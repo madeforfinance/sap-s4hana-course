@@ -50,6 +50,17 @@ main{max-width:880px;margin:0 auto;padding:20px clamp(16px,4vw,32px) 70px}
 .fact .big{font-size:1.45rem;font-weight:800;color:var(--accent);line-height:1.15}
 .fact .cap{font-size:.82rem;color:var(--ink2);font-weight:600;margin-top:3px}
 .hero .note-line{font-size:.88rem;color:var(--ink3);margin-top:12px}
+.exam-points{margin:.9em 0 .2em;padding-left:1.3em;color:var(--ink2)}
+.exam-points li{margin:.45em 0}
+.exam-points b{color:var(--ink)}
+.topic-table{width:100%;border-collapse:collapse;margin:14px 0 6px;font-size:.97rem}
+.topic-table th,.topic-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.topic-table thead th{font-size:.82rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);border-bottom:2px solid var(--line)}
+.topic-table td.wt{font-weight:800;color:var(--accent);white-space:nowrap;width:110px}
+.topic-table tr.biggest td{background:var(--accent-soft)}
+.topic-table tr.biggest td:first-child{font-weight:700}
+.big-tag{display:inline-block;font-size:.75rem;font-weight:800;color:var(--accent);background:var(--surface);border:1.5px solid var(--accent);border-radius:99px;padding:1px 9px;margin-left:8px;vertical-align:2px}
+.howto h3{margin-top:20px}
 section.block{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:clamp(20px,3.4vw,34px);margin-bottom:22px}
 .sec-head{display:flex;align-items:flex-start;gap:14px;border-bottom:2px solid var(--surface2);padding-bottom:13px;margin-bottom:6px}
 .sec-badge{flex:0 0 auto;background:var(--accent);color:var(--accent-ink);font-weight:800;border-radius:9px;padding:7px 12px;font-size:.85rem;display:inline-flex;align-items:center;gap:7px}
@@ -107,18 +118,58 @@ footer.page .credit{font-weight:700;color:var(--ink2);font-size:.95rem}
   </div>
 
   <header class="hero">
-    <div class="kicker">Course Dashboard</div>
+    <div class="kicker">About the Exam</div>
     <h1>SAP S/4HANA Financial Accounting — C_TS4FI Course</h1>
-    <p class="lede">SAP Certified Associate — SAP S/4HANA Cloud Private Edition, Financial Accounting. You already know Financial Accounting, but not SAP — this course starts from there. All <b>17 lessons</b> — 10 in Part 1 and 7 in Part 2 — are listed below in order.</p>
+    <p class="lede"><b>SAP Certified — SAP S/4HANA Cloud Private Edition, Financial Accounting.</b> Exam code: <b>C_TS4FI</b> (current version C_TS4FI_2601). This course prepares you for this exam. All <b>17 lessons</b> — 10 in Part 1 and 7 in Part 2 — are listed below in order.</p>
     <div class="facts">
-      <div class="fact"><div class="big">80</div><div class="cap">Questions</div></div>
-      <div class="fact"><div class="big">180 min</div><div class="cap">Time — 3 hours</div></div>
-      <div class="fact"><div class="big">61%</div><div class="cap">Cut score to pass</div></div>
-      <div class="fact"><div class="big">Associate</div><div class="cap">Level — beginner-friendly</div></div>
+      <div class="fact"><div class="big">1 task</div><div class="cap">One hands-on activity in a live SAP system</div></div>
+      <div class="fact"><div class="big">3 hours</div><div class="cap">Time — one sitting</div></div>
+      <div class="fact"><div class="big">60%</div><div class="cap">Score needed to pass</div></div>
+      <div class="fact"><div class="big">English</div><div class="cap">Language — English only</div></div>
+      <div class="fact"><div class="big">Intermediate</div><div class="cap">Level</div></div>
       <div class="fact"><div class="big">17</div><div class="cap">Lessons in this course</div></div>
     </div>
-    <p class="note-line">The largest part of the exam — General Ledger, Accounts Payable / Receivable and Financial Closing — is the same accounting you already know. What is new is only how that work is done in SAP, on which screen and with which setting. Before booking the exam, be sure to check the latest topics and weights on SAP's official certification page.</p>
+    <ul class="exam-points">
+      <li><b>New format — System-Based Assessment.</b> This is <b>not a multiple-choice exam anymore</b>. You get one hands-on activity inside a live SAP S/4HANA system. You do real tasks in the system, and the system checks your work.</li>
+      <li><b>One sitting, 3 hours.</b> If you take a break, the clock does not stop.</li>
+      <li><b>Open book and unproctored.</b> You may use your study material during the exam, and no one watches you while you take it. SAP does not publish a question count for this format.</li>
+      <li><b>Learning journey: 6 courses.</b> The official learning journey for this exam has 6 courses.</li>
+      <li><b>Certificate validity: 12 months.</b> After you pass, your certificate stays valid for 12 months. You keep it current through SAP Stay Certified.</li>
+    </ul>
   </header>
+
+  <section class="block" id="exam-topics">
+    <div class="sec-head">
+      <span class="sec-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v3"/><path d="M12 10v8"/><path d="M17 6v12"/></svg>Exam Topics</span>
+      <div>
+        <h2 style="margin-bottom:2px">What the Exam Covers</h2>
+        <div class="ts">The 9 exam topics and how much each one counts in your score</div>
+      </div>
+    </div>
+
+    <table class="topic-table">
+      <thead>
+        <tr><th scope="col">Topic</th><th scope="col">Weight</th></tr>
+      </thead>
+      <tbody>
+        <tr class="biggest"><td>Accounts Payable<span class="big-tag">Biggest topic</span></td><td class="wt">21–30%</td></tr>
+        <tr><td>Create a new Document Type</td><td class="wt">11–20%</td></tr>
+        <tr><td>Perform Value Adjustments for Overdue Receivables</td><td class="wt">Up to 10%</td></tr>
+        <tr><td>Accounts Receivable</td><td class="wt">Up to 10%</td></tr>
+        <tr><td>Create a House Bank, Configure and Execute the Payment Run</td><td class="wt">Up to 10%</td></tr>
+        <tr><td>Perform Customizing, Acquisition, and Depreciation Postings</td><td class="wt">Up to 10%</td></tr>
+        <tr><td>Asset Accounting</td><td class="wt">Up to 10%</td></tr>
+        <tr><td>Establish a new Company Code</td><td class="wt">Up to 10%</td></tr>
+        <tr><td>General Ledger</td><td class="wt">Up to 10%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="howto">
+      <h3>How to Use This Course for the New Exam</h3>
+      <p class="note-text">Accounts Payable and Create a new Document Type together can be <b>up to half of your total score</b>, so give these two topics extra practice. Every lesson in this course is <b>hands-on practice for the tasks you will do in the system</b> — it is not about memorising multiple-choice answers. Finish the lessons in order, pass the gate tests, and practise each task in a real SAP system before the exam.</p>
+      <p class="note-line" style="font-size:.88rem;color:var(--ink3)">Check the latest exam details on SAP Learning before you register, as SAP can update the format.</p>
+    </div>
+  </section>
 
   <section class="block" id="lessons">
     <div class="sec-head">
