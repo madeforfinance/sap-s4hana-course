@@ -748,11 +748,11 @@
     </div>
 
     <script>
-      // ---- Theme switch (in-memory; starts from system preference) ----
+      // ---- Theme switch (default Light) ----
       (function(){
         var root=document.documentElement, label=document.getElementById('themeLabel');
         function apply(t){ root.setAttribute('data-theme',t); label.textContent = (t==='dark') ? 'Light theme' : 'Dark theme'; }
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) apply('dark'); else apply('light');
+        apply('light'); // default theme: Light
         document.getElementById('themeBtn').addEventListener('click',function(){
           apply(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
         });

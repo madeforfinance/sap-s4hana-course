@@ -184,31 +184,39 @@
       .weightbar div{height:100%}
       .legend{font-size:.85rem;color:var(--ink-soft)}
 
-      /* locked / gate screen */
-      .locked-wrap{max-width:760px;margin:0 auto;padding:34px 18px 80px}
-      .locked-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px;box-shadow:var(--shadow)}
-      @media (max-width:560px){.locked-card{padding:22px 18px}}
-      .locked-card h1{font-size:1.7rem;margin:12px 0 8px}
-      .lock-badge{display:inline-flex;align-items:center;gap:8px;background:var(--red-soft);color:var(--red);font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 13px;border-radius:999px}
-      .lock-badge svg{width:16px;height:16px}
+      /* gate / locked screen */
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;margin-top:26px;box-shadow:var(--shadow);max-width:760px}
+      @media (max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
       .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
-      .gate-q p.qtext{font-weight:600;margin:0 0 10px}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
       .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
       .gate-opt:hover{border-color:var(--accent)}
-      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
       .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
       .gate-opt:disabled{cursor:default;opacity:.75}
-      .gate-msg{font-weight:700;font-size:1.05rem;margin-top:14px}
-      .gate-sub{color:var(--ink-soft);font-size:.93rem;margin-top:4px}
-      .btn-ghost{background:var(--surface);color:var(--accent-ink);border:2px solid var(--accent);border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      .btn-ghost{background:transparent;color:var(--accent-ink);border:2px solid var(--accent)}
       .btn-ghost:hover{background:var(--accent-soft)}
-      .admin-box{display:none;margin-top:16px;border:1px dashed var(--line);border-radius:12px;padding:16px 18px}
-      .admin-box.show{display:block}
-      .admin-box label{font-weight:600;font-size:.92rem;display:block;margin-bottom:8px}
-      .admin-row{display:flex;gap:10px;flex-wrap:wrap}
-      .admin-row input[type="password"]{flex:1 1 220px;border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 1rem "Source Sans 3",sans-serif;background:var(--surface);color:var(--ink);min-height:44px}
-      .lock-timer{background:var(--red-soft);border:1px solid var(--red);border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
-      .lock-timer b{color:var(--red)}
+      .btn:disabled{opacity:.55;cursor:default}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600;font-size:.93rem;margin:0}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
     </style>
   </head>
   <body>
@@ -224,40 +232,48 @@
       </button>
     </div>
 
-    <!-- ============ LOCKED SCREEN (shown until Lesson 1 is complete or the gate test is passed) ============ -->
-    <div class="locked-wrap" id="lockedScreen" hidden>
-      <div class="locked-card">
-        <span class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Lesson Locked</span>
-        <h1>Lesson 2 — SAP Architecture</h1>
-        <p>This lesson opens only after <b>Lesson 1</b> is fully complete — every section of Lesson 1 marked <b>Read</b> and the Lesson 1 self-test answered. <span class="urdu">(Pehle Lesson 1 mukammal karein — saare sections Mark Read karein aur uska self-test dein — tab hi Lesson 2 khulega.)</span></p>
-        <p>To open this lesson now, pass the <b>Gate Test</b> below. It has 5 questions from Lesson 1, and you must score <b>5 / 5</b>. Only your marks will be shown — the correct answers are never shown.</p>
+    <!-- ============ GATE / LOCKED SCREEN (shown until Lesson 1 is complete or the gate test is passed) ============ -->
+    <div class="wrap" id="gateScreen" hidden>
+      <section class="gate-card" aria-labelledby="gateTitle">
+        <div class="gate-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
+        <h2 id="gateTitle">Lesson 2 is locked</h2>
+        <p>Lesson 2 opens only when <b>Lesson 1 is fully complete</b> — every Lesson 1 section marked Read <b>and</b> the Lesson 1 self-test answered. <span class="urdu">(Pehle Lesson 1 mukammal karein — saare sections Mark Read karein aur uska self-test dein — tab hi Lesson 2 khulega.)</span></p>
+        <p>If you have already studied Lesson 1, you can unlock Lesson 2 by passing the <b>Gate Test</b> below: 5 questions from Lesson 1. You need <b>5 / 5</b> to pass. Only your marks are shown after you submit — the correct answers are never displayed.</p>
 
-        <div class="lock-timer" id="lockTimer" hidden>
-          <b>This lesson is locked for 1 hour</b> after 3 failed gate attempts.<br/>
-          Locked until: <b id="lockUntilText"></b><br/>
-          Time remaining: <b id="lockCountdown"></b>
+        <div class="gate-lockbox" id="gateLockBox" hidden>
+          <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+          <p>Locked until: <b id="gateLockUntil">—</b></p>
+          <p>Time remaining: <b id="gateCountdown">—</b></p>
+          <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
         </div>
 
-        <div id="gateArea">
-          <div id="gateQuiz"></div>
-          <button class="btn" id="gateSubmit" type="button">Submit Gate Test</button>
-          <p class="gate-msg" id="gateMsg" aria-live="polite"></p>
-          <p class="gate-sub" id="gateSub" aria-live="polite"></p>
+        <div id="gateTestArea">
+          <div id="gateQuestions"></div>
+          <p id="gateScore" aria-live="polite"></p>
+          <p id="gateMsg" aria-live="polite"></p>
+          <div class="gate-actions">
+            <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+            <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+          </div>
+          <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
         </div>
 
-        <div style="margin-top:22px;border-top:1px solid var(--line);padding-top:18px">
-          <button class="btn-ghost" id="adminBtn" type="button">Admin Unlock</button>
-          <div class="admin-box" id="adminBox">
-            <label for="adminPass">Admin password</label>
-            <div class="admin-row">
-              <input type="password" id="adminPass" autocomplete="off" placeholder="Enter admin password" />
-              <button class="btn" id="adminSubmit" type="button">Unlock</button>
-            </div>
-            <p class="gate-sub" id="adminMsg" aria-live="polite"></p>
+        <div class="gate-admin">
+          <button class="btn btn-ghost" id="adminBtn" type="button">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 21 2"/><path d="M15 8l3 3"/></svg>Admin Unlock
+          </button>
+          <div class="gate-admin-form" id="adminForm" hidden>
+            <label for="adminPw">Admin password</label>
+            <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+            <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+            <p id="adminMsg" aria-live="polite"></p>
           </div>
         </div>
-        <p style="margin-top:22px;color:var(--ink-soft);font-size:.86rem;text-align:center">course created by Muhammad Asad Ullah Ibrahim</p>
-      </div>
+
+        <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+      </section>
     </div>
 
     <div class="wrap" id="lessonContent">
@@ -1174,12 +1190,37 @@
     </script>
 
     <script>
-      // ---- Gating: Lesson 2 stays locked until Lesson 1 is fully complete, the gate test is passed 5/5, or an admin unlocks it ----
+      // ---- Lesson 2 gating: locked until Lesson 1 is fully complete, or the gate test is passed 5/5 ----
       (function(){
-        var lockedScreen=document.getElementById('lockedScreen');
-        var lessonContent=document.getElementById('lessonContent');
-        if(!lockedScreen||!lessonContent) return;
+        var LOCK_MS=60*60*1000;
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var GATE=[
+          {q:"What does ERP stand for and what does it do?",opts:["Enterprise Resource Planning — one system that connects all departments of a company","Electronic Report Printing — a tool that only prints company reports","Enterprise Record Program — software for storing office files","External Resource Portal — a website where vendors register"],a:0},
+          {q:"What is SAP S/4HANA?",opts:["An add-on that makes Excel reports faster","An older name for SAP R/3","SAP's next-generation ERP running on the HANA in-memory database","A database product made by a different company"],a:2},
+          {q:"What does FI stand for in FICO?",opts:["Finance Investment","Final Inspection","Fiscal Integration","Financial Accounting"],a:3},
+          {q:"What does CO stand for in FICO?",opts:["Company Operations","Controlling","Central Office","Cost Overview"],a:1},
+          {q:"Which came before S/4HANA in SAP history?",opts:["SAP Fiori","SAP SuccessFactors","SAP ECC / R/3","SAP HANA Studio"],a:2}
+        ];
+        var gateScreen=document.getElementById('gateScreen');
+        var content=document.getElementById('lessonContent');
+        var lockBox=document.getElementById('gateLockBox');
+        var lockUntilEl=document.getElementById('gateLockUntil');
+        var countdownEl=document.getElementById('gateCountdown');
+        var testArea=document.getElementById('gateTestArea');
+        var qWrap=document.getElementById('gateQuestions');
+        var scoreEl=document.getElementById('gateScore');
+        var msgEl=document.getElementById('gateMsg');
+        var attemptsEl=document.getElementById('gateAttempts');
+        var submitBtn=document.getElementById('gateSubmit');
+        var retryBtn=document.getElementById('gateRetry');
+        var adminBtn=document.getElementById('adminBtn');
+        var adminForm=document.getElementById('adminForm');
+        var adminPw=document.getElementById('adminPw');
+        var adminSubmit=document.getElementById('adminSubmit');
+        var adminMsg=document.getElementById('adminMsg');
+        var timer=null, selected={};
         var store=window.SAPStore;
+        if(!gateScreen||!content||!store) return;
 
         function isUnlocked(){
           try{
@@ -1189,123 +1230,108 @@
           }catch(e){}
           return false;
         }
-        function showContent(){
-          lockedScreen.hidden=true;
-          lessonContent.hidden=false;
-        }
-        function showLocked(){
-          lessonContent.hidden=true;
-          lockedScreen.hidden=false;
-        }
-        if(isUnlocked()){ showContent(); return; }
-        showLocked();
-
-        // ---------- Gate test (Lesson 1) — only the score is ever shown, never the correct answers ----------
-        var GATE=[
-          {q:"What does ERP stand for and what does it do?",opts:["Enterprise Resource Planning — one system that connects all departments of a company","Electronic Report Printing — a tool that only prints company reports","Enterprise Record Program — software for storing office files","External Resource Portal — a website where vendors register"],a:0},
-          {q:"What is SAP S/4HANA?",opts:["An add-on that makes Excel reports faster","An older name for SAP R/3","SAP's next-generation ERP running on the HANA in-memory database","A database product made by a different company"],a:2},
-          {q:"What does FI stand for in FICO?",opts:["Finance Investment","Final Inspection","Fiscal Integration","Financial Accounting"],a:3},
-          {q:"What does CO stand for in FICO?",opts:["Company Operations","Controlling","Central Office","Cost Overview"],a:1},
-          {q:"Which came before S/4HANA in SAP history?",opts:["SAP Fiori","SAP SuccessFactors","SAP ECC / R/3","SAP HANA Studio"],a:2}
-        ];
-        var gateQuiz=document.getElementById('gateQuiz');
-        var gateSubmit=document.getElementById('gateSubmit');
-        var gateMsg=document.getElementById('gateMsg');
-        var gateSub=document.getElementById('gateSub');
-        var gateArea=document.getElementById('gateArea');
-        var lockTimer=document.getElementById('lockTimer');
-        var lockUntilText=document.getElementById('lockUntilText');
-        var lockCountdown=document.getElementById('lockCountdown');
-        var picked={};
-        var timerId=null;
-
-        GATE.forEach(function(item,qi){
-          var box=document.createElement('div'); box.className='gate-q';
-          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
-          var opts=document.createElement('div'); opts.className='opts';
-          item.opts.forEach(function(text,oi){
-            var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
-            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
-            b.appendChild(letter); b.appendChild(document.createTextNode(text));
-            b.addEventListener('click',function(){
-              picked[qi]=oi;
-              opts.querySelectorAll('.gate-opt').forEach(function(x){ x.classList.remove('selected'); });
-              b.classList.add('selected');
-            });
-            opts.appendChild(b);
-          });
-          box.appendChild(opts); gateQuiz.appendChild(box);
-        });
-
-        function setGateEnabled(on){
-          gateQuiz.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=!on; });
-          gateSubmit.disabled=!on;
-          gateSubmit.style.opacity=on?'1':'.55';
+        function unlockLesson(){
+          if(timer){ clearInterval(timer); timer=null; }
+          gateScreen.hidden=true; gateScreen.style.display='none';
+          content.hidden=false; content.style.display='';
+          window.scrollTo(0,0);
         }
         function fmtClock(ms){
-          var s=Math.max(0,Math.ceil(ms/1000));
-          var m=Math.floor(s/60), ss=s%60, h=Math.floor(m/60); m=m%60;
-          return (h>0?h+'h ':'')+m+'m '+(ss<10?'0':'')+ss+'s';
+          var s=Math.max(0,Math.ceil(ms/1000)), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+          return (h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+        }
+        function updateCountdown(){
+          var g=store.getGate();
+          var rem=g.lockUntil-Date.now();
+          if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+          countdownEl.textContent=fmtClock(rem);
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        }
+        function showLock(){
+          var g=store.getGate();
+          lockBox.hidden=false;
+          testArea.style.display='none';
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+          updateCountdown();
+          if(timer) clearInterval(timer);
+          timer=setInterval(updateCountdown,1000);
         }
         function refreshLock(){
           var g=store.getGate();
           var now=Date.now();
-          if(g.lockUntil && g.lockUntil>now){
-            lockTimer.hidden=false;
-            gateArea.style.display='none';
-            lockUntilText.textContent=new Date(g.lockUntil).toLocaleString();
-            lockCountdown.textContent=fmtClock(g.lockUntil-now);
-            if(!timerId){
-              timerId=setInterval(function(){
-                var gg=store.getGate(); var n=Date.now();
-                if(!gg.lockUntil || gg.lockUntil<=n){
-                  clearInterval(timerId); timerId=null;
-                  gg.lockUntil=0; gg.fails=0; store.setGate(gg);
-                  lockTimer.hidden=true; gateArea.style.display='';
-                  gateMsg.textContent=''; gateSub.textContent='';
-                  setGateEnabled(true);
-                } else {
-                  lockCountdown.textContent=fmtClock(gg.lockUntil-n);
-                  lockUntilText.textContent=new Date(gg.lockUntil).toLocaleString();
-                }
-              },1000);
-            }
-            return true;
-          }
-          lockTimer.hidden=true;
-          gateArea.style.display='';
+          if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+          if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; store.setGate(g); }
+          lockBox.hidden=true;
+          testArea.style.display='';
           return false;
         }
-        refreshLock();
-
-        gateSubmit.addEventListener('click',function(){
+        function updateAttempts(){
+          var g=store.getGate();
+          attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+        }
+        function renderGate(){
+          selected={};
+          scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+          submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+          qWrap.innerHTML='';
+          GATE.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='gate-q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                selected[qi]=oi;
+                var bs=opts.querySelectorAll('.gate-opt');
+                bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+                msgEl.textContent='';
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); qWrap.appendChild(box);
+          });
+        }
+        submitBtn.addEventListener('click',function(){
           if(refreshLock()) return;
-          if(Object.keys(picked).length<GATE.length){
-            gateMsg.textContent='Please answer all 5 questions first.';
-            gateSub.textContent='';
+          if(Object.keys(selected).length<GATE.length){
+            msgEl.textContent='Please answer all 5 questions before submitting.';
+            scoreEl.textContent='';
             return;
           }
           var score=0;
-          GATE.forEach(function(item,qi){ if(picked[qi]===item.a) score++; });
+          GATE.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+          qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+          submitBtn.hidden=true;
+          scoreEl.textContent='Your score: '+score+' / '+GATE.length;
+          var g=store.getGate();
           if(score===GATE.length){
-            var g=store.getGate(); g.fails=0; g.lockUntil=0; g.unlocked=true; store.setGate(g);
-            gateMsg.textContent='Your score: '+score+' / '+GATE.length;
-            gateSub.textContent='Gate test passed. Lesson 2 is now open.';
-            setTimeout(showContent,700);
-          } else {
-            var g2=store.getGate(); g2.fails=(g2.fails||0)+1;
-            if(g2.fails>=3){ g2.lockUntil=Date.now()+60*60*1000; }
-            store.setGate(g2);
-            gateMsg.textContent='Your score: '+score+' / '+GATE.length;
-            gateSub.textContent='Go back and complete previous lesson.';
-            picked={};
-            gateQuiz.querySelectorAll('.gate-opt').forEach(function(b){ b.classList.remove('selected'); });
-            refreshLock();
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            store.setGate(g);
+            msgEl.textContent='Gate test passed. Lesson 2 is now unlocked.';
+            msgEl.className='ok';
+            updateAttempts();
+            setTimeout(unlockLesson,900);
+          }else{
+            g.fails=(g.fails||0)+1;
+            msgEl.textContent='Go back and complete previous lesson.';
+            msgEl.className='';
+            if(g.fails>=3){
+              g.lockUntil=Date.now()+LOCK_MS;
+              store.setGate(g);
+              updateAttempts();
+              refreshLock();
+            }else{
+              store.setGate(g);
+              retryBtn.hidden=false;
+              updateAttempts();
+            }
           }
         });
+        retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
 
-        // ---------- Admin unlock (hashed comparison only — the password itself is never stored or shown in this page) ----------
-        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        // ---------- Admin unlock ----------
         var sha256=function a(b){function c(a,b){return a>>>b|a<<32-b}for(var d,e,f=Math.pow,g=f(2,32),h="length",i="",j=[],k=8*b[h],l=a.h=a.h||[],m=a.k=a.k||[],n=m[h],o={},p=2;64>n;p++)if(!o[p]){for(d=0;313>d;d+=p)o[d]=p;l[n]=f(p,.5)*g|0,m[n++]=f(p,1/3)*g|0}for(b+="\x80";b[h]%64-56;)b+="\x00";for(d=0;d<b[h];d++){if(e=b.charCodeAt(d),e>>8)return;j[d>>2]|=e<<(3-d)%4*8}for(j[j[h]]=k/g|0,j[j[h]]=k,e=0;e<j[h];){var q=j.slice(e,e+=16),r=l;for(l=l.slice(0,8),d=0;64>d;d++){var s=q[d-15],t=q[d-2],u=l[0],v=l[4],w=l[7]+(c(v,6)^c(v,11)^c(v,25))+(v&l[5]^~v&l[6])+m[d]+(q[d]=16>d?q[d]:q[d-16]+(c(s,7)^c(s,18)^s>>>3)+q[d-7]+(c(t,17)^c(t,19)^t>>>10)|0),x=(c(u,2)^c(u,13)^c(u,22))+(u&l[1]^u&l[2]^l[1]&l[2]);l=[w+x|0].concat(l),l[4]=l[4]+w|0}for(d=0;8>d;d++)l[d]=l[d]+r[d]|0}for(d=0;8>d;d++)for(e=3;e+1;e--){var y=l[d]>>8*e&255;i+=(16>y?0:"")+y.toString(16)}return i};
         function hashText(text){
           if(window.crypto && window.crypto.subtle && window.crypto.subtle.digest){
@@ -1315,30 +1341,40 @@
           }
           return Promise.resolve(sha256(text));
         }
-        var adminBtn=document.getElementById('adminBtn');
-        var adminBox=document.getElementById('adminBox');
-        var adminPass=document.getElementById('adminPass');
-        var adminMsg=document.getElementById('adminMsg');
         adminBtn.addEventListener('click',function(){
-          adminBox.classList.toggle('show');
-          if(adminBox.classList.contains('show')) adminPass.focus();
+          adminForm.hidden=!adminForm.hidden;
+          if(!adminForm.hidden) adminPw.focus();
         });
-        document.getElementById('adminSubmit').addEventListener('click',function(){
-          var val=adminPass.value||'';
-          if(!val){ adminMsg.textContent='Please enter the admin password.'; return; }
+        function tryAdminUnlock(){
+          var val=adminPw.value||'';
+          if(!val){ adminMsg.className='err'; adminMsg.textContent='Please enter the admin password.'; return; }
           hashText(val).then(function(h){
             if(h===ADMIN_HASH){
               var g=store.getGate(); g.fails=0; g.lockUntil=0; g.unlocked=true; store.setGate(g);
-              if(timerId){ clearInterval(timerId); timerId=null; }
-              adminMsg.textContent='Unlocked.';
-              setTimeout(showContent,500);
-            } else {
-              adminMsg.textContent='Incorrect password.';
+              adminMsg.className=''; adminMsg.style.color='var(--green)';
+              adminMsg.textContent='Unlocked. Opening Lesson 2\u2026';
+              adminPw.value='';
+              setTimeout(unlockLesson,700);
+            }else{
+              adminMsg.style.color=''; adminMsg.className='err';
+              adminMsg.textContent='Incorrect password. Please try again.';
+              adminPw.value='';
+              adminPw.focus();
             }
-            adminPass.value='';
           });
-        });
-        adminPass.addEventListener('keydown',function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); document.getElementById('adminSubmit').click(); } });
+        }
+        adminSubmit.addEventListener('click',tryAdminUnlock);
+        adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+        // ---- Initial state ----
+        if(isUnlocked()){
+          unlockLesson();
+        }else{
+          gateScreen.hidden=false; gateScreen.style.display='';
+          content.hidden=true; content.style.display='none';
+          if(!refreshLock()) renderGate();
+          updateAttempts();
+        }
       })();
     </script>
   </body>
