@@ -1,0 +1,1345 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 2 — SAP Architecture · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      /* reading progress */
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .35s ease}
+
+      /* top bar */
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      @media (max-width:860px){.layout{grid-template-columns:1fr}}
+
+      /* TOC */
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc a .tick{margin-left:auto;flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:transparent;line-height:1}
+      nav.toc li.read a .tick{background:var(--green);border-color:var(--green);color:#fff}
+      nav.toc a.active{background:#0a6ed1;color:#fff;font-weight:700;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+      nav.toc a.active:hover{background:#0a6ed1;color:#fff}
+      nav.toc li.read a.active{color:#fff}
+      .progress-box{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 12px}
+      .progress-box .pct{font-size:1.35rem;font-weight:800;color:var(--ink)}
+      .progress-box .lbl{font-size:.78rem;color:var(--ink-soft)}
+      .progress-track{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:7px}
+      .progress-fill{height:100%;width:0%;background:var(--green);border-radius:99px;transition:width .35s ease}
+      .sec-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:2px solid var(--surface2);margin-top:26px;padding-top:18px}
+      .mark-read{cursor:pointer;font:600 .95rem "Source Sans 3",sans-serif;font-weight:700;border-radius:9px;padding:11px 22px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:9px;min-height:48px;transition:background .15s,color .15s}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read .box{width:20px;height:20px;border:2px solid currentColor;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;line-height:1}
+      .mark-read.done{background:var(--green);color:#fff;border-color:var(--green)}
+      .mark-read.done .box{background:rgba(255,255,255,.22)}
+      .read-status{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+      section.lesson.is-read{border-color:var(--green)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      /* hero */
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      /* callouts */
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      /* tables */
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      /* diagrams */
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      /* mock screens */
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .fiori-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;background:var(--surface2);padding:16px}
+      .tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 12px;min-height:86px}
+      .tile .t-ic{width:26px;height:26px;color:var(--accent)}
+      .tile .t-name{font-size:.82rem;font-weight:600;margin-top:8px;line-height:1.3}
+      .tile .t-num{font-size:1.25rem;font-weight:700;color:var(--accent-ink)}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      /* glossary */
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      /* self test */
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      .weightbar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:10px 0 4px;border:1px solid var(--line)}
+      .weightbar div{height:100%}
+      .legend{font-size:.85rem;color:var(--ink-soft)}
+
+      /* locked / gate screen */
+      .locked-wrap{max-width:760px;margin:0 auto;padding:34px 18px 80px}
+      .locked-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px;box-shadow:var(--shadow)}
+      @media (max-width:560px){.locked-card{padding:22px 18px}}
+      .locked-card h1{font-size:1.7rem;margin:12px 0 8px}
+      .lock-badge{display:inline-flex;align-items:center;gap:8px;background:var(--red-soft);color:var(--red);font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 13px;border-radius:999px}
+      .lock-badge svg{width:16px;height:16px}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-msg{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .gate-sub{color:var(--ink-soft);font-size:.93rem;margin-top:4px}
+      .btn-ghost{background:var(--surface);color:var(--accent-ink);border:2px solid var(--accent);border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .admin-box{display:none;margin-top:16px;border:1px dashed var(--line);border-radius:12px;padding:16px 18px}
+      .admin-box.show{display:block}
+      .admin-box label{font-weight:600;font-size:.92rem;display:block;margin-bottom:8px}
+      .admin-row{display:flex;gap:10px;flex-wrap:wrap}
+      .admin-row input[type="password"]{flex:1 1 220px;border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 1rem "Source Sans 3",sans-serif;background:var(--surface);color:var(--ink);min-height:44px}
+      .lock-timer{background:var(--red-soft);border:1px solid var(--red);border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .lock-timer b{color:var(--red)}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 2 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Dark theme</span>
+      </button>
+    </div>
+
+    <!-- ============ LOCKED SCREEN (shown until Lesson 1 is complete or the gate test is passed) ============ -->
+    <div class="locked-wrap" id="lockedScreen" hidden>
+      <div class="locked-card">
+        <span class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Lesson Locked</span>
+        <h1>Lesson 2 — SAP Architecture</h1>
+        <p>This lesson opens only after <b>Lesson 1</b> is fully complete — every section of Lesson 1 marked <b>Read</b> and the Lesson 1 self-test answered. <span class="urdu">(Pehle Lesson 1 mukammal karein — saare sections Mark Read karein aur uska self-test dein — tab hi Lesson 2 khulega.)</span></p>
+        <p>To open this lesson now, pass the <b>Gate Test</b> below. It has 5 questions from Lesson 1, and you must score <b>5 / 5</b>. Only your marks will be shown — the correct answers are never shown.</p>
+
+        <div class="lock-timer" id="lockTimer" hidden>
+          <b>This lesson is locked for 1 hour</b> after 3 failed gate attempts.<br/>
+          Locked until: <b id="lockUntilText"></b><br/>
+          Time remaining: <b id="lockCountdown"></b>
+        </div>
+
+        <div id="gateArea">
+          <div id="gateQuiz"></div>
+          <button class="btn" id="gateSubmit" type="button">Submit Gate Test</button>
+          <p class="gate-msg" id="gateMsg" aria-live="polite"></p>
+          <p class="gate-sub" id="gateSub" aria-live="polite"></p>
+        </div>
+
+        <div style="margin-top:22px;border-top:1px solid var(--line);padding-top:18px">
+          <button class="btn-ghost" id="adminBtn" type="button">Admin Unlock</button>
+          <div class="admin-box" id="adminBox">
+            <label for="adminPass">Admin password</label>
+            <div class="admin-row">
+              <input type="password" id="adminPass" autocomplete="off" placeholder="Enter admin password" />
+              <button class="btn" id="adminSubmit" type="button">Unlock</button>
+            </div>
+            <p class="gate-sub" id="adminMsg" aria-live="polite"></p>
+          </div>
+        </div>
+        <p style="margin-top:22px;color:var(--ink-soft);font-size:.86rem;text-align:center">course created by Muhammad Asad Ullah Ibrahim</p>
+      </div>
+    </div>
+
+    <div class="wrap" id="lessonContent">
+      <header class="hero">
+        <span class="kicker">Part 1 · Lesson 2 of 10 · C_TS4FI Exam Prep</span>
+        <h1>Lesson 2 — SAP Architecture</h1>
+        <p class="lede">In Lesson 1 you learned <b>what</b> SAP is. Now we open the bonnet and see <b>how SAP is built inside</b>: the famous <b>three layers</b>, what a <b>Client</b> really is, what happens step-by-step when you press Enter on a posting, and why every company keeps three systems — Development, Quality and Production. No technical background needed; every new word is explained the first time it appears. <span class="urdu">(Is lesson mein hum SAP ke andar jhank kar dekhenge ke system bana kaisay hai — bilkul aasan alfaaz mein.)</span></p>
+        <div class="hero-meta">
+          <span class="chip">Exam: <b>C_TS4FI</b> — SAP S/4HANA Cloud Private Edition, Financial Accounting</span>
+          <span class="chip">Exam topic: <b>Overview &amp; Deployment of SAP S/4HANA</b> (weight: up to ~10%)</span>
+          <span class="chip">Level: <b>Complete beginner</b> · Builds on Lesson 1</span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Lesson 2 contents">
+          <h2>In this lesson</h2>
+          <div class="progress-box">
+            <div><span class="pct" id="pctText">0%</span> <span class="lbl">of this lesson read</span></div>
+            <div class="progress-track"><div class="progress-fill" id="sideFill"></div></div>
+            <div class="lbl" id="countText" style="margin-top:6px">0 of 19 sections marked read</div>
+          </div>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span>1. Quick recap of Lesson 1<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span>2. What does “Architecture” mean?<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span>3. The three layers — the big picture<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span>4. Layer 1: Presentation layer<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span>5. Layer 2: Application layer<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span>6. Layer 3: Database layer (HANA)<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span>7. One posting, step by step<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span>8. Inside the application server<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span>9. What is a Client? (deep dive)<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span>10. Client-dependent vs client-independent<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span>11. System ID (SID) and Instance<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span>12. The landscape: DEV → QAS → PRD<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span>13. Transport Requests — moving your settings<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span>14. Screen tour: the SAP logon screen<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span>15. Why architecture matters for an FI consultant<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span>16. Exam traps for Lesson 2<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span>17. Lesson 2 glossary (A–Z)<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s18"><span class="dot"></span>18. Summary — key points<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s19"><span class="dot"></span>19. Self-test (12 MCQs)<span class="tick" aria-hidden="true">✓</span></a></li>
+          </ol>
+          <p class="toc-note">The blue highlight in this menu always shows the section on your screen right now. Press <b>Mark Read</b> at the end of a section to tick it green here. <span class="urdu">(Jo hissa parh liya, us par Mark Read dabayein — nishan sabz ho jayega.)</span></p>
+        </nav>
+
+        <main>
+
+          <!-- ============ 1 RECAP ============ -->
+          <section class="lesson" id="s1" data-toc>
+            <h2><span class="no">01</span> Quick recap of Lesson 1</h2>
+            <p class="sub">Thirty seconds of revision — this lesson stands on these five points.</p>
+            <ul class="clean">
+              <li><b>ERP</b> = one software, one database, for the whole company.</li>
+              <li><b>SAP</b> is the world's leading ERP software; <b>FICO</b> = FI (Financial Accounting) + CO (Controlling) is its finance side.</li>
+              <li>Generations: <b>R/3 (1992) → ECC (2004) → S/4HANA (2015)</b>.</li>
+              <li><b>S/4HANA runs only on the HANA database</b> — an in-memory database, so reports are real-time.</li>
+              <li>You use SAP through two faces: the classic <b>SAP GUI</b> (with T-codes) and the modern browser-based <b>Fiori</b>.</li>
+            </ul>
+            <p>One question Lesson 1 left open: when you type an entry in SAP GUI and press Enter, <b>where does your entry actually go?</b> Who does the calculation? Where is the data saved? That journey is called SAP's <b>architecture</b> — and it is this whole lesson. <span class="urdu">(Entry likhne ke baad woh jaati kahan hai? Yahi is lesson ka asal sawal hai.)</span></p>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 2 WHAT IS ARCHITECTURE ============ -->
+          <section class="lesson" id="s2" data-toc>
+            <h2><span class="no">02</span> What does “Architecture” mean?</h2>
+            <div class="box term"><span class="box-title">New word — Architecture</span>
+              <p><b>Architecture</b> means the <b>internal design or structure</b> of something — how its parts are arranged and how they work together. A building's architecture is its plan: where the rooms, stairs and wiring are. A software's architecture is the same idea: which parts exist, what each part does, and how they talk to each other.</p>
+            </div>
+            <p>So “SAP Architecture” simply means: <b>how is the SAP system built inside, and how do its parts work together when you use it?</b> Nothing more scary than that.</p>
+            <div class="box analogy"><span class="box-title">Analogy — a restaurant</span>
+              <p>Think of SAP as a big restaurant with three areas:</p>
+              <ul class="clean">
+                <li><b>The counter / dining area</b> — where the customer sits, sees the menu and gives the order. This is what the user sees and touches.</li>
+                <li><b>The kitchen</b> — where the chefs actually cook the order. The customer never enters, but all the real work happens here.</li>
+                <li><b>The store room (godown)</b> — where all the raw material is kept safely, in an organised way, ready whenever the kitchen asks.</li>
+              </ul>
+              <p>Keep this restaurant in mind. In the next section you will see that SAP has exactly these three parts — SAP calls them <b>layers</b>.</p>
+            </div>
+            <div class="box term"><span class="box-title">New word — Layer / Tier</span>
+              <p>A <b>layer</b> (also called a <b>tier</b>, pronounced “teer”) is one level or floor of the design. Like the floors of a building, each layer has its own job and only talks to the layer next to it. SAP's design has <b>three layers</b>, so it is called a <b>three-tier architecture</b>.</p>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick — the “3” in R/3</span>
+              <p>Remember from Lesson 1: the old famous SAP was called <b>R/3</b>. The <b>3</b> stands for these <b>three layers</b>! (And the <b>R</b> stands for <b>Real-time</b>.) So the name R/3 itself is a summary of this lesson: <b>R</b>eal-time, <b>3</b> tiers. S/4HANA kept the same three-tier design.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 3 THREE LAYERS ============ -->
+          <section class="lesson" id="s3" data-toc>
+            <h2><span class="no">03</span> The three layers — the big picture</h2>
+            <p>Here is the whole lesson in one picture. Read the diagram first, then the table below it.</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 400" role="img" aria-label="Diagram of SAP three-tier architecture: presentation layer with SAP GUI and Fiori on user devices, application layer with the SAP application server, and database layer with the HANA database">
+                <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text x="360" y="24" text-anchor="middle" class="svg-title">SAP S/4HANA — THREE-TIER ARCHITECTURE</text>
+
+                <rect x="60" y="44" width="600" height="92" rx="12" class="svg-box-a"/>
+                <text x="84" y="70" class="svg-title">LAYER 1 — PRESENTATION LAYER</text>
+                <text x="84" y="90" class="svg-sub">What the user sees and touches — screens only, no data stored here</text>
+                <rect x="84" y="100" width="160" height="26" rx="6" class="svg-box"/><text x="164" y="118" text-anchor="middle" class="svg-sub">SAP GUI (PC program)</text>
+                <rect x="262" y="100" width="170" height="26" rx="6" class="svg-box"/><text x="347" y="118" text-anchor="middle" class="svg-sub">Fiori (web browser)</text>
+                <rect x="450" y="100" width="186" height="26" rx="6" class="svg-box"/><text x="543" y="118" text-anchor="middle" class="svg-sub">Mobile / tablet apps</text>
+
+                <path d="M330 136 L330 168" class="svg-arrow"/><path d="M390 168 L390 136" class="svg-arrow"/>
+                <text x="360" y="158" text-anchor="middle" class="svg-sub">request ↓ &nbsp;&nbsp; ↑ result</text>
+
+                <rect x="60" y="172" width="600" height="92" rx="12" class="svg-box-g"/>
+                <text x="84" y="198" class="svg-title">LAYER 2 — APPLICATION LAYER</text>
+                <text x="84" y="218" class="svg-sub">Where SAP programs run and all calculations happen — the “brain”</text>
+                <rect x="84" y="228" width="250" height="26" rx="6" class="svg-box"/><text x="209" y="246" text-anchor="middle" class="svg-sub">Application Server (ABAP programs)</text>
+                <rect x="352" y="228" width="284" height="26" rx="6" class="svg-box"/><text x="494" y="246" text-anchor="middle" class="svg-sub">Dispatcher + Work Processes</text>
+
+                <path d="M330 264 L330 296" class="svg-arrow"/><path d="M390 296 L390 264" class="svg-arrow"/>
+                <text x="360" y="286" text-anchor="middle" class="svg-sub">read / write ↓ &nbsp;&nbsp; ↑ data</text>
+
+                <rect x="60" y="300" width="600" height="72" rx="12" class="svg-box-a"/>
+                <text x="84" y="326" class="svg-title">LAYER 3 — DATABASE LAYER</text>
+                <text x="84" y="346" class="svg-sub">Where all data is stored permanently — SAP HANA database (in-memory)</text>
+                <text x="636" y="346" text-anchor="end" class="svg-sub">Tables: BKPF · BSEG · ACDOCA …</text>
+              </svg>
+              <figcaption>The three layers of SAP. Your screen never talks to the database directly — the application layer always stands in the middle. (Diagram drawn for learning — an illustration, not a real SAP screenshot.)</figcaption>
+            </figure>
+            <div class="tblwrap"><table>
+              <tr><th style="width:22%">Layer</th><th style="width:30%">Simple meaning</th><th style="width:24%">Restaurant part</th><th>What lives here in SAP</th></tr>
+              <tr><td><b>1. Presentation layer</b></td><td>The screens you see and type on</td><td>Dining area / counter</td><td>SAP GUI, Fiori in a browser, mobile apps</td></tr>
+              <tr><td><b>2. Application layer</b></td><td>The working brain — runs the programs, does every calculation and check</td><td>Kitchen</td><td>Application server(s) running SAP programs written in ABAP</td></tr>
+              <tr><td><b>3. Database layer</b></td><td>The store where all data is kept permanently</td><td>Store room / godown</td><td>SAP HANA database and its tables</td></tr>
+            </table></div>
+            <h3>Why separate the work into three layers?</h3>
+            <ul class="clean">
+              <li><b>Many users, one system:</b> hundreds of accountants can connect their screens (Layer 1) to the same application servers and the same database. Everyone shares the same live data — the ERP idea from Lesson 1.</li>
+              <li><b>Power where it is needed:</b> heavy calculations happen on big, powerful server computers (Layer 2), not on each user's small PC.</li>
+              <li><b>Easy to grow:</b> if the company grows, you add more application servers — like adding more chefs to the kitchen — without changing the screens or the database.</li>
+              <li><b>Safety:</b> users never touch the database directly. Every request passes through the application layer, which checks permissions and rules first.</li>
+            </ul>
+            <div class="box trick"><span class="box-title">Memory trick — P-A-D</span>
+              <p>Remember the order top to bottom: <b>P</b>resentation → <b>A</b>pplication → <b>D</b>atabase = <b>“PAD”</b>. Or in Urdu style: <b>“Pehle screen, Aakhir mein data”</b> — first the screen, in the middle the application, last the database. In the exam, the three names in this order answer many questions.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 4 PRESENTATION LAYER ============ -->
+          <section class="lesson" id="s4" data-toc>
+            <h2><span class="no">04</span> Layer 1: Presentation layer — the face of SAP</h2>
+            <p>The <b>presentation layer</b> is everything on <b>your own device</b>: your office PC, laptop, tablet or phone. Its only jobs are:</p>
+            <ul class="clean">
+              <li><b>Show</b> screens to you (forms, lists, reports).</li>
+              <li><b>Take</b> what you type (amounts, account numbers, clicks) and send it to the application layer.</li>
+              <li><b>Show the result</b> that comes back.</li>
+            </ul>
+            <p>It does <b>no accounting itself</b> and stores <b>no business data</b>. If your laptop is switched off or replaced, nothing is lost — all data is safe in Layers 2 and 3. <span class="urdu">(Aap ka laptop sirf ek TV screen hai — asal film server par chalti hai.)</span></p>
+            <h3>The two faces you already know</h3>
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>SAP GUI</h4>
+                <p>A program installed on your PC. Classic SAP look: menus, a command box for <b>T-codes</b>, and the famous blue-and-grey screens. Most FI consultants still do daily work here. “GUI” = <b>G</b>raphical <b>U</b>ser <b>I</b>nterface — simply, “the screen you use with mouse and keyboard”.</p>
+              </div>
+              <div class="mini-card">
+                <h4>SAP Fiori</h4>
+                <p>SAP opened in a <b>web browser</b> (Chrome, Edge…). No installation. Work is organised as <b>apps shown as tiles</b> on a home page called the <b>Fiori Launchpad</b>. Works on phones and tablets too. This is SAP's modern face and the main face of S/4HANA.</p>
+              </div>
+            </div>
+            <div class="box term"><span class="box-title">New word — Client (software meaning)</span>
+              <p>Careful — the word “client” has <b>two different meanings</b> in the SAP world, and Lesson 2 uses both:</p>
+              <p>1) In general computing, a <b>client</b> is the small program/device that <i>asks</i> for service — e.g. SAP GUI on your PC is a “client” of the server. The computer that <i>gives</i> the service is the <b>server</b>. This pair is called <b>client–server</b>.</p>
+              <p>2) Inside SAP, a <b>Client</b> (with capital C) is a separate environment inside one SAP system — Section 9 explains this in full. Do not mix the two meanings!</p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>“Data is stored in the presentation layer” — <b>wrong</b>. The presentation layer only displays. Also: “Fiori replaced the GUI completely” — <b>wrong</b>. In S/4HANA both exist, and both connect to the same application layer and the same data.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 5 APPLICATION LAYER ============ -->
+          <section class="lesson" id="s5" data-toc>
+            <h2><span class="no">05</span> Layer 2: Application layer — the brain of SAP</h2>
+            <div class="box term"><span class="box-title">New word — Server</span>
+              <p>A <b>server</b> is a powerful computer that stays switched on all the time and “serves” many users at once. It is not a screen you sit at — it usually lives in a server room or in a cloud data centre. Your PC asks; the server works and answers.</p>
+            </div>
+            <p>The application layer is made of one or more <b>application servers</b>. This is where the actual SAP system runs:</p>
+            <ul class="clean">
+              <li>All SAP <b>programs</b> run here — the posting program behind FB50, the payment program, every report.</li>
+              <li>All <b>checks and calculations</b> happen here: Is the period open? Do debits equal credits? Does this user have permission? Is this G/L account blocked?</li>
+              <li>It receives your request from Layer 1, works on it, reads or writes data in Layer 3, and sends the result back to your screen.</li>
+            </ul>
+            <div class="box term"><span class="box-title">New word — ABAP (first mention)</span>
+              <p>SAP's own programming language is called <b>ABAP</b> (Advanced Business Application Programming). Almost all SAP programs in the application layer are written in ABAP. As an FI consultant you do <b>not</b> need to be a programmer — but you must know that ABAP programs are what run here. ABAP gets its own full lesson later (Lesson 4 of this course), so for now just remember: <b>ABAP = the language SAP itself is written in, running in Layer 2.</b></p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — the kitchen and its chefs</span>
+              <p>The application server is the restaurant's kitchen. One kitchen can have <b>several chefs</b> working in parallel — in SAP these parallel workers are called <b>work processes</b> (Section 8). A small company may run everything on <b>one</b> application server; a big company uses <b>many</b> application servers sharing the load, all cooking from the same store room (one database).</p>
+            </div>
+            <h3>One system can have many application servers</h3>
+            <p>This is a favourite exam point. The database is normally <b>one</b> per system, but application servers can be <b>many</b>. When you log on, a special service sends you to an application server that is free — you usually never notice which one. The list of application servers of a system can be seen with T-code <code>SM51</code>.</p>
+            <div class="box trick"><span class="box-title">Memory trick</span>
+              <p><b>“Brain in the middle.”</b> Whenever a question asks <i>where</i> something is calculated, checked, or executed in SAP — the answer is almost always the <b>application layer</b>. Screens only show; the database only stores; the application layer <b>thinks</b>.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 6 DATABASE LAYER ============ -->
+          <section class="lesson" id="s6" data-toc>
+            <h2><span class="no">06</span> Layer 3: Database layer — the memory of SAP</h2>
+            <p>The <b>database layer</b> is where everything is stored <b>permanently</b>: every document you post, every customer and vendor, every G/L account balance. Switch the servers off and on again — the data is still there.</p>
+            <div class="box term"><span class="box-title">New word — Table</span>
+              <p>A database stores data in <b>tables</b> — like Excel sheets: rows and columns. One row = one record (for example, one document header). One column = one field (for example, posting date, amount, company code). When consultants say “the data is in table BKPF”, they mean: the document headers are stored in that table, the way one sheet in a workbook holds one list.</p>
+            </div>
+            <h3>Tables an FI person will meet again and again</h3>
+            <div class="tblwrap"><table>
+              <tr><th style="width:20%">Table</th><th>What it stores (simple words)</th></tr>
+              <tr><td><code>BKPF</code></td><td><b>Document headers</b> — the top part of every accounting document: number, date, type, who posted it.</td></tr>
+              <tr><td><code>BSEG</code></td><td><b>Document line items</b> — the individual debit/credit lines inside each document.</td></tr>
+              <tr><td><code>ACDOCA</code></td><td>The <b>Universal Journal</b> of S/4HANA — FI and CO line items together in one table (from Lesson 1).</td></tr>
+              <tr><td><code>SKA1 / SKB1</code></td><td>The <b>chart of accounts</b> and company-code data of G/L accounts.</td></tr>
+              <tr><td><code>LFA1 / KNA1</code></td><td>Vendor master data (<code>LFA1</code>) and customer master data (<code>KNA1</code>) — in S/4HANA these live under the Business Partner concept.</td></tr>
+            </table></div>
+            <p>You do not need to memorise tables today. Just understand the idea: <b>when you post in SAP, rows are written into tables like these</b>, and every report simply reads those tables back.</p>
+            <h3>Why HANA makes this layer special</h3>
+            <p>From Lesson 1: in S/4HANA this layer is always the <b>SAP HANA database</b>. Two facts matter for the exam:</p>
+            <ul class="clean">
+              <li><b>In-memory:</b> HANA keeps the working data in fast memory (RAM), not only on slow disks — so reports that took minutes in ECC come back in seconds.</li>
+              <li><b>Column store:</b> HANA stores tables mainly <b>column by column</b> (not only row by row), which makes adding up one column — like “total of the Amount column” — extremely fast. Perfect for accounting totals.</li>
+            </ul>
+            <div class="box analogy"><span class="box-title">Analogy — godown vs ready shelf</span>
+              <p>A normal (disk) database is like fetching stock from a far godown every single time — safe, but slow. HANA is like keeping the stock on shelves <b>inside the kitchen itself</b> (in memory), neatly arranged by item type (columns). Cooking — sorry, reporting — becomes very fast.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>S/4HANA can run on Oracle / SQL Server / DB2 — <b>wrong</b>. That freedom belonged to ECC. <b>S/4HANA runs only on SAP HANA.</b> This single fact appears in the exam again and again.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 7 ONE POSTING STEP BY STEP ============ -->
+          <section class="lesson" id="s7" data-toc>
+            <h2><span class="no">07</span> One posting, step by step — the full journey</h2>
+            <p class="sub">Now put the three layers together. Watch one real FI action travel through the system.</p>
+            <p><b>Scene:</b> You are the accountant. You open T-code <code>FB50</code> (Post G/L Account Document — you will use it hands-on in a later lesson), type a simple entry — Debit Rent Expense Rs 50,000, Credit Bank Rs 50,000 — and press <b>Save (Post)</b>.</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 330" role="img" aria-label="Step diagram: user types entry in SAP GUI, request goes to the application server which checks and runs the posting program, data is written to the HANA database, and the document number returns to the screen">
+                <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <rect x="30" y="60" width="150" height="86" rx="10" class="svg-box-a"/>
+                <text x="105" y="88" text-anchor="middle" class="svg-title" font-size="13.5">YOUR SCREEN</text>
+                <text x="105" y="108" text-anchor="middle" class="svg-sub">SAP GUI / Fiori</text>
+                <text x="105" y="126" text-anchor="middle" class="svg-sub">FB50 entry typed</text>
+                <rect x="285" y="60" width="170" height="86" rx="10" class="svg-box-g"/>
+                <text x="370" y="88" text-anchor="middle" class="svg-title" font-size="13.5">APPLICATION SERVER</text>
+                <text x="370" y="108" text-anchor="middle" class="svg-sub">Checks: Dr = Cr? Period</text>
+                <text x="370" y="126" text-anchor="middle" class="svg-sub">open? Permission OK?</text>
+                <rect x="545" y="60" width="150" height="86" rx="10" class="svg-box-a"/>
+                <text x="620" y="88" text-anchor="middle" class="svg-title" font-size="13.5">HANA DATABASE</text>
+                <text x="620" y="108" text-anchor="middle" class="svg-sub">Document saved in</text>
+                <text x="620" y="126" text-anchor="middle" class="svg-sub">BKPF · BSEG · ACDOCA</text>
+                <path d="M180 88 L281 88" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+                <text x="230" y="76" text-anchor="middle" class="svg-sub">1 · request</text>
+                <path d="M455 88 L541 88" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+                <text x="498" y="76" text-anchor="middle" class="svg-sub">2 · write</text>
+                <path d="M541 124 L459 124" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+                <text x="498" y="146" text-anchor="middle" class="svg-sub">3 · confirmed</text>
+                <path d="M281 124 L184 124" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+                <text x="230" y="146" text-anchor="middle" class="svg-sub">4 · result</text>
+                <rect x="120" y="196" width="480" height="86" rx="10" class="svg-box"/>
+                <text x="360" y="224" text-anchor="middle" class="svg-title" font-size="13.5">MESSAGE ON YOUR SCREEN</text>
+                <text x="360" y="246" text-anchor="middle" class="svg-sub">“Document 100000123 was posted in company code 1000”</text>
+                <text x="360" y="266" text-anchor="middle" class="svg-sub">The whole journey usually takes less than a second.</text>
+                <path d="M105 146 L105 232 L116 232" class="svg-line"/>
+              </svg>
+              <figcaption>The life of one posting. Notice: your screen never writes to the database itself — the application server does everything in the middle. (Illustration drawn for learning.)</figcaption>
+            </figure>
+            <h3>The journey in words</h3>
+            <ul class="clean">
+              <li><b>Step 1 — Request:</b> You press Post. The presentation layer (GUI/Fiori) sends your typed data over the network to an application server.</li>
+              <li><b>Step 2 — Checking &amp; processing:</b> A work process on the application server runs the posting program. It checks: debits = credits? Is the posting period open? Is the account valid for this company code? Do you have authorisation? If anything fails, you get an error message and <b>nothing is saved</b>.</li>
+              <li><b>Step 3 — Saving:</b> All checks pass → the program writes the document into the database tables (header in BKPF, lines in BSEG, journal lines in ACDOCA) and takes the next document number.</li>
+              <li><b>Step 4 — Result:</b> The application server sends back “Document … was posted”, and your screen simply displays it.</li>
+            </ul>
+            <div class="box term"><span class="box-title">New word — Transaction (two meanings, again!)</span>
+              <p>1) A <b>transaction</b> in SAP everyday speech = a task/screen you open with a T-code, e.g. “the FB50 transaction”.<br/>
+              2) In database language, a <b>transaction</b> = one complete unit of work that either saves fully or not at all. Your posting above is one database transaction: either the whole document is saved, or nothing is. SAP never saves half a document — accountants call this same idea “a journal entry must balance before it is posted”.</p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — ordering food for delivery</span>
+              <p>You (screen) place an order on the app → the restaurant kitchen (application server) checks the items and cooks → ingredients come from the store (database) and the finished record is kept → the app shows you “Order delivered”. You never entered the kitchen or the store yourself. That is exactly how SAP works.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 8 INSIDE THE APPLICATION SERVER ============ -->
+          <section class="lesson" id="s8" data-toc>
+            <h2><span class="no">08</span> Inside the application server — Dispatcher &amp; Work Processes</h2>
+            <p class="sub">A little deeper — this part is small, but the exam loves two words from here: <b>Dispatcher</b> and <b>Work Process</b>.</p>
+            <p>One application server may receive requests from 200 users at the same moment. Who decides which request is handled first? And who does the handling?</p>
+            <div class="box term"><span class="box-title">New word — Dispatcher</span>
+              <p>The <b>Dispatcher</b> is the receptionist / traffic controller of an application server. Every incoming request first reaches the Dispatcher, which keeps a waiting line (queue) and hands each request to a free work process. When the work is done, the Dispatcher sends the result back to the user's screen.</p>
+            </div>
+            <div class="box term"><span class="box-title">New word — Work Process</span>
+              <p>A <b>work process</b> is a worker inside the application server that actually executes one request at a time — runs the program, talks to the database, prepares the next screen. An application server has several work processes of different types, working in parallel.</p>
+            </div>
+            <h3>The five types of work processes</h3>
+            <div class="tblwrap"><table>
+              <tr><th style="width:20%">Type</th><th style="width:34%">Simple meaning</th><th>Everyday example</th></tr>
+              <tr><td><b>Dialog</b> (DIA)</td><td>Handles your live, step-by-step screen work</td><td>You typing and posting in FB50, pressing Enter again and again</td></tr>
+              <tr><td><b>Background</b> (BGD)</td><td>Runs long jobs quietly, without a user waiting at the screen</td><td>Depreciation run or a big report scheduled at night</td></tr>
+              <tr><td><b>Update</b> (UPD)</td><td>Writes the final changes into the database</td><td>The moment your checked document is actually saved</td></tr>
+              <tr><td><b>Enqueue</b> (ENQ)</td><td>The lock manager — stops two users from changing the same data at the same time</td><td>“Vendor 1000 is locked by user AHMED” message</td></tr>
+              <tr><td><b>Spool</b> (SPO)</td><td>Handles printing</td><td>Printing a payment advice or a report</td></tr>
+            </table></div>
+            <p>As an FI user you will mostly live in <b>Dialog</b> work processes, schedule month-end jobs in <b>Background</b>, and meet <b>Enqueue</b> whenever SAP says a record is “locked by another user”. That locked message is not an error in your entry — it simply means a colleague is editing the same vendor/document right now. Wait and retry.</p>
+            <h3>T-codes that show this layer <span class="examtag">Good to know</span></h3>
+            <div class="tblwrap"><table>
+              <tr><th style="width:18%">T-code</th><th>What it shows</th></tr>
+              <tr><td><code>SM50</code></td><td>Work processes of <b>your</b> application server — which are busy, which are free, what they are running.</td></tr>
+              <tr><td><code>SM66</code></td><td>Work processes of <b>all</b> application servers together (global view).</td></tr>
+              <tr><td><code>SM51</code></td><td>The list of <b>application servers</b> in this system.</td></tr>
+              <tr><td><code>SM04</code></td><td>Users currently logged on to your application server.</td></tr>
+              <tr><td><code>SM12</code></td><td>Lock entries — who has locked what (the Enqueue list).</td></tr>
+              <tr><td><code>SM37</code></td><td>Background jobs — see and check jobs that run in the background.</td></tr>
+            </table></div>
+            <div class="box analogy"><span class="box-title">Analogy — bank branch</span>
+              <p>The <b>Dispatcher</b> is the token machine + guard at a bank branch: you take a token and wait your turn. The <b>work processes</b> are the counter staff: some counters serve walk-in customers (Dialog), one desk processes files dropped off for later collection (Background), one officer finally stamps and files the papers (Update), one keeps the “file is with me” register so two officers never edit the same file (Enqueue), and one handles the printer (Spool).</p>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick — “D-B-U-E-S”</span>
+              <p>Work processes: <b>D</b>ialog, <b>B</b>ackground, <b>U</b>pdate, <b>E</b>nqueue, <b>S</b>pool. Remember the sentence: <b>“Daily Background Updates Ensure Smooth-printing.”</b> Five types, one line.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 9 CLIENT DEEP DIVE ============ -->
+          <section class="lesson" id="s9" data-toc>
+            <h2><span class="no">09</span> What is a Client? — the deep dive <span class="examtag">Exam favourite</span></h2>
+            <p class="sub">You met this word in Lesson 1. Now we finish it properly, because it sits right in the middle of SAP architecture — and in the middle of many exam questions.</p>
+            <div class="box term"><span class="box-title">New word — Client (SAP meaning)</span>
+              <p>A <b>Client</b> is a <b>separate, self-contained environment inside one SAP system</b>. It has its own set of business data, its own users, and its own settings that belong only to it. A Client is identified by a <b>3-digit number</b>, from <code>000</code> to <code>999</code>, which you type on the logon screen before your user name and password.</p>
+            </div>
+            <p>One installed SAP system (one database, one set of application servers) can hold <b>several Clients side by side</b>. They share the same programs and the same database software, but their business data is kept strictly separate — data of Client 100 can never be seen from Client 200.</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 300" role="img" aria-label="Diagram: one SAP system containing three separate clients 100, 200 and 300, each with its own data, users and settings, sharing the same programs">
+                <defs><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text x="360" y="24" text-anchor="middle" class="svg-title">ONE SAP SYSTEM (one SID, e.g. “PRD”)</text>
+                <rect x="50" y="40" width="620" height="180" rx="14" class="svg-box"/>
+                <rect x="75" y="66" width="175" height="128" rx="10" class="svg-box-a"/>
+                <text x="162" y="94" text-anchor="middle" class="svg-title" font-size="14">CLIENT 100</text>
+                <text x="162" y="116" text-anchor="middle" class="svg-sub">Customising / Golden</text>
+                <text x="162" y="136" text-anchor="middle" class="svg-sub">Settings are built here</text>
+                <text x="162" y="166" text-anchor="middle" class="svg-sub">Own data · Own users</text>
+                <rect x="272" y="66" width="175" height="128" rx="10" class="svg-box-g"/>
+                <text x="359" y="94" text-anchor="middle" class="svg-title" font-size="14">CLIENT 200</text>
+                <text x="359" y="116" text-anchor="middle" class="svg-sub">Testing / Training</text>
+                <text x="359" y="136" text-anchor="middle" class="svg-sub">Practice data lives here</text>
+                <text x="359" y="166" text-anchor="middle" class="svg-sub">Own data · Own users</text>
+                <rect x="469" y="66" width="175" height="128" rx="10" class="svg-box-a"/>
+                <text x="556" y="94" text-anchor="middle" class="svg-title" font-size="14">CLIENT 800</text>
+                <text x="556" y="116" text-anchor="middle" class="svg-sub">IDES / Practice</text>
+                <text x="556" y="136" text-anchor="middle" class="svg-sub">Demo company data</text>
+                <text x="556" y="166" text-anchor="middle" class="svg-sub">Own data · Own users</text>
+                <text x="360" y="246" text-anchor="middle" class="svg-sub">Shared by all clients: the SAP programs (ABAP) and the database software</text>
+                <text x="360" y="268" text-anchor="middle" class="svg-sub">Never shared: business data — a document posted in Client 100 does not exist in Client 200</text>
+              </svg>
+              <figcaption>One system, many Clients. Same building, fully separate flats. (Illustration drawn for learning — client numbers and purposes are typical examples; every company arranges its own.)</figcaption>
+            </figure>
+            <div class="box analogy"><span class="box-title">Analogy — flats in one building</span>
+              <p>An SAP <b>system</b> is one apartment building. A <b>Client</b> is one flat inside it. All flats share the building's structure, lift and wiring (the programs), but each flat has its own furniture, its own family and its own lock (its data and users). The family in Flat 100 cannot open Flat 200's door or see its furniture.</p>
+            </div>
+            <h3>The special clients SAP itself delivers</h3>
+            <div class="tblwrap"><table>
+              <tr><th style="width:16%">Client</th><th>What it is</th></tr>
+              <tr><td><code>000</code></td><td>The <b>reference client</b> delivered by SAP with standard settings. Used as the clean starting copy for making new clients. Normal users do not work here daily.</td></tr>
+              <tr><td><code>001</code></td><td>Another SAP-delivered copy of the reference client (historically the “example” client). Also not a working client.</td></tr>
+              <tr><td><code>066</code></td><td>Reserved for SAP's own remote support service (EarlyWatch). You will likely never log on here.</td></tr>
+              <tr><td>e.g. <code>100</code>, <code>200</code>, <code>800</code></td><td><b>Your company's own clients</b> — created by copying the reference client, then used for configuration, testing, training or live work. Numbers are chosen by the company.</td></tr>
+            </table></div>
+            <h3>Why does one system need several Clients?</h3>
+            <ul class="clean">
+              <li><b>Safe practice:</b> new staff can learn and make mistakes in a training client — live data is untouched.</li>
+              <li><b>Clean testing:</b> new settings are tested in one client before they are allowed anywhere near real work.</li>
+              <li><b>Separate companies/groups:</b> sometimes different purposes (e.g. a demo company) are kept as different clients in the same system.</li>
+            </ul>
+            <div class="box trap"><span class="box-title">Exam trap — the No. 1 trap of this lesson</span>
+              <p>In SAP, <b>Client ≠ customer</b>. A customer who buys your goods is a <b>Customer / Business Partner</b>. A <b>Client</b> is an environment inside the system. If an exam option says “the client placed an order”, read carefully which meaning is intended — in architecture questions it is always the environment.</p>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick</span>
+              <p><b>Client = “Computer ke andar ka Ilaqa”</b> — a separate area inside the computer system. And remember the number: a Client is always <b>3 digits</b>. If you see a 3-digit number on a logon screen, it is the Client.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 10 CLIENT DEPENDENT VS INDEPENDENT ============ -->
+          <section class="lesson" id="s10" data-toc>
+            <h2><span class="no">10</span> Client-dependent vs client-independent data</h2>
+            <p class="sub">One step deeper — a small idea with a big exam value.</p>
+            <p>Almost everything in SAP belongs to one Client only. But a few things are shared by <b>all</b> Clients of the system. SAP has two exact words for this:</p>
+            <div class="tblwrap"><table>
+              <tr><th style="width:24%">Type</th><th style="width:38%">Meaning</th><th>Examples</th></tr>
+              <tr><td><b>Client-dependent</b></td><td>Belongs to <b>one</b> Client only. Change it in Client 100, Client 200 does not see it.</td><td>All business data (documents, vendors, customers), most FI configuration — company code settings, chart of accounts assignments, posting period settings.</td></tr>
+              <tr><td><b>Client-independent</b><br/>(cross-client)</td><td>Belongs to the <b>whole system</b>. Change it once, it changes for every Client.</td><td>ABAP programs themselves, and some general settings — e.g. the list of <b>currencies</b> and <b>countries</b> used by the whole system.</td></tr>
+            </table></div>
+            <div class="box analogy"><span class="box-title">Analogy — flats again</span>
+              <p>Furniture inside your flat is <b>client-dependent</b> — only your flat has it. The building's lift, main gate and water tank are <b>client-independent</b> — repair the lift once, and every flat benefits. Programs are like the lift: one program, used by all clients.</p>
+            </div>
+            <p><b>Why should an FI consultant care?</b> Because most of your future configuration (SPRO settings for FI) is <b>client-dependent</b>. You will set it in the configuration client, and it will <b>not</b> automatically appear in other clients or systems — it must be carried there by a <b>Transport Request</b> (Section 13). Keep this chain in mind; it explains half of how SAP projects work.</p>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>“All configuration in SAP is client-independent” — <b>wrong</b>. Most customising is client-<b>dependent</b>. And “programs are stored separately in each client” — <b>wrong</b>. ABAP programs are client-<b>independent</b>: one copy serves all clients.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 11 SID AND INSTANCE ============ -->
+          <section class="lesson" id="s11" data-toc>
+            <h2><span class="no">11</span> System ID (SID) and Instance — two small names</h2>
+            <p>When technical people talk, two short words keep coming up. Learn them now and you will never feel lost in a project meeting.</p>
+            <div class="box term"><span class="box-title">New word — SID (System ID)</span>
+              <p>Every SAP system has a short name of <b>3 characters</b> called its <b>SID</b> (System IDentifier) — for example <code>DEV</code>, <code>QAS</code>, <code>PRD</code>, or any 3-letter/number code a company chooses, like <code>S4P</code>. The SID is the system's identity card: “Which system are you logged into?” — “PRD.” One SID = one system = one database.</p>
+            </div>
+            <div class="box term"><span class="box-title">New word — Instance</span>
+              <p>An <b>instance</b> is one running copy of the SAP application software on one server — practically: <b>one application server, running, with its own Dispatcher and work processes</b>. A system with 3 application servers has 3 instances (usually one main “central” instance plus additional “dialog” instances), all serving the same system and the same database.</p>
+            </div>
+            <div class="tblwrap"><table>
+              <tr><th style="width:24%">Word</th><th style="width:38%">One-line meaning</th><th>Analogy</th></tr>
+              <tr><td><b>System (SID)</b></td><td>One complete SAP installation: application servers + one database</td><td>One whole restaurant branch</td></tr>
+              <tr><td><b>Instance</b></td><td>One running application server within that system</td><td>One kitchen counter team inside the branch</td></tr>
+              <tr><td><b>Client</b></td><td>A separate environment inside the system</td><td>A separate, locked section of the branch for one party/event</td></tr>
+            </table></div>
+            <div class="box trick"><span class="box-title">Memory trick — “3 and 3”</span>
+              <p><b>SID = 3 characters</b> (PRD). <b>Client = 3 digits</b> (100). On the logon screen you give both: the system (chosen in your SAP Logon list) and the Client number. Two 3s — easy to remember together.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 12 LANDSCAPE ============ -->
+          <section class="lesson" id="s12" data-toc>
+            <h2><span class="no">12</span> The system landscape: DEV → QAS → PRD <span class="examtag">Exam favourite</span></h2>
+            <div class="box term"><span class="box-title">New word — Landscape</span>
+              <p>A company's complete set of SAP systems, arranged in a line, is called its <b>landscape</b>. The standard landscape has <b>three systems</b>. Work flows through them in one fixed direction — never backwards.</p>
+            </div>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 240" role="img" aria-label="Diagram of the three-system landscape: Development system DEV where configuration is built, Quality system QAS where it is tested, Production system PRD where the company works live, connected by transports in one direction">
+                <defs><marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <rect x="30" y="60" width="190" height="110" rx="12" class="svg-box-a"/>
+                <text x="125" y="90" text-anchor="middle" class="svg-title">DEV</text>
+                <text x="125" y="112" text-anchor="middle" class="svg-sub">Development System</text>
+                <text x="125" y="134" text-anchor="middle" class="svg-sub">Configuration is BUILT here</text>
+                <text x="125" y="152" text-anchor="middle" class="svg-sub">No real business data</text>
+                <rect x="265" y="60" width="190" height="110" rx="12" class="svg-box-g"/>
+                <text x="360" y="90" text-anchor="middle" class="svg-title">QAS</text>
+                <text x="360" y="112" text-anchor="middle" class="svg-sub">Quality Assurance System</text>
+                <text x="360" y="134" text-anchor="middle" class="svg-sub">Settings are TESTED here</text>
+                <text x="360" y="152" text-anchor="middle" class="svg-sub">Test data, like real life</text>
+                <rect x="500" y="60" width="190" height="110" rx="12" class="svg-box-a"/>
+                <text x="595" y="90" text-anchor="middle" class="svg-title">PRD</text>
+                <text x="595" y="112" text-anchor="middle" class="svg-sub">Production System</text>
+                <text x="595" y="134" text-anchor="middle" class="svg-sub">The LIVE system</text>
+                <text x="595" y="152" text-anchor="middle" class="svg-sub">Real company data — be careful!</text>
+                <path d="M220 105 L261 105" stroke="var(--accent)" stroke-width="2.5" fill="none" marker-end="url(#arr4)"/>
+                <text x="240" y="92" text-anchor="middle" class="svg-sub">transport</text>
+                <path d="M455 105 L496 105" stroke="var(--accent)" stroke-width="2.5" fill="none" marker-end="url(#arr4)"/>
+                <text x="475" y="92" text-anchor="middle" class="svg-sub">transport</text>
+                <text x="360" y="205" text-anchor="middle" class="svg-sub">Settings travel DEV → QAS → PRD. Never directly into PRD, never backwards.</text>
+              </svg>
+              <figcaption>The three-system landscape. SID names DEV / QAS / PRD are the most common convention; a company may choose other 3-character SIDs. (Illustration drawn for learning.)</figcaption>
+            </figure>
+            <div class="tblwrap"><table>
+              <tr><th style="width:16%">System</th><th style="width:28%">Full name</th><th>What happens here</th></tr>
+              <tr><td><b>DEV</b></td><td>Development</td><td>Consultants <b>build</b> configuration here (in its customising client) and developers write/change programs. Unit testing — quick self-checks — also happens here. No real business is run on DEV.</td></tr>
+              <tr><td><b>QAS</b></td><td>Quality Assurance</td><td>The built settings arrive here and are <b>tested properly</b> with realistic data, often by business users. Training is also frequently done on QAS. If a test fails, the fix is made back in DEV — never directly in QAS.</td></tr>
+              <tr><td><b>PRD</b></td><td>Production</td><td>The <b>live</b> system where the whole company actually works — real invoices, real payments, real closing. Configuration is <b>never</b> created directly in PRD; it only arrives, tested, from QAS.</td></tr>
+            </table></div>
+            <div class="box analogy"><span class="box-title">Analogy — a tailor's three rooms</span>
+              <p><b>DEV</b> is the cutting room — the suit is stitched here, mistakes are cheap. <b>QAS</b> is the trial room — the customer tries the suit, checks the fitting. <b>PRD</b> is the wedding day — the suit is worn for real; nobody stitches on the wedding day. SAP settings follow exactly this journey.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam traps</span>
+              <ul class="clean">
+                <li>“Configuration is done directly in the Production system” — <b>wrong</b>, and in real life it is forbidden. PRD only receives tested transports.</li>
+                <li>“QAS is where programs are developed” — <b>wrong</b>. Development happens in DEV; QAS is for testing what DEV produced.</li>
+                <li>“DEV, QAS and PRD are clients of one system” — <b>wrong</b>. They are three separate <b>systems</b> (three SIDs, three databases). Each system has its own clients inside it.</li>
+              </ul>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 13 TRANSPORTS ============ -->
+          <section class="lesson" id="s13" data-toc>
+            <h2><span class="no">13</span> Transport Requests — how settings travel</h2>
+            <p class="sub">If settings are built in DEV, how do they reach QAS and PRD? They travel in a sealed packet called a Transport Request.</p>
+            <div class="box term"><span class="box-title">New word — Transport Request (TR)</span>
+              <p>A <b>Transport Request</b> is a numbered container in which SAP packs your configuration changes (or a developer's program changes) so they can be <b>moved (imported)</b> into another system — DEV → QAS → PRD — exactly as they were made, in the right order, with a record of who made them. Think of it as a sealed, numbered courier parcel for settings.</p>
+            </div>
+            <h3>Two kinds of transport requests</h3>
+            <div class="tblwrap"><table>
+              <tr><th style="width:26%">Type</th><th>What it carries</th></tr>
+              <tr><td><b>Customizing request</b></td><td><b>Configuration settings</b> — the SPRO work of consultants like you (client-dependent settings). This is the type an FI consultant creates every day.</td></tr>
+              <tr><td><b>Workbench request</b></td><td><b>Development objects</b> — ABAP programs and other client-independent development work of programmers.</td></tr>
+            </table></div>
+            <h3>The journey of your setting, step by step</h3>
+            <ul class="clean">
+              <li><b>Step 1:</b> In DEV, you open SPRO and change a setting. SAP asks: “Create or choose a Customizing request?” Your change is recorded inside that request — nothing has moved yet.</li>
+              <li><b>Step 2:</b> When the work is finished and checked, you <b>release</b> the request (T-code <code>SE09</code> / <code>SE10</code> — the Transport Organizer). Releasing = sealing the parcel and handing it to the courier.</li>
+              <li><b>Step 3:</b> The system team (Basis) <b>imports</b> the request into QAS, usually through the Transport Management System, T-code <code>STMS</code>. You test in QAS.</li>
+              <li><b>Step 4:</b> Tests pass → the same request is imported into <b>PRD</b>. Your setting is now live for the whole company.</li>
+            </ul>
+            <div class="box term"><span class="box-title">New word — Basis</span>
+              <p><b>Basis</b> is the technical administration side of SAP — the team that installs systems, manages users' technical access, moves transports, takes backups and keeps the servers healthy. FI consultants do the accounting settings; Basis looks after the machine room. You will say “please ask Basis to import this TR” many times in your career.</p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — registered post</span>
+              <p>A transport request is like sending an important file by <b>registered post</b>: it is packed and sealed (recorded changes), given a tracking number (the TR number), signed for at each stop (DEV → QAS → PRD), and never opened or edited on the way. If the file is wrong, you do not edit the parcel in transit — you prepare a <b>new</b> parcel in DEV with the correction.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>Business <b>data</b> (documents, invoices) is <b>never</b> transported — only configuration and programs travel by transport request. Live data stays in PRD where it was created. If an option says “transport the posted documents to QAS”, it is wrong.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 14 SCREEN TOUR ============ -->
+          <section class="lesson" id="s14" data-toc>
+            <h2><span class="no">14</span> Screen tour: the SAP logon screen</h2>
+            <p class="sub">Let us see this lesson's words on a screen. Below is a re-created illustration of the classic SAP logon screen — drawn for learning, in the style of SAP GUI. It is <b>not</b> a real SAP screenshot.</p>
+            <div class="screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>SAP Logon — illustration (re-created for learning, not a real screenshot)</span></div>
+              <div class="screen-body"><span class="dim">System:  </span> <span class="hl2">PRD</span> <span class="dim">— Production System (the SID: 3 characters)</span><br/>
+<span class="dim">Client:  </span> <span class="hl2">100</span> <span class="dim">— the Client inside this system (3 digits — NOT a customer)</span><br/>
+<span class="dim">User:    </span> <span class="hl2">ASAD.FI</span> <span class="dim">— your personal user ID</span><br/>
+<span class="dim">Password:</span> <span class="hl2">••••••••</span><br/>
+<span class="dim">Language:</span> <span class="hl2">EN</span> <span class="dim">— screen language</span><br/>
+<span class="dim">──────────────────────────────────────────────</span><br/>
+<span class="dim">You are connecting from the</span> PRESENTATION layer <span class="dim">(SAP GUI on your PC).</span><br/>
+<span class="dim">Your logon request travels to an</span> APPLICATION server <span class="dim">of system PRD,</span><br/>
+<span class="dim">which checks your password against data stored in the</span> DATABASE layer.</span></div>
+            </div>
+            <p>Read the logon screen with your new eyes:</p>
+            <ul class="clean">
+              <li><b>System / SID</b> — which of the landscape's systems you are entering (DEV, QAS or PRD). In SAP Logon you pick it from your list of systems before this screen.</li>
+              <li><b>Client</b> — which environment inside that system. Same system, different Client = different data, and your user ID may not even exist there.</li>
+              <li><b>User &amp; password</b> — who you are <i>inside that Client</i>. Users are client-dependent: a user created in Client 100 cannot log on to Client 200 until it is created there too.</li>
+            </ul>
+            <div class="box trick"><span class="box-title">Memory trick — the logon question</span>
+              <p>Before logging on, always ask: <b>“System konsa? Client konsa?”</b> (Which system? Which client?). Half of all beginner mistakes — “my document is missing!”, “my setting is not here!” — are simply a logon into the wrong system or wrong client. The data is safe; you are standing in the wrong flat.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 15 WHY IT MATTERS ============ -->
+          <section class="lesson" id="s15" data-toc>
+            <h2><span class="no">15</span> Why architecture matters for an FI consultant</h2>
+            <p class="sub">“I am an accounts person — why should I care about servers?” Fair question. Here is the honest answer.</p>
+            <ul class="clean">
+              <li><b>Your daily settings live in this structure.</b> From Lesson 5 onwards you will configure company codes, fiscal years and charts of accounts in SPRO — in the DEV customising client — and your work will travel by transport to QAS and PRD. If you do not understand Clients and transports, you cannot do a consultant's job.</li>
+              <li><b>It explains everyday mysteries.</b> “I created the vendor but the tester cannot see it” (different client/system). “The report is slow today” (application server load — check SM50/SM66). “Record locked by user…” (Enqueue — SM12). Architecture turns panic into a checklist.</li>
+              <li><b>The exam asks it directly.</b> This lesson sits in the C_TS4FI topic <b>“Overview and Deployment of SAP S/4HANA”</b>. Client, landscape, and deployment questions are considered easy marks — if you have the concepts clear.</li>
+              <li><b>Deployment connects here too:</b> remember the editions from Lesson 1 — On-Premise, Cloud Private Edition (your exam), Cloud Public Edition. “Deployment” simply means <b>where Layers 2 and 3 physically run and who manages them</b>: on the company's own servers (on-premise), or in a cloud data centre — dedicated to one company in Private Edition, shared and SAP-managed in Public Edition. The three layers themselves never change.</li>
+            </ul>
+            <div class="box term"><span class="box-title">New word — Deployment</span>
+              <p><b>Deployment</b> = the way the SAP system is installed and run: on whose computers, in which place, managed by whom. Same software, different “housing”. Your C_TS4FI exam is specifically about the <b>Cloud Private Edition</b> housing — one company's own S/4HANA system, hosted in the cloud, with the full flexibility of configuration and transports you are learning in this lesson.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 16 EXAM TRAPS ============ -->
+          <section class="lesson" id="s16" data-toc>
+            <h2><span class="no">16</span> Exam traps for Lesson 2</h2>
+            <p class="sub">Read these the night before the exam. Each one has caught real candidates.</p>
+            <div class="box trap"><span class="box-title">Trap 1 — Client means customer</span>
+              <p>No. In architecture, a <b>Client</b> is an environment inside one system, identified by 3 digits. A customer is a Customer / Business Partner.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 2 — DEV / QAS / PRD are clients</span>
+              <p>No. They are three separate <b>systems</b> (SIDs), each with its own database and its own clients inside.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 3 — Data is stored on the user's PC</span>
+              <p>No. The presentation layer only displays. All data lives in the database layer; all processing happens in the application layer.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 4 — One system = one application server</span>
+              <p>Not necessarily. A system has <b>one database</b> but can have <b>many application servers (instances)</b> sharing the work.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 5 — Configuration is done in Production</span>
+              <p>Never. Configuration is built in <b>DEV</b>, tested in <b>QAS</b>, and only then transported to <b>PRD</b>.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 6 — Everything is client-dependent</span>
+              <p>No. Business data and most customising are client-dependent, but <b>ABAP programs are client-independent</b> — one copy for all clients.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 7 — Transports move business data</span>
+              <p>No. Transports move <b>configuration</b> (Customizing requests) and <b>programs</b> (Workbench requests). Posted documents never travel.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 8 — S/4HANA can use any database</span>
+              <p>No. S/4HANA runs <b>only on SAP HANA</b>. “Any database” was ECC's freedom, and it ended with S/4HANA.</p>
+            </div>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 17 GLOSSARY ============ -->
+          <section class="lesson" id="s17" data-toc>
+            <h2><span class="no">17</span> Lesson 2 glossary (A–Z)</h2>
+            <p class="sub">Every technical word of this lesson, in one place. Use it for revision.</p>
+            <dl class="glossary">
+              <dt>ABAP</dt><dd>SAP's own programming language. The SAP programs that run in the application layer are written in ABAP.</dd>
+              <dt>Application Layer</dt><dd>The middle layer of SAP's architecture — where programs run and all checks and calculations happen, on application servers.</dd>
+              <dt>Application Server</dt><dd>A powerful, always-on computer that runs the SAP application software and serves many users at once.</dd>
+              <dt>Architecture</dt><dd>The internal design of a system — its parts, their jobs, and how they work together.</dd>
+              <dt>Basis</dt><dd>The technical administration side of SAP: installations, transports, backups, system health. Also the team that does it.</dd>
+              <dt>Client</dt><dd>In SAP: a separate, self-contained environment inside one system, identified by a 3-digit number. Not a customer.</dd>
+              <dt>Client-dependent</dt><dd>Belonging to one Client only — e.g. business data and most FI configuration.</dd>
+              <dt>Client-independent</dt><dd>Shared by all Clients of a system — e.g. ABAP programs, the currency list. Also called cross-client.</dd>
+              <dt>Customizing Request</dt><dd>The transport request type that carries configuration (SPRO) settings from DEV to QAS to PRD.</dd>
+              <dt>Database Layer</dt><dd>The bottom layer — where all data is stored permanently. In S/4HANA, always the SAP HANA database.</dd>
+              <dt>Deployment</dt><dd>How and where the system is installed and run — on-premise, Cloud Private Edition, or Cloud Public Edition.</dd>
+              <dt>DEV</dt><dd>Development system — where configuration and programs are built.</dd>
+              <dt>Dispatcher</dt><dd>The traffic controller of an application server: receives requests, queues them, and gives them to free work processes.</dd>
+              <dt>Enqueue</dt><dd>The lock service/work process type that prevents two users from changing the same data at the same time.</dd>
+              <dt>Instance</dt><dd>One running application server within a system, with its own Dispatcher and work processes.</dd>
+              <dt>Landscape</dt><dd>A company's full set of SAP systems in order — classically DEV → QAS → PRD.</dd>
+              <dt>Layer / Tier</dt><dd>One level of the architecture with its own job. SAP has three: Presentation, Application, Database.</dd>
+              <dt>PRD</dt><dd>Production system — the live system where the company does its real work.</dd>
+              <dt>Presentation Layer</dt><dd>The top layer — the screens on the user's device (SAP GUI, Fiori). Displays and collects input; stores nothing.</dd>
+              <dt>QAS</dt><dd>Quality Assurance system — where transported settings are tested before going live.</dd>
+              <dt>Server</dt><dd>A powerful computer, always on, that provides services to many users (the “clients” in the computing sense).</dd>
+              <dt>SID</dt><dd>System ID — the 3-character name of one SAP system, e.g. PRD.</dd>
+              <dt>Table</dt><dd>The database's way of storing data: rows (records) and columns (fields), like an Excel sheet. E.g. BKPF, BSEG, ACDOCA.</dd>
+              <dt>Three-tier Architecture</dt><dd>SAP's design of three layers — Presentation, Application, Database. The “3” in the old name R/3.</dd>
+              <dt>Transport Request (TR)</dt><dd>A numbered, sealed container that carries configuration or program changes from one system to the next (DEV → QAS → PRD).</dd>
+              <dt>Work Process</dt><dd>A worker inside an application server that executes requests. Types: Dialog, Background, Update, Enqueue, Spool.</dd>
+              <dt>Workbench Request</dt><dd>The transport request type that carries development objects (ABAP programs and other cross-client work).</dd>
+            </dl>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 18 SUMMARY ============ -->
+          <section class="lesson" id="s18" data-toc>
+            <h2><span class="no">18</span> Summary — key points for C_TS4FI</h2>
+            <ul class="clean">
+              <li><b>Architecture</b> = how SAP is built inside. SAP S/4HANA uses a <b>three-tier architecture</b> — the “3” in the old name R/3 (R = Real-time).</li>
+              <li><b>Layer 1 — Presentation:</b> SAP GUI and Fiori on the user's device. Shows screens, takes input, stores nothing, calculates nothing.</li>
+              <li><b>Layer 2 — Application:</b> application servers run the ABAP programs; every check and calculation happens here. One system can have <b>many</b> application servers.</li>
+              <li><b>Layer 3 — Database:</b> all data stored permanently in tables — and in S/4HANA always in the <b>SAP HANA</b> in-memory database.</li>
+              <li>Inside an application server: the <b>Dispatcher</b> queues requests; <b>work processes</b> execute them — Dialog, Background, Update, Enqueue, Spool.</li>
+              <li>A <b>Client</b> is a separate environment inside one system, identified by <b>3 digits</b> (000 = SAP reference client). Client ≠ customer.</li>
+              <li>Data and settings are mostly <b>client-dependent</b>; <b>programs are client-independent</b> (shared by all clients).</li>
+              <li>Every system has a <b>SID</b> (3 characters). An <b>instance</b> is one running application server of that system.</li>
+              <li>The standard <b>landscape</b>: build in <b>DEV</b> → test in <b>QAS</b> → work live in <b>PRD</b>. Configuration is never made directly in PRD.</li>
+              <li>Settings travel in <b>Transport Requests</b>: <b>Customizing</b> requests carry configuration; <b>Workbench</b> requests carry programs. Business data is never transported.</li>
+              <li>Useful T-codes of this lesson: <code>SM50</code> / <code>SM66</code> work processes, <code>SM51</code> application servers, <code>SM12</code> locks, <code>SM37</code> background jobs, <code>SE09</code>/<code>SE10</code> transport organizer, <code>STMS</code> transport management.</li>
+            </ul>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <!-- ============ 19 SELF TEST ============ -->
+          <section class="lesson" id="s19" data-toc>
+            <h2><span class="no">19</span> Self-test — 12 MCQs</h2>
+            <p class="sub">Exam style: choose one answer, get instant feedback. Aim for 10/12 before moving to Lesson 3.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart self-test</button>
+          
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet — test de kar Mark Read dabayein</span>
+            </div>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow" aria-hidden="true">→</span>
+            <div>
+              <b>Next: Lesson 3 — SAP Interface</b><br/>
+              <span style="color:var(--ink-soft)">Now that you know how SAP is built inside, Lesson 3 walks you through the screens themselves: the SAP GUI window part by part, the menu bar, the command field, status bar messages, and how to navigate like a daily user. Lesson 3 will arrive as its own separate document, like this one.</span>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 2 of the C_TS4FI Exam-Prep series · Screen pictures in this lesson are learning illustrations re-created in the style of SAP GUI / Fiori, not actual SAP screenshots · Exam facts follow SAP's published C_TS4FI exam description; SAP may update them — always confirm on SAP's official certification page before booking.<br/>course created by Muhammad Asad Ullah Ibrahim
+          </footer>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      // ---- Theme switch (in-memory; starts from system preference) ----
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent = (t==='dark') ? 'Light theme' : 'Dark theme'; }
+        apply('light'); // default theme: Light
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+        });
+      })();
+
+      // ---- Shared course progress store (localStorage — works across all lesson files in the same folder/browser) ----
+      window.SAPStore=(function(){
+        var KEY='sapCts4fiProgress_v1';
+        function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var d=JSON.parse(raw); if(d&&typeof d==='object') return d; } }catch(e){} return {lessons:{},gate2:{fails:0,lockUntil:0,unlocked:false}}; }
+        function save(d){ try{ localStorage.setItem(KEY,JSON.stringify(d)); }catch(e){} }
+        function getLesson(n){ var d=load(); if(!d.lessons) d.lessons={}; return d.lessons[n]||{readSections:[],totalSections:0,allRead:false,quizDone:false}; }
+        function setLesson(n,rec){ var d=load(); if(!d.lessons) d.lessons={}; d.lessons[n]=rec; save(d); }
+        function getGate(){ var d=load(); return d.gate2||{fails:0,lockUntil:0,unlocked:false}; }
+        function setGate(g){ var d=load(); d.gate2=g; save(d); }
+        function lesson1Complete(){
+          var l=getLesson('1');
+          if(l.allRead && l.quizDone) return true;
+          try{
+            if(localStorage.getItem('lesson1_allRead')==='true' && localStorage.getItem('lesson1_quizDone')==='true') return true;
+            if(localStorage.getItem('sap_lesson1_complete')==='true') return true;
+            var r=localStorage.getItem('sap_lesson1_read'), q=localStorage.getItem('sap_lesson1_quizDone');
+            if(r && q==='true'){ var arr=JSON.parse(r); var cnt=Array.isArray(arr)?arr.length:Object.keys(arr).length; if(cnt>=17) return true; }
+          }catch(e){}
+          return false;
+        }
+        return {load:load,save:save,getLesson:getLesson,setLesson:setLesson,getGate:getGate,setGate:setGate,lesson1Complete:lesson1Complete};
+      })();
+
+      // ---- Mark Read + sidebar progress (same behaviour as Lesson 10) ----
+      (function(){
+        var sections=[].slice.call(document.querySelectorAll('section.lesson[data-toc]'));
+        var tocItems={};
+        document.querySelectorAll('#tocList li').forEach(function(li){
+          var a=li.querySelector('a'); if(a) tocItems[a.getAttribute('href').slice(1)]={li:li,a:a};
+        });
+        var total=sections.length;
+        var readSet={};
+        try{ (window.SAPStore.getLesson('2').readSections||[]).forEach(function(id){ readSet[id]=true; }); }catch(e){}
+        function persistRead(){
+          try{
+            var rec=window.SAPStore.getLesson('2');
+            rec.readSections=Object.keys(readSet);
+            rec.totalSections=total;
+            rec.allRead=(rec.readSections.length>=total && total>0);
+            window.SAPStore.setLesson('2',rec);
+          }catch(e){}
+        }
+        var pctText=document.getElementById('pctText'), sideFill=document.getElementById('sideFill'),
+            countText=document.getElementById('countText'), readbar=document.getElementById('progressBar');
+        function updateProgress(){
+          var n=Object.keys(readSet).length;
+          var pct=total?Math.round(n/total*100):0;
+          if(pctText) pctText.textContent=pct+'%';
+          if(sideFill) sideFill.style.width=pct+'%';
+          if(readbar) readbar.style.width=pct+'%';
+          if(countText) countText.textContent=n+' of '+total+' sections marked read';
+        }
+        sections.forEach(function(sec){
+          var btn=sec.querySelector('.mark-read'), status=sec.querySelector('.read-status'), label=sec.querySelector('.mr-label');
+          if(!btn) return;
+          if(readSet[sec.id]){
+            sec.classList.add('is-read'); btn.classList.add('done');
+            if(label) label.textContent='Read \u2713';
+            if(status) status.textContent='\u2713 Marked as read — sidebar mein green tick lag gaya';
+            if(tocItems[sec.id]) tocItems[sec.id].li.classList.add('read');
+          }
+          btn.addEventListener('click',function(){
+            var id=sec.id;
+            if(readSet[id]){
+              delete readSet[id];
+              sec.classList.remove('is-read'); btn.classList.remove('done');
+              label.textContent='Mark Read';
+              status.textContent=(id==='s19') ? 'Not read yet — test de kar Mark Read dabayein' : 'Not read yet — khatam kar ke Mark Read dabayein';
+              if(tocItems[id]) tocItems[id].li.classList.remove('read');
+            }else{
+              readSet[id]=true;
+              sec.classList.add('is-read'); btn.classList.add('done');
+              label.textContent='Read \u2713'; status.textContent='\u2713 Marked as read — sidebar mein green tick lag gaya';
+              if(tocItems[id]) tocItems[id].li.classList.add('read');
+            }
+            persistRead();
+            updateProgress();
+          });
+        });
+        updateProgress();
+
+        // ---- Scroll-spy: blue active highlight for the section on screen ----
+        var current=null;
+        function setActive(id){
+          if(current===id) return; current=id;
+          Object.keys(tocItems).forEach(function(k){ tocItems[k].a.classList.toggle('active', k===id); });
+          var item=tocItems[id];
+          if(item){
+            var nav=item.li.closest('nav.toc');
+            if(nav){
+              var r=item.a.offsetTop;
+              if(r < nav.scrollTop+40 || r > nav.scrollTop+nav.clientHeight-80){
+                nav.scrollTo({top:r-120, behavior:'smooth'});
+              }
+            }
+          }
+        }
+        if('IntersectionObserver' in window){
+          var spy=new IntersectionObserver(function(entries){
+            entries.forEach(function(en){ if(en.isIntersecting) setActive(en.target.id); });
+          },{rootMargin:'-30% 0px -55% 0px', threshold:0});
+          sections.forEach(function(s){ spy.observe(s); });
+        }else{
+          window.addEventListener('scroll',function(){
+            var y=window.scrollY+window.innerHeight*0.35, best=sections[0].id;
+            sections.forEach(function(s){ if(s.offsetTop<=y) best=s.id; });
+            setActive(best);
+          },{passive:true});
+        }
+        if(sections.length) setActive(sections[0].id);
+      })();
+
+      // ---- Self-test quiz ----
+      (function(){
+        var QUESTIONS=[
+          {q:"What are the three layers of SAP's architecture, in the correct order from user to data?",opts:["Database → Application → Presentation","Presentation → Application → Database","Application → Presentation → Database","Presentation → Database → Application"],a:1,why:"Top to bottom: Presentation (screens) → Application (programs and checks) → Database (storage). Remember P-A-D."},
+          {q:"The '3' in the old SAP name R/3 stands for…",opts:["3 modules: FI, CO, MM","3 company codes","The three-tier architecture","3 databases"],a:2,why:"R/3 = Real-time, 3 tiers. The three layers are Presentation, Application and Database."},
+          {q:"Where do SAP programs run and all calculations and checks happen?",opts:["In the presentation layer, on the user's PC","In the database layer","In the application layer, on application servers","Inside the SAP GUI program only"],a:2,why:"The application layer is the brain: ABAP programs run there, checks (Dr = Cr, open period, authorisation) happen there."},
+          {q:"Which statement about the presentation layer is correct?",opts:["It stores all business data on the user's PC","It only displays screens and collects input; it stores no business data","It runs the posting programs","It is the HANA database"],a:1,why:"Presentation = face only. If the laptop is replaced, no data is lost — everything lives in Layers 2 and 3."},
+          {q:"Which database does SAP S/4HANA run on?",opts:["Oracle","Any database the customer chooses","Only SAP HANA","Microsoft SQL Server"],a:2,why:"S/4HANA runs ONLY on SAP HANA — an in-memory, column-store database. Any-database freedom belonged to ECC."},
+          {q:"In SAP, what is a Client?",opts:["A customer who buys the company's products","A separate, self-contained environment inside one SAP system, identified by a 3-digit number","The SAP GUI program installed on a PC","A type of user licence"],a:1,why:"The classic trap: a Client is an environment inside the system (3 digits, e.g. 100). A customer is a Customer / Business Partner."},
+          {q:"Which client is the reference client delivered by SAP with standard settings?",opts:["Client 800","Client 100","Client 066","Client 000"],a:3,why:"Client 000 is SAP's delivered reference client — the clean copy used to create new clients. 066 is reserved for SAP's EarlyWatch support service."},
+          {q:"A consultant changes an FI setting in Client 100. A user in Client 200 of the same system cannot see the change. Why?",opts:["The system is broken","Most configuration is client-dependent — it belongs to one client only","Clients share all data by default","The change must be transported between clients of the same system by SE09 only"],a:1,why:"Most customising (and all business data) is client-dependent: it exists only in the client where it was made. ABAP programs are the opposite — client-independent."},
+          {q:"In the standard three-system landscape, where is configuration built, tested, and used live?",opts:["Built in PRD, tested in QAS, live in DEV","Built in DEV, tested in PRD, live in QAS","Built in DEV, tested in QAS, live in PRD","Built, tested and used live all in PRD"],a:2,why:"DEV (build) → QAS (test) → PRD (live). Configuration is never created directly in Production."},
+          {q:"What does a Transport Request carry from DEV to QAS to PRD?",opts:["Posted accounting documents","Configuration settings and/or program changes","The complete database","User passwords"],a:1,why:"Transports carry settings (Customizing requests) and development objects (Workbench requests). Business data is never transported."},
+          {q:"What is the job of the Dispatcher in an application server?",opts:["It stores the data permanently","It receives user requests, queues them, and hands them to free work processes","It prints all reports","It creates new clients"],a:1,why:"The Dispatcher is the traffic controller/receptionist. Work processes do the actual work; the Enqueue work process manages locks."},
+          {q:"A user sees the message 'Vendor 1000 is locked by user AHMED'. Which part of SAP is speaking, and what should the user do?",opts:["The database is full; call Basis to delete the vendor","The Enqueue (lock) service — another user is editing the same record; wait and retry","The Dispatcher; log off and delete the client","Fiori; clear the browser cache"],a:1,why:"Enqueue prevents two users changing the same data at once. It is not an error in your entry — wait for the other user to finish (locks can be viewed in SM12)."}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  try{ var _rec=window.SAPStore.getLesson('2'); _rec.quizDone=true; window.SAPStore.setLesson('2',_rec); }catch(e){}
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=10?' — Excellent! You are ready for Lesson 3.':' — Re-read the sections above once, then try again. You can do it.');
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+
+    <script>
+      // ---- Gating: Lesson 2 stays locked until Lesson 1 is fully complete, the gate test is passed 5/5, or an admin unlocks it ----
+      (function(){
+        var lockedScreen=document.getElementById('lockedScreen');
+        var lessonContent=document.getElementById('lessonContent');
+        if(!lockedScreen||!lessonContent) return;
+        var store=window.SAPStore;
+
+        function isUnlocked(){
+          try{
+            if(store.lesson1Complete()) return true;
+            var g=store.getGate();
+            if(g && g.unlocked) return true;
+          }catch(e){}
+          return false;
+        }
+        function showContent(){
+          lockedScreen.hidden=true;
+          lessonContent.hidden=false;
+        }
+        function showLocked(){
+          lessonContent.hidden=true;
+          lockedScreen.hidden=false;
+        }
+        if(isUnlocked()){ showContent(); return; }
+        showLocked();
+
+        // ---------- Gate test (Lesson 1) — only the score is ever shown, never the correct answers ----------
+        var GATE=[
+          {q:"What does ERP stand for and what does it do?",opts:["Enterprise Resource Planning — one system that connects all departments of a company","Electronic Report Printing — a tool that only prints company reports","Enterprise Record Program — software for storing office files","External Resource Portal — a website where vendors register"],a:0},
+          {q:"What is SAP S/4HANA?",opts:["An add-on that makes Excel reports faster","An older name for SAP R/3","SAP's next-generation ERP running on the HANA in-memory database","A database product made by a different company"],a:2},
+          {q:"What does FI stand for in FICO?",opts:["Finance Investment","Final Inspection","Fiscal Integration","Financial Accounting"],a:3},
+          {q:"What does CO stand for in FICO?",opts:["Company Operations","Controlling","Central Office","Cost Overview"],a:1},
+          {q:"Which came before S/4HANA in SAP history?",opts:["SAP Fiori","SAP SuccessFactors","SAP ECC / R/3","SAP HANA Studio"],a:2}
+        ];
+        var gateQuiz=document.getElementById('gateQuiz');
+        var gateSubmit=document.getElementById('gateSubmit');
+        var gateMsg=document.getElementById('gateMsg');
+        var gateSub=document.getElementById('gateSub');
+        var gateArea=document.getElementById('gateArea');
+        var lockTimer=document.getElementById('lockTimer');
+        var lockUntilText=document.getElementById('lockUntilText');
+        var lockCountdown=document.getElementById('lockCountdown');
+        var picked={};
+        var timerId=null;
+
+        GATE.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='gate-q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              picked[qi]=oi;
+              opts.querySelectorAll('.gate-opt').forEach(function(x){ x.classList.remove('selected'); });
+              b.classList.add('selected');
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); gateQuiz.appendChild(box);
+        });
+
+        function setGateEnabled(on){
+          gateQuiz.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=!on; });
+          gateSubmit.disabled=!on;
+          gateSubmit.style.opacity=on?'1':'.55';
+        }
+        function fmtClock(ms){
+          var s=Math.max(0,Math.ceil(ms/1000));
+          var m=Math.floor(s/60), ss=s%60, h=Math.floor(m/60); m=m%60;
+          return (h>0?h+'h ':'')+m+'m '+(ss<10?'0':'')+ss+'s';
+        }
+        function refreshLock(){
+          var g=store.getGate();
+          var now=Date.now();
+          if(g.lockUntil && g.lockUntil>now){
+            lockTimer.hidden=false;
+            gateArea.style.display='none';
+            lockUntilText.textContent=new Date(g.lockUntil).toLocaleString();
+            lockCountdown.textContent=fmtClock(g.lockUntil-now);
+            if(!timerId){
+              timerId=setInterval(function(){
+                var gg=store.getGate(); var n=Date.now();
+                if(!gg.lockUntil || gg.lockUntil<=n){
+                  clearInterval(timerId); timerId=null;
+                  gg.lockUntil=0; gg.fails=0; store.setGate(gg);
+                  lockTimer.hidden=true; gateArea.style.display='';
+                  gateMsg.textContent=''; gateSub.textContent='';
+                  setGateEnabled(true);
+                } else {
+                  lockCountdown.textContent=fmtClock(gg.lockUntil-n);
+                  lockUntilText.textContent=new Date(gg.lockUntil).toLocaleString();
+                }
+              },1000);
+            }
+            return true;
+          }
+          lockTimer.hidden=true;
+          gateArea.style.display='';
+          return false;
+        }
+        refreshLock();
+
+        gateSubmit.addEventListener('click',function(){
+          if(refreshLock()) return;
+          if(Object.keys(picked).length<GATE.length){
+            gateMsg.textContent='Please answer all 5 questions first.';
+            gateSub.textContent='';
+            return;
+          }
+          var score=0;
+          GATE.forEach(function(item,qi){ if(picked[qi]===item.a) score++; });
+          if(score===GATE.length){
+            var g=store.getGate(); g.fails=0; g.lockUntil=0; g.unlocked=true; store.setGate(g);
+            gateMsg.textContent='Your score: '+score+' / '+GATE.length;
+            gateSub.textContent='Gate test passed. Lesson 2 is now open.';
+            setTimeout(showContent,700);
+          } else {
+            var g2=store.getGate(); g2.fails=(g2.fails||0)+1;
+            if(g2.fails>=3){ g2.lockUntil=Date.now()+60*60*1000; }
+            store.setGate(g2);
+            gateMsg.textContent='Your score: '+score+' / '+GATE.length;
+            gateSub.textContent='Go back and complete previous lesson.';
+            picked={};
+            gateQuiz.querySelectorAll('.gate-opt').forEach(function(b){ b.classList.remove('selected'); });
+            refreshLock();
+          }
+        });
+
+        // ---------- Admin unlock (hashed comparison only — the password itself is never stored or shown in this page) ----------
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var sha256=function a(b){function c(a,b){return a>>>b|a<<32-b}for(var d,e,f=Math.pow,g=f(2,32),h="length",i="",j=[],k=8*b[h],l=a.h=a.h||[],m=a.k=a.k||[],n=m[h],o={},p=2;64>n;p++)if(!o[p]){for(d=0;313>d;d+=p)o[d]=p;l[n]=f(p,.5)*g|0,m[n++]=f(p,1/3)*g|0}for(b+="\x80";b[h]%64-56;)b+="\x00";for(d=0;d<b[h];d++){if(e=b.charCodeAt(d),e>>8)return;j[d>>2]|=e<<(3-d)%4*8}for(j[j[h]]=k/g|0,j[j[h]]=k,e=0;e<j[h];){var q=j.slice(e,e+=16),r=l;for(l=l.slice(0,8),d=0;64>d;d++){var s=q[d-15],t=q[d-2],u=l[0],v=l[4],w=l[7]+(c(v,6)^c(v,11)^c(v,25))+(v&l[5]^~v&l[6])+m[d]+(q[d]=16>d?q[d]:q[d-16]+(c(s,7)^c(s,18)^s>>>3)+q[d-7]+(c(t,17)^c(t,19)^t>>>10)|0),x=(c(u,2)^c(u,13)^c(u,22))+(u&l[1]^u&l[2]^l[1]&l[2]);l=[w+x|0].concat(l),l[4]=l[4]+w|0}for(d=0;8>d;d++)l[d]=l[d]+r[d]|0}for(d=0;8>d;d++)for(e=3;e+1;e--){var y=l[d]>>8*e&255;i+=(16>y?0:"")+y.toString(16)}return i};
+        function hashText(text){
+          if(window.crypto && window.crypto.subtle && window.crypto.subtle.digest){
+            return window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function(buf){
+              return Array.prototype.map.call(new Uint8Array(buf),function(x){ return ('00'+x.toString(16)).slice(-2); }).join('');
+            }).catch(function(){ return sha256(text); });
+          }
+          return Promise.resolve(sha256(text));
+        }
+        var adminBtn=document.getElementById('adminBtn');
+        var adminBox=document.getElementById('adminBox');
+        var adminPass=document.getElementById('adminPass');
+        var adminMsg=document.getElementById('adminMsg');
+        adminBtn.addEventListener('click',function(){
+          adminBox.classList.toggle('show');
+          if(adminBox.classList.contains('show')) adminPass.focus();
+        });
+        document.getElementById('adminSubmit').addEventListener('click',function(){
+          var val=adminPass.value||'';
+          if(!val){ adminMsg.textContent='Please enter the admin password.'; return; }
+          hashText(val).then(function(h){
+            if(h===ADMIN_HASH){
+              var g=store.getGate(); g.fails=0; g.lockUntil=0; g.unlocked=true; store.setGate(g);
+              if(timerId){ clearInterval(timerId); timerId=null; }
+              adminMsg.textContent='Unlocked.';
+              setTimeout(showContent,500);
+            } else {
+              adminMsg.textContent='Incorrect password.';
+            }
+            adminPass.value='';
+          });
+        });
+        adminPass.addEventListener('keydown',function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); document.getElementById('adminSubmit').click(); } });
+      })();
+    </script>
+  </body>
+</html>

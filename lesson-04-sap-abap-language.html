@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 4 — SAP ABAP Language · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      /* reading progress (driven by Mark Read) */
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .35s ease}
+
+      /* top bar */
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      @media (max-width:860px){.layout{grid-template-columns:1fr}}
+
+      /* TOC */
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35;border:1px solid transparent;transition:background .15s ease,color .15s ease,border-color .15s ease}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc a.active{background:var(--accent-soft);color:var(--accent-ink);font-weight:700;border-color:color-mix(in srgb,var(--accent) 45%,transparent);box-shadow:inset 3px 0 0 var(--accent)}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.read a.active{color:var(--accent-ink)}
+      nav.toc .tick{margin-left:auto;flex:none;font-weight:700;color:var(--green);font-size:.95rem;line-height:1;visibility:hidden}
+      nav.toc li.read .tick{visibility:visible}
+      .toc-progress{border:1px solid var(--line);border-radius:10px;background:var(--surface2);padding:10px 12px;margin-bottom:12px}
+      .toc-progress .tp-row{display:flex;justify-content:space-between;align-items:baseline;font-size:.85rem;color:var(--ink-soft)}
+      .toc-progress .tp-row b{color:var(--ink);font-size:.95rem}
+      .toc-progress .tp-pct{font-weight:700;color:var(--green);font-size:1rem}
+      .toc-progress .tp-track{height:8px;border-radius:999px;background:var(--surface);border:1px solid var(--line);overflow:hidden;margin-top:8px}
+      .toc-progress .tp-fill{height:100%;width:0;background:var(--green);border-radius:999px;transition:width .35s ease}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      /* Mark Read */
+      .mark-read-row{display:flex;justify-content:flex-end;margin-top:22px;padding-top:16px;border-top:1px dashed var(--line)}
+      .mark-read-btn{display:inline-flex;align-items:center;gap:8px;background:var(--green-soft);color:var(--green);border:1.5px solid var(--green);border-radius:999px;padding:9px 20px;font:700 .92rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px;transition:background .15s ease,color .15s ease}
+      .mark-read-btn:hover{background:color-mix(in srgb,var(--green) 18%,var(--surface))}
+      .mark-read-btn .mr-check{display:none;font-weight:700}
+      .mark-read-btn.is-read{background:var(--green);color:#fff;border-color:var(--green)}
+      .mark-read-btn.is-read .mr-check{display:inline}
+      .mark-read-btn.is-read:hover{background:var(--green)}
+
+      /* hero */
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      /* callouts */
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      /* tables */
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      /* diagrams */
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      /* mock screens */
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      /* glossary */
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      /* self test */
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      /* gate / locked screen */
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;margin-top:26px;box-shadow:var(--shadow);max-width:760px}
+      @media (max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      .btn-ghost{background:transparent;color:var(--accent-ink);border:2px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .btn:disabled{opacity:.55;cursor:default}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600;font-size:.93rem;margin:0}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 4 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Dark theme</span>
+      </button>
+    </div>
+
+    <div class="wrap">
+      <!-- ============ GATE / LOCKED SCREEN (shown until Lesson 3 is complete or the gate test is passed) ============ -->
+      <div id="gateScreen">
+        <section class="gate-card" aria-labelledby="gateTitle">
+          <div class="gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          </div>
+          <h2 id="gateTitle">Lesson 4 is locked</h2>
+          <p>Lesson 4 opens only when <b>Lesson 3 is fully complete</b> — every Lesson 3 section marked Read <b>and</b> the Lesson 3 self-test answered.</p>
+          <p>If you have already studied Lesson 3, you can unlock Lesson 4 by passing the <b>Gate Test</b> below: 5 questions from Lesson 3. You need <b>5 / 5</b> to pass. Only your marks are shown after you submit — the correct answers are never displayed.</p>
+
+          <div class="gate-lockbox" id="gateLockBox" hidden>
+            <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+            <p>Locked until: <b id="gateLockUntil">—</b></p>
+            <p>Time remaining: <b id="gateCountdown">—</b></p>
+            <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+          </div>
+
+          <div id="gateTestArea">
+            <div id="gateQuestions"></div>
+            <p id="gateScore" aria-live="polite"></p>
+            <p id="gateMsg" aria-live="polite"></p>
+            <div class="gate-actions">
+              <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+              <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+            </div>
+            <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+          </div>
+
+          <div class="gate-admin">
+            <button class="btn btn-ghost" id="adminBtn" type="button">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 21 2"/><path d="M15 8l3 3"/></svg>Admin Unlock
+            </button>
+            <div class="gate-admin-form" id="adminForm" hidden>
+              <label for="adminPw">Admin password</label>
+              <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+              <p id="adminMsg" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+        </section>
+      </div>
+
+      <div id="lessonContent" hidden>
+      <header class="hero">
+        <span class="kicker">Part 1 · Lesson 4 of 10 · SAP S/4HANA Financial Accounting</span>
+        <h1>Lesson 4 — SAP ABAP Language</h1>
+        <p class="lede">Every screen you used in Lesson 3 — FB50, F-02, FS10N — was <b>written by someone</b>, in a language. That language is <b>ABAP</b>, SAP's own programming language. In this lesson we open the bonnet gently, for non-programmers: what ABAP is, where ABAP programs live and run, the <b>Data Dictionary</b> (the master book of every table and field), how to <b>read</b> a few lines of ABAP without writing any, the famous FI tables <b>BKPF, BSEG and ACDOCA</b>, and how SAP is safely changed with <b>enhancements</b> and <b>transports</b>. You will not become a programmer today — you will become an FI consultant who can <i>talk</i> to programmers. <span class="urdu">(Aaj aap programmer nahi banenge — lekin programmer se baat karna, us ki code parhna aur apni requirement samjhana zaroor seekh jayenge.)</span></p>
+        <div class="hero-meta">
+          <span class="chip">Exam: <b>C_TS4FI</b> — SAP S/4HANA Cloud Private Edition, Financial Accounting</span>
+          <span class="chip">Exam topic: <b>Overview &amp; Deployment of SAP S/4HANA</b> (weight: up to ~10%)</span>
+          <span class="chip">Level: <b>Complete beginner</b> · Builds on Lessons 1–3 · No programming experience needed</span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Lesson 4 contents">
+          <h2>In this lesson</h2>
+          <div class="toc-progress" aria-live="polite">
+            <div class="tp-row"><span><b id="readCount">0</b> of <span id="readTotal">20</span> sections read</span><span class="tp-pct" id="readPct">0%</span></div>
+            <div class="tp-track"><div class="tp-fill" id="readFill"></div></div>
+          </div>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span>1. Quick recap of Lessons 1–3<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span>2. What is ABAP?<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span>3. Why an FI consultant needs ABAP<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span>4. Where ABAP lives and runs<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span>5. The ABAP Workbench — the toolbox<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span>6. The Data Dictionary (DDIC)<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span>7. FI tables you already know: BKPF, BSEG, ACDOCA<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span>8. Reading ABAP: anatomy of a small program<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span>9. ABAP words to recognise on sight<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span>10. The family of ABAP objects<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span>11. Forms: printouts, invoices and cheques<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span>12. Interfaces: BAPI, RFC and IDoc<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span>13. Changing SAP safely: enhancements &amp; Z-objects<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span>14. Debugging for beginners: /h and breakpoints<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span>15. ABAP on HANA: CDS views &amp; code pushdown<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span>16. T-codes of Lesson 4 at a glance<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span>17. Exam traps for Lesson 4<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s18"><span class="dot"></span>18. Lesson 4 glossary (A–Z)<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s19"><span class="dot"></span>19. Summary — key points for C_TS4FI<span class="tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s20"><span class="dot"></span>20. Self-test — 12 MCQs<span class="tick" aria-hidden="true">✓</span></a></li>
+          </ol>
+          <p class="toc-note">The section you are reading is highlighted in blue. Press <b>Mark Read</b> at the end of a section — a green tick appears here and your progress above updates. <span class="urdu">(Jo hissa parh liya, Mark Read dabayen — yahan sabz tick lag jayega.)</span></p>
+        </nav>
+
+        <main>
+          <!-- ============ 01 RECAP ============ -->
+          <section class="lesson" id="s1" data-toc>
+            <h2><span class="no">01</span> Quick recap of Lessons 1–3</h2>
+            <p class="sub">Thirty seconds of revision, then we go one layer deeper.</p>
+            <ul class="clean">
+              <li><b>Lesson 1 — Introduction:</b> SAP is an <b>ERP</b> (one shared software for the whole company). <b>S/4HANA</b> is SAP's newest ERP, running on the fast <b>HANA</b> database. <b>FICO</b> = <b>FI</b> (Financial Accounting — the legal books) + <b>CO</b> (Controlling — internal cost analysis).</li>
+              <li><b>Lesson 2 — Architecture:</b> SAP has <b>three layers</b> — Presentation (your screen), Application (the brain that runs programs), Database (where data is stored). Systems come in a line: <b>DEV → QAS → PRD</b>, and changes travel between them in <b>Transport Requests</b>.</li>
+              <li><b>Lesson 3 — Interface:</b> You log on through <b>SAP GUI</b> or <b>Fiori</b>, jump with <b>T-codes</b> in the command field, read messages in the <b>status bar</b> (S–I–W–E–A–X), and rescue yourself with <b>F1</b> (help) and <b>F4</b> (list of values).</li>
+            </ul>
+            <p>One question was left open at the end of Lesson 3: <i>who writes the programs behind those screens — and in what?</i> That is today's lesson. <span class="urdu">(Screens ke peeche jo programs chalte hain, wo kis language mein likhe jate hain? Jawab: ABAP.)</span></p>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s1" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 02 WHAT IS ABAP ============ -->
+          <section class="lesson" id="s2" data-toc>
+            <h2><span class="no">02</span> What is ABAP?</h2>
+            <p class="sub">One full form, one simple meaning, one short history.</p>
+
+            <div class="box term">
+              <span class="box-title">New term — ABAP</span>
+              <p><b>ABAP</b> = <b>A</b>dvanced <b>B</b>usiness <b>A</b>pplication <b>P</b>rogramming. In simple words: <b>the programming language in which SAP software itself is written</b> — and in which companies write their own extra programs inside SAP. Almost every screen, check and calculation in FI, MM, SD and HR is ABAP code written by SAP.</p>
+              <p><span class="urdu">(ABAP wo zuban hai jisme khud SAP software likha gaya hai — jaise kisi building ki neev aur deewarein.)</span></p>
+            </div>
+
+            <p>Think of it like this. A <b>programming language</b> is a set of strict instructions a computer can follow — like a recipe written so precisely that even a machine cannot misunderstand it. Different software is written in different languages: Windows is mostly C++, websites often use JavaScript. SAP chose to build its business software in its <b>own</b> language, ABAP, because business programs mostly do three things — read data from tables, apply rules, and show or save results — and ABAP is specially designed for exactly that.</p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — the factory and its own workshop</span>
+              <p>Imagine a huge factory (SAP) that makes furniture. The factory also has its <b>own workshop with its own tools</b> inside the building (ABAP). The furniture (SAP standard programs) was built with those tools — and if you, the customer, want a special cupboard (a custom report), the factory's carpenters build it with the <b>same tools, in the same workshop</b>, so it fits perfectly with everything else. ABAP is not an outside add-on; it is SAP's own workshop language.</p>
+            </div>
+
+            <h3>A very short history (only what the exam expects)</h3>
+            <ul class="clean">
+              <li><b>1980s:</b> ABAP begins as a simple <b>report-writing language</b> — its first job was printing lists from SAP data. (Old-timers still call every ABAP program a “report” for this reason — remember this, it explains SAP vocabulary later.)</li>
+              <li><b>1990s (R/3 era):</b> ABAP grows into a full language that builds screens, transactions and business logic — the whole of R/3 and later ECC is written in it.</li>
+              <li><b>2000s:</b> ABAP gains <b>object-oriented</b> features (<b>ABAP Objects</b> — programs organised into “classes”, like templates that create working copies; more in Section 10).</li>
+              <li><b>S/4HANA era:</b> ABAP is modernised for HANA — heavy calculations are pushed <b>down into the database</b> (Section 15), and new tools like <b>CDS views</b> appear.</li>
+            </ul>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick — the full form</span>
+              <p><b>A</b>dvanced <b>B</b>usiness <b>A</b>pplication <b>P</b>rogramming → remember: <b>“A Business Application Program.”</b> ABAP exists for <i>business applications</i> — not games, not operating systems. If an exam option says ABAP is a database, a hardware or an operating system — it is wrong. ABAP is a <b>language</b>.</p>
+            </div>
+
+            <h3>Three facts to fix in your mind</h3>
+            <ol>
+              <li><b>SAP is written in ABAP.</b> When you post with FB50, ABAP code checks your entry, calculates tax, assigns the document number and saves it.</li>
+              <li><b>Customers also write ABAP</b> — for their own reports, printouts and extra checks. These are called <b>custom developments</b> or <b>Z-programs</b> (Section 13 explains the Z).</li>
+              <li><b>ABAP is a “4GL”.</b> <span class="examtag">Exam word</span> ABAP is called a <b>fourth-generation language (4GL)</b> — a high-level language close to business thinking (“read this table, total this column”) rather than close to the machine. That is why ABAP code reads almost like English sentences.</li>
+            </ol>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s2" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 03 WHY FI CONSULTANT ============ -->
+          <section class="lesson" id="s3" data-toc>
+            <h2><span class="no">03</span> Why an FI consultant needs ABAP</h2>
+            <p class="sub">You are preparing for an FI certificate, not a programming job. So why this lesson? Four very practical reasons.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:34%">Situation in real projects</th><th>How a little ABAP saves you</th></tr>
+                <tr><td><b>1. Writing a specification (spec)</b></td><td>When the business asks for a new report, <i>you</i> write the requirement document for the ABAP developer. If you can name the exact <b>tables and fields</b> (“take document header from BKPF, amounts from ACDOCA”), the developer builds it right the first time.</td></tr>
+                <tr><td><b>2. Finding why something went wrong</b></td><td>An error message appears during posting. With <b>/h debugging</b> (Section 14) you can watch <i>where</i> the program stopped — often you find it is a missing setting, not a program bug, and you fix it yourself in minutes.</td></tr>
+                <tr><td><b>3. Checking data directly</b></td><td>No report shows what you need? Open the table in <b>SE16N</b> and look at the raw data yourself, instead of waiting days for a report.</td></tr>
+                <tr><td><b>4. Talking to the technical team</b></td><td>Projects fail on misunderstandings. A consultant who knows words like <i>function module, BAdI, transport, workbench</i> gets correct estimates and correct solutions.</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New terms — functional vs technical consultant</span>
+              <p>A <b>functional consultant</b> (your path — FI/CO) knows the business process and the SAP settings (<b>configuration / customizing</b>). A <b>technical consultant</b> (an <b>ABAPer</b>) writes code. Big projects need both. You are not crossing over — you are learning enough of their language to work together. <span class="urdu">(Aap coder nahi ban rahe; aap wo consultant ban rahe hain jo coder ko sahi kaam de sakta hai.)</span></p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap</span>
+              <p>C_TS4FI is a <b>functional</b> exam. It will <b>not</b> ask you to write ABAP code. But it <i>can</i> ask what ABAP is, what the Data Dictionary does, or which tool displays table contents. Learn the <b>concepts and T-codes</b> in this lesson; do not memorise code syntax beyond recognising the handful of words in Section 9.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s3" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 04 WHERE ABAP RUNS ============ -->
+          <section class="lesson" id="s4" data-toc>
+            <h2><span class="no">04</span> Where ABAP lives and runs</h2>
+            <p class="sub">Connecting Lesson 2 (architecture) with today's language — three simple steps from typed code to running program.</p>
+
+            <p>Recall the three layers: Presentation, Application, Database. ABAP belongs to the <b>Application layer</b>. Here is the life of an ABAP program:</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 250" role="img" aria-label="Diagram: source code is compiled by the ABAP compiler into a generated form, which the ABAP runtime executes inside a dialog work process on the application server, reading and writing the database">
+                <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <rect class="svg-box-g" x="10" y="60" width="160" height="90" rx="10"/>
+                <text class="svg-title" x="90" y="95" text-anchor="middle">1 · SOURCE CODE</text>
+                <text class="svg-sub" x="90" y="118" text-anchor="middle">The ABAP text the</text>
+                <text class="svg-sub" x="90" y="134" text-anchor="middle">developer typed (SE38)</text>
+                <path class="svg-arrow" d="M172 105 H222"/>
+                <rect class="svg-box-a" x="226" y="60" width="160" height="90" rx="10"/>
+                <text class="svg-title" x="306" y="95" text-anchor="middle">2 · COMPILER</text>
+                <text class="svg-sub" x="306" y="118" text-anchor="middle">Checks the code and</text>
+                <text class="svg-sub" x="306" y="134" text-anchor="middle">creates a runnable form</text>
+                <path class="svg-arrow" d="M388 105 H438"/>
+                <rect class="svg-box-a" x="442" y="60" width="160" height="90" rx="10"/>
+                <text class="svg-title" x="522" y="95" text-anchor="middle">3 · ABAP RUNTIME</text>
+                <text class="svg-sub" x="522" y="118" text-anchor="middle">Runs the program inside</text>
+                <text class="svg-sub" x="522" y="134" text-anchor="middle">a work process (Lesson 2)</text>
+                <path class="svg-arrow" d="M604 105 H654"/>
+                <rect class="svg-box" x="658" y="60" width="92" height="90" rx="10"/>
+                <text class="svg-title" x="704" y="95" text-anchor="middle">DATABASE</text>
+                <text class="svg-sub" x="704" y="118" text-anchor="middle">HANA</text>
+                <text class="svg-sub" x="704" y="134" text-anchor="middle">tables</text>
+                <text class="svg-sub" x="380" y="200" text-anchor="middle">Steps 1–2 happen in the Development system (DEV). Only the finished program travels to QAS and PRD — by transport.</text>
+                <text class="svg-sub" x="380" y="222" text-anchor="middle">The user never sees code — the user sees the screen the code produces.</text>
+              </svg>
+              <figcaption>How ABAP runs — illustration drawn for this lesson, not an SAP screenshot.</figcaption>
+            </figure>
+
+            <div class="box term">
+              <span class="box-title">New terms — source code, compiler, runtime</span>
+              <p><b>Source code</b> = the human-readable text of a program. <b>Compiler</b> = the translator that checks that text and converts it into a form the machine can execute quickly. <b>Runtime (ABAP runtime environment)</b> = the part of the application server that actually <i>executes</i> the program when a user runs it — like the player that plays a recorded song. In SAP, compiling happens automatically the first time a program runs after a change; you never press a separate “compile” button.</p>
+            </div>
+
+            <h3>Two more ideas that complete the picture</h3>
+            <ul class="clean">
+              <li><b>The Repository</b> — every ABAP program, table definition and screen is stored as an object in a central library inside the database called the <b>Repository</b>. <span class="urdu">(Repository = SAP ki markazi library, jahan har program aur table ki definition mehfooz hai.)</span> Repository objects are <b>client-independent</b> (Lesson 2): a program written in client 100 exists for all clients of that system.</li>
+              <li><b>The kernel</b> — underneath ABAP sits the <b>kernel</b>, the core engine of the application server, written in C/C++. The kernel is SAP's platform software; ABAP programs run <i>on</i> it. You never write kernel code — just remember the layering: <b>ABAP programs → ABAP runtime → kernel → operating system → hardware</b>.</li>
+            </ul>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — recipe, chef and kitchen</span>
+              <p>Source code is the <b>recipe card</b>. The compiler is the <b>head chef checking</b> the recipe for mistakes before cooking starts. The runtime is the <b>cook actually preparing the dish</b> each time an order comes. The kernel is the <b>kitchen itself</b> — stoves, knives, gas supply. And the Repository is the <b>recipe book</b> where all cards are filed.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s4" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 05 WORKBENCH ============ -->
+          <section class="lesson" id="s5" data-toc>
+            <h2><span class="no">05</span> The ABAP Workbench — the programmer's toolbox</h2>
+            <p class="sub">A “workbench” is simply the set of built-in tools used to build and repair ABAP objects. You already know several of its doors from Lesson 3 — they are ordinary T-codes.</p>
+
+            <div class="box term">
+              <span class="box-title">New term — ABAP Workbench</span>
+              <p>The <b>ABAP Workbench</b> is the collection of SAP's own development tools — editor, dictionary, object browser and testers — all inside SAP itself. A developer does not use outside software to write ABAP; the tools live <i>within</i> the SAP system (in DEV). Modern developers may also use <b>ABAP Development Tools (ADT)</b> — ABAP editing inside the <b>Eclipse</b> program on their PC — connected to the same system.</p>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:16%">T-code</th><th style="width:30%">Tool</th><th>What it does, in simple words</th></tr>
+                <tr><td><code>SE80</code></td><td><b>Object Navigator</b></td><td>The master door: one tree showing <i>all</i> objects of a package — programs, tables, screens — in one place. Developers usually start here.</td></tr>
+                <tr><td><code>SE38</code></td><td><b>ABAP Editor</b></td><td>Write, change, check and run <b>programs (reports)</b>. The classic coding screen.</td></tr>
+                <tr><td><code>SE11</code></td><td><b>ABAP Dictionary</b></td><td>Create and view <b>tables, fields and data definitions</b> — Section 6 is all about this one.</td></tr>
+                <tr><td><code>SE16 / SE16N</code></td><td><b>Data Browser</b></td><td>Look <i>inside</i> a table at the actual data rows. The FI consultant's favourite — no coding needed. (SE16N is the newer, friendlier version.)</td></tr>
+                <tr><td><code>SE37</code></td><td><b>Function Builder</b></td><td>Build and test <b>function modules</b> — small reusable pieces of code (Section 10).</td></tr>
+                <tr><td><code>SE24</code></td><td><b>Class Builder</b></td><td>Build <b>classes</b> — the object-oriented building blocks of modern ABAP.</td></tr>
+                <tr><td><code>SE93</code></td><td><b>Transaction maintenance</b></td><td>Where a <b>T-code is linked to its program</b>. FB50 is not magic — SE93 holds the connection “FB50 → program SAPMF05A”.</td></tr>
+                <tr><td><code>SE91</code></td><td><b>Message maintenance</b></td><td>Where the message texts you saw in Lesson 3 (“Document 100000123 was posted”) are stored, by message class and number.</td></tr>
+                <tr><td><code>SM37</code></td><td><b>Job overview</b></td><td>See <b>background jobs</b> — programs scheduled to run automatically (e.g. the nightly depreciation run).</td></tr>
+                <tr><td><code>ST22</code></td><td><b>Dump analysis</b></td><td>When a program crashes, SAP saves a <b>short dump</b> (an error report). ST22 is where you read what happened — program name, error, and the line of code.</td></tr>
+              </table>
+            </div>
+
+            <div class="screen" role="img" aria-label="Illustration of the ABAP Editor SE38 showing a small ABAP program">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> ABAP Editor (SE38) — program ZFI_TRIAL_BALANCE — illustration, not a real SAP screenshot</div>
+              <div class="screen-body"><span class="cm">*&amp;---------------------------------------------------------------------*</span><br/><span class="cm">*&amp; Report ZFI_TRIAL_BALANCE — list posted documents of a company code</span><br/><span class="kw">REPORT</span> zfi_trial_balance.<br/><br/><span class="kw">DATA</span>: gv_bukrs <span class="kw">TYPE</span> bkpf-bukrs.   <span class="cm">" company code</span><br/><br/><span class="kw">SELECT</span> bukrs, belnr, gjahr, budat, bldat<br/>  <span class="kw">FROM</span> bkpf<br/>  <span class="kw">INTO TABLE</span> @DATA(lt_docs)<br/>  <span class="kw">WHERE</span> bukrs = <span class="st">'1000'</span>.<br/><br/><span class="kw">LOOP AT</span> lt_docs <span class="kw">INTO</span> DATA(ls_doc).<br/>  <span class="kw">WRITE</span>: / ls_doc-belnr, ls_doc-budat.<br/><span class="kw">ENDLOOP</span>.</div>
+            </div>
+            <p>Do not panic at this screen — by Section 9 you will be able to <i>read</i> every line of it. Notice two habits of ABAP: every statement <b>ends with a full stop</b>, and a line starting with <b>*</b> (or text after <b>"</b>) is a <b>comment</b> — a note for humans that the computer ignores. <span class="urdu">(Har ABAP jumla full stop pe khatam hota hai; * wali line sirf insaanon ke liye note hai.)</span></p>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick — the SE family</span>
+              <p>Most development T-codes start with <b>SE</b>. Think “<b>SE = Software Engineering</b>”. SE<b>11</b> = dictionary (definitions), SE<b>16</b> = look at data, SE<b>38</b> = edit programs, SE<b>80</b> = everything in one tree. If an exam question asks “which transaction shows table contents?” — your hand should reach for <b>SE16N</b> before you finish reading the options.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s5" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 06 DDIC ============ -->
+          <section class="lesson" id="s6" data-toc>
+            <h2><span class="no">06</span> The Data Dictionary (DDIC) — the master book of definitions</h2>
+            <p class="sub">If ABAP is SAP's language, the Data Dictionary is its official dictionary — the single place where every table and field is defined, once, for everyone.</p>
+
+            <div class="box term">
+              <span class="box-title">New term — Data Dictionary (DDIC)</span>
+              <p>The <b>ABAP Data Dictionary</b> (T-code <code>SE11</code>, short name <b>DDIC</b>) is the central register that defines <b>what data exists and what it looks like</b>: every table, every field in it, each field's type (text? number? date?) and length, and how fields relate to each other. Programs do not invent their own definitions — they <i>borrow</i> them from the Dictionary. Change a definition in the DDIC, and every program using it sees the change.</p>
+              <p><span class="urdu">(DDIC wo markazi register hai jahan har table aur field ki tareef ek hi dafa likhi jati hai — phir saare programs wahi tareef istemal karte hain.)</span></p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — the land registry office</span>
+              <p>In a city, the <b>land registry</b> holds the official record of every plot: its size, boundaries and owner. Builders, banks and buyers all trust that one record instead of measuring the land themselves each time. The DDIC is SAP's registry office: the official record of every “plot of data” — its size (length), its type (residential or commercial = text or number) and its boundaries (allowed values).</p>
+            </div>
+
+            <h3>The three building blocks: domain → data element → table field</h3>
+            <p>This chain is small, logical, and a favourite exam topic. Read it bottom-up with one real FI field — the company code field <code>BUKRS</code>:</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 240" role="img" aria-label="Diagram: a domain defines technical type and length, a data element adds the business meaning and labels, and a table field uses the data element inside a table">
+                <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <rect class="svg-box" x="30" y="70" width="200" height="100" rx="10"/>
+                <text class="svg-title" x="130" y="105" text-anchor="middle">DOMAIN</text>
+                <text class="svg-sub" x="130" y="128" text-anchor="middle">Technical shape only:</text>
+                <text class="svg-sub" x="130" y="146" text-anchor="middle">CHAR, 4 characters long</text>
+                <path d="M232 120 H282" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+                <rect class="svg-box-a" x="286" y="70" width="200" height="100" rx="10"/>
+                <text class="svg-title" x="386" y="105" text-anchor="middle">DATA ELEMENT · BUKRS</text>
+                <text class="svg-sub" x="386" y="128" text-anchor="middle">Adds business meaning:</text>
+                <text class="svg-sub" x="386" y="146" text-anchor="middle">“Company Code” + field labels</text>
+                <path d="M488 120 H538" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+                <rect class="svg-box-g" x="542" y="70" width="188" height="100" rx="10"/>
+                <text class="svg-title" x="636" y="105" text-anchor="middle">TABLE FIELD</text>
+                <text class="svg-sub" x="636" y="128" text-anchor="middle">BKPF-BUKRS, BSEG-BUKRS,</text>
+                <text class="svg-sub" x="636" y="146" text-anchor="middle">ACDOCA-RBUKRS… same meaning</text>
+                <text class="svg-sub" x="380" y="205" text-anchor="middle">One definition, reused in hundreds of tables and screens — that is the whole point of the Dictionary.</text>
+              </svg>
+              <figcaption>The DDIC building blocks — illustration drawn for this lesson.</figcaption>
+            </figure>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:22%">Object</th><th>Simple meaning</th><th style="width:30%">Accounting example</th></tr>
+                <tr><td><b>Domain</b></td><td>The <i>technical</i> shape of a value: data type (CHAR/NUMC/DATS/CURR…), length, and sometimes a list of allowed values. No description text.</td><td>Domain BUKRS: characters, length 4.</td></tr>
+                <tr><td><b>Data element</b></td><td>The <i>business meaning</i> of a field: it uses one domain and adds the labels you see on screens (“Company Code”) in every language.</td><td>Data element BUKRS = “Company Code”.</td></tr>
+                <tr><td><b>Transparent table</b></td><td>A real database table with rows and columns, defined in the DDIC — “transparent” because the DDIC table and the database table are one and the same.</td><td>BKPF, BSEG, ACDOCA (next section).</td></tr>
+                <tr><td><b>Structure</b></td><td>A list of fields <i>without</i> saved data — a form's blank shape, used to carry data inside programs.</td><td>A structure holding one document line while a program works on it.</td></tr>
+                <tr><td><b>View</b></td><td>A window that shows fields from one or more tables joined together, without storing data itself.</td><td>A view joining document header + company code text.</td></tr>
+                <tr><td><b>Search help</b></td><td>The definition behind the <b>F4 list</b> from Lesson 3 — which table to search and which fields to show.</td><td>F4 on the vendor field searches the vendor master tables.</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New terms — data types you will meet in FI tables</span>
+              <p><b>CHAR</b> = text of fixed length · <b>NUMC</b> = text that holds only digits (document numbers are NUMC — that is why document 123 shows as 0000000123) · <b>DATS</b> = a date stored as YYYYMMDD · <b>CURR</b> = a money amount (always paired with a currency field) · <b>QUAN</b> = a quantity (paired with a unit). When you browse a table in SE16N and see dates as 20261126, you now know why.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap — domain vs data element</span>
+              <p>The exam loves this pair. <b>Domain = technical</b> (type + length). <b>Data element = semantic / business</b> (meaning + labels). A domain can be reused by many data elements; a field gets its screen text from its data element, never from the domain. And remember: the DDIC holds <b>definitions</b>; the <b>data itself</b> lives in the database tables those definitions describe.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s6" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 07 FI TABLES ============ -->
+          <section class="lesson" id="s7" data-toc>
+            <h2><span class="no">07</span> FI tables you already know: BKPF, BSEG, ACDOCA</h2>
+            <p class="sub">Now the payoff for an accountant: when you post a journal entry in SAP, where does it physically go? Into tables — and you already understand their shape from paper accounting.</p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — the bound journal register</span>
+              <p>In a manual system, the <b>journal register</b> has one line per entry in the day book, and the full detail follows underneath. SAP copies this exactly: <b>BKPF</b> is the register's summary line (one row per document — the <b>header</b>), and <b>BSEG</b> holds the detail lines underneath it (one row per line item — debit this, credit that).</p>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:15%">Table</th><th style="width:30%">Plain-English name</th><th>What one row means</th></tr>
+                <tr><td><code>BKPF</code></td><td>Accounting Document <b>Header</b></td><td>One row = one whole document: company code (<code>BUKRS</code>), document number (<code>BELNR</code>), fiscal year (<code>GJAHR</code>), posting date (<code>BUDAT</code>), document type (<code>BLART</code>), who entered it (<code>USNAM</code>).</td></tr>
+                <tr><td><code>BSEG</code></td><td>Accounting Document <b>Segment</b> (line items)</td><td>One row = one line of that document: line number (<code>BUZEI</code>), G/L account or vendor/customer, debit/credit indicator (<code>SHKZG</code> = S/H), amount (<code>DMBTR</code>). The header is found through BUKRS + BELNR + GJAHR.</td></tr>
+                <tr><td><code>ACDOCA</code></td><td><b>Universal Journal</b> line items <span class="examtag">S/4HANA star</span></td><td>The S/4HANA centre table: one row per journal line carrying FI <i>and</i> CO information together (ledger <code>RACCT</code>… company code is <code>RBUKRS</code> here). You will study it deeply in the Universal Journal lesson — for now, remember the name and that it is a <b>real, physical table</b> in S/4HANA.</td></tr>
+                <tr><td><code>SKA1 / SKB1</code></td><td>G/L account master</td><td>SKA1 = chart-of-accounts level data of a G/L account; SKB1 = company-code level data of the same account.</td></tr>
+                <tr><td><code>LFA1 / LFB1</code></td><td>Vendor master</td><td>LFA1 = general vendor data (name, address); LFB1 = vendor data per company code.</td></tr>
+                <tr><td><code>KNA1 / KNB1</code></td><td>Customer master</td><td>Same pattern: KNA1 general, KNB1 company-code level.</td></tr>
+                <tr><td><code>T001</code></td><td>Company codes table</td><td>One row per company code — you will configure these in the Enterprise Structure lessons.</td></tr>
+              </table>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory tricks — table names have a pattern</span>
+              <p><b>BKPF</b> ends in F and holds the <b>kopf</b> (German for “head” — header!). <b>BSEG</b> = <b>SEG</b>ment. Master tables: <b>…A1</b> = general data, <b>…B1</b> = company-code data (LFA1/LFB1, KNA1/KNB1, SKA1/SKB1). And the key of almost every FI document is the trio <b>BUKRS + BELNR + GJAHR</b> — company code + document number + fiscal year. That trio will follow you through the whole course.</p>
+            </div>
+
+            <h3>Try the idea: browsing a table with SE16N</h3>
+            <p>In a training system you would type <code>SE16N</code>, enter table <code>BKPF</code>, set <code>BUKRS = 1000</code>, and press Execute — SAP shows the actual document headers as a grid. No code, no developer. This single skill — <i>checking the table yourself</i> — is used by real FI consultants every week, for example to confirm whether a document really exists, or which user posted it.</p>
+
+            <div class="screen" role="img" aria-label="Illustration of SE16N showing rows of table BKPF">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> SE16N — Table BKPF, company code 1000 — illustration with invented sample data, not a real SAP screenshot</div>
+              <div class="screen-body">BUKRS&nbsp;&nbsp;BELNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GJAHR&nbsp;&nbsp;BLART&nbsp;&nbsp;BUDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USNAM&nbsp;&nbsp;&nbsp;CPUDT<br/><span class="dim">1000&nbsp;&nbsp;&nbsp;1900000012&nbsp;&nbsp;2026&nbsp;&nbsp;&nbsp;SA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20261126&nbsp;&nbsp;&nbsp;ASAD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20261126</span><br/>1000&nbsp;&nbsp;&nbsp;1900000013&nbsp;&nbsp;2026&nbsp;&nbsp;&nbsp;KR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20261126&nbsp;&nbsp;&nbsp;ASAD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20261126<br/><span class="dim">1000&nbsp;&nbsp;&nbsp;5100000007&nbsp;&nbsp;2026&nbsp;&nbsp;&nbsp;RE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20261125&nbsp;&nbsp;&nbsp;BEELA&nbsp;&nbsp;&nbsp;&nbsp;20261125</span></div>
+            </div>
+            <p>Read one row aloud: company code 1000, document 1900000012, fiscal year 2026, type SA (G/L document), posted 26 Nov 2026 by user ASAD. That is a journal entry — just stored as a row. <span class="urdu">(Table ki har row asal mein aik journal entry ka record hai.)</span></p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap — BSEG in S/4HANA</span>
+              <p>In S/4HANA, <b>ACDOCA</b> is the single source of truth for journal lines, and many old “totals” and “index” tables of ECC no longer exist as physical tables. <b>BSEG still exists</b> and still holds document line items — do not let an option tell you BSEG was deleted. What changed is that reports now read ACDOCA, and old tables like BSIS/BSAS are delivered as <b>compatibility views</b> that read ACDOCA behind the scenes.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s7" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 08 READING ABAP ============ -->
+          <section class="lesson" id="s8" data-toc>
+            <h2><span class="no">08</span> Reading ABAP: anatomy of a small program</h2>
+            <p class="sub">Goal: read, not write. Here is the SE38 program from Section 5 again — now taken apart line by line, in accountant's language.</p>
+
+            <div class="screen" role="img" aria-label="The small ABAP program from section 5, repeated for line-by-line explanation">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> ABAP Editor (SE38) — program ZFI_TRIAL_BALANCE — illustration, not a real SAP screenshot</div>
+              <div class="screen-body"><span class="kw">REPORT</span> zfi_trial_balance.<br/><br/><span class="kw">DATA</span>: gv_bukrs <span class="kw">TYPE</span> bkpf-bukrs.<br/><br/><span class="kw">SELECT</span> bukrs, belnr, gjahr, budat<br/>  <span class="kw">FROM</span> bkpf<br/>  <span class="kw">INTO TABLE</span> @DATA(lt_docs)<br/>  <span class="kw">WHERE</span> bukrs = <span class="st">'1000'</span>.<br/><br/><span class="kw">LOOP AT</span> lt_docs <span class="kw">INTO</span> DATA(ls_doc).<br/>  <span class="kw">WRITE</span>: / ls_doc-belnr, ls_doc-budat.<br/><span class="kw">ENDLOOP</span>.</div>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:30%">Line</th><th>What it says, in plain English</th></tr>
+                <tr><td><code>REPORT zfi_trial_balance.</code></td><td>“This program is a report, and its name is ZFI_TRIAL_BALANCE.” Every executable program starts by declaring itself. (The Z is explained in Section 13.)</td></tr>
+                <tr><td><code>DATA: gv_bukrs TYPE bkpf-bukrs.</code></td><td>“Reserve a box (a <b>variable</b>) named gv_bukrs. Its shape must be exactly like the BUKRS field of table BKPF.” Notice: the program <i>borrows the DDIC definition</i> — Section 6 in action. Change the field in the Dictionary, and this variable changes too.</td></tr>
+                <tr><td><code>SELECT … FROM bkpf … WHERE bukrs = '1000'.</code></td><td>“From table BKPF, fetch the columns company code, document number, year and posting date — but only rows where company code is 1000 — and put them into a list in memory called lt_docs.” This reading of the database is called <b>Open SQL</b> (next box).</td></tr>
+                <tr><td><code>LOOP AT lt_docs … ENDLOOP.</code></td><td>“Take the fetched list and go through it <b>one row at a time</b>, from first to last.” Between LOOP and ENDLOOP sits what to do with each row.</td></tr>
+                <tr><td><code>WRITE: / ls_doc-belnr, ls_doc-budat.</code></td><td>“Print, on a new line, this row's document number and posting date.” WRITE is the oldest ABAP output command — a leftover from ABAP's report-writing childhood.</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New terms — variable, internal table, work area, Open SQL</span>
+              <p>A <b>variable</b> is a named box in memory holding one value while the program runs. An <b>internal table</b> is a list of rows held <i>in memory only</i> (it vanishes when the program ends — it is <b>not</b> a database table; this confusion is a classic exam trap). A <b>work area</b> is a single-row box used to hold the row currently being processed inside a loop — like the one line of the register your finger is on. <b>Open SQL</b> is ABAP's own database language: the ABAP runtime translates it into whatever the real database (HANA, Oracle…) speaks, so the same program works on any database.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — the accountant and the filing cabinet</span>
+              <p>SELECT is walking to the filing cabinet (database) and pulling out a <b>bundle of files</b> (internal table). LOOP is going through the bundle <b>file by file</b>. The work area is the <b>one file open on your desk</b> right now. WRITE is noting its number in your notebook. When you finish and go home (program ends), the bundle on the desk disappears — the cabinet (database) is untouched unless the program explicitly saves changes.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s8" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 09 WORDS TO RECOGNISE ============ -->
+          <section class="lesson" id="s9" data-toc>
+            <h2><span class="no">09</span> ABAP words to recognise on sight</h2>
+            <p class="sub">You do not need a hundred commands. These few cover most of the FI-related code you will ever be shown in meetings, specs and error messages.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:24%">ABAP word</th><th>Meaning in one line</th><th style="width:34%">Accountant's translation</th></tr>
+                <tr><td><code>DATA</code></td><td>Declares a variable or internal table.</td><td>“Open a new blank column/box in my worksheet.”</td></tr>
+                <tr><td><code>SELECT … FROM … WHERE</code></td><td>Reads rows from a database table.</td><td>“Bring me all journal entries where company code = 1000.”</td></tr>
+                <tr><td><code>INSERT / UPDATE / MODIFY</code></td><td>Writes new or changed rows to a database table.</td><td>“Post this entry / correct this entry in the register.”</td></tr>
+                <tr><td><code>LOOP AT … ENDLOOP</code></td><td>Repeats actions for every row of an internal table.</td><td>“Do this for each line of the list, one by one.”</td></tr>
+                <tr><td><code>IF … ELSE … ENDIF</code></td><td>Chooses a path based on a condition.</td><td>“<i>If</i> the amount is over 10,000, route for approval; <i>else</i> post directly.”</td></tr>
+                <tr><td><code>READ TABLE</code></td><td>Picks one row out of an internal table.</td><td>“Find the one line for document 1900000012.”</td></tr>
+                <tr><td><code>SORT</code></td><td>Orders an internal table by chosen fields.</td><td>“Arrange the list by posting date.”</td></tr>
+                <tr><td><code>MOVE / CLEAR</code></td><td>Copies a value / empties a variable.</td><td>“Write this figure into that box / rub the box clean.”</td></tr>
+                <tr><td><code>CALL FUNCTION</code></td><td>Runs a function module (a ready-made reusable piece of code).</td><td>“Use the office calculator service instead of calculating by hand.”</td></tr>
+                <tr><td><code>PERFORM</code></td><td>Runs a subroutine — a named block inside the same program (older style).</td><td>“Do the standard checking routine written at the back.”</td></tr>
+                <tr><td><code>MESSAGE</code></td><td>Shows one of the S/I/W/E/A messages from Lesson 3.</td><td>“Display: ‘Posting date is in a closed period.’”</td></tr>
+                <tr><td><code>COMMIT WORK</code></td><td>Finally saves all database changes of the current task.</td><td>“Ink the entries — now they are permanent.” (Until this point, changes can still be rolled back.)</td></tr>
+              </table>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick — naming habits tell you the type</span>
+              <p>Developers name things with prefixes: <b>g</b> = global, <b>l</b> = local, <b>t</b> = table, <b>s</b> = structure/work area, <b>v</b> = variable. So <code>lt_docs</code> = <b>l</b>ocal <b>t</b>able of documents, <code>ls_doc</code> = <b>l</b>ocal <b>s</b>tructure (one row), <code>gv_bukrs</code> = <b>g</b>lobal <b>v</b>ariable. These are conventions, not rules — but once you see them, ABAP code stops looking like alphabet soup. <span class="urdu">(Naam ke pehle harf hi bata dete hain ke ye table hai, row hai ya sirf ek value.)</span></p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s9" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 10 FAMILY OF OBJECTS ============ -->
+          <section class="lesson" id="s10" data-toc>
+            <h2><span class="no">10</span> The family of ABAP objects</h2>
+            <p class="sub">“Program” is only one member of the family. Meet the relatives — each with one simple job.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:24%">Object</th><th>Simple meaning</th><th style="width:32%">FI-flavoured example</th></tr>
+                <tr><td><b>Report</b> (executable program)</td><td>A program you start, it reads data and shows/prints a result. The oldest ABAP object type.</td><td>A custom “vendor ageing” list built for your company.</td></tr>
+                <tr><td><b>Module pool</b> (dialog program)</td><td>A program built around <b>screens</b> the user fills in — most transactions are module pools behind the T-code.</td><td>The program behind FB50's entry screen.</td></tr>
+                <tr><td><b>Function module</b></td><td>A small, self-contained, <b>reusable</b> piece of code with a defined input/output — like a standard service any program can call (<code>SE37</code>). Function modules live inside a <b>function group</b>.</td><td><code>BAPI_ACC_DOCUMENT_POST</code>'s inner helpers; currency conversion modules used by hundreds of programs.</td></tr>
+                <tr><td><b>Class / ABAP Objects</b></td><td>The modern, object-oriented way: a <b>class</b> is a template (blueprint) defining data + actions together; an <b>object</b> is a working copy made from it (<code>SE24</code>).</td><td>A “tax engine” class that any posting program can create and use.</td></tr>
+                <tr><td><b>Include</b></td><td>A piece of code stored separately and <i>inserted</i> into programs — shared text, so a fix is made once.</td><td>Common declarations shared by all ZFI reports.</td></tr>
+                <tr><td><b>Package</b></td><td>A folder-like container that groups related objects so they can be transported together and kept organised.</td><td>Package ZFI holding all custom FI developments.</td></tr>
+              </table>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — blueprint and houses (classes &amp; objects)</span>
+              <p>An architect's <b>blueprint</b> is the class: it defines rooms, doors and wiring once. Each <b>house built</b> from it is an object: same design, but each has its own occupants and furniture (its own data). Programs mostly work with houses; architects (senior developers) design blueprints. You only need the idea: <b>class = template, object = a live copy</b>.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term — dynpro</span>
+              <p>A <b>dynpro</b> (“dynamic program”) is the technical name of an SAP GUI <b>screen</b> — the fillable form part of a module pool program, numbered (e.g. screen 0100). When an error message says “dynpro not found”, it simply means: a screen of the program is missing. One more German-flavoured word decoded.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s10" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 11 FORMS ============ -->
+          <section class="lesson" id="s11" data-toc>
+            <h2><span class="no">11</span> Forms: printouts, invoices and cheques</h2>
+            <p class="sub">Accountants live on paper (and PDF): invoices, payment advices, cheques, dunning letters. In SAP, the layout of every such printout is a “form” — and form technology is pure exam vocabulary.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:22%">Technology</th><th>Era</th><th>One-line truth</th></tr>
+                <tr><td><b>SAPscript</b></td><td>Oldest (R/2–R/3)</td><td>The original form tool (<code>SE71</code>). Still found in old systems; painful to change.</td></tr>
+                <tr><td><b>Smart Forms</b></td><td>Middle (from ~2000)</td><td>Graphical form builder (<code>SMARTFORMS</code>) — drag-and-drop layout, generates a function module behind the scenes.</td></tr>
+                <tr><td><b>Adobe Forms</b> (Interactive Forms by Adobe)</td><td>Current standard</td><td>PDF-based forms designed in Adobe LiveCycle Designer; the standard choice in S/4HANA for invoices and statements. Output is a real PDF.</td></tr>
+              </table>
+            </div>
+
+            <p>How a printout is born, in four steps: (1) a program (often the standard posting/payment program) collects the data; (2) it calls the form with that data; (3) the form lays the data into the design — logo, address, lines, totals; (4) the result goes to the printer or becomes a PDF/email. When the business says “our logo is wrong on the invoice”, the fix is in the <b>form</b>, not in the posting program — knowing which layer to ask for is exactly the kind of thing Section 3 promised.</p>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick — the form timeline</span>
+              <p><b>S</b>APscript → <b>S</b>mart Forms → <b>A</b>dobe: remember <b>“Old Script, Smart middle, Adobe today.”</b> If a question asks for the S/4HANA standard for output forms — answer <b>Adobe Forms (PDF)</b>.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s11" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 12 INTERFACES ============ -->
+          <section class="lesson" id="s12" data-toc>
+            <h2><span class="no">12</span> Interfaces: BAPI, RFC and IDoc</h2>
+            <p class="sub">Lesson 3's “interface” meant the screen between you and SAP. Here the same word means something bigger: how SAP talks to <i>other systems</i> — banks, web shops, payroll software. Three names carry almost all of it.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:16%">Name</th><th>Full form / simple meaning</th><th style="width:34%">Typical FI use</th></tr>
+                <tr><td><b>RFC</b></td><td><b>Remote Function Call</b> — the mechanism that lets one system <i>call a function module in another system</i> and get the result back, like a phone call between programs.</td><td>Your reporting tool asks SAP, live, for today's balances.</td></tr>
+                <tr><td><b>BAPI</b></td><td><b>Business Application Programming Interface</b> — a <i>standard, published</i> function module with a guaranteed interface, representing a business action. SAP promises BAPIs stay stable across upgrades.</td><td><code>BAPI_ACC_DOCUMENT_POST</code> — an external system posts accounting documents into FI through this official door. Explore them in <code>BAPI</code> (BAPI Explorer).</td></tr>
+                <tr><td><b>IDoc</b></td><td><b>Intermediate Document</b> — a structured <i>message envelope</i> of data sent between systems, stored and monitored (e.g. <code>WE02</code> to display, <code>BD87</code> to reprocess errors). Sending can wait — IDocs queue up if the other side is down.</td><td>Vendor invoices arriving from a scanning system; payment data exchanged with another SAP system.</td></tr>
+              </table>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — phone call vs registered post</span>
+              <p>An <b>RFC/BAPI</b> call is a <b>phone call</b>: both sides are present, the answer comes immediately, and if nobody picks up, nothing was delivered. An <b>IDoc</b> is <b>registered post</b>: the envelope is written, stamped, tracked at every step, and delivered when the receiver is ready — with a full paper trail if something goes wrong. Synchronous (call) vs asynchronous (post) — that one distinction answers most exam questions on this topic.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap — BAPI is not a separate language</span>
+              <p>A BAPI is an ABAP <b>function module</b> with extra rules (standardised, stable, documented, usually RFC-enabled). “BAPI” appearing as a programming-language option is wrong. And remember from Lesson 3: <i>interface</i> has two meanings in SAP — <b>user interface</b> (screens) and <b>system interface</b> (data exchange). The exam expects you to know which one a question means from context.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s12" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 13 CHANGING SAP SAFELY ============ -->
+          <section class="lesson" id="s13" data-toc>
+            <h2><span class="no">13</span> Changing SAP safely: enhancements &amp; Z-objects</h2>
+            <p class="sub">Standard SAP cannot do everything. Companies add their own logic — but there is a right way and a dangerous way, and the exam tests the difference.</p>
+
+            <h3>The Z rule: customer objects start with Z or Y</h3>
+            <p>SAP reserves names beginning with <b>Z</b> and <b>Y</b> for customers. Standard SAP objects never start with Z — so <code>ZFI_TRIAL_BALANCE</code> instantly tells everyone “this is ours, SAP did not deliver it, and an upgrade will not overwrite it.” That is why our little program in Section 5 carries a Z. <span class="urdu">(Z se shuru honay wala naam = company ka apna banaya hua; SAP ka standard kabhi Z se shuru nahi hota.)</span></p>
+
+            <h3>Three ways to add your own logic — from safest to riskiest</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:24%">Method</th><th>Simple meaning</th><th style="width:26%">Upgrade safety</th></tr>
+                <tr><td><b>Enhancement</b> (BAdI / user exit / enhancement point)</td><td>SAP deliberately leaves <b>empty sockets</b> in its standard code. You plug your own code into the socket — SAP's code itself is untouched. A <b>BAdI</b> (Business Add-In) is the modern, object-oriented socket; <b>user exits</b> and <b>customer exits</b> are the older forms (<code>SMOD</code>/<code>CMOD</code>). Find BAdIs in <code>SE18</code>, implement in <code>SE19</code>.</td><td class="hl"><b>Safest</b> — survives upgrades; the recommended way.</td></tr>
+                <tr><td><b>Custom development</b> (Z-programs)</td><td>Your own brand-new objects alongside the standard — extra reports, forms, interfaces.</td><td><b>Safe</b> — standard untouched.</td></tr>
+                <tr><td><b>Modification</b></td><td>Directly <b>editing SAP's own standard code</b>. SAP allows it with a registered key, but every upgrade must re-check and often re-do it.</td><td><b>Riskiest</b> — avoid whenever an enhancement exists.</td></tr>
+              </table>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — the power socket vs cutting the wall</span>
+              <p>An enhancement is plugging your lamp into a <b>socket the builder provided</b> — clean, removable, safe. A modification is <b>cutting open the wall</b> to splice your wire into the builder's wiring — it works, but every renovation (upgrade) becomes your problem. Good consultants always ask first: “Is there a socket (BAdI) for this?”</p>
+            </div>
+
+            <h3>And how does any of this reach Production? The transport (recap + one new detail)</h3>
+            <p>From Lesson 2 you know changes travel DEV → QAS → PRD inside a <b>Transport Request</b>. New detail: development changes create a <b>Workbench request</b>, while pure settings (customizing) create a <b>Customizing request</b>. ABAP programs, DDIC tables and BAdI implementations ride in <b>Workbench</b> requests. Release them in <code>SE09/SE10</code>, import and monitor the queue in <code>STMS</code>. Nothing — no program, no enhancement — is ever typed directly into PRD. <span class="examtag">Exam favourite</span></p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap — “clean core”</span>
+              <p>SAP's current guidance for S/4HANA Cloud is the <b>clean core</b> principle: keep the standard system as untouched as possible, use released APIs and enhancement points, so upgrades stay painless. If a question contrasts “modifying standard code” with “using a BAdI / released API”, the BAdI/API answer is the one SAP wants — especially for the Cloud Private Edition in your exam title.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s13" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 14 DEBUGGING ============ -->
+          <section class="lesson" id="s14" data-toc>
+            <h2><span class="no">14</span> Debugging for beginners: /h and breakpoints</h2>
+            <p class="sub">Debugging = watching a program run step by step to find where it behaves unexpectedly. You will not fix code — but you will use this to find <i>why</i> a posting failed.</p>
+
+            <div class="box term">
+              <span class="box-title">New terms — debugger, breakpoint</span>
+              <p>The <b>Debugger</b> is a tool that pauses a running program and lets you walk through it line by line, watching values change. A <b>breakpoint</b> is a marked line where the program must stop and hand control to you — like a bookmark that halts the story at exactly that page.</p>
+            </div>
+
+            <h3>The two moves every FI consultant knows</h3>
+            <ol>
+              <li><b>Type <code>/h</code> in the command field</b> (Lesson 3's command field!) and press Enter — SAP answers “Debugging switched on”. Now press the button that triggers the action (e.g. <i>Post</i> in FB50): instead of completing, SAP jumps into the Debugger at the first line of the posting program.</li>
+              <li><b>Step and watch:</b> <b>F5</b> = step into (go one line deeper), <b>F6</b> = step over (run this line, show me the next), <b>F7</b> = step out, <b>F8</b> = continue running until the next breakpoint. On the side you watch variables — e.g. the posting date or the period — and the moment a wrong value appears, you have found your culprit: usually a <b>setting</b>, not a code bug.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of the ABAP Debugger paused at a breakpoint during a posting">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> ABAP Debugger — paused in the posting program — illustration, not a real SAP screenshot</div>
+              <div class="screen-body"><span class="dim">Program: SAPMF05A&nbsp;&nbsp;&nbsp;Line: 1 482&nbsp;&nbsp;&nbsp;Breakpoint reached</span><br/>&gt;&nbsp;<span class="kw">IF</span> bkpf-budat &lt; gv_open_from. <span class="cm">" posting date before open period?</span><br/>&nbsp;&nbsp;&nbsp;<span class="kw">MESSAGE</span> e165 <span class="kw">WITH</span> bkpf-budat. <span class="cm">" → Error: date in closed period</span><br/><br/>Variables:&nbsp;&nbsp;BKPF-BUDAT = <span class="hl2">20261015</span>&nbsp;&nbsp;GV_OPEN_FROM = <span class="hl2">20261101</span></div>
+            </div>
+            <p>Read the illustration: the program stopped because the posting date (15 Oct 2026) is <b>before</b> the first open date (1 Nov 2026) — the next line would throw the “closed period” error you met in Lesson 3. Diagnosis in ten seconds: <i>the period is closed; the fix is in the posting-period settings, not in code.</i> That is debugging earning its keep for a functional consultant. <span class="urdu">(Debugger aap ko wo exact line dikha deta hai jahan program ruka — aur aksar masla setting ka hota hai, code ka nahi.)</span></p>
+
+            <div class="box trap">
+              <span class="box-title">Exam / work trap</span>
+              <p>Debugging in <b>Production</b> is restricted and watched — it needs special authorisation, and you never change values there to “force” a posting. Debugging is for <b>DEV/QAS diagnosis</b>. Also remember its cousin from Section 5: if the program already crashed, you do not debug — you read the <b>short dump in ST22</b>.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s14" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 15 ABAP ON HANA ============ -->
+          <section class="lesson" id="s15" data-toc>
+            <h2><span class="no">15</span> ABAP on HANA: CDS views &amp; code pushdown</h2>
+            <p class="sub">The last concept — and the one that connects ABAP to S/4HANA itself. Two ideas only, both exam-relevant.</p>
+
+            <h3>Idea 1: Code pushdown — do the heavy work where the data lives</h3>
+            <p>In old systems, the pattern was: fetch millions of rows from the database to the application server, then total them in ABAP. HANA is so fast at calculating that S/4HANA flips the pattern: <b>push the calculation down into the database</b> and bring back only the small result. This principle is called <b>code pushdown</b> (or “code-to-data”).</p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy — the warehouse and the calculator</span>
+              <p>Old way: truck <b>every box</b> from the warehouse to your office, count them there, truck them back. Pushdown way: send <b>one instruction</b> — “count the boxes” — and the warehouse (HANA) replies with a single number. Same answer, a fraction of the traffic. ACDOCA can hold hundreds of millions of lines; pushdown is why reports on it still answer in seconds.</p>
+            </div>
+
+            <h3>Idea 2: CDS views — the modern way to define “smart tables”</h3>
+            <div class="box term">
+              <span class="box-title">New term — CDS view (Core Data Services)</span>
+              <p>A <b>CDS view</b> is a definition, written in a special ABAP-side language, that tells HANA: “take these tables, join them, calculate these totals, and present the result as if it were one table.” The heavy work executes <b>inside HANA</b> (pushdown in action). SAP delivers thousands of CDS views in S/4HANA — Fiori reports and analytics read them, and the <b>Virtual Data Model (VDM)</b> is simply the organised family of these delivered views. You define and view them in ADT/Eclipse; in the GUI you can display them in <code>SE11</code>.</p>
+              <p><span class="urdu">(CDS view = aik tayyar-shuda “smart window” jo kai tables ko jod kar, hisaab kar ke, aik table ki shakal mein natija deti hai — aur saara bhaari kaam HANA ke andar hota hai.)</span></p>
+            </div>
+
+            <ul class="clean">
+              <li><b>What changed for ABAP in S/4HANA, in one breath:</b> programs still written in ABAP and run on the application server — but database work is pushed down (CDS views, optimised Open SQL), and old habits (reading totals tables that no longer exist) had to be re-written for ACDOCA.</li>
+              <li><b>AMDP</b> — one name to recognise only: <b>ABAP Managed Database Procedures</b> let developers write procedures that run entirely inside HANA for the heaviest calculations. You will hear the word in projects; the idea is just “pushdown, maximum level”.</li>
+            </ul>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap</span>
+              <p>CDS views do <b>not</b> store their own data — like DDIC views, they calculate the result at read time from the underlying tables. And pushdown does <b>not</b> mean “ABAP is dead” or “everything runs in the database”: screens, checks and process logic still run as ABAP on the application server. Only the heavy data work moved down.</p>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s15" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 16 T-CODES ============ -->
+          <section class="lesson" id="s16" data-toc>
+            <h2><span class="no">16</span> T-codes of Lesson 4 at a glance</h2>
+            <p class="sub">Pin this table. For a functional consultant, SE16N, ST22 and /h are the daily tools; the rest you need to <i>recognise</i>.</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th style="width:20%">T-code / command</th><th style="width:38%">Name</th><th>Use it when…</th></tr>
+                <tr><td><code>SE11</code></td><td>ABAP Dictionary (DDIC)</td><td>You need a table's fields and definitions.</td></tr>
+                <tr><td><code>SE16N</code></td><td>Data Browser</td><td>You want to see the actual data inside a table (BKPF, BSEG…).</td></tr>
+                <tr><td><code>SE38</code></td><td>ABAP Editor</td><td>Programs are written / run here (developers).</td></tr>
+                <tr><td><code>SE80</code></td><td>Object Navigator</td><td>You want all objects of a package in one tree.</td></tr>
+                <tr><td><code>SE37</code></td><td>Function Builder</td><td>Function modules are built and tested here.</td></tr>
+                <tr><td><code>SE24</code></td><td>Class Builder</td><td>Classes (ABAP Objects) are built here.</td></tr>
+                <tr><td><code>SE93</code></td><td>Transaction maintenance</td><td>You ask “which program sits behind this T-code?”</td></tr>
+                <tr><td><code>SE18 / SE19</code></td><td>BAdI definition / implementation</td><td>Enhancement sockets are defined and filled here.</td></tr>
+                <tr><td><code>SE09 / SE10</code></td><td>Transport Organizer</td><td>Workbench &amp; Customizing requests are released here.</td></tr>
+                <tr><td><code>STMS</code></td><td>Transport Management System</td><td>Imports into QAS/PRD are queued and monitored here.</td></tr>
+                <tr><td><code>ST22</code></td><td>Short dump analysis</td><td>A program crashed — read the error report here.</td></tr>
+                <tr><td><code>SM37</code></td><td>Job overview</td><td>You check background jobs (e.g. nightly runs).</td></tr>
+                <tr><td><code>BAPI</code></td><td>BAPI Explorer</td><td>You browse SAP's standard published interfaces.</td></tr>
+                <tr><td><code>WE02</code></td><td>IDoc display</td><td>You check an IDoc message and its status.</td></tr>
+                <tr><td><code>/h</code></td><td>Command-field switch</td><td>Switches debugging on for the next action.</td></tr>
+              </table>
+            </div>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s16" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 17 EXAM TRAPS ============ -->
+          <section class="lesson" id="s17" data-toc>
+            <h2><span class="no">17</span> Exam traps for Lesson 4</h2>
+            <p class="sub">Eight traps, all from the wording games the exam plays with this topic.</p>
+            <ol>
+              <li><b>“ABAP is SAP's database.”</b> No — ABAP is a <b>programming language</b>. The database in S/4HANA is <b>HANA</b>. Language ≠ database ≠ operating system.</li>
+              <li><b>“The Data Dictionary stores the business data.”</b> No — the DDIC stores <b>definitions</b> (metadata). The data lives in the database tables. Dictionary = the registry book, not the land itself.</li>
+              <li><b>Domain vs data element swap.</b> Domain = <b>technical</b> (type, length). Data element = <b>meaning + labels</b>. If an option gives the domain the field label, it is wrong.</li>
+              <li><b>Internal table vs database table.</b> An internal table exists <b>only in memory while the program runs</b>. It is not stored, not transported, and gone at program end.</li>
+              <li><b>“BSEG was removed in S/4HANA.”</b> False — BSEG still exists. ACDOCA became the central line-item table; several old totals/index tables became <b>compatibility views</b>.</li>
+              <li><b>“A BAPI is a programming language / an interface technology like IDoc.”</b> A BAPI is a standardised, RFC-enabled <b>function module</b> — ABAP underneath. IDoc is a <b>message format</b>; RFC is the <b>calling mechanism</b>. Three different layers.</li>
+              <li><b>“To add logic, modify the standard program.”</b> The SAP-correct answer is almost always the <b>enhancement</b> (BAdI / exit) — modification is the last resort and the enemy of the <b>clean core</b>.</li>
+              <li><b>“ABAP programs are client-dependent, written separately per client.”</b> No — Repository objects (programs, DDIC) are <b>client-independent</b>: written once in DEV, valid for all clients, moved by <b>Workbench transports</b>.</li>
+            </ol>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s17" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 18 GLOSSARY ============ -->
+          <section class="lesson" id="s18" data-toc>
+            <h2><span class="no">18</span> Lesson 4 glossary (A–Z)</h2>
+            <p class="sub">Every technical term of this lesson, one line each. Use it for revision before the exam.</p>
+            <dl class="glossary">
+              <dt>ABAP</dt><dd>Advanced Business Application Programming — SAP's own programming language; almost all of SAP is written in it.</dd>
+              <dt>ABAP Objects</dt><dd>The object-oriented part of ABAP, built around classes and objects.</dd>
+              <dt>ADT</dt><dd>ABAP Development Tools — editing ABAP in Eclipse on a PC, connected to the SAP system.</dd>
+              <dt>AMDP</dt><dd>ABAP Managed Database Procedures — procedures written via ABAP that run entirely inside HANA.</dd>
+              <dt>BAdI</dt><dd>Business Add-In — a predefined enhancement “socket” in standard code where customers plug in their own logic.</dd>
+              <dt>BAPI</dt><dd>Business API — a standardised, stable, RFC-enabled function module representing a business action (e.g. posting a document).</dd>
+              <dt>Breakpoint</dt><dd>A marked line in code where the Debugger pauses the running program.</dd>
+              <dt>CDS view</dt><dd>Core Data Services view — a definition that joins/calculates data inside HANA and presents it like a table; basis of the Virtual Data Model.</dd>
+              <dt>Class</dt><dd>A template (blueprint) defining data and behaviour; an object is a live copy made from it.</dd>
+              <dt>Clean core</dt><dd>SAP's principle of keeping the standard system unmodified — use enhancements and released APIs so upgrades stay easy.</dd>
+              <dt>Code pushdown</dt><dd>Moving heavy calculations from the application server down into the HANA database.</dd>
+              <dt>Compiler</dt><dd>The translator that checks source code and converts it into executable form.</dd>
+              <dt>Data element</dt><dd>DDIC object giving a field its business meaning and screen labels; uses one domain.</dd>
+              <dt>Data Dictionary (DDIC)</dt><dd>The central register (SE11) defining all tables, fields and data types, once for the whole system.</dd>
+              <dt>Debugger</dt><dd>Tool that runs a program step by step (F5/F6/F7/F8) while you watch values; switched on with /h.</dd>
+              <dt>Domain</dt><dd>DDIC object defining only the technical shape of a value: data type and length.</dd>
+              <dt>Dynpro</dt><dd>Technical name of an SAP GUI screen inside a module pool program.</dd>
+              <dt>Enhancement</dt><dd>Customer logic plugged into SAP-provided points (BAdI, exits) without touching standard code.</dd>
+              <dt>Function module</dt><dd>A reusable, self-contained piece of ABAP code with defined inputs/outputs (SE37); grouped in function groups.</dd>
+              <dt>IDoc</dt><dd>Intermediate Document — a tracked, structured message envelope for data exchange between systems.</dd>
+              <dt>Internal table</dt><dd>A temporary list of rows in a program's memory; disappears when the program ends.</dd>
+              <dt>Kernel</dt><dd>The core engine of the application server (written in C/C++) on which the ABAP runtime runs.</dd>
+              <dt>Modification</dt><dd>Directly changing SAP's standard code — possible, but upgrade-risky; last resort.</dd>
+              <dt>Module pool</dt><dd>A screen-based ABAP program behind most transactions.</dd>
+              <dt>Open SQL</dt><dd>ABAP's database-independent way of reading/writing tables; translated by the runtime for the actual database.</dd>
+              <dt>Package</dt><dd>A container grouping related development objects for organisation and transport.</dd>
+              <dt>Repository</dt><dd>The central store of all development objects (programs, DDIC definitions); client-independent.</dd>
+              <dt>RFC</dt><dd>Remote Function Call — mechanism for calling a function module in another system and receiving the result.</dd>
+              <dt>Runtime</dt><dd>The part of the application server that executes compiled ABAP programs inside work processes.</dd>
+              <dt>Search help</dt><dd>DDIC definition behind the F4 value list of a field.</dd>
+              <dt>Short dump</dt><dd>The error report saved when a program crashes; read in ST22.</dd>
+              <dt>Source code</dt><dd>The human-readable text of a program as typed by the developer.</dd>
+              <dt>Structure</dt><dd>A field list with no stored data — a shape for carrying one record inside a program.</dd>
+              <dt>Transparent table</dt><dd>A DDIC table that exists 1:1 as a real database table (BKPF, BSEG, ACDOCA).</dd>
+              <dt>User exit / customer exit</dt><dd>Older enhancement forms — SAP-reserved places for customer code in standard processes.</dd>
+              <dt>Variable</dt><dd>A named memory box holding one value while a program runs.</dd>
+              <dt>View</dt><dd>A DDIC window joining fields from tables without storing data itself.</dd>
+              <dt>Work area</dt><dd>A single-row box holding the row currently being processed in a loop.</dd>
+              <dt>Workbench request</dt><dd>The transport type that carries development (Repository) changes between systems.</dd>
+              <dt>Z-object</dt><dd>Any customer-built object; names start with Z or Y, a namespace SAP reserves for customers.</dd>
+            </dl>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s18" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 19 SUMMARY ============ -->
+          <section class="lesson" id="s19" data-toc>
+            <h2><span class="no">19</span> Summary — key points for C_TS4FI</h2>
+            <p class="sub">If you remember nothing else from Lesson 4, remember these.</p>
+            <ul class="clean">
+              <li><b>ABAP</b> (Advanced Business Application Programming) is the <b>programming language</b> SAP is written in — a business-oriented 4GL that reads almost like English, with every statement ending in a full stop.</li>
+              <li>ABAP runs on the <b>Application layer</b>: source code → compiler → <b>ABAP runtime</b> in a work process; objects live in the client-independent <b>Repository</b>, above the C/C++ <b>kernel</b>.</li>
+              <li>The <b>ABAP Workbench</b> is the built-in toolbox: <b>SE80</b> navigator, <b>SE38</b> editor, <b>SE11</b> dictionary, <b>SE16N</b> data browser, <b>SE37</b> functions, <b>SE24</b> classes, <b>SE93</b> T-code links.</li>
+              <li>The <b>Data Dictionary</b> defines everything once: <b>domain</b> (technical shape) → <b>data element</b> (meaning + labels) → fields of <b>transparent tables</b>, plus structures, views and search helps.</li>
+              <li>FI data lives in tables an accountant can read: <b>BKPF</b> header, <b>BSEG</b> lines, <b>ACDOCA</b> the S/4HANA Universal Journal — keyed by <b>BUKRS + BELNR + GJAHR</b>. Check them yourself in <b>SE16N</b>.</li>
+              <li>Reading ABAP needs only a few words: <b>DATA, SELECT, LOOP, IF, READ TABLE, CALL FUNCTION, COMMIT WORK</b> — and the memory trio: database table (permanent) vs internal table (in memory) vs work area (one row).</li>
+              <li>Object family: <b>reports</b>, <b>module pools</b> (behind T-codes), <b>function modules</b>, <b>classes</b>; forms evolved <b>SAPscript → Smart Forms → Adobe Forms</b>.</li>
+              <li>Interfaces: <b>RFC</b> = the call mechanism, <b>BAPI</b> = standard published function (e.g. BAPI_ACC_DOCUMENT_POST), <b>IDoc</b> = tracked asynchronous message.</li>
+              <li>Change SAP the safe way: <b>Z/Y namespace</b> for your own objects, <b>enhancements (BAdI)</b> instead of <b>modifications</b>, everything moved by <b>Workbench transports</b> — the <b>clean core</b> principle.</li>
+              <li><b>/h</b> switches on the Debugger (F5/F6/F7/F8); crashes are read as <b>short dumps in ST22</b>.</li>
+              <li>S/4HANA ABAP = <b>code pushdown</b> + <b>CDS views</b>: heavy calculation inside HANA, logic still in ABAP on the application server.</li>
+            </ul>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s19" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <!-- ============ 20 SELF TEST ============ -->
+          <section class="lesson" id="s20" data-toc>
+            <h2><span class="no">20</span> Self-test — 12 MCQs</h2>
+            <p class="sub">Exam style: choose one answer, get instant feedback. Aim for 10/12 before moving to Lesson 5.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart self-test</button>
+            <div class="mark-read-row"><button class="mark-read-btn" type="button" data-mark-read="s20" aria-pressed="false"><span class="mr-check" aria-hidden="true">✓</span><span class="mr-label">Mark Read</span></button></div>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow" aria-hidden="true">→</span>
+            <div>
+              <b>Next: Lesson 5 — Enterprise Structure Theory</b> (video 01:34:50)<br/>
+              <span style="color:var(--ink-soft)">So far you know what SAP is, how it is built, how to drive its screens, and the language it is written in. Now the real FI work begins: how a company is <i>mapped</i> into SAP. Lesson 5 introduces the <b>Enterprise Structure</b> — the family tree of organisational units (client, company, company code and friends) that every posting depends on — as pure theory first, before we build any of it. Lesson 5 will arrive as its own separate document, like this one.</span>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 4 of the C_TS4FI Exam-Prep series · Screen pictures in this lesson are learning illustrations re-created in the style of SAP tools, not actual SAP screenshots · Exam facts follow SAP's published C_TS4FI exam description; SAP may update them — always confirm on SAP's official certification page before booking.
+            <br/>course created by Muhammad Asad Ullah Ibrahim
+          </footer>
+        </main>
+      </div>
+      </div>
+    </div>
+
+    <script>
+      // ---- Shared course progress store (localStorage, shared by all lessons) ----
+      window.SAPProgress=(function(){
+        var KEY='sapCts4fiProgress_v1';
+        function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+        function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+        function getLesson(n){ var s=load(), L=null;
+          if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+          if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+          return L; }
+        function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+          for(var p in patch){ cur[p]=patch[p]; }
+          s.lessons[k]=cur; saveAll(s); return cur; }
+        function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+          return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+        function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+          s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+        return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+      })();
+
+      // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+      function sha256Hex(ascii){
+        ascii=unescape(encodeURIComponent(ascii));
+        function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+        var maxWord=Math.pow(2,32), i, j, result='';
+        var words=[], asciiBitLength=ascii.length*8;
+        var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+        var primeCounter=k.length, isComposite={};
+        for(var candidate=2; primeCounter<64; candidate++){
+          if(!isComposite[candidate]){
+            for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+            hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+            k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+          }
+        }
+        ascii+='\x80';
+        while(ascii.length%64-56) ascii+='\x00';
+        for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+        words[words.length]=((asciiBitLength/maxWord)|0);
+        words[words.length]=(asciiBitLength);
+        for(j=0;j<words.length;){
+          var w=words.slice(j,j+=16), oldHash=hash;
+          hash=hash.slice(0,8);
+          for(i=0;i<64;i++){
+            var w15=w[i-15], w2=w[i-2];
+            var a=hash[0], e=hash[4];
+            var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+            var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+            hash=[(temp1+temp2)|0].concat(hash);
+            hash[4]=(hash[4]+temp1)|0;
+          }
+          for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+        }
+        for(i=0;i<8;i++){
+          for(j=3;j+1;j--){
+            var b=(hash[i]>>(j*8))&255;
+            result+=((b<16)?0:'')+b.toString(16);
+          }
+        }
+        return result;
+      }
+
+      // ---- Lesson 4 gating: locked until Lesson 3 is fully complete, or the gate test is passed 5/5 ----
+      (function(){
+        var THIS_LESSON=4, PREV_LESSON=3, PREV_SECTIONS=19, LOCK_MS=60*60*1000;
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var GATE_Q=[
+          {q:"What is the difference between SAP GUI and Fiori?",opts:["GUI is the classic desktop interface, Fiori is the modern web/app-based interface","GUI is only for administrators, Fiori is only for end users","GUI runs on the database, Fiori runs on the application server","There is no difference — Fiori is simply the new name of SAP GUI"],a:0},
+          {q:"What is a T-code?",opts:["A code that identifies a table in the database","A password used to log on to SAP","A short transaction code typed in the command field to open a transaction directly","A code printed on every posted document"],a:2},
+          {q:"What does /n do in the command field?",opts:["It logs you off completely","It ends the current transaction and opens a new one in the same session","It opens the transaction in a new window","It opens help for the current field"],a:1},
+          {q:"How many sessions/modes can a user open at most?",opts:["2","3","6","Unlimited"],a:2},
+          {q:"What is F1 help used for?",opts:["It lists all allowed values for a field","It saves the document","Field help — it explains the field the cursor is on","It opens a new session"],a:2}
+        ];
+        var gateScreen=document.getElementById('gateScreen');
+        var content=document.getElementById('lessonContent');
+        var lockBox=document.getElementById('gateLockBox');
+        var lockUntilEl=document.getElementById('gateLockUntil');
+        var countdownEl=document.getElementById('gateCountdown');
+        var testArea=document.getElementById('gateTestArea');
+        var qWrap=document.getElementById('gateQuestions');
+        var scoreEl=document.getElementById('gateScore');
+        var msgEl=document.getElementById('gateMsg');
+        var attemptsEl=document.getElementById('gateAttempts');
+        var submitBtn=document.getElementById('gateSubmit');
+        var retryBtn=document.getElementById('gateRetry');
+        var adminBtn=document.getElementById('adminBtn');
+        var adminForm=document.getElementById('adminForm');
+        var adminPw=document.getElementById('adminPw');
+        var adminSubmit=document.getElementById('adminSubmit');
+        var adminMsg=document.getElementById('adminMsg');
+        var timer=null, selected={};
+
+        function isPrevComplete(){
+          var L=window.SAPProgress.getLesson(PREV_LESSON);
+          if(!L) return false;
+          var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+          var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+          return !!(allRead&&quiz);
+        }
+        function unlockLesson(){
+          if(timer){ clearInterval(timer); timer=null; }
+          gateScreen.hidden=true; gateScreen.style.display='none';
+          content.hidden=false; content.style.display='';
+          window.scrollTo(0,0);
+        }
+        function updateCountdown(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var rem=g.lockUntil-Date.now();
+          if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+          var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+          countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        }
+        function showLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          lockBox.hidden=false;
+          testArea.style.display='none';
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+          updateCountdown();
+          if(timer) clearInterval(timer);
+          timer=setInterval(updateCountdown,1000);
+        }
+        function refreshLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var now=Date.now();
+          if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+          if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+          lockBox.hidden=true;
+          testArea.style.display='';
+          return false;
+        }
+        function updateAttempts(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+        }
+        function renderGate(){
+          selected={};
+          scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+          submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+          qWrap.innerHTML='';
+          GATE_Q.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='gate-q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                selected[qi]=oi;
+                var bs=opts.querySelectorAll('.gate-opt');
+                bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+                msgEl.textContent='';
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); qWrap.appendChild(box);
+          });
+        }
+        submitBtn.addEventListener('click',function(){
+          if(refreshLock()) return;
+          if(Object.keys(selected).length<GATE_Q.length){
+            msgEl.textContent='Please answer all 5 questions before submitting.';
+            scoreEl.textContent='';
+            return;
+          }
+          var score=0;
+          GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+          qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+          submitBtn.hidden=true;
+          scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          if(score===GATE_Q.length){
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            msgEl.textContent='Gate test passed. Lesson 4 is now unlocked.';
+            msgEl.className='ok';
+            updateAttempts();
+            setTimeout(unlockLesson,900);
+          }else{
+            g.fails=(g.fails||0)+1;
+            msgEl.textContent='Go back and complete previous lesson.';
+            msgEl.className='';
+            if(g.fails>=3){
+              g.lockUntil=Date.now()+LOCK_MS;
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              updateAttempts();
+              refreshLock();
+            }else{
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              retryBtn.hidden=false;
+              updateAttempts();
+            }
+          }
+        });
+        retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+        adminBtn.addEventListener('click',function(){
+          adminForm.hidden=!adminForm.hidden;
+          if(!adminForm.hidden) adminPw.focus();
+        });
+        function tryAdminUnlock(){
+          var val=adminPw.value;
+          if(!val) return;
+          if(sha256Hex(val)===ADMIN_HASH){
+            var g=window.SAPProgress.getGate(THIS_LESSON);
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            adminMsg.className=''; adminMsg.style.color='var(--green)';
+            adminMsg.textContent='Unlocked. Opening Lesson 4…';
+            adminPw.value='';
+            setTimeout(unlockLesson,700);
+          }else{
+            adminMsg.style.color=''; adminMsg.className='err';
+            adminMsg.textContent='Incorrect password. Please try again.';
+            adminPw.value='';
+            adminPw.focus();
+          }
+        }
+        adminSubmit.addEventListener('click',tryAdminUnlock);
+        adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+        // ---- Initial state ----
+        var g0=window.SAPProgress.getGate(THIS_LESSON);
+        if(isPrevComplete()||g0.unlocked===true){
+          unlockLesson();
+        }else{
+          gateScreen.hidden=false; gateScreen.style.display='';
+          content.hidden=true; content.style.display='none';
+          if(!refreshLock()) renderGate();
+          updateAttempts();
+        }
+      })();
+    </script>
+
+    <script>
+      // ---- Theme switch (default Light) ----
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent = (t==='dark') ? 'Light theme' : 'Dark theme'; }
+        apply('light'); // default theme: Light
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+        });
+      })();
+
+      // ---- Sidebar: active-section highlight (scroll-spy) + Mark Read progress ----
+      (function(){
+        var sections=Array.prototype.slice.call(document.querySelectorAll('section[data-toc]'));
+        var total=sections.length;
+        var liById={}, linkById={};
+        document.querySelectorAll('#tocList li').forEach(function(li){
+          var a=li.querySelector('a'); if(!a) return;
+          var id=a.getAttribute('href').slice(1);
+          liById[id]=li; linkById[id]=a;
+        });
+        var readSet={};
+        // Restore this lesson's saved read state from the shared progress store.
+        try{ var savedL4=window.SAPProgress&&window.SAPProgress.getLesson(4);
+          if(savedL4&&savedL4.readSections){ savedL4.readSections.forEach(function(id){ readSet[id]=true; }); }
+        }catch(e){}
+        var bar=document.getElementById('progressBar');
+        var countEl=document.getElementById('readCount');
+        var totalEl=document.getElementById('readTotal');
+        var pctEl=document.getElementById('readPct');
+        var fillEl=document.getElementById('readFill');
+        if(totalEl) totalEl.textContent=total;
+
+        function readCount(){ return Object.keys(readSet).length; }
+        function refreshProgress(){
+          var n=readCount();
+          var pct= total>0 ? Math.round((n/total)*100) : 0;
+          if(countEl) countEl.textContent=n;
+          if(pctEl) pctEl.textContent=pct+'%';
+          if(fillEl) fillEl.style.width=pct+'%';
+          if(bar) bar.style.width=pct+'%';
+        }
+        function setRead(id,on){
+          if(on) readSet[id]=true; else delete readSet[id];
+          if(liById[id]) liById[id].classList.toggle('read',!!on);
+          document.querySelectorAll('[data-mark-read="'+id+'"]').forEach(function(btn){
+            btn.classList.toggle('is-read',!!on);
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            var label=btn.querySelector('.mr-label');
+            if(label) label.textContent= on ? 'Read ✓' : 'Mark Read';
+          });
+          refreshProgress();
+          // Persist to the shared store so later lessons' gating can read it.
+          try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(4,{readSections:arr, allRead:(arr.length===total)}); } }catch(e){}
+        }
+        document.querySelectorAll('[data-mark-read]').forEach(function(btn){
+          btn.addEventListener('click',function(){
+            var id=btn.getAttribute('data-mark-read');
+            setRead(id, !readSet[id]);
+          });
+        });
+
+        // Apply any restored read state to buttons and sidebar.
+        Object.keys(readSet).forEach(function(id){ setRead(id,true); });
+
+        // Scroll-spy: highlight the section currently on screen in the sidebar.
+        function setActive(id){
+          Object.keys(linkById).forEach(function(k){
+            linkById[k].classList.toggle('active', k===id);
+          });
+        }
+        if('IntersectionObserver' in window){
+          var visible={};
+          var spy=new IntersectionObserver(function(entries){
+            entries.forEach(function(e){ visible[e.target.id]=e.isIntersecting; });
+            // Pick the first (topmost) section currently in view.
+            for(var i=0;i<sections.length;i++){
+              if(visible[sections[i].id]){ setActive(sections[i].id); return; }
+            }
+          },{rootMargin:'-20% 0px -55% 0px',threshold:0});
+          sections.forEach(function(s){ spy.observe(s); });
+        }
+        // Fallback / refinement on scroll for tall sections.
+        var ticking=false;
+        function onScrollSpy(){
+          if(ticking) return; ticking=true;
+          requestAnimationFrame(function(){
+            ticking=false;
+            var pos=window.scrollY + window.innerHeight*0.35;
+            var current=sections.length?sections[0].id:null;
+            sections.forEach(function(s){ if(s.offsetTop<=pos) current=s.id; });
+            if(current) setActive(current);
+          });
+        }
+        document.addEventListener('scroll',onScrollSpy,{passive:true});
+        onScrollSpy();
+        refreshProgress();
+      })();
+
+      // ---- Self-test quiz ----
+      (function(){
+        var QUESTIONS=[
+          {q:"What is ABAP?",opts:["SAP's database system","The programming language in which SAP applications are written","SAP's operating system","A reporting tool for end users"],a:1,why:"ABAP = Advanced Business Application Programming — a language. The S/4HANA database is HANA; ABAP programs run on the application server."},
+          {q:"An FI consultant wants to look at the actual rows stored in table BKPF. Which transaction is used?",opts:["SE38","SE93","SE16N","ST22"],a:2,why:"SE16N (Data Browser) shows table contents. SE38 edits programs, SE93 links T-codes to programs, ST22 analyses dumps."},
+          {q:"In the Data Dictionary, which object defines ONLY the technical properties of a field — data type and length?",opts:["Data element","Domain","Search help","Transparent table"],a:1,why:"Domain = technical shape. The data element adds the business meaning and the screen labels on top of a domain."},
+          {q:"A posted journal entry's HEADER (one row per document: company code, document number, posting date) is stored in which table?",opts:["BSEG","ACDOCA only","BKPF","T001"],a:2,why:"BKPF = document header (think Kopf = head). BSEG holds the line items; T001 holds company code definitions."},
+          {q:"What is an internal table in ABAP?",opts:["A database table hidden from users","A temporary list of rows held in memory while the program runs","A table imported from another system","The table of contents of a program"],a:1,why:"Internal tables live only in the program's memory and vanish when it ends. Database (transparent) tables are the permanent ones."},
+          {q:"An external billing system must post accounting documents into SAP FI through a standard, stable, SAP-published interface. What should be used?",opts:["A modification of program SAPMF05A","BAPI_ACC_DOCUMENT_POST","A Smart Form","Direct update of table BSEG"],a:1,why:"BAPIs are SAP's published, stable function modules for business actions — here, posting accounting documents. Direct table updates and modifications are exactly what you must avoid."},
+          {q:"Which statement about RFC and IDoc is correct?",opts:["RFC is a message format; IDoc is a calling mechanism","RFC calls a function in another system and waits for the result; an IDoc is a stored, tracked message that can be processed asynchronously","Both are programming languages","IDocs can only be used inside one system"],a:1,why:"RFC = synchronous call (phone call). IDoc = asynchronous, monitored message envelope (registered post)."},
+          {q:"A developer must add a company-specific check inside a standard SAP posting process. What is the SAP-recommended approach?",opts:["Modify the standard program directly","Copy the standard program and delete the original","Use an enhancement point / BAdI provided by SAP","Change the database table structure in HANA"],a:2,why:"Enhancements (BAdI, user exits) plug customer logic into SAP-provided sockets without touching standard code — the clean-core way."},
+          {q:"A custom report is named ZFI_AGING. What does the leading Z tell you?",opts:["It is a standard SAP program","It is a customer-developed object in the namespace SAP reserves for customers","It is a temporary program deleted nightly","It belongs to the Basis team only"],a:1,why:"Customer objects start with Z or Y. SAP standard objects never do, so Z-objects are safe from being overwritten by upgrades."},
+          {q:"You type /h in the command field and then press Post in FB50. What happens?",opts:["The document is posted twice","The Debugger starts and the program pauses so you can step through it","SAP logs you off","The help system opens"],a:1,why:"/h switches debugging on; the next action runs under the Debugger, pausing at breakpoints so values can be inspected."},
+          {q:"What does “code pushdown” mean in S/4HANA?",opts:["Programs are written on paper first","Heavy calculations are moved from the application server down into the HANA database","ABAP code is compressed before transport","Users must type code in lower case"],a:1,why:"Pushdown = code-to-data: HANA calculates totals/joins itself (e.g. via CDS views) and returns only the small result."},
+          {q:"Which transport type carries a new ABAP program from DEV to QAS?",opts:["A Customizing request","A Workbench request","An IDoc","A spool request"],a:1,why:"Repository/development objects (programs, DDIC objects) travel in Workbench requests; settings travel in Customizing requests. Release in SE09/SE10, import via STMS."}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  // Persist self-test completion to the shared store for the next lesson's gating.
+                  try{ if(window.SAPProgress) window.SAPProgress.saveLesson(4,{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=10?' — Excellent! You are ready for Lesson 5.':' — Re-read the sections above once, then try again. You can do it.');
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+  </body>
+</html>

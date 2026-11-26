@@ -1,0 +1,1439 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Part 2 · Lesson 2 — Unique Codes, Posting Period Variant &amp; Retained Earnings · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8; --green-ink:#ffffff;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527; --green-ink:#0e2417;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .15s linear}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35;border-left:3px solid transparent}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc li.active a{background:var(--accent);color:#fff;font-weight:700;border-left-color:var(--accent-ink)}
+      [data-theme="dark"] nav.toc li.active a{color:#0e1a26}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px;background:var(--surface)}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.active.read a{color:#fff}
+      [data-theme="dark"] nav.toc li.active.read a{color:#0e1a26}
+      nav.toc .tick{display:none;color:var(--green);font-weight:700;flex:none}
+      nav.toc li.read .tick{display:inline}
+      nav.toc li.active .tick{color:inherit}
+      .toc-progress{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+      .toc-progress .pct{font-weight:700;font-size:1.05rem}
+      .toc-progress .track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:6px 0}
+      .toc-progress .fill{height:100%;width:0;background:var(--green);border-radius:99px;transition:width .2s}
+      .toc-progress .count{font-size:.82rem;color:var(--ink-soft)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      section.lesson.is-read{border-color:var(--green)}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .sec-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:22px;padding-top:16px}
+      .mark-read{cursor:pointer;font:inherit;font-weight:700;font-size:.95rem;border-radius:9px;padding:11px 22px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:9px;min-height:48px;transition:background .15s,color .15s}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read .box{width:20px;height:20px;border:2px solid currentColor;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+      .mark-read .box svg{width:13px;height:13px;display:none}
+      .mark-read.done{background:var(--green);color:var(--green-ink);border-color:var(--green)}
+      .mark-read.done .box svg{display:block}
+      .read-status{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);flex-wrap:wrap}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      ol.steps{margin:.4em 0 .8em;padding-left:1.4em}
+      ol.steps li{margin:.45em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+      .btn-ghost{background:var(--surface);color:var(--accent-ink);border:1px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+
+      /* ---------- Gate (locked) screen ---------- */
+      .gate-wrap{max-width:760px;margin:0 auto;padding:34px 18px 80px}
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;box-shadow:var(--shadow)}
+      @media(max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form[hidden]{display:none}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{color:var(--accent);display:inline-flex}
+      .next-lesson .arrow svg{width:26px;height:26px}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Part 2 · Lesson 2</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <!-- ================= LOCKED / GATE SCREEN ================= -->
+    <div class="gate-wrap" id="gateScreen" hidden>
+      <section class="gate-card" aria-labelledby="gateTitle">
+        <div class="gate-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
+        <h2 id="gateTitle">Part 2 · Lesson 2 is locked</h2>
+        <p>This lesson opens only after <b>Part 2 · Lesson 1</b> is fully complete — every section marked Read <b>and</b> its self-test answered. If you have not finished Part 2 · Lesson 1 in this browser, complete it first.</p>
+        <p>You can also open this lesson right now by passing the <b>Gate Test</b> below: 5 questions from Part 2 · Lesson 1 (company details search, shortcuts, Chart of Accounts series and length, OBD4, OB13). You need <b>5 / 5</b>. Only your score is shown — correct answers are never displayed.</p>
+
+        <div class="gate-lockbox" id="gateLockBox" hidden>
+          <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+          <p>Locked until: <b id="gateLockUntil">—</b></p>
+          <p>Time remaining: <b id="gateCountdown">—</b></p>
+          <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+        </div>
+
+        <div id="gateTestArea">
+          <div id="gateQuestions"></div>
+          <p id="gateScore" aria-live="polite"></p>
+          <p id="gateMsg" aria-live="polite"></p>
+          <div class="gate-actions">
+            <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+            <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+          </div>
+          <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+        </div>
+
+        <div class="gate-admin">
+          <button class="btn btn-ghost" id="adminBtn" type="button">Admin Unlock</button>
+          <div class="gate-admin-form" id="adminForm" hidden>
+            <label for="adminPw">Admin password</label>
+            <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+            <div class="gate-actions">
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+            </div>
+            <p id="adminMsg" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+      </section>
+    </div>
+
+    <!-- ================= LESSON CONTENT ================= -->
+    <div id="lessonContent" hidden>
+    <div class="wrap">
+      <header class="hero">
+        <span class="kicker">Part 2 · Lesson 2 · Practical Configuration — Codes, Periods &amp; Profit Carry-Forward</span>
+        <h1>Unique Codes, Posting Period Variant &amp; Retained Earnings</h1>
+        <p class="lede">In Part 2 · Lesson 1 you learned to <b>find</b> company details and to set the chart’s series and length. Today you create things yourself: you will give company data entries their own <b>unique codes</b> and save them properly, build and configure a <b>Posting Period Variant</b>, copy it, save it and <b>assign it to the company code</b>, then <b>assign the retained earnings account</b> — making sure its number sits inside the correct liability / equity series — and finally <b>open the Chart of Accounts and verify</b> every detail you just created. <span class="urdu">Aaj sirf dhundna nahi hai — aaj khud banana, save karna, assign karna aur phir verify karna hai.</span></p>
+        <div class="hero-meta">
+          <span class="chip">Course segment <b>24:47 – 41:20+</b></span>
+          <span class="chip">Level <b>Beginner · Zero SAP assumed</b></span>
+          <span class="chip">Exam <b>C_TS4FI · Global settings: posting periods, retained earnings</b></span>
+          <span class="chip">Key T-codes <b>OX02 · OBBO · OBBP · OB52 · OB53</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span><span>Where Lesson 1 stopped — today’s five jobs</span><span class="tick">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span><span>Unique codes — why every entry needs its own identity</span><span class="tick">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span><span>Choosing good codes — the rules before you type</span><span class="tick">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span><span>Step by step — creating &amp; saving company entries with unique codes</span><span class="tick">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span><span>Posting Period Variant — the gatekeeper of the calendar</span><span class="tick">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span><span>Inside a variant — account types, period ranges &amp; the + row</span><span class="tick">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span><span>Step by step — creating &amp; configuring a variant (OBBO)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span><span>Copying a variant — the consultant’s shortcut (OBBO)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span><span>Assigning the variant to the company code (OBBP) &amp; opening periods (OB52)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span><span>Retained earnings — where the year’s profit finally sleeps</span><span class="tick">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span><span>The series rule — the retained earnings number must live in the equity / liability series</span><span class="tick">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span><span>Step by step — assigning the retained earnings account (OB53)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span><span>Verification — opening the Chart of Accounts &amp; checking every detail</span><span class="tick">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span><span>Exam traps</span><span class="tick">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span><span>A–Z glossary</span><span class="tick">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span><span>Summary — the whole lesson on one screen</span><span class="tick">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span><span>Self-test — 10 questions</span><span class="tick">✓</span></a></li>
+          </ol>
+          <div class="toc-progress">
+            <span class="pct" id="pctText">0%</span>
+            <div class="track"><div class="fill" id="sideFill"></div></div>
+            <span class="count" id="countText">0 of 17 sections marked read</span>
+          </div>
+          <p class="toc-note">Screens in this lesson are <b>re-created illustrations</b> made for learning — they are not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <!-- ============ S1 ============ -->
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Where Lesson 1 stopped — today’s five jobs</h2>
+            <p class="sub">Segment 24:47 onwards. A quick bridge from searching and revising to creating and assigning.</p>
+
+            <p>In Part 2 · Lesson 1 your hands learned the practical loop — <b>find it, open it, read it, save it, find it again</b>. You searched company details with F4 and shortcuts, checked table T001 behind the screen, and set the Chart of Accounts <b>length</b> (OB13) and <b>series</b> — the account-group number ranges (OBD4). Keep those two ideas warm: today’s last job depends on the series you set there.</p>
+            <p>Today the loop grows one extra step: <b>assign</b>. Creating a setting is only half the work — SAP only uses it once it is <i>assigned</i> to the object that needs it. A posting period variant that is not assigned to your company code controls nothing. A retained earnings account that is not assigned in OB53 receives nothing at year-end.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>#</th><th>Today’s job</th><th>Segment</th><th>Main T-code(s)</th></tr>
+                <tr><td>1</td><td class="hl"><b>Create &amp; save company data entries with unique codes</b></td><td>24:47</td><td>OX02 · OX15</td></tr>
+                <tr><td>2</td><td class="hl"><b>Create &amp; configure a Posting Period Variant</b></td><td>27:35</td><td>OBBO</td></tr>
+                <tr><td>3</td><td class="hl"><b>Copy, save &amp; assign the variant to the company code</b></td><td>37:56</td><td>OBBO · OBBP</td></tr>
+                <tr><td>4</td><td class="hl"><b>Assign the retained earnings account &amp; check the liability series</b></td><td>39:32</td><td>OB53 · OBD4</td></tr>
+                <tr><td>5</td><td class="hl"><b>Open &amp; verify the Chart of Accounts and retained earnings details</b></td><td>41:20</td><td>OB13 · FSP0 · SE16N</td></tr>
+              </table>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 210" role="img" aria-label="Diagram of today's build order: unique codes, posting period variant, assignment, retained earnings, verification">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box-a" x="15" y="55" width="130" height="80" rx="10"/>
+                <text class="svg-title" x="80" y="88" text-anchor="middle">UNIQUE</text>
+                <text class="svg-title" x="80" y="108" text-anchor="middle">CODES</text>
+                <text class="svg-sub" x="80" y="126" text-anchor="middle">OX02 · OX15</text>
+                <path class="svg-arrow" d="M145,95 L168,95"/>
+                <rect class="svg-box-a" x="172" y="55" width="130" height="80" rx="10"/>
+                <text class="svg-title" x="237" y="88" text-anchor="middle">PP VARIANT</text>
+                <text class="svg-sub" x="237" y="108" text-anchor="middle">create · copy</text>
+                <text class="svg-sub" x="237" y="126" text-anchor="middle">OBBO</text>
+                <path class="svg-arrow" d="M302,95 L325,95"/>
+                <rect class="svg-box-g" x="329" y="55" width="130" height="80" rx="10"/>
+                <text class="svg-title" x="394" y="88" text-anchor="middle">ASSIGN TO</text>
+                <text class="svg-title" x="394" y="108" text-anchor="middle">COMPANY CODE</text>
+                <text class="svg-sub" x="394" y="126" text-anchor="middle">OBBP · OB52</text>
+                <path class="svg-arrow" d="M459,95 L482,95"/>
+                <rect class="svg-box-g" x="486" y="55" width="130" height="80" rx="10"/>
+                <text class="svg-title" x="551" y="88" text-anchor="middle">RETAINED</text>
+                <text class="svg-title" x="551" y="108" text-anchor="middle">EARNINGS</text>
+                <text class="svg-sub" x="551" y="126" text-anchor="middle">OB53</text>
+                <path class="svg-arrow" d="M616,95 L639,95"/>
+                <rect class="svg-box-gr" x="643" y="55" width="102" height="80" rx="10"/>
+                <text class="svg-title" x="694" y="88" text-anchor="middle">VERIFY</text>
+                <text class="svg-sub" x="694" y="108" text-anchor="middle">CoA + tables</text>
+                <text class="svg-sub" x="694" y="126" text-anchor="middle">§13</text>
+                <text class="svg-sub" x="380" y="30" text-anchor="middle">Build in this order — each step stands on the one before it</text>
+                <text class="svg-sub" x="380" y="180" text-anchor="middle">Create → Save → Assign → Verify. A setting that is created but not assigned does nothing.</text>
+              </svg>
+              <figcaption>Today’s five jobs in build order. Notice the rhythm of the whole lesson: nothing counts until it is saved, and nothing works until it is assigned and verified.</figcaption>
+            </figure>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · A new employee’s first week</span>
+              <p>Think of today as onboarding one new company into SAP. First the employee gets a <b>unique ID card</b> (the code) — two employees can never share one ID. Then she gets a <b>shift calendar</b> that says which days she may work (the posting period variant). The calendar only applies to her once HR <b>attaches it to her file</b> (assignment). Finally, her salary needs a <b>bank account on record</b> (retained earnings) — and at the end you open her file and <b>check every page</b> before she starts work (verification).</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S2 ============ -->
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> Unique codes — why every entry needs its own identity</h2>
+            <p class="sub">Segment 24:47 — Creating and saving unique codes for company data entries. First, the idea.</p>
+
+            <p>Almost everything you create in SAP Customizing is identified by a short <b>code</b> — a key. The company code has a 4-character key (<code>BUKRS</code>), the company a 6-character key, the chart of accounts a 4-character key, the posting period variant a 4-character key. The key is how SAP finds the entry everywhere: in tables, in assignments, in documents, in reports. Names can be long and can even repeat — <b>keys cannot</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Key / Unique code</span>
+              <p>A <b>key</b> is the short code that identifies one entry uniquely inside its table. “Unique” means: within the same <b>client</b> (the whole SAP system copy, from Part 1), no two entries of the same type may carry the same key. If you try to create company code <code>PK01</code> when <code>PK01</code> already exists, SAP stops you with an error — the entry already exists. The key is also called the entry’s <b>primary key</b>: the database itself guarantees there can never be two rows with the same one.</p>
+              <p class="urdu">Har entry ka apna alag code hota hai — CNIC number ki tarah. Do entries ka code kabhi aik nahi ho sakta; SAP khud rok deta hai.</p>
+            </div>
+
+            <h3>Why uniqueness matters in practice</h3>
+            <ul class="clean">
+              <li><b>Documents point at keys, not names.</b> Every accounting document stores the company code key (e.g. <code>PK01</code>), not the company’s name. If two company codes could share a key, SAP would not know whose books a posting belongs to.</li>
+              <li><b>Assignments point at keys.</b> When you assign a posting period variant to a company code in §9, you are really writing two keys side by side in a table. Wrong key = wrong company gets the setting.</li>
+              <li><b>Reports group by keys.</b> Trial balance, balance sheet, tax reports — all select and total by key fields.</li>
+              <li><b>Keys are forever (almost).</b> Once postings exist under a key, you cannot simply rename or delete it. That is why consultants choose codes carefully <i>before</i> creating entries — the next section is all about that.</li>
+            </ul>
+
+            <div class="screen" role="img" aria-label="Illustration of SAP rejecting a duplicate company code key">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>Illustration — OX02 · Define Company Code · duplicate key message</span></div>
+              <div class="screen-body"><span class="dim">You type a company code that already exists and press Enter…</span><br>
+Company Code&nbsp;&nbsp;: <span class="hl2">PK01</span>  <span class="dim">(already in table T001)</span><br>
+<span class="kw">System message:</span> <span class="st">Entry PK01 already exists in table T001</span><br>
+<span class="cm">→ SAP refuses to create a second entry with the same key.</span><br>
+<span class="cm">→ Choose a different, unused code — or open the existing entry to view/change it.</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · Code = CNIC</span>
+              <p>Pakistan mein har shakhs ka CNIC number unique hota hai — naam aik jaisay ho saktay hain, number nahi. SAP mein bhi bilkul yehi rule hai: <b>naam repeat ho sakta hai, code nahi.</b> Jab bhi “unique code” parhain, CNIC yaad kar lein.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S3 ============ -->
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Choosing good codes — the rules before you type</h2>
+            <p class="sub">Thirty seconds of thinking before creating an entry saves hours later. The rules consultants actually follow.</p>
+
+            <h3>Rule 1 — Respect the length of the key field</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Object</th><th>Key field</th><th>Length</th><th>Example</th><th>Created in</th></tr>
+                <tr><td>Company Code</td><td><code>BUKRS</code></td><td class="hl"><b>4 characters</b></td><td>PK01</td><td>OX02</td></tr>
+                <tr><td>Company</td><td><code>RCOMP</code></td><td class="hl"><b>6 characters</b></td><td>PKGRP1</td><td>OX15</td></tr>
+                <tr><td>Chart of Accounts</td><td><code>KTOPL</code></td><td class="hl"><b>4 characters</b></td><td>PKCA</td><td>OB13</td></tr>
+                <tr><td>Posting Period Variant</td><td><code>VNAME</code> (variant name)</td><td class="hl"><b>4 characters</b></td><td>PK01 / Z001</td><td>OBBO</td></tr>
+                <tr><td>Fiscal Year Variant</td><td>—</td><td><b>2 characters</b></td><td>K4</td><td>OB29</td></tr>
+              </table>
+            </div>
+            <p>You cannot type a 5-character company code — the field simply will not accept it. Length is fixed by SAP’s data definition, not by your preference.</p>
+
+            <h3>Rule 2 — Stay out of SAP’s own namespace</h3>
+            <p>SAP delivers standard entries whose keys usually start with digits or plain letters (variant <code>0001</code>, chart <code>INT</code>, fiscal year variant <code>K4</code>). Customer-made entries traditionally start with <b>Z</b> or <b>Y</b> — the reserved <b>customer namespace</b> — or with your own meaningful prefix. Two benefits: your entries never collide with a future SAP delivery, and anyone can see at a glance “this one is ours, not standard”.</p>
+
+            <h3>Rule 3 — Make the code speak</h3>
+            <ul class="clean">
+              <li><b>Meaningful beats random:</b> <code>PK01</code> (Pakistan, unit 01) is understood instantly; <code>XQ7Z</code> is forgotten by lunch.</li>
+              <li><b>Keep a pattern across objects:</b> if the company code is <code>PK01</code>, naming its posting period variant <code>PK01</code> too is a common, tidy habit — one glance shows which variant belongs to which company code (you will do exactly this in §7).</li>
+              <li><b>Leave room to grow:</b> numbering 01, 02, 03… lets a second and third company code join later without breaking the pattern.</li>
+              <li><b>Never reuse a retired code</b> for a different object — old documents and reports still carry the old key.</li>
+            </ul>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · “Can the key be changed later?”</span>
+              <p>The exam loves this: a key is the entry’s identity. You can change an entry’s <b>name and details</b> freely, but the <b>key itself is not edited</b> — the practical way to “rename” is to create a new entry with the new key, re-do the assignments, and (only if unused) delete the old one. Once real postings exist under a company code, even that is no longer realistic. Choose carefully, once.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S4 ============ -->
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> Step by step — creating &amp; saving company entries with unique codes</h2>
+            <p class="sub">Segment 24:47, hands on. Creating the company and company code entries, and saving them so they truly exist.</p>
+
+            <p>You already know these two transactions from Part 1 · Lesson 5 and Part 2 · Lesson 1 — <code>OX15</code> (Company) and <code>OX02</code> (Company Code). What is new today is the discipline of <b>creating with a fresh unique code</b> and <b>saving correctly</b>, including the transport request that appears in a Customizing system.</p>
+
+            <h3>Before you create — check the code is really free</h3>
+            <ol class="steps">
+              <li>Open <code>OX02</code>. On the overview screen, use <b>Position / search</b> or press <b>F4</b> in the company code field and search for the code you plan to use (e.g. <code>PK01</code>).</li>
+              <li>If the search finds nothing — the code is free. If it finds an entry — stop: pick another code, or open the existing entry instead of creating a duplicate (SAP would refuse anyway, as you saw in §2).</li>
+              <li>The database-level check also works: <code>SE16N</code> on table <code>T001</code>, filter <code>BUKRS = PK01</code>. Zero rows = free code.</li>
+            </ol>
+
+            <h3>Creating the entries</h3>
+            <ol class="steps">
+              <li><b>Company first (OX15):</b> choose <b>New Entries</b>, type your unique 6-character company code (e.g. <code>PKGRP1</code>), company name, city, country and language. The Company is the consolidation unit from Part 1 — the group-level identity.</li>
+              <li><b>Company code (OX02):</b> choose <b>New Entries</b> (or use <i>Copy</i> from a similar existing company code — §8 shows the same copy idea for variants). Type the unique 4-character code (e.g. <code>PK01</code>), the company name, city, country, <b>currency</b> (e.g. PKR) and <b>language</b>. Currency and language are set here, at creation — remember from Part 1 that the company code currency is the local currency of its books.</li>
+              <li>Press <b>Enter</b> — SAP validates the key immediately. A duplicate key errors here, before anything is stored.</li>
+              <li>Complete the address details screen if it appears, then press <b>Save</b> (Ctrl+S).</li>
+              <li><b>The transport pop-up:</b> in a Customizing (development) system, saving asks for a <b>Customizing request</b> — create a new request with a sensible description (e.g. “FI: Company code PK01 created”) or select your existing one, and confirm. As you learned in Part 2 · Lesson 1: <b>cancelling this pop-up cancels the save</b> — the entry would not exist.</li>
+              <li>Read the status bar: <i>“Data was saved”</i> / the entry appears in the overview list. Only now does the entry truly exist.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of creating a company code entry with a unique code in OX02">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>Illustration — OX02 · New Entries · company code detail</span></div>
+              <div class="screen-body">Company Code&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">PK01</span>   <span class="dim">← unique 4-char key, checked free beforehand</span><br>
+Company Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="st">Ibrahim Apparel &amp; Trading (Pvt) Ltd</span><br>
+City&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="st">Faisalabad</span>&nbsp;&nbsp;&nbsp;Country: <span class="st">PK</span><br>
+Currency&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="st">PKR</span>&nbsp;&nbsp;&nbsp;Language: <span class="st">EN</span><br>
+<span class="dim">Press Save (Ctrl+S) → Customizing request pop-up → confirm request</span><br>
+<span class="kw">Status:</span> <span class="st">Data was saved</span> <span class="cm">→ entry now stored in table T001</span></div>
+            </div>
+
+            <h3>Verify immediately — the 30-second habit</h3>
+            <ol class="steps">
+              <li>Leave the transaction (<code>/n</code>) and re-enter <code>OX02</code> — or run <code>SE16N</code> on <code>T001</code> with <code>BUKRS = PK01</code>.</li>
+              <li>Your entry must appear with the exact name, currency and country you typed. If it is not there, the save did not complete (most often: the transport pop-up was cancelled).</li>
+            </ol>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Registering a newborn</span>
+              <p>Pehle check karte hain ke ye naam/number pehle se registered to nahi (free-code check). Phir form bharte hain (details), phir form <b>jama</b> karte hain (Save + transport request — the “file number” your paperwork travels under). Sirf form bhar lena registration nahi hai — jama karana registration hai. Aur ghar aa kar record dobara check karna (verify) samajhdari hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S5 ============ -->
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Posting Period Variant — the gatekeeper of the calendar</h2>
+            <p class="sub">Segment 27:35 begins. First the idea, in plain words — you met this in Part 1 · Lesson 6; today you build one.</p>
+
+            <p>Accounting works in <b>posting periods</b> — normally the 12 months of the fiscal year, plus special periods for year-end adjustments. At any moment, some periods are <b>open</b> (you may post into them) and the rest are <b>closed</b> (posting is refused). Who decides which periods are open? A <b>Posting Period Variant</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Posting Period Variant (PPV)</span>
+              <p>A <b>Posting Period Variant</b> is a named set of rules (a 4-character code, e.g. <code>PK01</code> or the SAP standard <code>0001</code>) that states, <b>for each account type</b>, which posting periods are currently open. The variant itself holds no company data — it is a reusable rulebook. You assign the variant to one or more company codes (OBBP), and from then on, transaction <code>OB52</code> opens and closes periods <i>through that variant</i>. One variant can serve many company codes that share the same open/close rhythm.</p>
+              <p class="urdu">Posting Period Variant aik rule-book hai: kis mahine mein posting ho sakti hai, kis mein nahi. Company code ko ye rule-book assign ki jati hai — baghair assignment ke rule-book almari mein pari rehti hai, lagu nahi hoti.</p>
+            </div>
+
+            <h3>Do not confuse the two “variants” <span class="examtag">Exam favourite</span></h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th></th><th>Fiscal Year Variant (FYV)</th><th>Posting Period Variant (PPV)</th></tr>
+                <tr><td><b>Question it answers</b></td><td>“What does our year look like?”</td><td class="hl">“Which periods may I post into <i>right now</i>?”</td></tr>
+                <tr><td><b>Content</b></td><td>Number of periods, where each period starts/ends (calendar layout)</td><td class="hl">Open/closed ranges per account type</td></tr>
+                <tr><td><b>Defined in</b></td><td>OB29 (e.g. K4 = calendar year, 12 periods + 4 special)</td><td class="hl">OBBO</td></tr>
+                <tr><td><b>Assigned in</b></td><td>OB37 (to company code)</td><td class="hl">OBBP (to company code)</td></tr>
+                <tr><td><b>Used daily in</b></td><td>— (background calendar)</td><td class="hl">OB52 — open/close periods</td></tr>
+              </table>
+            </div>
+            <p>Easy sentence to remember: <b>the Fiscal Year Variant draws the calendar; the Posting Period Variant locks and unlocks its pages.</b></p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Library ke timings</span>
+              <p>Fiscal Year Variant library ka <b>saal bhar ka calendar</b> hai — kab khulti hai, chhuttian kab hain. Posting Period Variant <b>roz ka gate-keeper</b> hai: aaj ka din kis section ke liye open hai — bachon ka section (customers), reference section (vendors), ya sab ke liye band? Calendar alag cheez hai, gate-keeper alag — dono ki zaroorat hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S6 ============ -->
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Inside a variant — account types, period ranges &amp; the + row</h2>
+            <p class="sub">Before creating one, learn to read the OB52 grid — the screen where a variant does its daily work.</p>
+
+            <p>Open any variant in <code>OB52</code> and you see a grid. Each <b>row</b> is one rule: <i>for this account type, in this fiscal year, periods from X to Y are open.</i> The columns:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Column</th><th>Meaning in simple words</th></tr>
+                <tr><td><b>Variant</b></td><td>Which rulebook this row belongs to (the PPV key, e.g. PK01)</td></tr>
+                <tr><td><b>Account type</b></td><td>Which kind of posting this row controls — see the table below</td></tr>
+                <tr><td><b>From account / To account</b></td><td>Optional: limit the row to a range of account numbers (blank = all accounts of that type)</td></tr>
+                <tr><td><b>From period 1 / To period 1</b></td><td class="hl">The <b>normal</b> open range — the periods ordinary users may post into</td></tr>
+                <tr><td><b>From period 2 / To period 2</b></td><td class="hl">A <b>second</b> open range, only usable by users with the row’s <b>authorization group</b> — typically for the accountants closing the books</td></tr>
+                <tr><td><b>From year / To year</b></td><td>The fiscal year(s) this row applies to</td></tr>
+                <tr><td><b>Authorization group</b></td><td>Who may use period range 2 (checked against the user’s authorizations)</td></tr>
+              </table>
+            </div>
+
+            <h3>The account types — one letter each</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Code</th><th>Account type</th><th>Controls postings to…</th></tr>
+                <tr><td><b>+</b></td><td class="hl"><b>Valid for all account types</b></td><td class="hl">Everything — the master row (see below)</td></tr>
+                <tr><td><b>A</b></td><td>Assets</td><td>Asset accounts (fixed assets)</td></tr>
+                <tr><td><b>D</b></td><td>Customers</td><td>Customer (debtor) accounts — “D” from <i>Debitors</i></td></tr>
+                <tr><td><b>K</b></td><td>Vendors</td><td>Vendor (creditor) accounts — “K” from <i>Kreditoren</i></td></tr>
+                <tr><td><b>M</b></td><td>Materials</td><td>Material / stock accounts</td></tr>
+                <tr><td><b>S</b></td><td>G/L accounts</td><td>General ledger accounts — “S” from <i>Sachkonten</i> (G/L accounts in German)</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key rule · The + row is compulsory</span>
+              <p>Every variant <b>must</b> contain a row with account type <b>+</b>. The + row is the fallback rule for everything. In practice, companies often open periods <i>only</i> through the + row (one simple rule for all), and add specific rows (D, K, S…) only when one type needs different treatment — for example, keeping vendors (K) open one extra week while customers (D) are already closed. A more specific row beats the + row for its account type; anything without its own row follows +.</p>
+            </div>
+
+            <div class="screen" role="img" aria-label="Illustration of the OB52 open posting periods grid for variant PK01">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>Illustration — OB52 · Open Posting Periods · variant PK01 · year 2026</span></div>
+              <div class="screen-body">Var&nbsp;&nbsp;Typ&nbsp;&nbsp;From acct&nbsp;&nbsp;&nbsp;To acct&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">From per.1&nbsp;&nbsp;To per.1</span>&nbsp;&nbsp;From per.2&nbsp;&nbsp;To per.2&nbsp;&nbsp;Year&nbsp;&nbsp;Auth grp<br>
+PK01&nbsp;&nbsp;<span class="kw">+</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026<br>
+PK01&nbsp;&nbsp;<span class="kw">S</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12</span>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026&nbsp;&nbsp;CLOSE<br>
+<span class="cm">Reading it: everyone may post periods 1–12 (+ row). G/L accounts (S) additionally</span><br>
+<span class="cm">keep period 1 of the closing range open only for users in auth group CLOSE.</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · + pehle, baaki baad mein</span>
+              <p>Variant ki table hamesha <b>+ wali row se shuru</b> karein — ye “sab ke liye” wali buniyadi row hai. Specific rows (D, K, S) sirf tab banayein jab kisi aik type ko alag treatment chahiye. Aur letters yaad rakhne ke liye: <b>D = Debtor (customer), K = Kreditor (vendor), S = Sachkonto (G/L), A = Assets, M = Materials.</b></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S7 ============ -->
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> Step by step — creating &amp; configuring a variant (OBBO)</h2>
+            <p class="sub">Segment 27:35, hands on. Creating the Posting Period Variant using its transaction code.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · OBBO</span>
+              <p><code>OBBO</code> is the Customizing transaction <b>“Define Variants for Open Posting Periods”</b>. Here you create the variant’s <b>identity</b> — its unique 4-character code and name. The variant created here is still empty of company meaning: it becomes real for postings only when its periods are maintained (OB52) and it is assigned to a company code (OBBP). In the IMG (SPRO) the same screen lives under <i>Financial Accounting → Financial Accounting Global Settings → Ledgers → Fiscal Year and Posting Periods → Posting Periods → Define Variants for Open Posting Periods</i>. The variant list is stored in table <code>T010O</code>.</p>
+            </div>
+
+            <h3>The steps</h3>
+            <ol class="steps">
+              <li>Type <code>OBBO</code> in the command field and press Enter. The overview of existing variants opens — you will see SAP’s standard variant <code>0001</code> here.</li>
+              <li>Click <b>New Entries</b>.</li>
+              <li>In the <b>Variant</b> field, type your unique code. Following the tidy pattern from §3, use the same code as your company code: <code>PK01</code>. (Check first that <code>PK01</code> is not already listed as a variant — uniqueness rule from §2 applies here too.)</li>
+              <li>In the <b>Name / Description</b> field, type a clear name, e.g. <i>“Posting Period Variant – PK01”</i>. The name is for humans; the code is for SAP.</li>
+              <li>Press <b>Save</b> (Ctrl+S). Answer the Customizing request pop-up (create/select your request, confirm). Watch for <i>“Data was saved.”</i></li>
+              <li>Go back to the overview: your variant <code>PK01</code> must now be listed next to <code>0001</code>. It exists — stored in table <code>T010O</code>.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of creating a posting period variant in OBBO">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>Illustration — OBBO · Define Variants for Open Posting Periods · New Entries</span></div>
+              <div class="screen-body">Variant&nbsp;&nbsp;: <span class="hl2">PK01</span>   <span class="dim">← unique 4-char key (same as company code — tidy pattern)</span><br>
+Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="st">Posting Period Variant – PK01</span><br>
+<span class="dim">Existing standard entry for comparison:</span><br>
+Variant&nbsp;&nbsp;: <span class="dim">0001&nbsp;&nbsp;&nbsp;Name: Posting Period Variant 0001 (SAP standard)</span><br>
+<span class="dim">Save (Ctrl+S) → confirm Customizing request →</span> <span class="kw">Status:</span> <span class="st">Data was saved</span><br>
+<span class="cm">Stored in table T010O. Next: give it periods (OB52) and assign it (OBBP).</span></div>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · Creating ≠ configuring ≠ assigning</span>
+              <p>Three different acts, three different places — the exam tests them separately. <b>Create</b> the variant in <b>OBBO</b>. <b>Configure</b> its open periods in <b>OB52</b>. <b>Assign</b> it to the company code in <b>OBBP</b>. If a scenario says “the variant was created but postings are still blocked for the company code”, the missing step is almost always the <b>assignment</b> — or the periods were never opened in OB52.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S8 ============ -->
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Copying a variant — the consultant’s shortcut (OBBO)</h2>
+            <p class="sub">Segment 37:56, first half. Why professionals rarely type a variant from zero.</p>
+
+            <p>Typing every OB52 row by hand for a new variant is slow and error-prone. The professional way: <b>copy</b> a variant that already works — usually SAP’s standard <code>0001</code>, or your own proven variant — give the copy a new unique code, adjust the few rows that differ, and save. Copying carries over the variant’s period rows, so the copy starts life complete instead of empty.</p>
+
+            <h3>The steps</h3>
+            <ol class="steps">
+              <li>Open <code>OBBO</code> and select the source variant (click its row, e.g. <code>0001</code>).</li>
+              <li>Choose <b>Copy</b> (the “Copy As…” function / F6 in the classic GUI menu: <i>Edit → Copy As</i>).</li>
+              <li>SAP shows the entry with the source code. <b>Overwrite the code</b> with your new unique code, e.g. <code>PK01</code>, and adjust the name. The new code must not exist yet — the uniqueness rule again.</li>
+              <li>Press Enter, then <b>Save</b> (Ctrl+S) and confirm the Customizing request.</li>
+              <li>Open the copy in <code>OB52</code>: the period rows came with it. Adjust only what your company does differently (for example, your fiscal year, or an extra authorization-group range).</li>
+              <li>Save again in OB52 — period rows live in table <code>T001B</code>, keyed by variant.</li>
+            </ol>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 190" role="img" aria-label="Diagram showing copying variant 0001 to a new variant PK01, then adjusting and saving">
+                <defs>
+                  <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box" x="25" y="55" width="180" height="80" rx="10"/>
+                <text class="svg-title" x="115" y="88" text-anchor="middle">VARIANT 0001</text>
+                <text class="svg-sub" x="115" y="108" text-anchor="middle">SAP standard · complete rows</text>
+                <text class="svg-sub" x="115" y="126" text-anchor="middle">source — do not change it</text>
+                <path class="svg-arrow" style="marker-end:url(#arr2)" d="M205,95 L268,95"/>
+                <text class="svg-sub" x="237" y="82" text-anchor="middle">Copy As</text>
+                <rect class="svg-box-a" x="272" y="55" width="200" height="80" rx="10"/>
+                <text class="svg-title" x="372" y="88" text-anchor="middle">VARIANT PK01 (copy)</text>
+                <text class="svg-sub" x="372" y="108" text-anchor="middle">new unique code · same rows</text>
+                <text class="svg-sub" x="372" y="126" text-anchor="middle">stored in T010O + T001B</text>
+                <path class="svg-arrow" style="marker-end:url(#arr2)" d="M472,95 L535,95"/>
+                <text class="svg-sub" x="504" y="82" text-anchor="middle">adjust</text>
+                <rect class="svg-box-gr" x="539" y="55" width="196" height="80" rx="10"/>
+                <text class="svg-title" x="637" y="88" text-anchor="middle">ADJUST &amp; SAVE</text>
+                <text class="svg-sub" x="637" y="108" text-anchor="middle">your year · your auth groups</text>
+                <text class="svg-sub" x="637" y="126" text-anchor="middle">then assign in OBBP (§9)</text>
+                <text class="svg-sub" x="380" y="30" text-anchor="middle">Copy → rename → adjust → save. Never edit SAP’s standard 0001 directly.</text>
+              </svg>
+              <figcaption>Copying a variant. The standard variant stays untouched as your permanent template and safety net.</figcaption>
+            </figure>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · Never modify the standard variant 0001</span>
+              <p>Changing <code>0001</code> directly is a classic beginner mistake and a favourite exam scenario. SAP can overwrite delivered entries in an upgrade, and every company code still using <code>0001</code> would silently inherit your changes. The correct professional pattern is always: <b>copy 0001 → your own code → change the copy.</b> The same pattern applies to company codes, charts and fiscal year variants.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S9 ============ -->
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> Assigning the variant to the company code (OBBP) &amp; opening periods (OB52)</h2>
+            <p class="sub">Segment 37:56, second half. The step that makes the variant real — then the daily screen it powers.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · OBBP — assignment</span>
+              <p><code>OBBP</code> is the Customizing transaction <b>“Assign Variants to Company Code”</b> for posting periods. An <b>assignment</b> is a simple two-key row in a table — here table <code>T010P</code> — that says: <i>company code PK01 uses posting period variant PK01.</i> Each company code gets exactly <b>one</b> posting period variant; one variant may serve <b>many</b> company codes. Until this row exists, the company code has no open/close rulebook at all.</p>
+            </div>
+
+            <h3>Assigning — the steps</h3>
+            <ol class="steps">
+              <li>Type <code>OBBP</code> and press Enter. The assignment overview lists company codes and their current variants.</li>
+              <li>Find your company code <code>PK01</code> (use Position/search if the list is long).</li>
+              <li>In its <b>Variant</b> column, enter <code>PK01</code> — or press F4 and pick your variant from the list (the F4 list is exactly the variants defined in OBBO, stored in T010O).</li>
+              <li>Press <b>Save</b> (Ctrl+S), confirm the Customizing request, and check for <i>“Data was saved.”</i> The assignment row now sits in table <code>T010P</code>.</li>
+            </ol>
+
+            <h3>Now open the periods — OB52</h3>
+            <ol class="steps">
+              <li>Type <code>OB52</code>. Enter your variant <code>PK01</code> on the selection screen (in some systems OB52 opens the grid directly — then filter by variant).</li>
+              <li>Check the <b>+ row</b>: set the fiscal year and the normal open range, e.g. periods <b>1 to 12</b> for your current year, so everyday posting works.</li>
+              <li>If you copied the variant in §8, most rows are already correct — verify them instead of retyping.</li>
+              <li><b>Save</b>. From this moment, posting into an open period succeeds; posting into a closed period fails with a “period is not open” error — the variant is now actively guarding your company code.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of assigning posting period variant PK01 to company code PK01 in OBBP">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>Illustration — OBBP · Assign Variants to Company Code</span></div>
+              <div class="screen-body">Company Code&nbsp;&nbsp;&nbsp;Variant&nbsp;&nbsp;&nbsp;Name<br>
+<span class="dim">1000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAP standard company code (example)</span><br>
+<span class="hl2">PK01</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">PK01</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">Posting Period Variant – PK01</span>  <span class="cm">← your new assignment row</span><br>
+<span class="dim">Save (Ctrl+S) → confirm request →</span> <span class="kw">Status:</span> <span class="st">Data was saved</span><br>
+<span class="cm">Stored in table T010P: one row, two keys — BUKRS PK01 → Variant PK01.</span></div>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Rule-book almari se nikaal kar desk par</span>
+              <p>OBBO mein rule-book <b>likhi</b> gayi, OB52 mein uske pages par <b>timings</b> likhay gaye — lekin jab tak wo book PK01 ke desk par <b>rakhi</b> nahi jati (OBBP assignment), PK01 ke staff ke liye wo exist hi nahi karti. Assignment wohi “desk par rakhna” hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S10 ============ -->
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> Retained earnings — where the year’s profit finally sleeps</h2>
+            <p class="sub">Segment 39:32 begins. You met retained earnings in Part 1 · Lesson 8; here is the practical heart of it.</p>
+
+            <p>Your accounting knowledge already knows this story. All year, income and expense accounts (the <b>Profit &amp; Loss accounts</b>) collect the period’s activity. At year-end their balances cannot simply vanish — the net result, profit or loss, belongs to the owners and must move into the <b>Balance Sheet</b>, into equity, as <b>retained earnings</b> (the accumulated profit the company keeps instead of distributing). Accountants call the yearly movement <b>balance carryforward</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Retained Earnings Account</span>
+              <p>The <b>Retained Earnings Account</b> is the one <b>Balance Sheet (equity) G/L account</b> that receives the net balance of all P&amp;L accounts at year-end carryforward. SAP does not guess which account this is — <b>you must tell SAP</b>, per chart of accounts, in transaction <code>OB53</code>. No assignment in OB53 = the carryforward has nowhere to go, and year-end closing cannot complete correctly. In OB53 the link is made through the <b>P&amp;L statement account type</b>: the standard type is <b>X</b>, and each type can point to exactly <b>one</b> retained earnings account per chart.</p>
+              <p class="urdu">Saal bhar ka nafa-nuqsan aakhir mein aik hi khaate mein ja kar jama hota hai — Retained Earnings. SAP ko batana parta hai ke wo khaata konsa hai; khud se andaza nahi lagata. Ye batana hi OB53 hai.</p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 220" role="img" aria-label="Diagram of year-end balance carryforward: P and L accounts close into the retained earnings account in equity">
+                <defs>
+                  <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box" x="25" y="30" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="132" y="56" text-anchor="middle">REVENUE ACCOUNTS</text>
+                <text class="svg-sub" x="132" y="75" text-anchor="middle">P&amp;L · series 4xxxxx</text>
+                <rect class="svg-box" x="25" y="128" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="132" y="154" text-anchor="middle">EXPENSE ACCOUNTS</text>
+                <text class="svg-sub" x="132" y="173" text-anchor="middle">P&amp;L · series 5xxxxx – 6xxxxx</text>
+                <path class="svg-arrow" style="marker-end:url(#arr3)" d="M240,61 C 330,61 330,110 415,110"/>
+                <path class="svg-arrow" style="marker-end:url(#arr3)" d="M240,159 C 330,159 330,110 415,110"/>
+                <text class="svg-sub" x="330" y="98" text-anchor="middle">year-end</text>
+                <text class="svg-sub" x="330" y="126" text-anchor="middle">carryforward</text>
+                <rect class="svg-box-a" x="420" y="70" width="315" height="80" rx="10"/>
+                <text class="svg-title" x="577" y="100" text-anchor="middle">RETAINED EARNINGS ACCOUNT</text>
+                <text class="svg-sub" x="577" y="120" text-anchor="middle">Balance Sheet · EQUITY · e.g. 331000</text>
+                <text class="svg-sub" x="577" y="138" text-anchor="middle">assigned in OB53 · P&amp;L stmt acct type X</text>
+                <text class="svg-sub" x="380" y="205" text-anchor="middle">P&amp;L accounts start the new year at zero — their net result now lives in equity.</text>
+              </svg>
+              <figcaption>Balance carryforward in one picture: revenue minus expenses lands, as one net figure, in the retained earnings account — which is why that account must be a Balance Sheet account in the equity series.</figcaption>
+            </figure>
+
+            <h3>Three facts the exam returns to again and again</h3>
+            <ul class="clean">
+              <li><b>One per type, per chart:</b> in OB53, for one chart of accounts and one P&amp;L statement account type (X), there is exactly <b>one</b> retained earnings account. You may define additional types (e.g. A, B) if different groups of P&amp;L accounts must carry into different retained earnings accounts — an advanced option; the standard setup uses only X.</li>
+              <li><b>It is a Balance Sheet account:</b> the retained earnings account itself is created as a <b>Balance Sheet</b> account (in FS00), never as a P&amp;L account — it <i>receives</i> the P&amp;L result; it is not part of it.</li>
+              <li><b>The assignment is per chart, not per company code:</b> OB53 is maintained at <b>Chart of Accounts</b> level. Every company code using that chart inherits the same retained earnings assignment — define once, use many times, the variant principle again.</li>
+            </ul>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S11 ============ -->
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> The series rule — the retained earnings number must live in the equity / liability series</h2>
+            <p class="sub">Segment 39:32, the detail everyone misses. This is where Part 2 · Lesson 1’s “series” comes back.</p>
+
+            <p>Recall from Part 2 · Lesson 1: in <code>OBD4</code> every <b>account group</b> owns a <b>series</b> — a From–To number interval in the chart (stored in table <code>T077S</code>). A G/L account can only be created with a number <b>inside its group’s interval</b>. The retained earnings account is a G/L account like any other, so it obeys the same law — and that creates a practical rule you must check <i>before</i> OB53:</p>
+
+            <div class="box term">
+              <span class="box-title">Key rule · Series pehle, assignment baad mein</span>
+              <p>The retained earnings account must belong to a <b>Balance Sheet account group</b> whose series covers the <b>equity / liabilities</b> numbers of your chart — in a typical plan, the <b>3xxxxx series</b> (liabilities &amp; equity), for example group <code>EQTY</code> owning <code>300000–399999</code>, with the retained earnings account at <code>331000</code>. If the account number you want does not fall inside any suitable Balance Sheet group’s interval, <b>FS00 will refuse to create the account there</b> — fix the series in OBD4 first (widen or add the group interval), then create the account, then assign it in OB53.</p>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Series (typical plan)</th><th>Account group</th><th>Belongs there</th></tr>
+                <tr><td>100000 – 199999</td><td>ASST — Assets</td><td>Cash, receivables, fixed assets</td></tr>
+                <tr><td>200000 – 299999</td><td>LIAB — Liabilities</td><td>Payables, loans, tax payable</td></tr>
+                <tr><td class="hl"><b>300000 – 399999</b></td><td class="hl"><b>EQTY — Equity</b></td><td class="hl"><b>Share capital + Retained Earnings (e.g. 331000)</b></td></tr>
+                <tr><td>400000 – 499999</td><td>REVN — Revenue</td><td>Sales and other income (P&amp;L)</td></tr>
+                <tr><td>500000 – 699999</td><td>EXPN — Expenses</td><td>Costs and expenses (P&amp;L)</td></tr>
+              </table>
+            </div>
+            <p>Notice the geography: retained earnings sits with the <b>owners’ claim</b> on the business — the equity block of the liability side of the Balance Sheet. That is exactly what your accounting knowledge expects: profit kept in the business increases equity. The “liability series” wording simply reflects that in many charts the whole <b>liabilities + equity side</b> is planned as the 2xxxxx–3xxxxx block, and the retained earnings account must be numbered inside it — never inside the revenue or expense series.</p>
+
+            <h3>The failure you will meet if you skip this check</h3>
+            <ul class="clean">
+              <li>You try to create account <code>331000</code> in FS00 under a P&amp;L group (or a group whose interval ends at 299999) → SAP errors: the number is <b>outside the group’s interval</b>.</li>
+              <li>Or the account exists but in the wrong series (say <code>430000</code>, inside Revenue) → your Balance Sheet structure breaks: retained earnings would report inside income.</li>
+              <li>The cure is never “force it” — the cure is: <b>check OBD4 → fix the series → create in the right group → assign in OB53.</b></li>
+            </ul>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · Nafa malik ka hota hai</span>
+              <p>Retained earnings ka number hamesha <b>equity wali gali</b> mein hoga — kyunke saal ka nafa company ke <b>maalikon</b> ka hota hai. Agar number revenue ya expense wali series mein nazar aye, samajh lein ghalti hai: <b>nafa aamadni nahi hota, nafa maalikiat (equity) hai.</b></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S12 ============ -->
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> Step by step — assigning the retained earnings account (OB53)</h2>
+            <p class="sub">Segment 39:32, hands on. The assignment itself takes one minute — if §11 was checked first.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · OB53 &amp; P&amp;L statement account type X</span>
+              <p><code>OB53</code> is the Customizing transaction <b>“Define Retained Earnings Account”</b>. Its screen is a small table with three columns: <b>Chart of Accounts</b>, <b>P&amp;L statement account type</b>, and <b>Account</b>. The <b>P&amp;L statement account type</b> is a one-character label stamped on P&amp;L accounts (in their chart-level master data) that tells the carryforward “accounts of my type close into <i>this</i> retained earnings account”. SAP’s standard type is <b>X</b> — in the standard setup, all P&amp;L accounts carry type X and OB53 has exactly one row: <i>chart → X → retained earnings account</i>. The assignment is stored in table <code>T030</code> (standard account determination).</p>
+            </div>
+
+            <h3>Pre-check (30 seconds, from §11)</h3>
+            <ol class="steps">
+              <li>The retained earnings G/L account exists in the chart — e.g. <code>331000</code> “Retained Earnings”, created in <code>FS00</code> as a <b>Balance Sheet</b> account in the equity group, inside the 3xxxxx series.</li>
+              <li>Your P&amp;L accounts carry P&amp;L statement account type <b>X</b> (the standard). If they carry a different type, OB53 needs a row for <i>that</i> type instead.</li>
+            </ol>
+
+            <h3>The assignment — the steps</h3>
+            <ol class="steps">
+              <li>Type <code>OB53</code> and press Enter. The retained earnings table for all charts opens.</li>
+              <li>Click <b>New Entries</b>.</li>
+              <li><b>Chart of Accounts:</b> enter your chart, e.g. <code>PKCA</code> (F4 helps — the list comes from OB13 / table T004).</li>
+              <li><b>P&amp;L statement account type:</b> enter <code>X</code>.</li>
+              <li><b>Account:</b> enter the retained earnings account number, e.g. <code>331000</code>. Press Enter — SAP checks that the account exists in that chart. A non-existent account is refused here.</li>
+              <li>Press <b>Save</b> (Ctrl+S), confirm the Customizing request, and check for <i>“Data was saved.”</i></li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of the OB53 retained earnings assignment row">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>Illustration — OB53 · Define Retained Earnings Account · New Entries</span></div>
+              <div class="screen-body">Chart of Accounts&nbsp;&nbsp;P&amp;L stmt acct type&nbsp;&nbsp;Account&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Account name<br>
+<span class="hl2">PKCA</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">X</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">331000</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">Retained Earnings</span><br>
+<span class="dim">Save (Ctrl+S) → confirm Customizing request →</span> <span class="kw">Status:</span> <span class="st">Data was saved</span><br>
+<span class="cm">Stored in table T030. One row per chart + type. Carryforward now knows its home.</span></div>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · OB53 is chart-level, not company-code-level</span>
+              <p>A very common wrong answer: “retained earnings is assigned per company code.” No — <b>OB53 is maintained per Chart of Accounts</b>. Two company codes sharing chart PKCA automatically share the same retained earnings account assignment. If an exam scenario gives two company codes with the same chart but “different retained earnings accounts”, that is impossible through OB53 — the difference would have to come from different charts or different P&amp;L statement account types.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S13 ============ -->
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> Verification — opening the Chart of Accounts &amp; checking every detail</h2>
+            <p class="sub">Segment 41:20. The professional finish: prove, on screen and in tables, that everything you built today is really there.</p>
+
+            <p>Consultants never say “I did it” — they say “I checked it”. Verification means opening each object again, with fresh eyes, through an independent path: the Customizing screen, the master-data display, and the table behind both.</p>
+
+            <h3>Check 1 — The Chart of Accounts itself (OB13)</h3>
+            <ol class="steps">
+              <li>Open <code>OB13</code>, select your chart <code>PKCA</code> and display it: chart name, <b>length of G/L account number</b> (from Part 2 · Lesson 1 — e.g. 6), status and the account-group / controlling-integration settings are as expected.</li>
+              <li>Cross-check in <code>SE16N</code>: table <code>T004</code>, filter <code>KTOPL = PKCA</code> — one row, your chart.</li>
+            </ol>
+
+            <h3>Check 2 — The retained earnings account inside the chart (FSP0 / FS00)</h3>
+            <ol class="steps">
+              <li>Open <code>FSP0</code> (display G/L account in the chart of accounts) for account <code>331000</code> in chart <code>PKCA</code>.</li>
+              <li>Confirm: account group = equity group, <b>Balance Sheet account</b> flag set (not P&amp;L), name “Retained Earnings”, number inside the 3xxxxx series.</li>
+              <li>Table-level proof: <code>SE16N</code> on <code>SKA1</code> with <code>KTOPL = PKCA</code> lists every account of the chart — <code>331000</code> must be among them; and on <code>T030</code> you can find the OB53 row: chart PKCA, type X, account 331000.</li>
+              <li>A full chart listing for review or print: report <code>S_ALR_87012326</code> (Chart of Accounts) — the whole chart, group by group, in series order. Scan it: does every account sit in the series its group owns?</li>
+            </ol>
+
+            <h3>Check 3 — The variant chain (OBBO → OBBP → OB52)</h3>
+            <ol class="steps">
+              <li><code>OBBO</code>: variant <code>PK01</code> exists (table <code>T010O</code>).</li>
+              <li><code>OBBP</code>: company code <code>PK01</code> shows variant <code>PK01</code> (table <code>T010P</code>).</li>
+              <li><code>OB52</code>: for variant <code>PK01</code>, the <b>+ row</b> exists and the current year’s periods you intend to be open really are open (table <code>T001B</code>).</li>
+              <li><code>OX02</code> / <code>T001</code>: company code <code>PK01</code> still shows the correct name, currency and country from §4.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of verifying the chart of accounts and retained earnings account in FSP0">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>Illustration — FSP0 · G/L Account Display · Chart of Accounts level</span></div>
+              <div class="screen-body">G/L Account&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">331000</span>&nbsp;&nbsp;&nbsp;Chart of Accounts: <span class="hl2">PKCA</span><br>
+Account Group&nbsp;&nbsp;&nbsp;: <span class="st">EQTY — Equity</span>   <span class="dim">(series 300000–399999 in OBD4)</span><br>
+Account Type&nbsp;&nbsp;&nbsp;&nbsp;: <span class="kw">Balance Sheet account</span>  <span class="cm">← must NOT be P&amp;L</span><br>
+Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="st">Retained Earnings</span><br>
+OB53 assignment&nbsp;: <span class="st">PKCA · type X · 331000</span>  <span class="cm">← verified in table T030</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · Teen sawal, har kaam ke baad</span>
+              <p>Har configuration ke baad teen sawal poochein: <b>(1)</b> Kya ye <b>save</b> hua? (status bar / request) <b>(2)</b> Kya ye <b>assign</b> hua? (OBBP / OB53 row mojood hai?) <b>(3)</b> Kya mein isay <b>dobara dhoond</b> sakta hoon? (display T-code ya table mein nazar aata hai?) Teenon ka jawab “haan” — tabhi kaam mukammal hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S14 ============ -->
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> Exam traps</h2>
+            <p class="sub">The exact confusions C_TS4FI questions are built on, from today’s topics.</p>
+
+            <div class="box trap">
+              <span class="box-title">Trap 1 · Duplicate code “should work because the name is different”</span>
+              <p>False. Uniqueness is about the <b>key</b>, not the name. Two entries may share a name; they may never share a key in the same table and client. SAP rejects the second creation with “entry already exists”.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 2 · Fiscal Year Variant vs Posting Period Variant</span>
+              <p>FYV (OB29) = the <b>calendar layout</b> of the year. PPV (OBBO) = <b>which periods are open</b>. OB52 belongs to the PPV world; OB37 assigns the FYV; OBBP assigns the PPV. Mixing any pair of these four is the single most common wrong answer in this topic area.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 3 · “The variant was created, so posting must work”</span>
+              <p>Creation (OBBO) alone changes nothing for a company code. The chain is: <b>create → open periods (OB52) → assign (OBBP)</b>. A missing assignment or a missing + row leaves postings blocked even though “the variant exists”.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 4 · Editing standard variant 0001</span>
+              <p>Professionals <b>copy</b> 0001 and change the copy. Editing the delivered standard risks upgrade overwrites and silently affects every company code still using 0001.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 5 · Retained earnings assigned per company code</span>
+              <p>No — OB53 is per <b>Chart of Accounts</b>. And per chart + P&amp;L statement account type there is exactly <b>one</b> retained earnings account; the standard type is <b>X</b>.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 6 · Retained earnings as a P&amp;L account, or in the revenue series</span>
+              <p>The retained earnings account is a <b>Balance Sheet (equity)</b> account, and its number must sit inside the <b>equity / liability series</b> of its account group (OBD4). Putting it in the revenue series (4xxxxx) or defining it as a P&amp;L account breaks the carryforward logic and the Balance Sheet structure.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 7 · One variant, one company code only?</span>
+              <p>The relationship is one-to-many in the useful direction: <b>one PPV can serve many company codes</b>; each company code has exactly <b>one</b> PPV. Company codes with the same period rhythm should share a variant — that is the point of making it a separate object.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S15 ============ -->
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> A–Z glossary</h2>
+            <p class="sub">Every technical term from this lesson, in simple words.</p>
+
+            <dl class="glossary">
+              <dt>Assignment (OBBP / OB53)</dt><dd>A two-key table row that connects a setting to the object that uses it — variant → company code (T010P), chart + type → retained earnings account (T030). Created but unassigned settings do nothing.</dd>
+              <dt>Authorization group (OB52)</dt><dd>A label on an OB52 row; only users whose authorizations include that group may use the row’s second period range — typically reserved for the closing team.</dd>
+              <dt>Balance carryforward</dt><dd>The year-end program that closes P&amp;L account balances into the retained earnings account, so P&amp;L starts the new year at zero and the result lives in equity.</dd>
+              <dt>BUKRS</dt><dd>The database field name of the company code key — 4 characters, e.g. PK01 (table T001).</dd>
+              <dt>Chart of Accounts (KTOPL)</dt><dd>The list of all G/L accounts of an organisation, identified by a 4-character key; defined in OB13, stored in T004.</dd>
+              <dt>Customizing request</dt><dd>The transport request a Customizing save is recorded in. Cancelling its pop-up cancels the save itself.</dd>
+              <dt>Fiscal Year Variant (FYV)</dt><dd>The calendar layout of a year — how many periods and where they fall (OB29, e.g. K4). Not the same as the Posting Period Variant.</dd>
+              <dt>Key / unique code</dt><dd>The short code identifying one entry in its table; must be unique in the client. Names may repeat — keys may not.</dd>
+              <dt>OB52</dt><dd>“Open Posting Periods” — where a variant’s open period ranges per account type are maintained (table T001B).</dd>
+              <dt>OB53</dt><dd>“Define Retained Earnings Account” — assigns one retained earnings account per chart of accounts and P&amp;L statement account type (table T030).</dd>
+              <dt>OBBO</dt><dd>“Define Variants for Open Posting Periods” — creates the Posting Period Variant itself (table T010O).</dd>
+              <dt>OBBP</dt><dd>“Assign Variants to Company Code” — assigns a Posting Period Variant to a company code (table T010P).</dd>
+              <dt>P&amp;L statement account type</dt><dd>A one-character type stamped on P&amp;L accounts that steers their carryforward; the standard type is X, pointing to the chart’s retained earnings account in OB53.</dd>
+              <dt>Posting Period Variant (PPV)</dt><dd>A 4-character rulebook stating, per account type, which posting periods are open. Created in OBBO, maintained in OB52, assigned in OBBP.</dd>
+              <dt>Retained Earnings Account</dt><dd>The Balance Sheet (equity) G/L account that receives the net P&amp;L result at carryforward; its number must sit in the equity / liability series of its account group.</dd>
+              <dt>Series (number range)</dt><dd>The From–To account-number interval an account group owns in OBD4 (table T077S). An account’s number must fall inside its group’s series.</dd>
+              <dt>T001 / T004 / T010O / T010P / T001B / T030 / SKA1</dt><dd>The tables behind today’s screens: company codes / charts of accounts / period variants / variant assignments / open periods / retained earnings determination / G/L accounts per chart.</dd>
+            </dl>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S16 ============ -->
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> Summary — the whole lesson on one screen</h2>
+            <p class="sub">If you can say these lines from memory, you own this lesson.</p>
+
+            <ul class="clean">
+              <li><b>Codes are keys:</b> every Customizing entry is identified by a short unique code (company code 4 chars, company 6, chart 4, PPV 4). Names may repeat; keys never do. Choose meaningful codes in the customer namespace, check the code is free before creating, and remember — keys are not edited later.</li>
+              <li><b>Create + save:</b> OX15 / OX02 entries exist only after <b>Save</b> with the Customizing request confirmed. Cancelling the request pop-up cancels the save.</li>
+              <li><b>Posting Period Variant:</b> the rulebook of open periods, per account type (+, A, D, K, M, S), with a normal range and an authorization-group range. The <b>+ row is compulsory</b>. Do not confuse it with the Fiscal Year Variant (the calendar itself).</li>
+              <li><b>The PPV chain:</b> create in <b>OBBO</b> → maintain periods in <b>OB52</b> → assign to the company code in <b>OBBP</b>. Professionals <b>copy 0001</b> instead of building from zero or editing the standard.</li>
+              <li><b>Retained earnings:</b> the Balance Sheet equity account that receives the year’s net P&amp;L result at carryforward. Its number must live in the <b>equity / liability series</b> of its OBD4 account group (typically 3xxxxx).</li>
+              <li><b>OB53:</b> one retained earnings account per <b>chart of accounts</b> + P&amp;L statement account type (standard <b>X</b>) — chart-level, not company-code-level.</li>
+              <li><b>Verify everything:</b> OB13 + T004 for the chart, FSP0 + SKA1 + T030 for the retained earnings account, OBBO/OBBP/OB52 + T010O/T010P/T001B for the variant chain. Saved? Assigned? Findable again? — then it is done.</li>
+            </ul>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Task</th><th>T-code</th><th>Table</th></tr>
+                <tr><td>Create company / company code</td><td>OX15 / OX02</td><td>T880 / T001</td></tr>
+                <tr><td>Create posting period variant</td><td>OBBO</td><td>T010O</td></tr>
+                <tr><td>Open / close periods</td><td>OB52</td><td>T001B</td></tr>
+                <tr><td>Assign variant to company code</td><td>OBBP</td><td>T010P</td></tr>
+                <tr><td>Assign retained earnings account</td><td>OB53</td><td>T030</td></tr>
+                <tr><td>Display chart / account in chart</td><td>OB13 / FSP0</td><td>T004 / SKA1</td></tr>
+                <tr><td>Account groups &amp; series</td><td>OBD4</td><td>T077S</td></tr>
+              </table>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S17 ============ -->
+          <section class="lesson" id="s17">
+            <h2><span class="no">17</span> Self-test — 10 questions</h2>
+            <p class="sub">Click an answer to check yourself. Explanations appear instantly. Answer all 10 questions and mark every section Read to complete this lesson and unlock the next one.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart the test</button>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span>
+            <div>
+              <b>Next: Part 2 · Lesson 3 — a small preview only</b><br>
+              <span style="color:var(--ink-soft)">Today you gave the company its codes, its period rulebook and its profit’s home. The next lesson continues the same hands-on build on top of these foundations — creating the actual G/L accounts inside the chart, using the series, groups and settings you prepared in Lessons 1 and 2, with the same loop: create it, save it, assign it, verify it. Finish this lesson fully — every section marked Read and the self-test answered — so the next lesson opens for you.</span>
+            </div>
+          </div>
+
+          <footer>
+            course created by Muhammad Asad Ullah Ibrahim<br>
+            Part 2 · Lesson 2 of the SAP S/4HANA Financial Accounting series · Prepared for C_TS4FI (SAP S/4HANA Cloud Private Edition, Financial Accounting) exam preparation · All SAP screens shown are re-created illustrations for learning, not real SAP screenshots.
+          </footer>
+        </main>
+      </div>
+    </div>
+    </div>
+
+    <script>
+    // ---- Shared course progress store (localStorage, shared by all lessons) ----
+    window.SAPProgress=(function(){
+      var KEY='sapCts4fiProgress_v1';
+      function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+      function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+      function getLesson(n){ var s=load(), L=null;
+        if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+        if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+        return L; }
+      function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+        for(var p in patch){ cur[p]=patch[p]; }
+        s.lessons[k]=cur; saveAll(s); return cur; }
+      function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+        return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+      function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+        s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+      return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+    })();
+
+    // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+    function sha256Hex(ascii){
+      ascii=unescape(encodeURIComponent(ascii));
+      function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+      var maxWord=Math.pow(2,32), i, j, result='';
+      var words=[], asciiBitLength=ascii.length*8;
+      var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+      var primeCounter=k.length, isComposite={};
+      for(var candidate=2; primeCounter<64; candidate++){
+        if(!isComposite[candidate]){
+          for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+          hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+          k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+        }
+      }
+      ascii+='\x80';
+      while(ascii.length%64-56) ascii+='\x00';
+      for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+      words[words.length]=((asciiBitLength/maxWord)|0);
+      words[words.length]=(asciiBitLength);
+      for(j=0;j<words.length;){
+        var w=words.slice(j,j+=16), oldHash=hash;
+        hash=hash.slice(0,8);
+        for(i=0;i<64;i++){
+          var w15=w[i-15], w2=w[i-2];
+          var a=hash[0], e=hash[4];
+          var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+          var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+          hash=[(temp1+temp2)|0].concat(hash);
+          hash[4]=(hash[4]+temp1)|0;
+        }
+        for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+      }
+      for(i=0;i<8;i++){
+        for(j=3;j+1;j--){
+          var b=(hash[i]>>(j*8))&255;
+          result+=((b<16)?0:'')+b.toString(16);
+        }
+      }
+      return result;
+    }
+
+    // ---- Part 2 Lesson 2 gating: locked until Part 2 Lesson 1 is fully complete, or the gate test is passed 5/5 ----
+    (function(){
+      var THIS_LESSON='p2-2', PREV_LESSON='p2-1', PREV_SECTIONS=17, LOCK_MS=60*60*1000;
+      var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+      var GATE_Q=[
+        {q:"A manager asks you to 'show the company details' for the legal entity whose Balance Sheet is prepared in SAP. Which object, T-code and table are correct?",opts:["Company — OX15 — table T880","Company Code — OX02 — table T001","Company Code — OB13 — table T004","Company — SE16N — table SKA1"],a:1},
+        {q:"What does typing /oOB13 in the command field do?",opts:["Ends the current transaction and opens OB13 in the same window","Opens OB13 in a NEW session, keeping the current screen alive","Logs off and reopens OB13 after login","Opens OB13 in display mode only"],a:1},
+        {q:"Where is the Length of G/L Account Number set, and what is its maximum?",opts:["Per company code in OX02 — maximum 8","Per account in FS00 — maximum 10","Per chart of accounts in OB13 — maximum 10","Per account group in OBD4 — maximum 6"],a:2},
+        {q:"In project language, what does 'setting the series' of a chart of accounts mean?",opts:["Sorting the accounts alphabetically","Giving every account group its From–To number interval in OBD4","Assigning the chart to all company codes in OB62","Blocking the chart while it is being built"],a:1},
+        {q:"Account group ASST owns 100000–199999 and REVN owns 400000–499999 in the same chart. Which creation will SAP accept?",opts:["Account 150000 in group REVN","Account 450000 in group ASST","Account 450000 in group REVN","Account 250000 in group ASST"],a:2}
+      ];
+      var gateScreen=document.getElementById('gateScreen');
+      var content=document.getElementById('lessonContent');
+      var lockBox=document.getElementById('gateLockBox');
+      var lockUntilEl=document.getElementById('gateLockUntil');
+      var countdownEl=document.getElementById('gateCountdown');
+      var testArea=document.getElementById('gateTestArea');
+      var qWrap=document.getElementById('gateQuestions');
+      var scoreEl=document.getElementById('gateScore');
+      var msgEl=document.getElementById('gateMsg');
+      var attemptsEl=document.getElementById('gateAttempts');
+      var submitBtn=document.getElementById('gateSubmit');
+      var retryBtn=document.getElementById('gateRetry');
+      var adminBtn=document.getElementById('adminBtn');
+      var adminForm=document.getElementById('adminForm');
+      var adminPw=document.getElementById('adminPw');
+      var adminSubmit=document.getElementById('adminSubmit');
+      var adminMsg=document.getElementById('adminMsg');
+      var timer=null, selected={};
+
+      function isPrevComplete(){
+        var L=window.SAPProgress.getLesson(PREV_LESSON);
+        if(!L) return false;
+        var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+        var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+        return !!(allRead&&quiz);
+      }
+      function unlockLesson(){
+        if(timer){ clearInterval(timer); timer=null; }
+        gateScreen.hidden=true; gateScreen.style.display='none';
+        content.hidden=false; content.style.display='';
+        window.scrollTo(0,0);
+      }
+      function updateCountdown(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var rem=g.lockUntil-Date.now();
+        if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+        var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+        countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+      }
+      function showLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        lockBox.hidden=false;
+        testArea.style.display='none';
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        updateCountdown();
+        if(timer) clearInterval(timer);
+        timer=setInterval(updateCountdown,1000);
+      }
+      function refreshLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var now=Date.now();
+        if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+        if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+        lockBox.hidden=true;
+        testArea.style.display='';
+        return false;
+      }
+      function updateAttempts(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+      }
+      function renderGate(){
+        selected={};
+        scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+        submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+        qWrap.innerHTML='';
+        GATE_Q.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='gate-q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              selected[qi]=oi;
+              var bs=opts.querySelectorAll('.gate-opt');
+              bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+              msgEl.textContent='';
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); qWrap.appendChild(box);
+        });
+      }
+      submitBtn.addEventListener('click',function(){
+        if(refreshLock()) return;
+        if(Object.keys(selected).length<GATE_Q.length){
+          msgEl.textContent='Please answer all 5 questions before submitting.';
+          scoreEl.textContent='';
+          return;
+        }
+        var score=0;
+        GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+        qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+        submitBtn.hidden=true;
+        scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        if(score===GATE_Q.length){
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          msgEl.textContent='Gate test passed. Part 2 · Lesson 2 is now unlocked.';
+          msgEl.className='ok';
+          updateAttempts();
+          setTimeout(unlockLesson,900);
+        }else{
+          g.fails=(g.fails||0)+1;
+          msgEl.textContent='Go back and complete previous lesson.';
+          msgEl.className='';
+          if(g.fails>=3){
+            g.lockUntil=Date.now()+LOCK_MS;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            updateAttempts();
+            refreshLock();
+          }else{
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            retryBtn.hidden=false;
+            updateAttempts();
+          }
+        }
+      });
+      retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+      adminBtn.addEventListener('click',function(){
+        adminForm.hidden=!adminForm.hidden;
+        if(!adminForm.hidden) adminPw.focus();
+      });
+      function tryAdminUnlock(){
+        var val=adminPw.value;
+        if(!val) return;
+        if(sha256Hex(val)===ADMIN_HASH){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          adminMsg.className=''; adminMsg.style.color='var(--green)';
+          adminMsg.textContent='Unlocked. Opening Part 2 · Lesson 2…';
+          adminPw.value='';
+          setTimeout(unlockLesson,700);
+        }else{
+          adminMsg.style.color=''; adminMsg.className='err';
+          adminMsg.textContent='Incorrect password. Please try again.';
+          adminPw.value='';
+          adminPw.focus();
+        }
+      }
+      adminSubmit.addEventListener('click',tryAdminUnlock);
+      adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+      // ---- Initial state ----
+      var g0=window.SAPProgress.getGate(THIS_LESSON);
+      if(isPrevComplete()||g0.unlocked===true){
+        unlockLesson();
+      }else{
+        gateScreen.hidden=false; gateScreen.style.display='';
+        content.hidden=true; content.style.display='none';
+        if(!refreshLock()) renderGate();
+        updateAttempts();
+      }
+    })();
+    </script>
+
+    <script>
+    (function(){
+      "use strict";
+      var THIS_KEY='p2-2';
+      /* ---------- Theme switch (top right, default Light) ---------- */
+      var themeBtn=document.getElementById('themeBtn');
+      var themeLabel=document.getElementById('themeLabel');
+      function applyTheme(t){
+        document.documentElement.setAttribute('data-theme',t);
+        if(themeLabel) themeLabel.textContent=(t==='dark'?'Dark':'Light');
+      }
+      applyTheme('light');
+      themeBtn.addEventListener('click',function(){
+        var cur=document.documentElement.getAttribute('data-theme');
+        applyTheme(cur==='dark'?'light':'dark');
+      });
+
+      /* ---------- Mark Read + sidebar progress + scroll-spy ---------- */
+      var sections=[].slice.call(document.querySelectorAll('section.lesson'));
+      var tocItems={};
+      [].slice.call(document.querySelectorAll('#tocList li')).forEach(function(li){
+        var a=li.querySelector('a');
+        if(a) tocItems[a.getAttribute('href').slice(1)]={li:li,a:a};
+      });
+      var readSet={}, total=sections.length;
+      var pctText=document.getElementById('pctText'), sideFill=document.getElementById('sideFill'),
+          countText=document.getElementById('countText'), bar=document.getElementById('progressBar');
+
+      function persist(){
+        try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(THIS_KEY,{readSections:arr, allRead:(total>0&&arr.length===total)}); } }catch(e){}
+      }
+      function updateProgress(){
+        var n=Object.keys(readSet).length;
+        var pct=total?Math.round(n/total*100):0;
+        if(pctText) pctText.textContent=pct+'%';
+        if(sideFill) sideFill.style.width=pct+'%';
+        if(countText) countText.textContent=n+' of '+total+' sections marked read';
+        if(bar) bar.style.width=pct+'%';
+      }
+      function reflect(sec){
+        var id=sec.id, on=!!readSet[id];
+        var btn=sec.querySelector('.mark-read'), status=sec.querySelector('.read-status'), label=sec.querySelector('.mr-label');
+        if(btn) btn.classList.toggle('done',on);
+        if(label) label.textContent=on?'Read':'Mark Read';
+        if(status) status.textContent=on?'Marked as read':'Not read yet';
+        sec.classList.toggle('is-read',on);
+        if(tocItems[id]) tocItems[id].li.classList.toggle('read',on);
+      }
+      // Restore this lesson's saved read state
+      try{
+        var saved=window.SAPProgress?window.SAPProgress.getLesson(THIS_KEY):null;
+        if(saved&&saved.readSections){ saved.readSections.forEach(function(id){ readSet[id]=true; }); }
+      }catch(e){}
+      sections.forEach(function(sec){
+        reflect(sec);
+        var btn=sec.querySelector('.mark-read');
+        if(btn) btn.addEventListener('click',function(){
+          if(readSet[sec.id]) delete readSet[sec.id]; else readSet[sec.id]=true;
+          reflect(sec); updateProgress(); persist();
+        });
+      });
+      updateProgress();
+
+      // Scroll-spy: highlight the section currently on screen in the sidebar
+      if('IntersectionObserver' in window){
+        var spy=new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if(en.isIntersecting&&tocItems[en.target.id]){
+              Object.keys(tocItems).forEach(function(k){ tocItems[k].li.classList.remove('active'); });
+              tocItems[en.target.id].li.classList.add('active');
+            }
+          });
+        },{rootMargin:'-25% 0px -65% 0px'});
+        sections.forEach(function(s){ spy.observe(s); });
+      }
+    })();
+    </script>
+
+    <script>
+    (function(){
+      var QUESTIONS=[
+        {q:"A consultant tries to create company code PK01, but an entry with code PK01 already exists in the client — with a different company name. What happens?",opts:["SAP creates it, because the name is different","SAP refuses: the key must be unique, and entry PK01 already exists in T001","SAP renames the old entry automatically","SAP creates it in a different client"],a:1,why:"Uniqueness is about the key, not the name. The database primary key cannot repeat in the same table and client, so the second creation is rejected."},
+        {q:"What are the correct key lengths for a Company Code and a Company?",opts:["Both are 4 characters","Company Code 6, Company 4","Company Code 4, Company 6","Both are 6 characters"],a:2,why:"BUKRS (company code) is 4 characters; the Company key (RCOMP) is 6 characters. The chart of accounts and the posting period variant are also 4."},
+        {q:"A consultant creates a company code entry and cancels the Customizing request pop-up at save time. What is the result?",opts:["The entry is saved without a request","The entry is saved locally only","The entry is NOT saved","The entry is saved but hidden until transported"],a:2,why:"In a system that prompts for a Customizing request, saving and recording in the request are one act. Cancelling the prompt cancels the save — verify afterwards in OX02 or T001."},
+        {q:"Which transaction creates a Posting Period Variant, and in which table is the variant list stored?",opts:["OB52 — table T001B","OBBO — table T010O","OBBP — table T010P","OB29 — table T009"],a:1,why:"OBBO (Define Variants for Open Posting Periods) creates the variant; the list lives in T010O. OB52 maintains the open periods (T001B) and OBBP the assignment (T010P)."},
+        {q:"In an OB52 row, what does the second period range (From period 2 / To period 2) mean?",opts:["A backup copy of the first range","Periods open only for users who carry the row's authorization group","The special periods for year-end only","Periods open in the second company code"],a:1,why:"Range 2 is the restricted range: only users with the row's authorization group (typically the closing team) may post into those periods. Range 1 is for everyone."},
+        {q:"A new variant PK01 was created in OBBO and its periods were opened in OB52, but postings in company code PK01 are still blocked. What is the most likely missing step?",opts:["The fiscal year variant was not created","The variant was never assigned to the company code in OBBP","The chart of accounts is too short","The company code currency is wrong"],a:1,why:"Create → configure → assign. Without the OBBP assignment row (T010P), the company code has no rulebook, however perfect the variant itself is."},
+        {q:"What is the correct professional way to build a new posting period variant from SAP's standard one?",opts:["Edit variant 0001 directly and save it under the same code","Delete 0001 and create a fresh variant with code 0001","Copy 0001 to your own unique code, adjust the copy, and save","Use 0001 for all company codes without copying"],a:2,why:"Copy → rename → adjust → save. Editing the delivered standard risks upgrade overwrites and affects every company code still using 0001."},
+        {q:"Which statement about the Posting Period Variant and company codes is correct?",opts:["Each company code needs its own variant; sharing is not possible","One variant can serve many company codes, and each company code has exactly one variant","A company code can have two variants if their periods do not overlap","The variant is assigned to the Company (OX15), not to company codes"],a:1,why:"The variant is a separate reusable object: define once, assign many times. OBBP gives each company code exactly one PPV."},
+        {q:"In OB53, what exactly is assigned, and at what level?",opts:["A retained earnings account per company code","A retained earnings account per Chart of Accounts and P&L statement account type","A retained earnings account per fiscal year variant","A retained earnings account per G/L account group"],a:1,why:"OB53 is chart-level: chart + P&L statement account type (standard X) → one retained earnings account, stored in T030. Company codes sharing the chart share the assignment."},
+        {q:"Your chart's series are: ASST 100000–199999, LIAB 200000–299999, EQTY 300000–399999, REVN 400000–499999. You want the retained earnings account at 331000. Will it work, and why?",opts:["No — 331000 is a revenue number","No — retained earnings must be in the 2xxxxx liability series only","Yes — 331000 falls inside the EQTY (equity) series, where retained earnings belongs","Yes — any free number works, series do not matter for retained earnings"],a:2,why:"The retained earnings account is a Balance Sheet equity account; 331000 sits inside the equity group's interval (300000–399999), so FS00 can create it there and OB53 can assign it. A number in the revenue series would break the Balance Sheet structure."}
+      ];
+      var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+      var answered=0, correct=0;
+      function render(){
+        quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+        QUESTIONS.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              if(box.dataset.done) return; box.dataset.done='1'; answered++;
+              var buttons=opts.querySelectorAll('.opt');
+              buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+              if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+              explain.classList.add('show');
+              if(answered===QUESTIONS.length){
+                try{ if(window.SAPProgress) window.SAPProgress.saveLesson('p2-2',{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=8?' — Excellent! Mark every section Read to complete this lesson.':' — Re-read the sections above once, then try again. You can do it.');
+              } else {
+                scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+              }
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+        });
+      }
+      render();
+      document.getElementById('resetQuiz').addEventListener('click',render);
+    })();
+    </script>
+  </body>
+</html>

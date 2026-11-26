@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Part 2 · Lesson 7 — Asset, Bank, Controlling &amp; Closing Practical · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8; --green-ink:#ffffff;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527; --green-ink:#0e2417;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .15s linear}
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35;border-left:3px solid transparent}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc li.active a{background:var(--accent);color:#fff;font-weight:700;border-left-color:var(--accent-ink)}
+      [data-theme="dark"] nav.toc li.active a{color:#0e1a26}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px;background:var(--surface)}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.active.read a{color:#fff}
+      [data-theme="dark"] nav.toc li.active.read a{color:#0e1a26}
+      nav.toc .tick{display:none;color:var(--green);font-weight:700;flex:none}
+      nav.toc li.read .tick{display:inline}
+      nav.toc li.active .tick{color:inherit}
+      .toc-progress{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+      .toc-progress .pct{font-weight:700;font-size:1.05rem}
+      .toc-progress .track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:6px 0}
+      .toc-progress .fill{height:100%;width:0;background:var(--green);border-radius:99px;transition:width .2s}
+      .toc-progress .count{font-size:.82rem;color:var(--ink-soft)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      section.lesson.is-read{border-color:var(--green)}
+      .sub{color:var(--ink-soft);margin-top:2px}
+      .sec-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:22px;padding-top:16px}
+      .mark-read{cursor:pointer;font:inherit;font-weight:700;font-size:.95rem;border-radius:9px;padding:11px 22px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:9px;min-height:48px;transition:background .15s,color .15s}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read .box{width:20px;height:20px;border:2px solid currentColor;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+      .mark-read .box svg{width:13px;height:13px;display:none}
+      .mark-read.done{background:var(--green);color:var(--green-ink);border-color:var(--green)}
+      .mark-read.done .box svg{display:block}
+      .read-status{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);flex-wrap:wrap}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      ol.steps{margin:.4em 0 .8em;padding-left:1.4em}
+      ol.steps li{margin:.45em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+      .btn-ghost{background:var(--surface);color:var(--accent-ink);border:1px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .gate-wrap{max-width:760px;margin:0 auto;padding:34px 18px 80px}
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;box-shadow:var(--shadow)}
+      @media(max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form[hidden]{display:none}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Part 2 · Lesson 7 · Final Lesson</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <!-- ================= LOCKED / GATE SCREEN ================= -->
+    <div class="gate-wrap" id="gateScreen" hidden>
+      <section class="gate-card" aria-labelledby="gateTitle">
+        <div class="gate-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
+        <h2 id="gateTitle">Part 2 · Lesson 7 is locked</h2>
+        <p>This lesson opens only after <b>Part 2 · Lesson 6</b> is fully complete — every section marked Read <b>and</b> its self-test answered. If you have not finished Part 2 · Lesson 6 in this browser, complete it first.</p>
+        <p>You can also open this lesson right now by passing the <b>Gate Test</b> below: 5 questions from Part 2 · Lesson 6 (customer master through the Business Partner, FB70, F-28, F-32 clearing, dunning F150, credit management, tax codes and OB40). You need <b>5 / 5</b>. Only your score is shown — correct answers are never displayed.</p>
+        <div class="gate-lockbox" id="gateLockBox" hidden>
+          <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+          <p>Locked until: <b id="gateLockUntil">—</b></p>
+          <p>Time remaining: <b id="gateCountdown">—</b></p>
+          <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+        </div>
+        <div id="gateTestArea">
+          <div id="gateQuestions"></div>
+          <p id="gateScore" aria-live="polite"></p>
+          <p id="gateMsg" aria-live="polite"></p>
+          <div class="gate-actions">
+            <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+            <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+          </div>
+          <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+        </div>
+        <div class="gate-admin">
+          <button class="btn btn-ghost" id="adminBtn" type="button">Admin Unlock</button>
+          <div class="gate-admin-form" id="adminForm" hidden>
+            <label for="adminPw">Admin password</label>
+            <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+            <div class="gate-actions">
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+            </div>
+            <p id="adminMsg" aria-live="polite"></p>
+          </div>
+        </div>
+        <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+      </section>
+    </div>
+
+    <!-- ================= LESSON CONTENT ================= -->
+    <div id="lessonContent" hidden>
+    <div class="wrap">
+      <header class="hero">
+        <span class="kicker">Part 2 · Lesson 7 · Practical — Assets, Bank, Controlling &amp; Closing · Final Lesson</span>
+        <h1>Asset, Bank, Controlling &amp; Period-End Closing — Practical</h1>
+        <p class="lede">This is the <b>final lesson of the whole course</b>. Everything so far was about daily business — invoices, payments, tax. Today you handle the things a business <b>keeps</b> and the moment every accountant waits for: <b>closing the books</b>. You will run the full <b>Asset Accounting</b> life cycle — chart of depreciation, asset classes (<code>OAOA</code>), asset master (<code>AS01</code>), acquisition (<code>F-90</code>), transfer (<code>ABUM</code>), retirement (<code>ABAVN</code>), the depreciation run (<code>AFAB</code>) and the Asset Explorer (<code>AW01N</code>). Then <b>Bank Accounting</b> — house bank (<code>FI12</code>), cheque payment (<code>F-58</code>), bank statement (<code>FF67</code>) and clearing (<code>F-03</code>). Then the <b>Controlling</b> objects every posting can carry — cost center (<code>KS01</code>), profit center (<code>KE51</code>) and internal order (<code>KO01</code>). And finally <b>period-end closing</b>: posting periods (<code>OB52</code>), foreign currency valuation (<code>F.05</code>), balance carryforward (<code>FAGLGVTR</code>), the Financial Statement Version (<code>OB58</code> / <code>F.01</code>) and the SAP Fiori apps for closing. <span class="urdu">Yeh course ki aakhri lesson hai — aaj hum assets ki poori zindagi, bank ka hisaab, controlling ke objects, aur mahina/saal band karne (closing) ka poora amal seekhenge.</span></p>
+        <div class="hero-meta">
+          <span class="chip">Course segment <b>Part 2 · Practical — assets, bank, CO objects &amp; closing</b></span>
+          <span class="chip">Level <b>Beginner · Zero SAP assumed</b></span>
+          <span class="chip">Exam <b>C_TS4FI · Asset Accounting, Bank Accounting &amp; Closing Operations</b></span>
+          <span class="chip">Key T-codes <b>AS01 · F-90 · AFAB · AW01N · FI12 · F-58 · FF67 · KS01 · KE51 · KO01 · OB52 · F.05 · FAGLGVTR · F.01</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span><span>Where the course stands — the last four pieces</span><span class="tick">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span><span>Asset Accounting — the big idea</span><span class="tick">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span><span>Chart of depreciation &amp; depreciation areas</span><span class="tick">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span><span>Asset classes — OAOA</span><span class="tick">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span><span>Step by step — AS01: create an asset master (AS02 / AS03)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span><span>Step by step — F-90: asset acquisition (and ABSO)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span><span>Transfer with ABUM &amp; retirement with ABAVN</span><span class="tick">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span><span>Step by step — AFAB: the depreciation run</span><span class="tick">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span><span>AW01N — the Asset Explorer</span><span class="tick">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span><span>Bank Accounting — the big idea</span><span class="tick">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span><span>House bank (FI12) &amp; the bank G/L account</span><span class="tick">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span><span>Step by step — F-58: payment with cheque print</span><span class="tick">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span><span>FF67 bank statement &amp; F-03 bank clearing</span><span class="tick">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span><span>Cost Center — KS01</span><span class="tick">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span><span>Profit Center — KE51</span><span class="tick">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span><span>Internal Order — KO01</span><span class="tick">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span><span>Period-end closing &amp; OB52 — open and close posting periods</span><span class="tick">✓</span></a></li>
+            <li><a href="#s18"><span class="dot"></span><span>Foreign currency valuation — F.05</span><span class="tick">✓</span></a></li>
+            <li><a href="#s19"><span class="dot"></span><span>Balance carryforward — FAGLGVTR</span><span class="tick">✓</span></a></li>
+            <li><a href="#s20"><span class="dot"></span><span>Financial Statement Version — OB58 &amp; F.01, and Fiori apps for closing</span><span class="tick">✓</span></a></li>
+            <li><a href="#s21"><span class="dot"></span><span>Exam traps</span><span class="tick">✓</span></a></li>
+            <li><a href="#s22"><span class="dot"></span><span>A–Z glossary</span><span class="tick">✓</span></a></li>
+            <li><a href="#s23"><span class="dot"></span><span>Summary — the whole lesson on one screen</span><span class="tick">✓</span></a></li>
+            <li><a href="#s24"><span class="dot"></span><span>Self-test — 10 questions</span><span class="tick">✓</span></a></li>
+            <li><a href="#s25"><span class="dot"></span><span>Course complete — Part 1 + Part 2 recap &amp; your next steps to C_TS4FI</span><span class="tick">✓</span></a></li>
+          </ol>
+          <div class="toc-progress">
+            <span class="pct" id="pctText">0%</span>
+            <div class="track"><div class="fill" id="sideFill"></div></div>
+            <span class="count" id="countText">0 of 25 sections marked read</span>
+          </div>
+          <p class="toc-note">Screens in this lesson are <b>re-created illustrations</b> made for learning — they are not real SAP screenshots.</p>
+        </nav>
+        <main>
+          <!-- ============ S1 ============ -->
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Where the course stands — the last four pieces</h2>
+            <p class="sub">You can post, pay, collect and tax. Four things remain: what the business keeps, where its money sits, who spent it — and closing the period.</p>
+            <p>Look back at the journey. Part 2 · Lesson 4 taught you G/L postings. Lesson 5 paid vendors (AP). Lesson 6 collected from customers and handled tax (AR). But a real finance month has four more jobs, and this final lesson does all four:</p>
+            <div class="tblwrap"><table>
+              <tr><th>Piece</th><th>Plain question it answers</th><th>Sections</th></tr>
+              <tr><td class="hl"><b>Asset Accounting (FI-AA)</b></td><td>What long-life things do we own — machines, vehicles, computers — what did they cost, and how much value have they lost?</td><td>2–9</td></tr>
+              <tr><td class="hl"><b>Bank Accounting (FI-BL)</b></td><td>What is really in our bank accounts, and does SAP agree with the bank?</td><td>10–13</td></tr>
+              <tr><td class="hl"><b>Controlling objects (CO)</b></td><td>Which department, product line or project caused this cost?</td><td>14–16</td></tr>
+              <tr><td class="hl"><b>Period-end closing</b></td><td>How do we lock a finished month, correct currency values, and produce the final financial statements?</td><td>17–20</td></tr>
+            </table></div>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 200" role="img" aria-label="Diagram: the asset life cycle — acquire, use and depreciate, transfer, retire">
+                <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text class="svg-title" x="360" y="24" text-anchor="middle">The life of one asset — the spine of Sections 2–9</text>
+                <rect class="svg-box-a" x="15" y="55" width="155" height="62" rx="10"/><text class="svg-title" x="92" y="81" text-anchor="middle">1 · Master</text><text class="svg-sub" x="92" y="100" text-anchor="middle">AS01 — asset created</text>
+                <rect class="svg-box" x="195" y="55" width="155" height="62" rx="10"/><text class="svg-title" x="272" y="81" text-anchor="middle">2 · Acquire</text><text class="svg-sub" x="272" y="100" text-anchor="middle">F-90 — value booked</text>
+                <rect class="svg-box" x="375" y="55" width="155" height="62" rx="10"/><text class="svg-title" x="452" y="81" text-anchor="middle">3 · Depreciate</text><text class="svg-sub" x="452" y="100" text-anchor="middle">AFAB — monthly run</text>
+                <rect class="svg-box-gr" x="555" y="55" width="155" height="62" rx="10"/><text class="svg-title" x="632" y="81" text-anchor="middle">4 · Retire</text><text class="svg-sub" x="632" y="100" text-anchor="middle">ABAVN — scrap / sell</text>
+                <path class="svg-arrow" d="M170 86 L191 86"/><path class="svg-arrow" d="M350 86 L371 86"/><path class="svg-arrow" d="M530 86 L551 86"/>
+                <text class="svg-sub" x="360" y="150" text-anchor="middle">AW01N (Asset Explorer) lets you watch every step of this life, year by year.</text>
+                <text class="svg-sub" x="360" y="170" text-anchor="middle">ABUM moves an asset sideways (transfer) between the acquire and retire steps.</text>
+              </svg>
+              <figcaption>Illustration — one delivery van will travel this whole road in this lesson: created, bought, depreciated, and finally retired.</figcaption>
+            </figure>
+            <div class="box trick"><span class="box-title">Memory trick · Rakh, Bank, zimmedari, Band</span><p><b>Rakh</b> = assets (jo cheez rakhte hain), <b>Bank</b> = paisa kahan hai, <b>zimmedari</b> = CO objects (kis ki zimmedari / kis department ka kharcha), <b>Band</b> = closing (period band karna). Chaar lafz — poori lesson yaad.</p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S2 ============ -->
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> Asset Accounting — the big idea</h2>
+            <p class="sub">A subledger for things that live longer than a year — with its own master records, its own postings, and a live bridge to the G/L.</p>
+            <p>When Ibrahim Apparel &amp; Trading buys stitching machines for 2,400,000, that is not an expense of one month — the machines will earn money for years. Accounting spreads the cost over the machine's life. That spreading is <b>depreciation</b>, and the bookkeeping home for it is <b>Asset Accounting</b>, SAP module code <b>FI-AA</b>.</p>
+            <div class="box term"><span class="box-title">Key term · Fixed asset</span><p>A <b>fixed asset</b> (also called a capital asset) is a long-life thing the business owns and uses for more than one year — machinery, vehicles, buildings, computers, furniture. It sits on the balance sheet, not in one month's expenses. <span class="urdu">Fixed asset = lambi umar wali cheez jo business saalon istemal karta hai — machine, gaari, building.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · Asset Accounting (FI-AA) &amp; the asset subledger</span><p><b>Asset Accounting</b> is a <b>subledger</b> of FI, exactly like AP and AR. AP keeps detail per vendor, AR per customer — FI-AA keeps detail <b>per asset</b>: cost, accumulated depreciation, net book value, location, useful life. And like AP/AR, it is tied to the G/L by <b>reconciliation accounts</b>: you never post to the asset G/L accounts directly; every asset posting updates them automatically. <span class="urdu">FI-AA = assets ka tafseeli register; G/L mein sirf total, woh bhi khud-ba-khud.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · APC, accumulated depreciation &amp; net book value</span><p><b>APC</b> means <i>Acquisition and Production Costs</i> — simply: what the asset cost when you got it. <b>Accumulated depreciation</b> is the total value lost so far. <b>Net book value (NBV)</b> = APC − accumulated depreciation: what the asset is still “worth on the books” today. Example: machine APC 2,400,000, depreciation so far 600,000 → NBV 1,800,000. <span class="urdu">NBV = asal qeemat − ab tak ki depreciation.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · Capitalisation</span><p><b>Capitalisation</b> means putting a purchase onto the balance sheet as an asset instead of expensing it at once. The posting that does this is called an <b>asset acquisition</b>. Small cheap items (a 3,000 mouse) are usually expensed directly; valuable long-life items are capitalised. Many companies set a <b>capitalisation threshold</b> — a minimum value — in policy. <span class="urdu">Capitalise karna = kharche ko foran expense na likhna, asset bana kar balance sheet mein rakhna.</span></p></div>
+            <div class="box analogy"><span class="box-title">Analogy · Har machine ki apni file</span><p>Sochain godam mein har machine ke liye ek file hai: khareed ki raseed (APC), har saal kitni purani hui (depreciation), ab kitni qeemat bachi (NBV), machine kahan khari hai (location/cost center). FI-AA wohi file cabinet hai — aur G/L sirf cabinet ke bahar lagi hui kul-qeemat ki parchi hai, jo har file ki tabdeeli se khud update hoti hai.</p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S3 ============ -->
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Chart of depreciation &amp; depreciation areas</h2>
+            <p class="sub">One asset, several rule-books: tax law, company reporting and group reporting may each value the same machine differently.</p>
+            <p>Pakistan tax rules may allow a machine to be written off in 5 years, while the company's own books use 8 years, and the group (parent company) uses 10. SAP does not force a choice — it values the same asset <b>in parallel</b>, once per rule-book. Each rule-book view is a <b>depreciation area</b>, and the full set of areas for a country is the <b>chart of depreciation</b>.</p>
+            <div class="box term"><span class="box-title">Key term · Chart of depreciation</span><p>A <b>chart of depreciation</b> is the country-level bundle of depreciation areas and rules, assigned to a company code. SAP delivers country templates (you copy and adjust). It is to assets what the chart of accounts is to G/L accounts — a standard framework the company adopts. Note: despite the similar name, it is a <b>different object</b> from the chart of accounts. <span class="urdu">Chart of depreciation = aik mulk ke liye depreciation ke usoolon ka set, company code ko assign hota hai.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · Depreciation area</span><p>A <b>depreciation area</b> is one valuation view of all assets — for example area <b>01 Book depreciation</b> (the real one that posts to the G/L), area <b>15 Tax depreciation</b> (for the tax return, usually values-only), or a group area. Each area has its own depreciation key, useful life and values for the same physical asset. <span class="urdu">Depreciation area = aik hi asset ko aik khaas usool (book / tax / group) se dekhna.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · Real area vs derived area</span><p>Area 01 is a <b>real area</b> — its values are stored and posted to the G/L. Some areas are <b>derived</b>: they are calculated on the fly as the difference of two real areas (e.g. book − tax) and store nothing themselves. In S/4HANA with the Universal Journal (ACDOCA, Part 1), each posting area is typically tied to a <b>ledger</b> — area 01 posts to the leading ledger 0L. <span class="examtag">Exam favourite</span> <span class="urdu">Real area = asal values store hoti hain; derived area = do areas ka farq, khud calculate hota hai.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · Depreciation key &amp; useful life</span><p>The <b>depreciation key</b> is the calculation recipe: e.g. <i>straight-line</i> (equal amount every year) or <i>declining balance</i> (bigger amounts early). <b>Useful life</b> is how many years the asset will serve. Straight-line on 2,400,000 over 8 years = 300,000 per year, 25,000 per month. <span class="urdu">Depreciation key = hisaab ka tareeqa; useful life = asset kitne saal chalega.</span></p></div>
+            <div class="box trap"><span class="box-title">Exam trap · Chart of depreciation ≠ chart of accounts</span><p>Two different “charts”. The <b>chart of accounts</b> lists G/L accounts (OB13). The <b>chart of depreciation</b> lists depreciation areas and is assigned per company code. Also remember: a company code can have only <b>one</b> chart of depreciation, but a chart of depreciation can serve <b>many</b> company codes in the same country. <span class="urdu">Naam milta-julta hai, cheez bilkul alag hai — imtihan ki pasandeeda chaal.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S4 ============ -->
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> Asset classes — OAOA</h2>
+            <p class="sub">The asset class is the master template: it decides the G/L accounts, the number range and the default depreciation rules for every asset of that kind.</p>
+            <p>Before you can create a single asset, its <b>asset class</b> must exist. Classes are the families: <i>Machinery</i>, <i>Vehicles</i>, <i>Buildings</i>, <i>IT Equipment</i>, <i>Furniture</i>, and the special <i>Assets under Construction</i>. Asset classes are defined and viewed in transaction <code>OAOA</code>.</p>
+            <div class="box term"><span class="box-title">Key term · Asset class</span><p>An <b>asset class</b> groups assets of the same kind and controls, for every asset created in it: (1) the <b>account determination</b> — which G/L accounts receive APC, depreciation and retirement postings; (2) the <b>number range</b> for asset numbers; (3) default <b>depreciation areas, keys and useful life</b>; (4) which fields appear on the asset master screen. <span class="urdu">Asset class = assets ka khandan; accounts, number aur depreciation ke defaults yahin se aate hain.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · Account determination (assets)</span><p>For assets, <b>account determination</b> is the link inside the asset class that names the G/L accounts: the balance-sheet APC account, the accumulated depreciation account, and the depreciation expense account (a P&amp;L account, usually charged to a cost center). When AFAB runs, it knows where to post <b>because the class told it</b>. <span class="urdu">Account determination = class ke andar likha hua “kaunsa G/L account kahan lagega”.</span></p></div>
+            <div class="tblwrap"><table>
+              <tr><th>Typical class</th><th>APC (balance sheet)</th><th>Depreciation expense (P&amp;L)</th><th>Default life</th></tr>
+              <tr><td class="hl"><b>Machinery</b></td><td>Machinery &amp; Equipment</td><td>Depreciation — Production</td><td>8–10 years</td></tr>
+              <tr><td class="hl"><b>Vehicles</b></td><td>Vehicles</td><td>Depreciation — Vehicles</td><td>5 years</td></tr>
+              <tr><td><b>IT Equipment</b></td><td>IT Equipment</td><td>Depreciation — IT</td><td>3–4 years</td></tr>
+              <tr><td><b>Assets under Construction (AuC)</b></td><td>Assets under Construction</td><td>— none —</td><td>No depreciation while building</td></tr>
+            </table></div>
+            <div class="box term"><span class="box-title">Key term · Asset under Construction (AuC)</span><p>An <b>Asset under Construction</b> collects the costs of something being built (a new warehouse, a machine being assembled). While under construction it is <b>not depreciated</b>. When finished, its collected costs are <b>settled / transferred</b> to the final asset, and depreciation starts. <span class="urdu">AuC = ban raha asset; mukammal honay tak depreciation nahi lagti.</span></p></div>
+            <div class="box trick"><span class="box-title">Memory trick · Class = saanche (mould)</span><p>Asset class ek <b>saancha</b> hai: jaisa saanca, waisi murti. Har naya asset apni class se accounts, number range aur depreciation defaults “inherit” karta hai — is liye AS01 mein zyada tar fields pehle se bhare milte hain.</p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S5 ============ -->
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Step by step — AS01: create an asset master (AS02 / AS03)</h2>
+            <p class="sub">The asset master is the asset's file: description, location, cost center, useful life — created before any money is posted to it.</p>
+            <p>Scenario: the company will buy a <b>delivery van</b>. First the master, then the purchase. The family of transactions: <code>AS01</code> create, <code>AS02</code> change, <code>AS03</code> display — the same 01/02/03 rhythm you know from FS00 and BP-related work.</p>
+            <ol class="steps">
+              <li>Open <code>AS01</code>. Enter the <b>asset class</b> (e.g. Vehicles) and the <b>company code</b>. SAP takes the next number from the class's number range.</li>
+              <li><b>General tab:</b> description (“Delivery Van — Suzuki Bolan”), quantity/unit if relevant.</li>
+              <li><b>Time-dependent tab:</b> the <b>cost center</b> that will bear the depreciation (e.g. Logistics), plus location / room. “Time-dependent” means these assignments can change over time with validity dates — the van can move from one department to another.</li>
+              <li><b>Depreciation areas tab:</b> for each area, confirm the <b>depreciation key</b> and <b>useful life</b> inherited from the class (e.g. straight-line, 5 years) and the <b>depreciation start date</b> logic.</li>
+              <li><b>Save.</b> SAP confirms the asset number, e.g. <b>400012</b>. At this moment the asset exists but its value is still <b>zero</b> — no acquisition has been posted yet.</li>
+            </ol>
+            <div class="screen" role="img" aria-label="Re-created illustration of the AS01 create asset screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>AS01 — Create Asset · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Asset Class</span>     <span class="hl2">Vehicles</span>          <span class="dim">Company Code</span>  1000
+<span class="dim">Description</span>    Delivery Van — Suzuki Bolan
+<span class="dim">Cost Center</span>    <span class="hl2">LOG-100  Logistics</span>   <span class="dim">Location</span>  Faisalabad Plant
+<span class="dim">Area 01 Book</span>   <span class="st">Straight-line · Useful life 5 years</span>
+<span class="dim">Area 15 Tax</span>    Straight-line · Useful life 5 years
+<span class="cm">— Save —&gt; "Asset 400012 was created" (value still 0 — acquisition comes next)</span></div>
+            </div>
+            <div class="box term"><span class="box-title">Key term · Asset number &amp; subnumber</span><p>Every asset has a <b>main number</b> (e.g. 400012). Parts added later — a new engine for the van — can be tracked as <b>subnumbers</b> (400012-1, 400012-2) under the same main asset, each with its own cost and life. <span class="urdu">Subnumber = aik hi asset ke hissay, alag hisaab ke saath.</span></p></div>
+            <div class="box trap"><span class="box-title">Exam trap · AS01 creates no value</span><p>Creating the master posts <b>nothing</b> to the G/L. The balance appears only with an <b>acquisition posting</b> (next section). A favourite exam picture: “Asset created in AS01 — what is its book value?” Answer: <b>zero</b>. <span class="urdu">File ban gayi, magar file abhi khaali hai.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S6 ============ -->
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Step by step — F-90: asset acquisition (and ABSO)</h2>
+            <p class="sub">Now the money: buying the van from a vendor and capitalising it in one document.</p>
+            <p>The van costs <b>3,000,000</b> from a dealer. The classic FI way to book a purchase <b>with a vendor</b> is <code>F-90</code> — <i>Acquisition from Purchase with Vendor</i>. Its posting keys are exam material:</p>
+            <ol class="steps">
+              <li>Open <code>F-90</code>. Document type is typically <code>KR</code>-style vendor logic — in practice the standard asset acquisition with vendor uses posting keys below.</li>
+              <li>First line: posting key <b>31</b> (credit vendor) — enter the vendor, amount <b>3,000,000</b>.</li>
+              <li>Second line: posting key <b>70</b> (debit asset) — enter asset number <b>400012</b> and transaction type <b>100</b> (external acquisition). Amount 3,000,000.</li>
+              <li>Simulate, check, and <b>post</b>. One document: <b>Cr Vendor 3,000,000 / Dr Asset (via subledger) 3,000,000</b>. The asset's APC is now 3,000,000 and the G/L asset account was updated automatically through the subledger.</li>
+            </ol>
+            <div class="box term"><span class="box-title">Key term · Posting keys 70 / 75 &amp; transaction type</span><p>Posting key <b>70</b> = debit an asset, <b>75</b> = credit an asset. Every asset posting also carries a <b>transaction type</b> — a code saying <i>what kind</i> of movement this is (100 = acquisition from purchase, 200 = retirement, 300-series = transfers…). Reports and the asset history sheet group movements by transaction type. <span class="urdu">70 = asset debit, 75 = asset credit; transaction type batata hai ke harkat kis qism ki hai.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · ABSO — miscellaneous posting</span><p><code>ABSO</code> is the general asset posting screen used when the classic Enjoy transactions do not fit — e.g. an acquisition <b>without</b> a vendor (offset to a clearing or bank account), or special adjustments. F-90 is simply the vendor-flavoured specialist; ABSO is the flexible all-rounder where you choose the transaction type yourself. <span class="urdu">ABSO = asset posting ka general screen, jab vendor wala rasta na ho.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · Integrated vs non-integrated acquisition</span><p>Our F-90 is <b>integrated</b>: asset and vendor are posted in the <b>same document</b>, so AP and AA can never disagree. (The purchasing route — PO, goods receipt, MIRO — also capitalises the asset through the same integration.) A <b>non-integrated</b> acquisition posts the asset first against a clearing account and settles the vendor side separately. <span class="urdu">Integrated = asset aur vendor aik hi document mein.</span></p></div>
+            <div class="box trap"><span class="box-title">Exam trap · The asset G/L account is never typed</span><p>In F-90 you enter the <b>asset number</b>, never the asset G/L account. SAP finds the account through the asset class's account determination — and, as with AP/AR recon accounts, direct posting to asset balance-sheet accounts is blocked. <span class="urdu">Asset number likho, G/L account nahi — woh class se khud aata hai.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S7 ============ -->
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> Transfer with ABUM &amp; retirement with ABAVN</h2>
+            <p class="sub">Moving value between assets, and the end of the road: scrapping or selling an asset.</p>
+            <h3>ABUM — transfer within the company</h3>
+            <p>A <b>transfer</b> moves an asset (or part of its value) to another asset — e.g. the AuC warehouse is finished and its 18,000,000 of collected cost moves to the new <i>Buildings</i> asset, or one machine is split between two cost centers via two assets. Transaction <code>ABUM</code> posts the transfer: the sending asset is credited, the receiving asset debited, with the asset's history (APC and accumulated depreciation) moving along — or, if you choose, only current-year values. <span class="urdu">ABUM = aik asset se doosray asset mein value muntakil karna — company ke andar hi.</span></p>
+            <div class="box term"><span class="box-title">Key term · Transfer &amp; gross / net method</span><p>With the <b>gross method</b>, APC and accumulated depreciation move separately, so the receiving asset keeps the full history. With the <b>net method</b>, only the net book value moves and the receiver looks “new”. The method is set in the transfer's transaction type / transfer variant. <span class="urdu">Gross = poori tareekh saath jati hai; net = sirf bachi hui qeemat.</span></p></div>
+            <h3>ABAVN — retirement by scrapping</h3>
+            <p>Five years later the van is finished — engine dead, sold as scrap for nothing. <b>Retirement</b> removes the asset from the books. <code>ABAVN</code> is retirement <b>by scrapping</b> (no revenue): SAP removes the APC (3,000,000) and the accumulated depreciation (say 2,700,000), and the remaining book value (300,000) is posted as a <b>loss on retirement</b> to the P&amp;L. After retirement the asset is deactivated — no more depreciation, no more postings except history display.</p>
+            <div class="box term"><span class="box-title">Key term · Retirement with revenue (sale)</span><p>Selling an asset instead uses <code>F-92</code> (retirement with customer) or <code>ABAON</code> (retirement without customer, revenue typed in). SAP compares the <b>sale price</b> with the <b>net book value</b>: price above NBV = <b>gain</b>, below = <b>loss</b> — posted automatically. <span class="urdu">Bechna = F-92 / ABAON; qeemat NBV se zyada to munafa, kam to nuqsan.</span></p></div>
+            <div class="screen" role="img" aria-label="Re-created illustration of the ABAVN scrapping result">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>ABAVN — Retirement by Scrapping · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Asset</span>  400012  Delivery Van
+<span class="dim">APC removed</span>            <span class="hl2">−3,000,000</span>
+<span class="dim">Accum. depreciation</span>    <span class="hl2">+2,700,000</span>  <span class="cm">(cleared out)</span>
+<span class="dim">Loss on retirement</span>     <span class="st">300,000 → P&amp;L</span>
+<span class="cm">— Asset deactivated. NBV is now 0 in every area. —</span></div>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap · Retirement ≠ deletion</span><p>A retired asset is <b>not deleted</b> and its documents are not reversed. It stays visible for years of reporting (asset history sheet) with value zero. Deleting an asset master (possible only for assets with no postings) is a completely different act. <span class="urdu">Retire = hisaab band, tareekh mehfooz; delete nahi hota.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S8 ============ -->
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Step by step — AFAB: the depreciation run</h2>
+            <p class="sub">Depreciation is never typed by hand. Once a period, one program calculates and posts it for every asset at once.</p>
+            <p>The van: APC 3,000,000, straight-line, 5 years → 600,000 per year → <b>50,000 per month</b>. Nobody posts 50,000 manually for hundreds of assets. Instead, at period end, you run <code>AFAB</code> — the <b>depreciation posting run</b>.</p>
+            <ol class="steps">
+              <li>Open <code>AFAB</code>. Enter company code, <b>fiscal year</b> and <b>posting period</b>.</li>
+              <li>Choose the run type: <b>Planned posting run</b> (the normal monthly run), <b>Repeat run</b> (redo a period, e.g. assets acquired later), <b>Restart run</b> (resume a run that stopped with an error), or <b>Unplanned run</b> (an extra run outside the plan).</li>
+              <li>First execute as a <b>test run</b> — SAP calculates everything and lists totals and errors, but posts nothing. Fix any errors (e.g. a missing cost center on a new asset).</li>
+              <li>Execute the <b>productive (real) run</b>, usually as a background job. SAP posts one summarised document per run: <b>Dr Depreciation expense 50,000 (to the asset's cost center) / Cr Accumulated depreciation 50,000</b> — for all assets together, per account.</li>
+              <li>Check the run's log and the posted document. The period is then marked as posted for depreciation — a normal planned run for the same period cannot simply be repeated; that is what the <b>repeat run</b> is for.</li>
+            </ol>
+            <div class="box term"><span class="box-title">Key term · Depreciation posting run (AFAB)</span><p>The <b>depreciation run</b> is a period-end program that calculates depreciation for all assets from their keys and useful lives, and posts it in batch to the G/L (expense + accumulated depreciation), using the asset class account determination and each asset's cost center. It posts <b>summarised</b>, not asset-by-asset documents — the per-asset detail lives in FI-AA itself. <span class="urdu">AFAB = mahina khatam par tamam assets ki depreciation aik saath calculate aur post karne wala program.</span></p></div>
+            <div class="box trap"><span class="box-title">Exam trap · AFAB is not a manual journal</span><p>You cannot “just FB50” depreciation and expect the subledger to agree — the asset's own depreciation values would be wrong forever. Depreciation must come through AFAB (or asset transactions) so FI-AA and the G/L stay reconciled. Also: a run that ends with errors must be continued with a <b>restart run</b>, not a fresh planned run. <span class="urdu">Depreciation haath se nahi, AFAB se — aur adhoora run restart se poora hota hai.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S9 ============ -->
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> AW01N — the Asset Explorer</h2>
+            <p class="sub">One screen that answers every question about one asset: what it cost, what happened to it, what it will still depreciate.</p>
+            <p>Transaction <code>AW01N</code>, the <b>Asset Explorer</b>, is the display heart of FI-AA. Give it an asset number and a fiscal year, and it shows, per depreciation area:</p>
+            <ul class="clean">
+              <li><b>Planned values:</b> APC, accumulated depreciation, NBV — opening, movements, closing — plus the depreciation planned for each future period.</li>
+              <li><b>Posted values:</b> what AFAB has actually posted so far.</li>
+              <li><b>Transactions tab:</b> every document that touched the asset — acquisition, transfer, retirement — and you can drill into the FI document.</li>
+              <li><b>Comparison:</b> side-by-side values of two depreciation areas (book vs tax) — the parallel valuation of Section 3 made visible.</li>
+            </ul>
+            <div class="screen" role="img" aria-label="Re-created illustration of the AW01N Asset Explorer for the delivery van">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>AW01N — Asset Explorer · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Asset</span> 400012  Delivery Van        <span class="dim">Area</span> 01 Book depreciation
+<span class="dim">APC (start of year)</span>     <span class="hl2">3,000,000</span>
+<span class="dim">Accum. depreciation</span>     <span class="hl2">−600,000</span>
+<span class="dim">Net book value</span>          <span class="st">2,400,000</span>
+<span class="dim">Planned depreciation</span>    50,000 / period · remaining life 4 years
+<span class="cm">Transactions: F-90 acquisition doc · AFAB runs P1–P12</span></div>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick · AW01N = asset ki “report card”</span><p>Jab bhi asset ke baare mein koi sawal ho — qeemat, depreciation, tareekh — pehle AW01N kholo. FBL3N G/L account ki report card hai, FBL1N vendor ki, FBL5N customer ki, aur <b>AW01N asset ki</b>.</p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+          <!-- ============ S10 ============ -->
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> Bank Accounting — the big idea</h2>
+            <p class="sub">Cash is the easiest thing to lose track of — so SAP gives every bank account its own structure and a strict reconciliation routine.</p>
+            <p><b>Bank Accounting (FI-BL)</b> manages the company's bank accounts inside FI: payments out, receipts in, cheque management, and above all <b>bank reconciliation</b> — proving that SAP's bank balance equals the real bank's balance. The difference between the two, at any moment, should be only <b>timing</b>: cheques issued but not yet presented, deposits recorded but not yet credited.</p>
+            <div class="box term"><span class="box-title">Key term · Bank reconciliation &amp; clearing accounts</span><p>To keep timing differences visible, SAP routes bank movements through <b>bank clearing (transit) accounts</b>: e.g. a payment first lands on “Bank Clearing — Payments Out” and only moves to the <b>main bank account</b> when the bank statement proves the money actually left. Open items sitting in clearing accounts = exactly the timing differences. <span class="urdu">Clearing account = darmiyani khata; paisa asal bank account mein tab jata hai jab statement se sabit ho jaye.</span></p></div>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 190" role="img" aria-label="Diagram: payment flow through the bank clearing account to the main bank account on statement confirmation">
+                <defs><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text class="svg-title" x="360" y="24" text-anchor="middle">Why clearing accounts exist — the two-step journey of a payment</text>
+                <rect class="svg-box-a" x="20" y="55" width="200" height="62" rx="10"/><text class="svg-title" x="120" y="81" text-anchor="middle">1 · Payment posted</text><text class="svg-sub" x="120" y="100" text-anchor="middle">F-58 / F110 → clearing a/c</text>
+                <rect class="svg-box-g" x="260" y="55" width="200" height="62" rx="10"/><text class="svg-title" x="360" y="81" text-anchor="middle">2 · Statement arrives</text><text class="svg-sub" x="360" y="100" text-anchor="middle">FF67 — bank confirms</text>
+                <rect class="svg-box-gr" x="500" y="55" width="200" height="62" rx="10"/><text class="svg-title" x="600" y="81" text-anchor="middle">3 · Cleared</text><text class="svg-sub" x="600" y="100" text-anchor="middle">F-03 → main bank a/c</text>
+                <path d="M220 86 L256 86" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr3)"/>
+                <path d="M460 86 L496 86" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr3)"/>
+                <text class="svg-sub" x="360" y="150" text-anchor="middle">Until step 3, the item sits OPEN in the clearing account — your list of “issued but not yet presented”.</text>
+              </svg>
+              <figcaption>Illustration — SAP's bank balance only moves when the bank itself confirms the movement.</figcaption>
+            </figure>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S11 ============ -->
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> House bank (FI12) &amp; the bank G/L account</h2>
+            <p class="sub">Three levels, always in this order: house bank → bank account → G/L account.</p>
+            <div class="box term"><span class="box-title">Key term · House bank</span><p>A <b>house bank</b> is a bank where <b>your company</b> holds accounts — e.g. “Meezan Bank” as seen by your company code. It is defined in transaction <code>FI12</code> (in S/4HANA, <code>FI12_HBANK</code> / the Fiori app <i>Manage Banks</i>) with a short <b>house bank ID</b> (e.g. MEEZ). Do not confuse it with a <b>bank master record</b> (transaction FI01) — the general directory of all banks in the country, used for vendors' and customers' banks too. <span class="urdu">House bank = woh bank jahan HAMARA account hai; bank master = tamam banks ki directory.</span></p></div>
+            <div class="box term"><span class="box-title">Key term · Bank account &amp; account ID</span><p>Under each house bank sit its <b>bank accounts</b>, each with an <b>account ID</b> (e.g. CUR01 — current account), the real account number / IBAN, the currency, and — the key link — the <b>G/L account</b> that represents this bank account in the books. Payment programs (F110, Lesson 5) find the money through exactly this chain: house bank + account ID → G/L account. <span class="urdu">Account ID = house bank ke andar har account ka chhota naam, jo G/L account se jurta hai.</span></p></div>
+            <div class="tblwrap"><table>
+              <tr><th>Level</th><th>Example</th><th>Defined where</th></tr>
+              <tr><td class="hl"><b>House bank</b></td><td>MEEZ — Meezan Bank</td><td>FI12, per company code</td></tr>
+              <tr><td class="hl"><b>Bank account (account ID)</b></td><td>CUR01 — PK36 MEZN … current account, PKR</td><td>FI12, under the house bank</td></tr>
+              <tr><td class="hl"><b>G/L account</b></td><td>111000 — Bank — Meezan Current</td><td>FS00, linked in the account ID</td></tr>
+            </table></div>
+            <div class="box trap"><span class="box-title">Exam trap · FI12 is per company code</span><p>House banks are defined <b>for a company code</b> — two company codes banking at the same Meezan branch each define their own house bank entry. And in the payment program configuration (FBZP, Lesson 5), the ranking of house banks decides which bank pays first. <span class="urdu">House bank company code ke hisaab se banta hai, poore group ke liye aik nahi.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S12 ============ -->
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> Step by step — F-58: payment with cheque print</h2>
+            <p class="sub">The manual cousin of F110: pay one vendor now, and print the cheque in the same step.</p>
+            <p>In Lesson 5 you paid vendors manually with F-53 (no cheque) and in bulk with F110. <code>F-58</code> — <i>Post Payment with Printout</i> — is the manual payment that also <b>prints the cheque / payment advice</b> immediately, using the house bank's cheque lot.</p>
+            <ol class="steps">
+              <li>Open <code>F-58</code>. Enter company code, payment method <b>C</b> (cheque), <b>house bank</b> and <b>account ID</b>, and the <b>cheque lot</b> / printer form.</li>
+              <li>Enter the vendor and amount, then process the open items — select the invoice(s) this cheque settles (same open-item selection skill as F-53 / F-28).</li>
+              <li><b>Post and print.</b> SAP posts <b>Dr Vendor / Cr Bank Clearing — Outgoing Cheques</b> (document type KZ), assigns the next cheque number from the lot, and prints the cheque.</li>
+              <li>The cheque number is now linked to the payment document — traceable in the cheque register (<code>FCHN</code>). If a cheque is spoiled, it is voided (<code>FCH3</code>), never deleted, so the number sequence stays complete for audit.</li>
+            </ol>
+            <div class="box term"><span class="box-title">Key term · Cheque lot</span><p>A <b>cheque lot</b> is a numbered bundle of cheque leaves assigned to a house bank account (e.g. lot 1 = cheques 000101–000200). SAP tracks every number: used, void, or unused — auditors love a complete sequence. <span class="urdu">Cheque lot = number-daar cheques ki gaddi; har number ka hisaab rehta hai.</span></p></div>
+            <div class="box trap"><span class="box-title">Exam trap · F-58 vs F-53 vs F110</span><p><b>F-53</b> = manual payment, no print. <b>F-58</b> = manual payment <b>with</b> cheque print. <b>F110</b> = automatic program for many payments. Same KZ result, three doors. <span class="urdu">53 = baghair print, 58 = cheque print ke saath, F110 = automatic.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S13 ============ -->
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> FF67 bank statement &amp; F-03 bank clearing</h2>
+            <p class="sub">The bank speaks — through the statement. SAP listens, matches, and moves money from clearing to the main account.</p>
+            <h3>FF67 — enter the bank statement manually</h3>
+            <p><code>FF67</code> is the <b>manual bank statement</b> entry: you type the statement the bank sent (opening balance, each line, closing balance). Each line carries a <b>transaction / business transaction code</b> (posting rule) that tells SAP what the line is — a presented cheque, a bank charge, a customer deposit — and how to post it. Where banks send files, the same statement arrives electronically (<code>FF_5</code> import, formats like MT940 / CAMT) — the posting logic is identical.</p>
+            <ol class="steps">
+              <li>Open <code>FF67</code>, enter house bank, account ID, statement number and date.</li>
+              <li>Type the <b>opening balance</b> (must equal the last statement's closing balance) and each statement line: amount, value date, transaction code, reference (e.g. cheque number).</li>
+              <li>Enter the <b>closing balance</b>. SAP checks: opening + lines = closing. Mismatch = the statement cannot be saved as balanced.</li>
+              <li><b>Post the statement.</b> For a presented cheque, SAP posts <b>Dr Bank Clearing — Outgoing Cheques / Cr Main Bank Account</b> — the money now officially leaves the main bank account in SAP too.</li>
+            </ol>
+            <h3>F-03 — clear the G/L clearing account</h3>
+            <p>The statement posting creates a matching line in the clearing account. <code>F-03</code> (<i>Clear G/L Account</i>) is where you <b>clear</b> those pairs: select the clearing account, match the original payment line (from F-58) with the statement line (from FF67) — equal and opposite — and clear them. What remains open in the clearing account is, by definition, your unreconciled timing differences. (Automatic clearing program <code>F.13</code> can do this matching in bulk using rules like cheque number / amount.)</p>
+            <div class="box term"><span class="box-title">Key term · Value date</span><p>The <b>value date</b> is the date from which the bank counts the money as in/out (interest and balance purposes). It can differ from the posting date — a cheque deposited Friday may carry Monday's value date. Statements and clearing care about value dates. <span class="urdu">Value date = woh tareekh jis se bank paisa asal mein ginna shuru karta hai.</span></p></div>
+            <div class="box trap"><span class="box-title">Exam trap · Clearing is not posting</span><p>F-03 creates <b>no amounts</b> — it only stamps existing open items as cleared and sets the clearing document/date. If the two sides differ, F-03 will not “fix” it; differences must be posted properly (e.g. bank charges via the statement's posting rules). <span class="urdu">F-03 sirf jorta (match) hai, raqam nahi banata.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S14 ============ -->
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> Cost Center — KS01</h2>
+            <p class="sub">Controlling (CO) asks the question FI alone cannot answer: <i>whose</i> cost is this?</p>
+            <p>FI tells you the company spent 50,000 on depreciation. Management asks: <i>which department?</i> That “which department / which unit” label is the <b>cost center</b> — the basic object of <b>Controlling (CO)</b>, SAP's internal (management) accounting. Cost centers are created in <code>KS01</code>, changed in <code>KS02</code>, displayed in <code>KS03</code>.</p>
+            <div class="box term"><span class="box-title">Key term · Cost center &amp; controlling area</span><p>A <b>cost center</b> is an organisational unit where costs are collected and whose manager is responsible for them — Production, Logistics, Admin, Sales Office. Cost centers live inside a <b>controlling area</b>: the CO counterpart of the company code level, to which one or more company codes are assigned. An FI posting of a cost/revenue line to a <b>primary cost element</b> account <b>must</b> carry a CO object — usually a cost center — or SAP refuses to post. That is why the van's depreciation needed “LOG-100 Logistics” in Section 5. <span class="urdu">Cost center = kharcha kis department ka hai; baghair is ke cost posting ruk jati hai.</span></p></div>
+            <ol class="steps">
+              <li>Open <code>KS01</code>. Enter the controlling area and the new cost center code (e.g. LOG-100) and its validity dates.</li>
+              <li>Enter name, description, <b>person responsible</b>, <b>cost center category</b> (e.g. production, administration, sales) and the <b>hierarchy area</b> — where it sits in the <b>standard hierarchy</b>, the tree that rolls all cost centers up to the company total.</li>
+              <li>Set control indicators if needed (e.g. lock against postings). <b>Save.</b></li>
+            </ol>
+            <div class="box term"><span class="box-title">Key term · Cost element</span><p>In S/4HANA, P&amp;L accounts that carry costs/revenues into CO are called <b>cost elements</b> — and they are simply <b>G/L accounts</b> whose master (FS00) marks them with an account type / cost element category. One chart of accounts serves both FI and CO — a big S/4HANA simplification. <span class="urdu">Cost element = woh P&amp;L G/L account jo kharcha CO tak le jata hai.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S15 ============ -->
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> Profit Center — KE51</h2>
+            <p class="sub">Cost centers collect costs. Profit centers answer the bigger question: did this part of the business <i>make</i> money?</p>
+            <div class="box term"><span class="box-title">Key term · Profit center</span><p>A <b>profit center</b> is a unit of the business viewed as its own mini-company: it collects <b>both revenues and costs</b>, so you can produce a mini profit &amp; loss — and with document splitting (Part 1), even a mini balance sheet — for it. Examples for Ibrahim Apparel &amp; Trading: “Winter Wear”, “Formal Shirts”, “Online Sales”. Profit centers are created in <code>KE51</code>, changed in <code>KE52</code>, displayed in <code>KE53</code>, inside a controlling area. <span class="urdu">Profit center = business ka woh hissa jiska apna munafa-naqsan nikala jata hai.</span></p></div>
+            <p>How does a posting get its profit center? Usually <b>automatically</b>: each cost center is assigned to one profit center, so a posting to LOG-100 silently carries profit center “Logistics” with it. Materials, assets and other objects have their own assignments. That automatic derivation is why profit center reporting stays complete without users typing it on every line.</p>
+            <div class="box term"><span class="box-title">Key term · Dummy profit center</span><p>If a posting reaches CO with no derivable profit center, it falls into the <b>dummy profit center</b> — a warning bucket. A growing dummy balance means master-data assignments are broken somewhere. Good month-end hygiene: check the dummy profit center is (near) zero. <span class="urdu">Dummy profit center = “kahin na kahin galti hai” wala khata — is ka balance zero hona chahiye.</span></p></div>
+            <div class="box trap"><span class="box-title">Exam trap · Profit center ≠ profit center <i>accounting</i> as a separate ledger</span><p>In S/4HANA, profit center values are not kept in a separate side-table world: they are <b>fields in the Universal Journal (ACDOCA)</b>, posted in the same document as FI. Classic “PCA” as a separate ledger is history. <span class="urdu">S/4HANA mein profit center ACDOCA ke andar hi rehta hai — alag ledger nahi.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S16 ============ -->
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> Internal Order — KO01</h2>
+            <p class="sub">Cost centers are forever. Projects are not — for one-off jobs, CO uses the internal order.</p>
+            <div class="box term"><span class="box-title">Key term · Internal order</span><p>An <b>internal order</b> is a temporary CO object that collects the costs (and sometimes revenues) of one defined job or event: “Exhibition Stall — Lahore Expo”, “Machine Overhaul 2026”, “New Shop Fit-Out”. It is created in <code>KO01</code> (change KO02, display KO03), given a budget if needed, charged by real postings, and at the end its collected costs are <b>settled</b> — moved on to a cost center, an asset (classic for AuC!), or a G/L account — after which the order is closed. <span class="urdu">Internal order = aik khaas kaam/project ka kharcha ikatha karne wala temporary khata; aakhir mein settle ho kar band ho jata hai.</span></p></div>
+            <div class="tblwrap"><table>
+              <tr><th>Object</th><th>Lifetime</th><th>Collects</th><th>Created in</th></tr>
+              <tr><td class="hl"><b>Cost center</b></td><td>Ongoing (a department)</td><td>Costs of a unit</td><td>KS01</td></tr>
+              <tr><td class="hl"><b>Profit center</b></td><td>Ongoing (a business segment)</td><td>Revenues + costs → profit</td><td>KE51</td></tr>
+              <tr><td class="hl"><b>Internal order</b></td><td>Temporary (one job)</td><td>Costs of one job, then settled</td><td>KO01</td></tr>
+            </table></div>
+            <div class="box term"><span class="box-title">Key term · Real vs statistical posting</span><p>A posting can carry only <b>one real</b> CO object (the one that truly bears the cost — e.g. an internal order). Extra objects can ride along <b>statistically</b> — recorded for reporting, but not the true cost bearer. Example: Dr Repair expense — real: Internal Order “Overhaul 2026”; statistical: the Production cost center. <span class="urdu">Real = asal zimmedar aik hi; statistical = sirf report ke liye saath likha hua.</span></p></div>
+            <div class="box trick"><span class="box-title">Memory trick · KS, KE, KO — teeno “01”</span><p><b>KS</b>01 cost center (S = Stelle, German for “place”), <b>KE</b>51 profit center, <b>KO</b>01 internal order (O = Order). Aur yaad rahe: order ka kharcha aakhir mein <b>settle</b> hota hai — yehi us ki pehchan hai.</p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S17 ============ -->
+          <section class="lesson" id="s17">
+            <h2><span class="no">17</span> Period-end closing &amp; OB52 — open and close posting periods</h2>
+            <p class="sub">Closing is a sequence, not a single button. Its gatekeeper is the posting period control.</p>
+            <p><b>Period-end closing</b> is the ordered set of jobs that finishes a month (or year): run depreciation (AFAB — done above), value foreign currency (next section), post accruals, reconcile subledgers, then lock the period so nothing can sneak into a finished month. The lock itself lives in <code>OB52</code> — the transaction that <b>opens and closes posting periods</b>, working on the <b>posting period variant</b> you configured back in Part 2 · Lesson 2.</p>
+            <div class="box term"><span class="box-title">Key term · OB52 — open/close periods</span><p>In <code>OB52</code>, for each <b>posting period variant + account type</b> (+, A assets, D customers, K vendors, M materials, S G/L), you set the range of periods open for posting: “from period / to period”, with a second range and an <b>authorisation group</b> that can let a small closing team post into an otherwise closed period (level 3 periods). Normal users get hard errors like “Period 004/2026 is not open”. <span class="urdu">OB52 = kis period mein posting allowed hai, is ka darwaza; band period = taala laga darwaza.</span></p></div>
+            <ol class="steps">
+              <li>Finish the period's operational postings; run AFAB and the other closing programs (Sections 18–20).</li>
+              <li>Open <code>OB52</code>, select the posting period variant, and shift the open range forward: close period 4 by moving “from period” to 5 for all account types.</li>
+              <li>Keep the special authorisation range for the closing team until final adjustments are done, then remove it too.</li>
+              <li>At <b>year-end</b>, remember the special periods 13–16 (Part 1): closing adjustments are posted into these <b>adjustment periods</b> of the old year while the new year is already open for daily business.</li>
+            </ol>
+            <div class="box trap"><span class="box-title">Exam trap · OB52 controls FI posting periods — not everything</span><p>OB52 governs <b>FI documents</b>. Materials movements have their own period control (MMPV), and CO has its own locks (OKP1). Also: closing a period never deletes or moves documents — it only refuses <b>new</b> postings with posting dates in that period. <span class="urdu">Band karna = nayi posting rokna; purani documents waisi ki waisi rehti hain.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S18 ============ -->
+          <section class="lesson" id="s18">
+            <h2><span class="no">18</span> Foreign currency valuation — F.05</h2>
+            <p class="sub">A dollar receivable booked at 278 is worth something else at month-end. Valuation corrects the books — temporarily.</p>
+            <p>Part 1 taught exchange rates and currency translation. At period end, open items and balances in foreign currency must be re-measured at the <b>closing rate</b>. That program is <code>F.05</code> — <b>foreign currency valuation</b> (in S/4HANA also available as the Fiori-scheduled job / <code>FAGL_FCV</code>).</p>
+            <div class="box term"><span class="box-title">Key term · Foreign currency valuation (F.05)</span><p><b>F.05</b> revalues (a) <b>open items</b> in AP/AR foreign currency and (b) <b>G/L balances</b> in foreign currency (e.g. a USD bank account) at the period-end exchange rate. The difference goes to an <b>exchange gain/loss</b> P&amp;L account, with the offset on a <b>balance sheet adjustment account</b> — the original item keeps its original amount. Crucially, valuation postings are made with an <b>automatic reversal date</b> (first day of the next period): they exist only so the balance sheet date tells the truth; next period, business continues at the original rates until the item is really paid (when the <i>realised</i> gain/loss is posted). <span class="urdu">F.05 = mahina-akhir ki rate par dobara napna; posting agle period ke pehle din khud reverse ho jati hai.</span></p></div>
+            <div class="screen" role="img" aria-label="Re-created illustration of an F.05 valuation result for a USD customer item">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>F.05 — Foreign Currency Valuation · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Customer item</span>  USD 10,000  booked @ 278.00  = <span class="hl2">PKR 2,780,000</span>
+<span class="dim">Closing rate</span>   282.50  →  valued at        <span class="hl2">PKR 2,825,000</span>
+<span class="dim">Valuation diff</span> <span class="st">+45,000  Unrealised exchange gain</span>
+<span class="cm">Posted to: FX gain (P&amp;L) / BS adjustment a/c — auto-reverses 01 next period</span></div>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap · Unrealised vs realised</span><p>F.05 books only <b>unrealised</b> differences (paper gains/losses on still-open items) and reverses them. The <b>realised</b> difference is posted later, at actual payment/clearing, from the real rates — and is never reversed. Mixing these two is the classic F.05 exam question. <span class="urdu">F.05 = kagzi (unrealised) farq, reverse hota hai; asal farq payment par banta hai, reverse nahi hota.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S19 ============ -->
+          <section class="lesson" id="s19">
+            <h2><span class="no">19</span> Balance carryforward — FAGLGVTR</h2>
+            <p class="sub">The bridge from the old year to the new: balances walk across, P&amp;L is emptied into retained earnings.</p>
+            <div class="box term"><span class="box-title">Key term · Balance carryforward (FAGLGVTR)</span><p><b>Balance carryforward</b> is the year-end program — transaction <code>FAGLGVTR</code> for the G/L — that opens the new fiscal year: <b>balance sheet accounts</b> carry their closing balance forward as the new year's opening balance; <b>P&amp;L accounts</b> are closed to zero and their total result is carried into the <b>retained earnings</b> account (the OB53 account from Part 2 · Lesson 2). Customer/vendor balances are carried forward with <code>F.07</code>, and assets have their own year-end closing (<code>AJAB</code>) and fiscal-year change (<code>AJRW</code>). The program can be re-run — later closing adjustments simply update the carried-forward amounts. <span class="urdu">Carryforward = purane saal ke balances naye saal ke opening balances bana dena; P&amp;L ka result retained earnings mein chala jata hai.</span></p></div>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 185" role="img" aria-label="Diagram: balance carryforward moves balance sheet balances directly and P and L result into retained earnings">
+                <defs><marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text class="svg-title" x="360" y="24" text-anchor="middle">What FAGLGVTR does on New Year's night</text>
+                <rect class="svg-box-a" x="20" y="50" width="300" height="52" rx="10"/><text class="svg-title" x="170" y="71" text-anchor="middle">Balance sheet accounts</text><text class="svg-sub" x="170" y="90" text-anchor="middle">Bank 5,000,000 · Receivables 800,000 …</text>
+                <rect class="svg-box-a" x="400" y="50" width="300" height="52" rx="10"/><text class="svg-title" x="550" y="71" text-anchor="middle">New year — opening balances</text><text class="svg-sub" x="550" y="90" text-anchor="middle">Same balances, carried forward</text>
+                <path d="M320 76 L396 76" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr4)"/>
+                <rect class="svg-box-g" x="20" y="118" width="300" height="52" rx="10"/><text class="svg-title" x="170" y="139" text-anchor="middle">P&amp;L accounts</text><text class="svg-sub" x="170" y="158" text-anchor="middle">Revenue − Expenses = Profit 1,200,000</text>
+                <rect class="svg-box-gr" x="400" y="118" width="300" height="52" rx="10"/><text class="svg-title" x="550" y="139" text-anchor="middle">Retained earnings (OB53)</text><text class="svg-sub" x="550" y="158" text-anchor="middle">P&amp;L starts the new year at zero</text>
+                <path d="M320 144 L396 144" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr4)"/>
+              </svg>
+              <figcaption>Illustration — nothing is re-typed. The program carries balances; it does not post normal documents you can display in FB03.</figcaption>
+            </figure>
+            <div class="box trap"><span class="box-title">Exam trap · Carryforward posts no document</span><p>Carryforward writes <b>carried-forward balances</b> into the new year — there is no journal document to reverse. If a late adjustment changes the old year, you simply <b>run FAGLGVTR again</b> and the opening balances update. <span class="urdu">Document nahi banta; dobara run karne se opening balances theek ho jate hain.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S20 ============ -->
+          <section class="lesson" id="s20">
+            <h2><span class="no">20</span> Financial Statement Version — OB58 &amp; F.01, and Fiori apps for closing</h2>
+            <p class="sub">The final product of all this work: the balance sheet and P&amp;L, shaped by the FSV — and scheduled from Fiori.</p>
+            <div class="box term"><span class="box-title">Key term · Financial Statement Version (FSV)</span><p>A <b>Financial Statement Version</b> is the tree-shaped layout that turns G/L accounts into the published statements: which accounts sit under “Current Assets”, which under “Equity”, the headings, subtotals and the order of lines. It is defined in <code>OB58</code> and assigned to the company code. The accounts hold the numbers; the FSV decides the <b>shape</b> of the report. <span class="urdu">FSV = balance sheet / P&amp;L ki tarteeb aur headings — kaunsa account kis khane mein dikhega.</span></p></div>
+            <p>To produce the statements you run <code>F.01</code> (the classic financial statement report — in reports also S_ALR_87012284): choose company code, FSV, ledger and the periods to compare. F.01 reads the balances and lays them out exactly as the FSV tree commands. A classic closing check: F.01 shows an <b>“accounts not assigned”</b> warning if a G/L account with a balance was never placed in the FSV — those amounts would silently miss the statements, so the closing team always checks this list.</p>
+            <div class="box term"><span class="box-title">Key term · SAP Fiori apps for closing</span><p><b>SAP Fiori</b> is SAP's modern web-style interface of tile apps (Part 1). For closing, key Fiori apps include <b>Manage Posting Periods</b> (the Fiori face of OB52), <b>Schedule General Ledger Jobs</b> (runs F.05 valuation, carryforward and other closing jobs as scheduled background jobs with logs), <b>Post General Journal Entries</b>, <b>Display Line Items in General Ledger</b>, and the <b>Advanced Financial Closing (SAP AFC)</b> app family, which organises the whole closing as a task list with owners, deadlines and dependencies across company codes. The exam expects you to know closing is increasingly <b>scheduled and monitored from Fiori</b>, while the underlying programs stay the same. <span class="urdu">Fiori apps = closing ke kaam tiles ki shakal mein schedule aur monitor karna; andar program wohi purane hain.</span></p></div>
+            <div class="screen" role="img" aria-label="Re-created illustration of an F.01 financial statement output shaped by an FSV">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>F.01 — Financial Statements · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">FSV: PK01</span>  Company Code 1000 · FY 2026
+<span class="dim">ASSETS</span>
+<span class="dim">  Fixed Assets (incl. Assets 400012 …)</span>   <span class="hl2">14,400,000</span>
+<span class="dim">  Trade Receivables</span>                        <span class="hl2">800,000</span>
+<span class="dim">  Bank — Meezan Current</span>                    <span class="hl2">5,000,000</span>
+<span class="dim">EQUITY &amp; LIABILITIES</span>
+<span class="dim">  Retained Earnings (incl. 2026 profit)</span>    <span class="st">…</span>
+<span class="cm">— Accounts not assigned in FSV: NONE — closing check passed —</span></div>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick · OB58 banata hai, F.01 chalata hai</span><p><b>OB58</b> = FSV ki <b>definition</b> (naqsha banana). <b>F.01</b> = us naqshe se <b>report chalana</b>. Numbers hamesha G/L se aate hain; FSV sirf tarteeb deta hai — FSV badalne se koi balance nahi badalta.</p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+          <!-- ============ S21 ============ -->
+          <section class="lesson" id="s21">
+            <h2><span class="no">21</span> Exam traps</h2>
+            <p class="sub">The eight traps this lesson's topics set again and again in C_TS4FI.</p>
+            <div class="box trap"><span class="box-title">Trap 1 · Chart of depreciation vs chart of accounts</span><p>Different objects. Chart of depreciation = depreciation areas per country, one per company code. Chart of accounts = G/L account list (OB13). <span class="urdu">Naam ki mushabihat hi jaal hai.</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 2 · AS01 posts nothing</span><p>Master creation = value zero. Value arrives only with an acquisition (F-90 / ABSO / MIRO route). <span class="urdu">File ≠ paisa.</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 3 · Depreciation is a run, not a journal</span><p>AFAB calculates and posts summarised; a failed run continues with a <b>restart run</b>. Manual FB50 depreciation breaks subledger reconciliation. <span class="urdu">AFAB hi sahi rasta hai.</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 4 · AuC is not depreciated</span><p>Assets under Construction collect costs with <b>no depreciation</b> until settled to the final asset. <span class="urdu">Ban raha asset purana nahi gina jata.</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 5 · FI12 house bank ≠ FI01 bank master</span><p>FI12 = <b>our</b> banks, per company code. FI01 = the general bank directory. House bank + account ID → G/L account is the chain payments use. <span class="urdu">House bank hamara bank hai.</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 6 · F.05 reverses; realised differences do not</span><p>Valuation = unrealised, auto-reversed next period. Realised gain/loss happens at payment and stays. <span class="urdu">Kagzi farq ulta ho jata hai, asal farq nahi.</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 7 · Carryforward makes no document</span><p>FAGLGVTR carries balances, P&amp;L result goes to retained earnings (OB53). Re-run it after late adjustments — never “reverse” it. <span class="urdu">Document nahi, balance aage barhta hai.</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 8 · The FSV changes shape, never numbers</span><p>OB58 only arranges accounts into statement lines. An unassigned account with a balance is a closing error F.01 warns about. <span class="urdu">Tarteeb badalti hai, raqam nahi.</span></p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S22 ============ -->
+          <section class="lesson" id="s22">
+            <h2><span class="no">22</span> A–Z glossary</h2>
+            <p class="sub">Every technical term of this lesson, in one place, in simple words.</p>
+            <dl class="glossary">
+              <dt>ABAVN</dt><dd>Retirement of an asset by scrapping (no revenue).</dd>
+              <dt>ABAON / F-92</dt><dd>Retirement with revenue — selling an asset (without / with a customer).</dd>
+              <dt>ABSO</dt><dd>General asset posting screen (e.g. acquisition without a vendor).</dd>
+              <dt>ABUM</dt><dd>Transfer of an asset / value to another asset within the company.</dd>
+              <dt>Accumulated depreciation</dt><dd>Total depreciation posted on an asset so far.</dd>
+              <dt>Acquisition</dt><dd>The posting that capitalises a purchase onto an asset (F-90: keys 31 / 70, transaction type 100).</dd>
+              <dt>AFAB</dt><dd>The depreciation posting run — calculates and posts depreciation for all assets of a period.</dd>
+              <dt>APC</dt><dd>Acquisition and Production Costs — what the asset cost.</dd>
+              <dt>AS01 / AS02 / AS03</dt><dd>Create / change / display an asset master.</dd>
+              <dt>Asset class (OAOA)</dt><dd>Template family of assets; controls account determination, number range and depreciation defaults.</dd>
+              <dt>Asset Explorer (AW01N)</dt><dd>One-screen display of an asset's values, plan and transactions per depreciation area and year.</dd>
+              <dt>Asset under Construction (AuC)</dt><dd>Asset collecting costs while being built; not depreciated until settled.</dd>
+              <dt>Balance carryforward (FAGLGVTR)</dt><dd>Year-end program carrying balance sheet balances forward and P&amp;L result into retained earnings.</dd>
+              <dt>Bank clearing account</dt><dd>Transit G/L account holding bank movements until the statement confirms them.</dd>
+              <dt>Chart of depreciation</dt><dd>Country bundle of depreciation areas assigned to a company code.</dd>
+              <dt>Cheque lot</dt><dd>Numbered bundle of cheque leaves tracked per house bank account.</dd>
+              <dt>Controlling area</dt><dd>CO organisational unit holding cost centers, profit centers and internal orders.</dd>
+              <dt>Cost center (KS01)</dt><dd>Unit responsible for costs — a department.</dd>
+              <dt>Cost element</dt><dd>A P&amp;L G/L account that carries costs/revenues into CO.</dd>
+              <dt>Depreciation area</dt><dd>One valuation view of assets (book, tax, group); area 01 posts to the G/L.</dd>
+              <dt>Depreciation key</dt><dd>The calculation recipe (e.g. straight-line) for depreciation.</dd>
+              <dt>F-03</dt><dd>Manual clearing of open items on a G/L account (e.g. bank clearing).</dd>
+              <dt>F.05</dt><dd>Foreign currency valuation of open items and FX balances at the closing rate; auto-reversing.</dd>
+              <dt>F-58</dt><dd>Manual outgoing payment with cheque printing.</dd>
+              <dt>F.01 / OB58</dt><dd>F.01 runs the financial statements; OB58 defines the Financial Statement Version (layout).</dd>
+              <dt>FF67</dt><dd>Manual bank statement entry.</dd>
+              <dt>FI12</dt><dd>Define house banks and their accounts per company code.</dd>
+              <dt>Financial Statement Version</dt><dd>Tree layout arranging G/L accounts into balance sheet / P&amp;L lines.</dd>
+              <dt>House bank</dt><dd>A bank where your company holds accounts, defined per company code.</dd>
+              <dt>Internal order (KO01)</dt><dd>Temporary CO object collecting one job's costs; settled at the end.</dd>
+              <dt>Net book value (NBV)</dt><dd>APC minus accumulated depreciation.</dd>
+              <dt>OB52</dt><dd>Open and close FI posting periods per posting period variant and account type.</dd>
+              <dt>Profit center (KE51)</dt><dd>Business unit judged on revenues minus costs — a mini P&amp;L.</dd>
+              <dt>Settlement</dt><dd>Moving an internal order's (or AuC's) collected costs to their final receiver.</dd>
+              <dt>Transaction type (assets)</dt><dd>Code classifying an asset movement (100 acquisition, 200 retirement, transfers…).</dd>
+              <dt>Useful life</dt><dd>Years over which an asset is depreciated.</dd>
+              <dt>Value date</dt><dd>Date from which the bank counts a movement as effective.</dd>
+            </dl>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S23 ============ -->
+          <section class="lesson" id="s23">
+            <h2><span class="no">23</span> Summary — the whole lesson on one screen</h2>
+            <p class="sub">If you remember this screen, you remember the lesson.</p>
+            <ul class="clean">
+              <li><b>FI-AA</b> is a subledger per asset, tied to the G/L by class account determination. NBV = APC − accumulated depreciation.</li>
+              <li><b>Chart of depreciation</b> = areas (01 book posts to G/L; tax/group areas value in parallel). <b>Asset class (OAOA)</b> = template: accounts, number range, depreciation defaults. AuC is never depreciated.</li>
+              <li>Life cycle: <b>AS01</b> master (value 0) → <b>F-90</b> acquisition (31/70, type 100; ABSO for other cases) → <b>ABUM</b> transfer → <b>AFAB</b> monthly depreciation run → <b>ABAVN</b> scrap / <b>F-92·ABAON</b> sale → watch it all in <b>AW01N</b>.</li>
+              <li><b>Bank:</b> house bank + account ID → G/L (<b>FI12</b>). <b>F-58</b> pays with cheque into a clearing account; <b>FF67</b> statement confirms; <b>F-03</b> clears into the main bank account.</li>
+              <li><b>CO objects:</b> cost center <b>KS01</b> (department, ongoing), profit center <b>KE51</b> (mini P&amp;L), internal order <b>KO01</b> (one job, then settled). One real CO object per line; others statistical.</li>
+              <li><b>Closing:</b> <b>OB52</b> opens/closes periods → <b>F.05</b> FX valuation (unrealised, auto-reverses) → <b>FAGLGVTR</b> carryforward (P&amp;L → retained earnings) → statements via <b>OB58</b> FSV + <b>F.01</b>; closing jobs scheduled and monitored in <b>Fiori</b>.</li>
+            </ul>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S24 ============ -->
+          <section class="lesson" id="s24">
+            <h2><span class="no">24</span> Self-test — 10 questions</h2>
+            <p class="sub">Answer all 10. Explanations appear after each answer — and answering all 10 completes this lesson's self-test for the course record.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn btn-ghost" id="resetQuiz" type="button">Reset self-test</button>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <!-- ============ S25 ============ -->
+          <section class="lesson" id="s25">
+            <h2><span class="no">25</span> Course complete — Part 1 + Part 2 recap &amp; your next steps to C_TS4FI</h2>
+            <p class="sub">This is the end of the course — and the beginning of your exam preparation. No next lesson follows this one.</p>
+            <h3>What you have covered — Part 1 (concepts)</h3>
+            <ul class="clean">
+              <li><b>Foundations:</b> SAP and S/4HANA, architecture, the SAP interface and Fiori, ABAP basics.</li>
+              <li><b>Enterprise structure:</b> company, company code, business area, fiscal year and posting periods.</li>
+              <li><b>Core FI settings:</b> currencies and exchange rates, chart of accounts, retained earnings, ledgers, document splitting and the Universal Journal (ACDOCA).</li>
+              <li><b>Controls:</b> tolerance groups, and the design of Accounts Payable.</li>
+            </ul>
+            <h3>What you have covered — Part 2 (practical)</h3>
+            <ul class="clean">
+              <li><b>Lessons 1–3:</b> company &amp; chart of accounts setup, unique codes, posting period variant, retained earnings (OB53), reporting (F.01), line items (FBL3N), document tracking (FB03) and table queries (SE16N).</li>
+              <li><b>Lesson 4:</b> G/L postings — FS00, FB50, F-02, FB03/FB02, reversal, park vs hold.</li>
+              <li><b>Lesson 5:</b> Accounts Payable — BP vendor (FLVN00/01), FB60, MIRO three-way match, F-53, F110, F-44 clearing, down payments.</li>
+              <li><b>Lesson 6:</b> Accounts Receivable &amp; Tax — BP customer (FLCU00/01), FB70, FB75, F-28, F-32, dunning F150, credit management, tax codes (FTXP) and OB40.</li>
+              <li><b>Lesson 7 (this lesson):</b> Asset Accounting, Bank Accounting, Controlling objects, and period-end / year-end closing.</li>
+            </ul>
+            <h3>Your next steps toward C_TS4FI</h3>
+            <ol class="steps">
+              <li><b>Revise by topic, not by lesson:</b> re-do each lesson's self-test until you score 10/10 without the explanations; the exam draws from the same topic areas — organisational units, G/L, AP, AR, assets, bank, tax and closing.</li>
+              <li><b>Drill the T-code families:</b> 01 create / 02 change / 03 display; FB-, F-, AS-, KS/KE/KO- series; OB-configuration codes (OB52, OB53, OB58, OB40). Most exam questions are scenario questions — “which transaction / which setting” — exactly like the gate tests you passed.</li>
+              <li><b>Practise the traps:</b> re-read every “Exam traps” section in all 17 lessons in one sitting the week before the exam.</li>
+              <li><b>Book through the official channel:</b> register for <b>C_TS4FI — SAP Certified Associate: SAP S/4HANA Cloud Private Edition, Financial Accounting</b> via SAP's official certification/learning site, check the current exam version, topic weights and any voucher included with your learning subscription, and confirm the syllabus has not changed since this course.</li>
+              <li><b>Keep a practice system habit:</b> if you have access to any S/4HANA sandbox or trial, repeat the Part 2 postings with your own numbers — one full month: postings → AP/AR → AFAB → F.05 → OB52 close → F.01.</li>
+            </ol>
+            <div class="box trick"><span class="box-title">Final word · Mubarak ho</span><p>Aap ne poora course mukammal kar liya — concepts se le kar closing tak. Ab kaam sirf dohraana (revision) aur practice hai. Jab har lesson ka self-test baghair dekhe 10/10 aane lage, aap imtihan ke liye tayyar hain. Best of luck for your C_TS4FI.</p></div>
+            <div class="sec-foot"><button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button><span class="read-status">Not read yet</span></div>
+          </section>
+
+          <footer>
+            course created by Muhammad Asad Ullah Ibrahim<br>
+            Part 2 · Lesson 7 of the SAP S/4HANA Financial Accounting series · Final lesson of the course · Prepared for C_TS4FI (SAP S/4HANA Cloud Private Edition, Financial Accounting) exam preparation · All SAP screens shown are re-created illustrations for learning, not real SAP screenshots.
+          </footer>
+        </main>
+      </div>
+    </div>
+    </div>
+
+<script>
+    window.SAPProgress=(function(){
+      var KEY='sapCts4fiProgress_v1';
+      function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+      function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+      function getLesson(n){ var s=load(), L=null;
+        if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+        if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+        return L; }
+      function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+        for(var p in patch){ cur[p]=patch[p]; }
+        s.lessons[k]=cur; saveAll(s); return cur; }
+      function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+        return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+      function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+        s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+      return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+    })();
+    function sha256Hex(ascii){
+      ascii=unescape(encodeURIComponent(ascii));
+      function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+      var maxWord=Math.pow(2,32), i, j, result='';
+      var words=[], asciiBitLength=ascii.length*8;
+      var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+      var primeCounter=k.length, isComposite={};
+      for(var candidate=2; primeCounter<64; candidate++){
+        if(!isComposite[candidate]){
+          for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+          hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+          k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+        }
+      }
+      ascii+='\x80';
+      while(ascii.length%64-56) ascii+='\x00';
+      for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+      words[words.length]=((asciiBitLength/maxWord)|0);
+      words[words.length]=(asciiBitLength);
+      for(j=0;j<words.length;){
+        var w=words.slice(j,j+=16), oldHash=hash;
+        hash=hash.slice(0,8);
+        for(i=0;i<64;i++){
+          var w15=w[i-15], w2=w[i-2];
+          var a=hash[0], e=hash[4];
+          var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+          var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+          hash=[(temp1+temp2)|0].concat(hash);
+          hash[4]=(hash[4]+temp1)|0;
+        }
+        for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+      }
+      for(i=0;i<8;i++){
+        for(j=3;j+1;j--){
+          var b=(hash[i]>>(j*8))&255;
+          result+=((b<16)?0:'')+b.toString(16);
+        }
+      }
+      return result;
+    }
+    (function(){
+      var THIS_LESSON='p2-7', PREV_LESSON='p2-6', PREV_SECTIONS=24, LOCK_MS=60*60*1000;
+      var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+      var GATE_Q=[
+        {q:"In SAP S/4HANA, how is a new customer created for accounting?",opts:["With XD01 only — BP is not used for customers","As a Business Partner in transaction BP, with role FLCU00 for the FI (company code) data","Directly in FB70 at the time of the first invoice","In FS00, as a special G/L account"],a:1},
+        {q:"You enter a direct customer invoice with no sales order. Which transaction, document type and posting keys are used?",opts:["FB60 — type KR, keys 31/40","FB70 — type DR, keys 01 (customer debit) / 50 (revenue credit)","F-28 — type DZ, keys 40/11","MIRO — type RE, keys 31/86"],a:1},
+        {q:"A customer pays an invoice in full through F-28. What does F-28 do?",opts:["Only records the bank receipt; clearing is always a separate step in F-32","Posts the payment document (type DZ) and clears the matched open items in the same step","Creates a noted item with no balance effect","Runs the dunning program for the remaining balance"],a:1},
+        {q:"An invoice is 20 days overdue, the customer master carries a dunning procedure and the item is not blocked. What will the F150 dunning run do?",opts:["Reverse the invoice automatically","Assign or raise the item's dunning level per the procedure and produce a dunning notice","Post a new receivable for the reminder fee","Nothing — dunning works only for vendors"],a:1},
+        {q:"An invoice shows the correct 18% tax amount, but the tax posts to the WRONG G/L account. Where is the fault most likely?",opts:["In the tax code's rate in FTXP","In the account assignment in OB40, where the account key (e.g. MWS) is mapped to the tax G/L account","In the customer's reconciliation account","In the customer's payment terms"],a:1}
+      ];
+      var gateScreen=document.getElementById('gateScreen');
+      var content=document.getElementById('lessonContent');
+      var lockBox=document.getElementById('gateLockBox');
+      var lockUntilEl=document.getElementById('gateLockUntil');
+      var countdownEl=document.getElementById('gateCountdown');
+      var testArea=document.getElementById('gateTestArea');
+      var qWrap=document.getElementById('gateQuestions');
+      var scoreEl=document.getElementById('gateScore');
+      var msgEl=document.getElementById('gateMsg');
+      var attemptsEl=document.getElementById('gateAttempts');
+      var submitBtn=document.getElementById('gateSubmit');
+      var retryBtn=document.getElementById('gateRetry');
+      var adminBtn=document.getElementById('adminBtn');
+      var adminForm=document.getElementById('adminForm');
+      var adminPw=document.getElementById('adminPw');
+      var adminSubmit=document.getElementById('adminSubmit');
+      var adminMsg=document.getElementById('adminMsg');
+      var timer=null, selected={};
+      function isPrevComplete(){
+        var L=window.SAPProgress.getLesson(PREV_LESSON);
+        if(!L) return false;
+        var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+        var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+        return !!(allRead&&quiz);
+      }
+      function unlockLesson(){
+        if(timer){ clearInterval(timer); timer=null; }
+        gateScreen.hidden=true; gateScreen.style.display='none';
+        content.hidden=false; content.style.display='';
+        window.scrollTo(0,0);
+      }
+      function updateCountdown(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var rem=g.lockUntil-Date.now();
+        if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+        var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+        countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+      }
+      function showLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        lockBox.hidden=false;
+        testArea.style.display='none';
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        updateCountdown();
+        if(timer) clearInterval(timer);
+        timer=setInterval(updateCountdown,1000);
+      }
+      function refreshLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var now=Date.now();
+        if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+        if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+        lockBox.hidden=true;
+        testArea.style.display='';
+        return false;
+      }
+      function updateAttempts(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+      }
+      function renderGate(){
+        selected={};
+        scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+        submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+        qWrap.innerHTML='';
+        GATE_Q.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='gate-q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              selected[qi]=oi;
+              var bs=opts.querySelectorAll('.gate-opt');
+              bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+              msgEl.textContent='';
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); qWrap.appendChild(box);
+        });
+      }
+      submitBtn.addEventListener('click',function(){
+        if(refreshLock()) return;
+        if(Object.keys(selected).length<GATE_Q.length){
+          msgEl.textContent='Please answer all 5 questions before submitting.';
+          scoreEl.textContent='';
+          return;
+        }
+        var score=0;
+        GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+        qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+        submitBtn.hidden=true;
+        scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        if(score===GATE_Q.length){
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          msgEl.textContent='Gate test passed. Part 2 · Lesson 7 is now unlocked.';
+          msgEl.className='ok';
+          updateAttempts();
+          setTimeout(unlockLesson,900);
+        }else{
+          g.fails=(g.fails||0)+1;
+          msgEl.textContent='Go back and complete previous lesson.';
+          msgEl.className='';
+          if(g.fails>=3){
+            g.lockUntil=Date.now()+LOCK_MS;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            updateAttempts();
+            refreshLock();
+          }else{
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            retryBtn.hidden=false;
+            updateAttempts();
+          }
+        }
+      });
+      retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+      adminBtn.addEventListener('click',function(){
+        adminForm.hidden=!adminForm.hidden;
+        if(!adminForm.hidden) adminPw.focus();
+      });
+      function tryAdminUnlock(){
+        var val=adminPw.value;
+        if(!val) return;
+        if(sha256Hex(val)===ADMIN_HASH){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          adminMsg.className=''; adminMsg.style.color='var(--green)';
+          adminMsg.textContent='Unlocked. Opening Part 2 · Lesson 7…';
+          adminPw.value='';
+          setTimeout(unlockLesson,700);
+        }else{
+          adminMsg.style.color=''; adminMsg.className='err';
+          adminMsg.textContent='Incorrect password. Please try again.';
+          adminPw.value='';
+          adminPw.focus();
+        }
+      }
+      adminSubmit.addEventListener('click',tryAdminUnlock);
+      adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+      var g0=window.SAPProgress.getGate(THIS_LESSON);
+      if(isPrevComplete()||g0.unlocked===true){
+        unlockLesson();
+      }else{
+        gateScreen.hidden=false; gateScreen.style.display='';
+        content.hidden=true; content.style.display='none';
+        if(!refreshLock()) renderGate();
+        updateAttempts();
+      }
+    })();
+</script>
+<script>
+    (function(){
+      "use strict";
+      var THIS_KEY='p2-7';
+      var themeBtn=document.getElementById('themeBtn');
+      var themeLabel=document.getElementById('themeLabel');
+      function applyTheme(t){
+        document.documentElement.setAttribute('data-theme',t);
+        if(themeLabel) themeLabel.textContent=(t==='dark'?'Dark':'Light');
+      }
+      applyTheme('light');
+      themeBtn.addEventListener('click',function(){
+        var cur=document.documentElement.getAttribute('data-theme');
+        applyTheme(cur==='dark'?'light':'dark');
+      });
+      var sections=[].slice.call(document.querySelectorAll('section.lesson'));
+      var tocItems={};
+      [].slice.call(document.querySelectorAll('#tocList li')).forEach(function(li){
+        var a=li.querySelector('a');
+        if(a) tocItems[a.getAttribute('href').slice(1)]={li:li,a:a};
+      });
+      var readSet={}, total=sections.length;
+      var pctText=document.getElementById('pctText'), sideFill=document.getElementById('sideFill'),
+          countText=document.getElementById('countText'), bar=document.getElementById('progressBar');
+      function persist(){
+        try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(THIS_KEY,{readSections:arr, allRead:(total>0&&arr.length===total)}); } }catch(e){}
+      }
+      function updateProgress(){
+        var n=Object.keys(readSet).length;
+        var pct=total?Math.round(n/total*100):0;
+        if(pctText) pctText.textContent=pct+'%';
+        if(sideFill) sideFill.style.width=pct+'%';
+        if(countText) countText.textContent=n+' of '+total+' sections marked read';
+        if(bar) bar.style.width=pct+'%';
+      }
+      function reflect(sec){
+        var id=sec.id, on=!!readSet[id];
+        var btn=sec.querySelector('.mark-read'), status=sec.querySelector('.read-status'), label=sec.querySelector('.mr-label');
+        if(btn) btn.classList.toggle('done',on);
+        if(label) label.textContent=on?'Read':'Mark Read';
+        if(status) status.textContent=on?'Marked as read':'Not read yet';
+        sec.classList.toggle('is-read',on);
+        if(tocItems[id]) tocItems[id].li.classList.toggle('read',on);
+      }
+      try{
+        var saved=window.SAPProgress?window.SAPProgress.getLesson(THIS_KEY):null;
+        if(saved&&saved.readSections){ saved.readSections.forEach(function(id){ readSet[id]=true; }); }
+      }catch(e){}
+      sections.forEach(function(sec){
+        reflect(sec);
+        var btn=sec.querySelector('.mark-read');
+        if(btn) btn.addEventListener('click',function(){
+          if(readSet[sec.id]) delete readSet[sec.id]; else readSet[sec.id]=true;
+          reflect(sec); updateProgress(); persist();
+        });
+      });
+      updateProgress();
+      if('IntersectionObserver' in window){
+        var spy=new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if(en.isIntersecting&&tocItems[en.target.id]){
+              Object.keys(tocItems).forEach(function(k){ tocItems[k].li.classList.remove('active'); });
+              tocItems[en.target.id].li.classList.add('active');
+            }
+          });
+        },{rootMargin:'-25% 0px -65% 0px'});
+        sections.forEach(function(s){ spy.observe(s); });
+      }
+    })();
+</script>
+<script>    (function(){
+      var QUESTIONS=[
+        {q:"What is a chart of depreciation?",opts:["The list of all G/L accounts of a company code","The country-level bundle of depreciation areas assigned to a company code — a different object from the chart of accounts","The report that lists all assets and their values","The number range for asset masters"],a:1,why:"The chart of depreciation bundles the depreciation areas (book, tax, group…) for a country and is assigned per company code. The chart of accounts (OB13) is the G/L list — the similar name is a deliberate exam trap."},
+        {q:"An asset class (OAOA) controls all of the following for its assets EXCEPT:",opts:["Account determination — the G/L accounts for APC, depreciation and retirement","The number range for asset numbers","Default depreciation areas, keys and useful life","The vendor from whom each asset must be purchased"],a:3,why:"The class is a template for accounts, numbering and depreciation defaults. It says nothing about vendors — any vendor can supply an asset of any class via F-90, ABSO or the purchasing route."},
+        {q:"You create a delivery van in AS01 and save. What is the asset's book value immediately after saving?",opts:["The purchase price entered on the depreciation tab","Zero — AS01 creates only the master; value arrives with an acquisition posting","The class's default value","It cannot be displayed until AFAB runs"],a:1,why:"AS01 creates the file, not the money. APC and NBV stay zero until an acquisition (F-90 / ABSO / MIRO) is posted."},
+        {q:"In F-90 (acquisition from purchase with vendor), which posting keys are used?",opts:["40 debit asset / 50 credit vendor","31 credit vendor / 70 debit asset, with transaction type 100","01 debit asset / 31 credit vendor","70 credit vendor / 75 debit asset"],a:1,why:"Vendor lines use key 31 for a credit; asset lines use 70 (debit asset) and 75 (credit asset). The acquisition carries transaction type 100. You enter the asset number — never the asset G/L account."},
+        {q:"Which statement about the AFAB depreciation run is correct?",opts:["Depreciation must be posted asset by asset with FB50","AFAB calculates depreciation for all assets of the period and posts it summarised; a run stopped by errors is continued with a restart run","AFAB posts only to the tax depreciation area","A planned run for a posted period can simply be repeated unchanged"],a:1,why:"AFAB is a batch period-end program using each asset's key, life, class account determination and cost center. After errors, use the restart run; extra postings use a repeat run. Manual FB50 depreciation would break the subledger reconciliation."},
+        {q:"Where do you see one asset's APC, accumulated depreciation, planned depreciation and all its transactions, per depreciation area and fiscal year?",opts:["FBL3N on the asset G/L account","AW01N — the Asset Explorer","AS03 alone","F.01"],a:1,why:"AW01N is the asset's report card: planned and posted values, transactions with drill-down, and area comparisons. FBL3N shows only summarised G/L lines; AS03 shows master data, not values."},
+        {q:"In bank accounting, what is the correct chain from a payment program to the books?",opts:["Bank master (FI01) → vendor → G/L","House bank + account ID (FI12) → the G/L account linked to that account ID","Cheque lot → house bank → cost center","Account ID → bank directory → clearing account only"],a:1,why:"House banks and their accounts are defined per company code in FI12; each account ID points to exactly one G/L account. F110/F-58 find the money through house bank + account ID. FI01 is only the general bank directory."},
+        {q:"A cheque issued via F-58 appears on the bank statement entered in FF67. What happens next in the standard flow?",opts:["The payment document is reversed","The statement posting moves the amount from the bank clearing account to the main bank account, and the pair is cleared (F-03 / F.13)","Nothing — the main bank account was already updated by F-58","The cheque lot is deleted"],a:1,why:"F-58 credits the clearing account, not the main bank account. The statement (FF67) proves the money left, posts Dr clearing / Cr main bank, and clearing (F-03 or automatic F.13) matches the pair. Remaining open clearing items = timing differences."},
+        {q:"Which CO object is temporary, collects the costs of one job, and is settled to its final receiver at the end?",opts:["Cost center (KS01)","Profit center (KE51)","Internal order (KO01)","Cost element"],a:2,why:"The internal order is built for one defined job — exhibition, overhaul, fit-out. Cost centers and profit centers are ongoing organisational units; a cost element is an account, not a collector object."},
+        {q:"At year-end, what does the balance carryforward (FAGLGVTR) do?",opts:["Posts a journal document moving every balance, which can be reversed in FB08","Carries balance sheet balances into the new year as opening balances and closes P&L accounts into retained earnings — without a document; it can be re-run after late adjustments","Closes all posting periods in OB52","Revalues foreign currency items at the closing rate"],a:1,why:"Carryforward writes opening balances, not documents: balance sheet accounts carry over, P&L result lands in the OB53 retained earnings account. OB52 is period control; F.05 is FX valuation."}
+      ];
+      var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+      var answered=0, correct=0;
+      function render(){
+        quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+        QUESTIONS.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              if(box.dataset.done) return; box.dataset.done='1'; answered++;
+              var buttons=opts.querySelectorAll('.opt');
+              buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+              if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+              explain.classList.add('show');
+              if(answered===QUESTIONS.length){
+                try{ if(window.SAPProgress) window.SAPProgress.saveLesson('p2-7',{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=8?' — Excellent! Mark every section Read to complete this lesson — and with it, the whole course.':' — Re-read the sections above once, then try again. You can do it.');
+              } else {
+                scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+              }
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+        });
+      }
+      render();
+      document.getElementById('resetQuiz').addEventListener('click',render);
+    })();
+</script>
+  </body>
+</html>

@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 1 — Introduction of SAP · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      /* reading progress */
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:60;transition:width .1s linear}
+
+      /* top bar */
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      @media (max-width:860px){.layout{grid-template-columns:1fr}}
+
+      /* TOC */
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+      /* active (on-screen) section in sidebar */
+      nav.toc a.active{background:var(--accent-soft);color:var(--accent-ink);font-weight:700;box-shadow:inset 3px 0 0 var(--accent)}
+      nav.toc a.active .dot{border-color:var(--accent)}
+      nav.toc li.read a.active{color:var(--accent-ink)}
+      /* green tick shown in sidebar once a section is marked read */
+      .toc-tick{margin-left:auto;color:var(--green);font-weight:700;font-size:.95rem;line-height:1;visibility:hidden;flex:none;padding-left:6px}
+      nav.toc li.read .toc-tick{visibility:visible}
+      /* read progress inside sidebar */
+      .toc-progress{margin:2px 0 12px}
+      .toc-progress-head{display:flex;justify-content:space-between;align-items:baseline;font-size:.82rem;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+      .toc-progress-head #readPct{color:var(--accent-ink);font-family:"JetBrains Mono",monospace;font-size:.85rem}
+      .toc-progress-track{height:8px;background:var(--surface2);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+      #readBar{height:100%;width:0;background:var(--green);transition:width .25s ease}
+      /* Mark Read button at the end of every section */
+      .mark-read-row{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+      .mark-read-btn{background:transparent;color:var(--green);border:2px solid var(--green);border-radius:10px;padding:9px 22px;font:700 .93rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px;transition:background .15s ease,color .15s ease}
+      .mark-read-btn:hover{background:var(--green-soft)}
+      .mark-read-btn.is-read{background:var(--green);color:#fff;border-color:var(--green)}
+      .mark-read-btn.is-read:hover{background:var(--green)}
+
+      /* hero */
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      /* callouts */
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      /* tables */
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      /* diagrams */
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      /* mock screens */
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .fiori-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;background:var(--surface2);padding:16px}
+      .tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 12px;min-height:86px}
+      .tile .t-ic{width:26px;height:26px;color:var(--accent)}
+      .tile .t-name{font-size:.82rem;font-weight:600;margin-top:8px;line-height:1.3}
+      .tile .t-num{font-size:1.25rem;font-weight:700;color:var(--accent-ink)}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      /* glossary */
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      /* self test */
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      .weightbar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:10px 0 4px;border:1px solid var(--line)}
+      .weightbar div{height:100%}
+      .legend{font-size:.85rem;color:var(--ink-soft)}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 1 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Dark theme</span>
+      </button>
+    </div>
+
+    <div class="wrap">
+      <header class="hero">
+        <span class="kicker">Part 1 · C_TS4FI — SAP S/4HANA Cloud Private Edition, Financial Accounting</span>
+        <h1>Lesson 1 — Introduction of SAP</h1>
+        <p class="lede">You already know Financial Accounting. This lesson teaches you <b>zero-to-one SAP</b>: what SAP is, what ERP means, what S/4HANA is, and what FICO is — in very simple words, with daily-life examples. Every new SAP word is explained the first time it appears. <span class="urdu">(Har mushkil lafz pehli dafa aasan alfaaz mein samjhaya gaya hai — ghabrana nahi hai.)</span></p>
+        <div class="hero-meta">
+          <span class="chip">Exam: <b>C_TS4FI</b> — SAP S/4HANA Cloud Private Edition, Financial Accounting</span>
+          <span class="chip">Exam topic: <b>Overview &amp; Deployment of SAP S/4HANA</b> (weight: up to ~10%)</span>
+          <span class="chip">Level: <b>Complete beginner</b> · Accounting knowledge assumed</span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Lesson 1 contents">
+          <h2>In this lesson</h2>
+          <div class="toc-progress" aria-live="polite">
+            <div class="toc-progress-head"><span id="readCount">0 of 17 sections read</span><span id="readPct">0%</span></div>
+            <div class="toc-progress-track"><div id="readBar"></div></div>
+          </div>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span>1. Before you start<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span>2. What is ERP?<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span>3. What is SAP?<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span>4. Story: a small business moves to SAP<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span>5. SAP Modules — the big map<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span>6. What is FICO? FI vs CO<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span>7. History: R/3 → ECC → S/4HANA<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span>8. What is the HANA database?<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span>9. S/4HANA &amp; its editions<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span>10. S/4HANA vs ECC — comparison<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span>11. How you use SAP: GUI &amp; Fiori<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span>12. Words you will hear at work<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span>13. The C_TS4FI exam — full picture<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span>14. Exam traps for Lesson 1<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span>15. Lesson 1 glossary (A–Z)<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span>16. Summary — key points<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span>17. Self-test (10 MCQs)<span class="toc-tick" aria-hidden="true">✓</span></a></li>
+          </ol>
+          <p class="toc-note">The section you are reading is highlighted in blue. At the end of each section, press <b>Mark Read</b> — the button turns green, a green tick appears here, and your progress above updates. <span class="urdu">(Jo hissa parh liya, us ke aakhir mein Mark Read dabayein — nishan sabz ho jayega.)</span></p>
+        </nav>
+
+        <main>
+
+          <!-- ============ 1 BEFORE YOU START ============ -->
+          <section class="lesson" id="s1" data-toc>
+            <h2><span class="no">01</span> Before you start</h2>
+            <p class="sub">Read this first. It tells you how this whole course works.</p>
+            <p>You know accounting: journal entries, ledgers, trial balance, profit &amp; loss, balance sheet. That is a <b>big advantage</b>. SAP does not change accounting — SAP is just a very big, very organised <b>software</b> that does the same accounting on a computer, for the whole company at the same time.</p>
+            <p>So in every lesson we follow one simple rule:</p>
+            <div class="box term"><span class="box-title">The golden rule of this course</span>
+              <p><b>Accounting first, SAP second.</b> First we recall the accounting idea you already know. Then we show you SAP's name for it and how SAP does it. <span class="urdu">(Pehle accounting ka concept, phir SAP usay kaisay karta hai.)</span></p>
+            </div>
+            <h3>How to read the boxes in this lesson</h3>
+            <ul class="clean">
+              <li><b>Blue box — New word:</b> a SAP term explained in one simple line.</li>
+              <li><b>Yellow box — Analogy:</b> a daily-life example (<span class="urdu">roz-marra ki misaal</span>) so the idea sticks in your mind.</li>
+              <li><b>Green box — Memory trick:</b> a shortcut to remember the point in the exam hall.</li>
+              <li><b>Red box — Exam trap:</b> a place where beginners lose marks.</li>
+              <li><b>Purple line:</b> the same idea in Roman Urdu, for extra clarity.</li>
+            </ul>
+            <p>Do not try to memorise everything in one reading. Read once for understanding, then do the self-test at the end. That is enough for Lesson 1.</p>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 2 WHAT IS ERP ============ -->
+          <section class="lesson" id="s2" data-toc>
+            <h2><span class="no">02</span> What is ERP?</h2>
+            <p>Everything in SAP starts from this one word: <b>ERP</b>.</p>
+            <div class="box term"><span class="box-title">New word — ERP</span>
+              <p><b>ERP = Enterprise Resource Planning.</b> In simple words: <b>one single software for the whole company</b> — sales, purchase, stock, accounts, salaries — all in one place, sharing the same data. “Enterprise” = the whole business. “Resource” = its money, goods, people. “Planning” = organising them.</p>
+            </div>
+            <h3>The problem ERP solves</h3>
+            <p>Imagine a trading company <b>without</b> ERP:</p>
+            <ul class="clean">
+              <li>The <b>sales</b> team keeps its own register of what was sold.</li>
+              <li>The <b>store</b> keeps a separate stock register.</li>
+              <li>The <b>accountant</b> keeps a third set of books in Excel or a manual ledger.</li>
+            </ul>
+            <p>Now the problems start. Sales sold 100 pieces, but the store register shows 90. The accountant bills for 95. Nobody knows which number is true. Stock runs out but nobody noticed. Month-end closing takes two weeks because three registers must be matched. <span class="urdu">(Teen alag register = teen alag sach. Yahi asal masla hai.)</span></p>
+            <p>With ERP, there is <b>one system and one database</b>. Sales makes a sale → stock goes down automatically → the accounting entry is created automatically. Everybody sees the <b>same, live numbers</b>.</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 300" role="img" aria-label="Diagram: without ERP each department keeps separate records; with ERP all departments share one central database">
+                <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text x="180" y="24" text-anchor="middle" class="svg-title">WITHOUT ERP — separate registers</text>
+                <rect x="40" y="44" width="120" height="46" rx="8" class="svg-box"/><text x="100" y="72" text-anchor="middle" class="svg-title" font-size="13">Sales register</text>
+                <rect x="240" y="44" width="120" height="46" rx="8" class="svg-box"/><text x="300" y="72" text-anchor="middle" class="svg-title" font-size="13">Stock register</text>
+                <rect x="40" y="110" width="120" height="46" rx="8" class="svg-box"/><text x="100" y="138" text-anchor="middle" class="svg-title" font-size="13">Excel accounts</text>
+                <rect x="240" y="110" width="120" height="46" rx="8" class="svg-box"/><text x="300" y="138" text-anchor="middle" class="svg-title" font-size="13">Salary sheets</text>
+                <text x="200" y="196" text-anchor="middle" class="svg-sub">Numbers do not match ✗ &nbsp;·&nbsp; Same work typed again and again ✗</text>
+                <text x="200" y="218" text-anchor="middle" class="svg-sub">Month-end closing is slow and painful ✗</text>
+                <text x="530" y="24" text-anchor="middle" class="svg-title">WITH ERP — one system</text>
+                <rect x="440" y="44" width="86" height="42" rx="8" class="svg-box-a"/><text x="483" y="70" text-anchor="middle" class="svg-title" font-size="13">Sales</text>
+                <rect x="545" y="44" width="86" height="42" rx="8" class="svg-box-a"/><text x="588" y="70" text-anchor="middle" class="svg-title" font-size="13">Purchase</text>
+                <rect x="440" y="196" width="86" height="42" rx="8" class="svg-box-a"/><text x="483" y="222" text-anchor="middle" class="svg-title" font-size="13">Accounts</text>
+                <rect x="545" y="196" width="86" height="42" rx="8" class="svg-box-a"/><text x="588" y="222" text-anchor="middle" class="svg-title" font-size="13">HR / Salary</text>
+                <rect x="462" y="118" width="150" height="48" rx="10" class="svg-box-g"/><text x="537" y="140" text-anchor="middle" class="svg-title" font-size="13">ONE DATABASE</text><text x="537" y="158" text-anchor="middle" class="svg-sub">same live data for all</text>
+                <path d="M483 86 L510 118" class="svg-arrow"/><path d="M588 86 L565 118" class="svg-arrow"/>
+                <path d="M510 166 L483 196" class="svg-arrow"/><path d="M565 166 L588 196" class="svg-arrow"/>
+                <text x="537" y="272" text-anchor="middle" class="svg-sub">Type once → every department sees it instantly ✓</text>
+              </svg>
+              <figcaption>ERP in one picture: many departments, one shared truth. This “one database” idea is the heart of SAP — remember it for the exam.</figcaption>
+            </figure>
+            <div class="box analogy"><span class="box-title">Analogy — the family WhatsApp group</span>
+              <p>Without ERP, a family plans a wedding on separate phone calls — everyone has a different guest count. With ERP, there is <b>one WhatsApp group</b>: one message, everyone sees the same list, instantly. ERP is that one group for the whole company.</p>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick</span>
+              <p>ERP = <b>“Ek Record Poora”</b> — one record for the whole company. Whenever the exam says “integrated”, “real-time” or “single source of truth”, think ERP.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 3 WHAT IS SAP ============ -->
+          <section class="lesson" id="s3" data-toc>
+            <h2><span class="no">03</span> What is SAP?</h2>
+            <p>Now the main word itself.</p>
+            <div class="box term"><span class="box-title">New word — SAP</span>
+              <p><b>SAP</b> is the name of a German software company (started in 1972), <b>and</b> the name of its famous ERP software. Full form: <b>S</b>ystems, <b>A</b>pplications &amp; <b>P</b>roducts in Data Processing. When people say “our company uses SAP”, they mean the software. When they say “SAP announced…”, they mean the company.</p>
+            </div>
+            <p>SAP is the world's most widely used ERP software. Very large companies — manufacturers, banks, textile mills, oil companies, hospitals, governments — run their daily business on it. In Pakistan too, most large companies (mills, pharma, FMCG, banks) use SAP, which is why SAP skills are valuable here.</p>
+            <h3>Why do companies pay so much for SAP?</h3>
+            <ul class="clean">
+              <li><b>Integration</b> — all departments in one system (the ERP idea from Section 2).</li>
+              <li><b>Real-time</b> — reports show today's live position, not last month's guess.</li>
+              <li><b>Standard process</b> — SAP follows world best practices; companies adjust their working to SAP's proven way.</li>
+              <li><b>Control</b> — every entry is recorded with who made it and when; nothing is “lost”.</li>
+            </ul>
+            <div class="box analogy"><span class="box-title">Analogy — SAP is like a big hospital system</span>
+              <p>In a small clinic, one doctor keeps a paper file. In a big hospital, reception, laboratory, pharmacy and billing all open the <b>same patient file</b> on the system. The lab result appears for the doctor instantly, and billing already knows the charges. That shared file = SAP for a business.</p>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick — SAP full form</span>
+              <p><b>S</b>ystems, <b>A</b>pplications, <b>P</b>roducts. Think: <b>“Sub Accounts Pehle”</b>… no — better: SAP = <b>S</b>oftware for <b>A</b>ccounts and <b>P</b>rocesses. Not the official full form, but it reminds you what it does. The official full form above is what to write in the exam.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 4 STORY ============ -->
+          <section class="lesson" id="s4" data-toc>
+            <h2><span class="no">04</span> Story: a small business moves to SAP</h2>
+            <p class="sub">A real-life style example. Read it slowly — almost every SAP idea appears in this story.</p>
+            <p><b>Ahmed</b> runs a growing fabric trading business. In the beginning, one accountant, <b>Bilal</b>, manages everything in paper ledgers and Excel:</p>
+            <ul class="clean">
+              <li>He writes the <b>journal</b> by hand, then posts to the <b>ledger</b>, then makes a <b>trial balance</b> at month end.</li>
+              <li>Customer dues (<span class="urdu">udhaar</span>) are in one notebook; supplier payments in another.</li>
+              <li>The godown keeper phones stock figures every evening — they rarely match the sales register.</li>
+            </ul>
+            <p>The business grows: 3 branches, 40 staff, thousands of invoices. The old way breaks. Ahmed's company buys SAP. Now watch how <b>your accounting stays the same, only the tool changes</b>:</p>
+            <div class="tblwrap"><table>
+              <tr><th style="width:38%">What Bilal did manually</th><th>What happens in SAP now</th></tr>
+              <tr><td>Write a journal entry in the register</td><td>He <b>posts a document</b> in SAP. (In SAP, a journal entry is called a <b>Document</b> — Lesson 9 explains this fully.)</td></tr>
+              <tr><td>Post the entry into each ledger book</td><td>SAP updates all ledgers <b>automatically, at the same second</b>. No separate posting work.</td></tr>
+              <tr><td>Prepare trial balance at month-end</td><td>Trial balance is available <b>any time, live</b> — because data is always up to date.</td></tr>
+              <tr><td>Phone the godown for stock</td><td>Stock is visible on screen; a sale reduces it instantly.</td></tr>
+              <tr><td>Chase customers for payment from a notebook</td><td>SAP shows a live list of who owes how much and since when (this is <b>Accounts Receivable</b>).</td></tr>
+              <tr><td>Month-end closing takes 12 days</td><td>Closing becomes a short, step-by-step routine (the exam's <b>Financial Closing</b> topic).</td></tr>
+            </table></div>
+            <p>Notice the lesson inside the story: <b>SAP did not teach Bilal new accounting. It removed the copying, matching and waiting.</b> Your accounting knowledge is the real skill; SAP is the tool you are learning to operate. <span class="urdu">(Accounting aap ko pehle se aati hai — ab sirf tool seekhna hai.)</span></p>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 5 MODULES ============ -->
+          <section class="lesson" id="s5" data-toc>
+            <h2><span class="no">05</span> SAP Modules — the big map</h2>
+            <div class="box term"><span class="box-title">New word — Module</span>
+              <p>A <b>module</b> is one big part of SAP made for one department's work. Accounts has its module, Purchase has its module, Sales has its module — but all modules sit on the <b>same one database</b>, so they talk to each other automatically.</p>
+            </div>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 330" role="img" aria-label="Map of the main SAP modules around one database">
+                <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <rect x="270" y="138" width="180" height="56" rx="12" class="svg-box-g"/><text x="360" y="163" text-anchor="middle" class="svg-title">SAP S/4HANA</text><text x="360" y="182" text-anchor="middle" class="svg-sub">one database (HANA)</text>
+                <rect x="30" y="30" width="170" height="58" rx="10" class="svg-box-a"/><text x="115" y="55" text-anchor="middle" class="svg-title" font-size="14">FI — Financial Accounting</text><text x="115" y="74" text-anchor="middle" class="svg-sub">ledgers, AP, AR, assets</text>
+                <rect x="275" y="30" width="170" height="58" rx="10" class="svg-box-a"/><text x="360" y="55" text-anchor="middle" class="svg-title" font-size="14">CO — Controlling</text><text x="360" y="74" text-anchor="middle" class="svg-sub">costs, profit centres</text>
+                <rect x="520" y="30" width="170" height="58" rx="10" class="svg-box"/><text x="605" y="55" text-anchor="middle" class="svg-title" font-size="14">MM — Materials Mgmt</text><text x="605" y="74" text-anchor="middle" class="svg-sub">purchase &amp; stock</text>
+                <rect x="30" y="242" width="170" height="58" rx="10" class="svg-box"/><text x="115" y="267" text-anchor="middle" class="svg-title" font-size="14">SD — Sales &amp; Distribution</text><text x="115" y="286" text-anchor="middle" class="svg-sub">sales orders, billing</text>
+                <rect x="275" y="242" width="170" height="58" rx="10" class="svg-box"/><text x="360" y="267" text-anchor="middle" class="svg-title" font-size="14">HCM — Human Capital</text><text x="360" y="286" text-anchor="middle" class="svg-sub">employees, payroll</text>
+                <rect x="520" y="242" width="170" height="58" rx="10" class="svg-box"/><text x="605" y="267" text-anchor="middle" class="svg-title" font-size="14">PP — Production Planning</text><text x="605" y="286" text-anchor="middle" class="svg-sub">manufacturing</text>
+                <path d="M200 80 L272 140" class="svg-line"/><path d="M360 88 L360 138" class="svg-line"/><path d="M520 80 L448 140" class="svg-line"/>
+                <path d="M200 250 L272 192" class="svg-line"/><path d="M360 242 L360 194" class="svg-line"/><path d="M520 250 L448 192" class="svg-line"/>
+              </svg>
+              <figcaption>The SAP modules map. FI and CO (highlighted) are your world — together they are called FICO. The other modules feed data into FI automatically: an MM purchase creates an FI payable; an SD sale creates an FI receivable.</figcaption>
+            </figure>
+            <div class="tblwrap"><table>
+              <tr><th>Module</th><th>Full name</th><th>Department it serves</th><th>One-line job</th></tr>
+              <tr><td class="hl"><b>FI</b></td><td class="hl">Financial Accounting</td><td class="hl">Accounts (external reporting)</td><td class="hl">Legal books: ledgers, payables, receivables, assets, financial statements</td></tr>
+              <tr><td class="hl"><b>CO</b></td><td class="hl">Controlling</td><td class="hl">Management / costing</td><td class="hl">Internal view: where costs happen, which product/branch is profitable</td></tr>
+              <tr><td><b>MM</b></td><td>Materials Management</td><td>Purchase &amp; store</td><td>Buying goods, receiving them, keeping stock</td></tr>
+              <tr><td><b>SD</b></td><td>Sales &amp; Distribution</td><td>Sales</td><td>Selling goods, delivery, billing the customer</td></tr>
+              <tr><td><b>HCM</b></td><td>Human Capital Management</td><td>HR</td><td>Employees and salary (payroll)</td></tr>
+              <tr><td><b>PP</b></td><td>Production Planning</td><td>Factory</td><td>Planning and recording manufacturing</td></tr>
+            </table></div>
+            <div class="box trick"><span class="box-title">Memory trick — module short forms</span>
+              <p><b>FI</b> = <b>FI</b>nance (bahar ki duniya ke liye reports). <b>CO</b> = <b>CO</b>sts (andar ki costing). <b>MM</b> = <b>M</b>aal <b>M</b>angwana (purchase). <b>SD</b> = <b>S</b>ell &amp; <b>D</b>eliver. If a question mentions stock purchase → MM; a customer invoice → SD creates it, FI records it.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 6 FICO ============ -->
+          <section class="lesson" id="s6" data-toc>
+            <h2><span class="no">06</span> What is FICO? FI vs CO</h2>
+            <p><b>FICO</b> is simply <b>FI + CO</b> said together — the finance side of SAP. Your exam, C_TS4FI, is about the <b>FI</b> part (with a small touch of how FI connects to the rest).</p>
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>FI — Financial Accounting</h4>
+                <p>The <b>official, legal</b> accounting of the company — the same Financial Accounting you studied. It answers: <i>“What do the law, the tax office, the bank and the owners need to see?”</i></p>
+                <ul class="clean">
+                  <li>General Ledger (all accounts)</li>
+                  <li>Accounts Payable — pay suppliers</li>
+                  <li>Accounts Receivable — collect from customers</li>
+                  <li>Asset Accounting — fixed assets &amp; depreciation</li>
+                  <li>Bank Accounting — bank &amp; cash</li>
+                  <li>Financial statements: Balance Sheet &amp; P&amp;L</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>CO — Controlling</h4>
+                <p>The <b>internal, management</b> view of the same money. It answers: <i>“Where exactly did we spend, and which product, branch or order made profit or loss?”</i> Not for the tax office — for the boss.</p>
+                <ul class="clean">
+                  <li>Cost centres (departments that spend)</li>
+                  <li>Profit centres (units that earn)</li>
+                  <li>Product costing</li>
+                  <li>Internal orders (small projects)</li>
+                </ul>
+                <p><i>CO has its own separate certification. For C_TS4FI you only need to know what CO is and that FI and CO stay reconciled (matched) with each other.</i></p>
+              </div>
+            </div>
+            <h3>Your accounting knowledge → SAP names (the bridge table)</h3>
+            <p>Keep coming back to this table. It is the fastest way to feel at home in SAP:</p>
+            <div class="tblwrap"><table>
+              <tr><th>You already know this</th><th>SAP calls it</th><th>Where it lives in FI</th></tr>
+              <tr><td>Journal entry</td><td><b>Document</b> (Accounting Document)</td><td>Posted with T-codes like FB50 / F-02 (Lesson 9–10)</td></tr>
+              <tr><td>Ledger / account book</td><td><b>G/L Account</b> (General Ledger account)</td><td>General Ledger Accounting</td></tr>
+              <tr><td>List of all ledger accounts</td><td><b>Chart of Accounts</b></td><td>Lesson 7</td></tr>
+              <tr><td>Creditors (jin ko paisay denay hain)</td><td><b>Accounts Payable (AP)</b> — Vendors</td><td>Lesson 10 onwards</td></tr>
+              <tr><td>Debtors (jin se paisay lenay hain)</td><td><b>Accounts Receivable (AR)</b> — Customers</td><td>Later lessons</td></tr>
+              <tr><td>Fixed assets register</td><td><b>Asset Accounting (FI-AA)</b></td><td>Later lessons</td></tr>
+              <tr><td>Trial balance / reports</td><td><b>G/L Reporting</b> &amp; Financial Statements</td><td>Lesson 10</td></tr>
+              <tr><td>Financial year (e.g. Jul–Jun in Pakistan)</td><td><b>Fiscal Year Variant</b></td><td>Lesson 6</td></tr>
+            </table></div>
+            <div class="box analogy"><span class="box-title">Analogy — FI is the report card, CO is the diary</span>
+              <p>FI is like a student's <b>official report card</b> — shown to parents, school and board; it must follow strict rules. CO is the student's <b>private study diary</b> — “I wasted 2 hours on Sunday, maths is weak” — only for self-improvement. Same student, two views. Same company: FI for the outside world, CO for inside management.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 7 HISTORY ============ -->
+          <section class="lesson" id="s7" data-toc>
+            <h2><span class="no">07</span> History: R/3 → ECC → S/4HANA</h2>
+            <p class="sub">Only the short version — exactly what a beginner needs for the exam.</p>
+            <p>SAP software has had three famous generations. Each generation kept the same accounting logic but became faster and simpler:</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 150" role="img" aria-label="Timeline: SAP R/3, then SAP ECC, then SAP S/4HANA">
+                <defs><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <line x1="30" y1="60" x2="690" y2="60" class="svg-arrow"/>
+                <rect x="40" y="30" width="170" height="60" rx="10" class="svg-box"/><text x="125" y="56" text-anchor="middle" class="svg-title">SAP R/3</text><text x="125" y="76" text-anchor="middle" class="svg-sub">1992 · the classic</text>
+                <rect x="275" y="30" width="170" height="60" rx="10" class="svg-box"/><text x="360" y="56" text-anchor="middle" class="svg-title">SAP ECC</text><text x="360" y="76" text-anchor="middle" class="svg-sub">2004 · ERP Central Component</text>
+                <rect x="510" y="30" width="170" height="60" rx="10" class="svg-box-a"/><text x="595" y="56" text-anchor="middle" class="svg-title">SAP S/4HANA</text><text x="595" y="76" text-anchor="middle" class="svg-sub">2015 · runs only on HANA</text>
+                <text x="360" y="125" text-anchor="middle" class="svg-sub">Same accounting heart — a new, faster engine each time.</text>
+              </svg>
+              <figcaption>The three generations. The exam expects you to know that S/4HANA is the current generation and that it <b>only</b> runs on the HANA database.</figcaption>
+            </figure>
+            <ul class="clean">
+              <li><b>R/3 (1992)</b> — the version that made SAP famous worldwide. “R” = Real-time, “3” = three layers (you will meet these layers in Lesson 2 — SAP Architecture).</li>
+              <li><b>ECC (2004)</b> — full name: <b>ERP Central Component</b>. The generation most older companies still run today. It could run on many different databases (Oracle, SQL Server, etc.).</li>
+              <li><b>S/4HANA (2015)</b> — the current generation. “S” = <b>S</b>imple / <b>S</b>uite, “4” = 4th generation, “HANA” = the database it runs on. It runs <b>only</b> on HANA.</li>
+            </ul>
+            <div class="box trick"><span class="box-title">Memory trick — the car story</span>
+              <p>R/3 = the old reliable Mehran. ECC = a newer Corolla — same driving, more features. S/4HANA = the same car but with a <b>brand-new, much faster engine (HANA)</b> and a simpler dashboard. The driver (accountant) does the same job — the machine underneath changed.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 8 HANA ============ -->
+          <section class="lesson" id="s8" data-toc>
+            <h2><span class="no">08</span> What is the HANA database?</h2>
+            <div class="box term"><span class="box-title">New words — Database &amp; HANA</span>
+              <p>A <b>database</b> is the place where software stores all its data — every entry, every customer, every amount. <b>HANA</b> (High-Performance Analytic Appliance) is SAP's own database. Its special power: it keeps data in the computer's <b>memory (RAM)</b> instead of only on the slow hard disk, so reports that took hours now take seconds.</p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — desk vs godown</span>
+              <p>An old database is like keeping files in a <b>godown (warehouse)</b>: correct, but every report means a trip to fetch boxes. HANA is like keeping the files <b>on your desk, in RAM</b>: you look, and the answer is already in front of you. That is why S/4HANA reports are <b>real-time</b>.</p>
+            </div>
+            <p>Why does this matter to an accountant?</p>
+            <ul class="clean">
+              <li>No waiting for overnight report runs — the trial balance, customer dues and stock are <b>live</b>.</li>
+              <li>SAP could remove many old “total tables” and old duplicate copies of data. In S/4HANA, FI and CO data is stored <b>together in one table</b> — the <b>Universal Journal</b> (table name <b>ACDOCA</b>). You will study it in Lesson 9; for now just remember the name.</li>
+            </ul>
+            <div class="box trick"><span class="box-title">Memory trick</span>
+              <p><b>HANA = “Haath ke neeche, Abhi, No wait, Always live.”</b> Silly, but it sticks: data in memory = answers instantly.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 9 S4HANA EDITIONS ============ -->
+          <section class="lesson" id="s9" data-toc>
+            <h2><span class="no">09</span> What is S/4HANA? And its editions</h2>
+            <p><b>SAP S/4HANA</b> is the current version of SAP's ERP software — the full suite (FI, CO, MM, SD, …) rebuilt to run only on the HANA database, with a simpler data structure and a modern screen design (Fiori — Section 11).</p>
+            <h3>One software, three ways to run it (“editions”)</h3>
+            <p>“Edition” here simply means: <b>where the system lives and who looks after it.</b></p>
+            <div class="tblwrap"><table>
+              <tr><th>Edition</th><th>Simple meaning</th><th>Who manages the servers?</th></tr>
+              <tr><td><b>On-Premise</b></td><td>SAP installed on the company's <b>own</b> computers, in its own building</td><td>The company itself</td></tr>
+              <tr><td class="hl"><b>S/4HANA Cloud, Private Edition</b> <span class="examtag">YOUR EXAM</span></td><td class="hl">The company's <b>own private</b> SAP system, but hosted on cloud servers run for them — full freedom to customise, like on-premise, without owning the machines</td><td class="hl">SAP / cloud provider hosts it; the company keeps control of its system</td></tr>
+              <tr><td><b>S/4HANA Cloud, Public Edition</b></td><td>A shared, ready-made SAP run by SAP; all customers use the same standard processes, very little customisation</td><td>SAP</td></tr>
+            </table></div>
+            <div class="box term"><span class="box-title">New word — Cloud</span>
+              <p><b>Cloud</b> simply means the software runs on powerful computers (servers) in a data centre, and you use it through the internet — instead of installing it on a machine in your own office. Like Gmail: your email lives “in the cloud”, not on your laptop.</p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — house, rented house, hotel</span>
+              <p><b>On-Premise</b> = your own house: full control, you maintain everything. <b>Private Edition</b> = a rented house only for you: you arrange the furniture your way, the landlord maintains the building. <b>Public Edition</b> = a hotel room: clean and ready, but you cannot change the walls. Your exam C_TS4FI is about the <b>rented house — Private Edition</b> (which behaves almost like on-premise).</p>
+            </div>
+            <p>One more idea you will meet often in this exam:</p>
+            <div class="box term"><span class="box-title">New word — Clean Core</span>
+              <p><b>Clean Core</b> means: keep the standard SAP system clean — use SAP's standard processes and approved add-ons instead of heavily modifying the core software, so upgrades stay easy. It is one of the official C_TS4FI topic areas (small weight, up to ~10%). <span class="urdu">(System ko saaf rakho taake upgrade aasan ho.)</span></p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 10 COMPARISON ============ -->
+          <section class="lesson" id="s10" data-toc>
+            <h2><span class="no">10</span> S/4HANA vs ECC — the comparison table</h2>
+            <p class="sub">This table is high-value for the exam. Read it row by row.</p>
+            <div class="tblwrap"><table>
+              <tr><th style="width:26%">Point</th><th style="width:35%">SAP ECC (old)</th><th>SAP S/4HANA (new)</th></tr>
+              <tr><td><b>Database</b></td><td>Any database (Oracle, SQL Server, DB2…)</td><td class="hl"><b>Only SAP HANA</b></td></tr>
+              <tr><td><b>FI &amp; CO data</b></td><td>Stored in separate tables; FI and CO had to be <b>reconciled</b> (matched) at period end</td><td class="hl">Stored <b>together</b> in one table — the Universal Journal (<b>ACDOCA</b>); no FI–CO reconciliation needed</td></tr>
+              <tr><td><b>Customer / Vendor</b></td><td>Customer and vendor masters kept separately</td><td class="hl">One combined concept: <b>Business Partner (BP)</b></td></tr>
+              <tr><td><b>Screens</b></td><td>Classic SAP GUI screens only</td><td class="hl">Modern <b>Fiori</b> apps (plus GUI still available)</td></tr>
+              <tr><td><b>Reporting speed</b></td><td>Many reports needed totals tables / overnight runs</td><td class="hl"><b>Real-time</b> reporting directly from live data</td></tr>
+              <tr><td><b>Ledger idea</b></td><td>New G/L available, but classic G/L still possible</td><td class="hl">Only the (new) G/L — with leading + non-leading ledgers (Lesson 8)</td></tr>
+            </table></div>
+            <div class="box trick"><span class="box-title">Memory trick — “S/4 = Simple &amp; Single”</span>
+              <p>S/4HANA's whole story is <b>single</b>: single database (HANA only), single journal table (ACDOCA), single partner (BP). If an exam option says “one / single / together”, it usually points to S/4HANA.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 11 GUI & FIORI ============ -->
+          <section class="lesson" id="s11" data-toc>
+            <h2><span class="no">11</span> How you use SAP: GUI and Fiori</h2>
+            <p>SAP is software — so how does a person actually work in it? There are two “faces” of SAP. Both open the <b>same</b> system and the <b>same</b> data; only the screen style differs.</p>
+            <div class="box term"><span class="box-title">New words — SAP GUI &amp; Fiori</span>
+              <p><b>SAP GUI</b> (Graphical User Interface) is the classic SAP program you install on your computer — grey screens, menus, and short codes called T-codes. <b>SAP Fiori</b> is the new, modern face: it opens in a web browser as colourful tiles (apps), works on phone and tablet, and is designed to be simple. Think: GUI = the old reliable office desk; Fiori = the new smartphone-style home screen.</p>
+            </div>
+            <p><i>The two pictures below are <b>illustrations</b> (drawn copies) of what the screens look like — SAP screens cannot be copied here as real screenshots, so we re-created their look for learning.</i></p>
+            <div class="screen" aria-label="Illustration of the classic SAP GUI screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> SAP GUI — Easy Access screen (illustration)</div>
+              <div class="screen-body">
+                <span class="dim">Menu&nbsp;&nbsp;Edit&nbsp;&nbsp;Favorites&nbsp;&nbsp;Extras&nbsp;&nbsp;System&nbsp;&nbsp;Help</span><br/>
+                Command field: <span class="hl2">FB50</span> ← type a T-code here and press Enter<br/>
+                ▸ SAP menu<br/>
+                &nbsp;&nbsp;▸ Accounting<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;▸ Financial Accounting<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▸ General Ledger<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▸ Accounts Payable<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▸ Accounts Receivable
+              </div>
+            </div>
+            <div class="screen" aria-label="Illustration of the SAP Fiori launchpad">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> SAP Fiori Launchpad — apps as tiles (illustration)</div>
+              <div class="fiori-grid">
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg><div class="t-name">Manage Journal Entries</div></div>
+                <div class="tile"><div class="t-num">37</div><div class="t-name">Supplier invoices to clear</div></div>
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg><div class="t-name">Manage Banks</div></div>
+                <div class="tile"><div class="t-num">12</div><div class="t-name">Customer payments overdue</div></div>
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18M8 17V9m5 8V5m5 12v-7"/></svg><div class="t-name">Balance Sheet / P&amp;L</div></div>
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div class="t-name">Schedule Closing Jobs</div></div>
+              </div>
+            </div>
+            <div class="box term"><span class="box-title">New word — T-code</span>
+              <p>A <b>T-code (Transaction Code)</b> is a short code that opens a screen or task in SAP — like a shortcut. Example: <code>FB50</code> opens “Post a journal entry”. You will collect T-codes lesson by lesson; the exam loves them. <span class="urdu">(T-code = kisi screen ka shortcut number/name.)</span></p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — GUI is the kitchen, Fiori is the restaurant menu</span>
+              <p>The GUI is the full professional kitchen — every tool, some skill needed. Fiori is the printed menu with pictures — pick a tile, get the dish. Both serve the same food (same data).</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 12 WORK WORDS ============ -->
+          <section class="lesson" id="s12" data-toc>
+            <h2><span class="no">12</span> Words you will hear at work</h2>
+            <p class="sub">Four everyday SAP-job words. Each one line, no jargon.</p>
+            <dl class="glossary">
+              <dt>Implementation</dt>
+              <dd>Setting up SAP in a company for the first time — configuring it to match the company's structure and way of working. <span class="urdu">(Kisi company mein pehli dafa SAP lagana aur set karna.)</span></dd>
+              <dt>Consultant</dt>
+              <dd>The SAP expert who does the implementation and solves problems. An <b>FI consultant</b> is the finance specialist — the job this exam prepares you for.</dd>
+              <dt>End User</dt>
+              <dd>The normal staff member who uses SAP daily for their job — e.g. the accountant posting entries. Consultants set the system up; end users run it.</dd>
+              <dt>Configuration</dt>
+              <dd>Setting SAP's options without programming — like setting up a new phone (language, ringtone, accounts) before using it. In SAP, configuration is done in a place called <b>SPRO</b> (you will meet SPRO properly in Lesson 5). Most of an FI consultant's job is configuration.</dd>
+              <dt>Client (in SAP)</dt>
+              <dd>Warning — this word is tricky! In SAP, a <b>Client</b> is not a customer. It is a separate, self-contained “world” inside one SAP system — for example one system can hold a <i>training</i> client, a <i>testing</i> client and the real <i>production</i> client. Lesson 2 explains this with the architecture.</dd>
+            </dl>
+            <div class="box trap"><span class="box-title">Exam trap — the word “Client”</span>
+              <p>In normal English, client = customer. In SAP, <b>Client = a separate environment inside the system</b> (identified by a 3-digit number like 100, 200, 800). The exam uses the SAP meaning. If a question says “client-dependent”, it means “belongs to one client only, not shared across clients”.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 13 EXAM OVERVIEW ============ -->
+          <section class="lesson" id="s13" data-toc>
+            <h2><span class="no">13</span> The C_TS4FI exam — the full picture</h2>
+            <p class="sub">Why SAP FICO matters for jobs, and exactly what exam you are preparing for.</p>
+            <p>Companies keep moving from ECC to S/4HANA, and every move needs FI consultants and trained accountants. That is why SAP FICO is one of the most in-demand SAP skills — in Pakistan and abroad (Gulf, Europe, remote work). The certificate that proves your skill is <b>C_TS4FI</b>.</p>
+            <div class="tblwrap"><table>
+              <tr><th style="width:34%">Exam fact</th><th>Details</th></tr>
+              <tr><td><b>Full name</b></td><td>SAP Certified Associate — SAP S/4HANA Cloud Private Edition, Financial Accounting</td></tr>
+              <tr><td><b>Exam code</b></td><td>C_TS4FI</td></tr>
+              <tr><td><b>Level</b></td><td>Associate (the starting professional level — right for you)</td></tr>
+              <tr><td><b>Questions</b></td><td>80 questions</td></tr>
+              <tr><td><b>Time</b></td><td>180 minutes (3 hours) — about 2 minutes per question</td></tr>
+              <tr><td><b>Passing score</b></td><td>61% (cut score for the current C_TS4FI version — SAP can revise it with new versions)</td></tr>
+              <tr><td><b>Question types</b></td><td>Multiple choice — some questions have <b>one</b> correct answer, some have <b>two or three</b>. The question tells you how many to choose. No negative marking.</td></tr>
+              <tr><td><b>Rules</b></td><td>Closed book — no SAP system, no notes, no help during the exam. Everything must be in your head: concepts, T-codes, configuration logic.</td></tr>
+              <tr><td><b>How this guide helps</b></td><td>Each lesson maps to an exam topic below, and ends with key points, traps and practice MCQs in the same style.</td></tr>
+            </table></div>
+            <h3>The six exam topic areas (official syllabus)</h3>
+            <p>Five big areas carry roughly equal heavy weight (about 11–20% each), and two smaller ones sit below ~10%:</p>
+            <div class="weightbar" aria-hidden="true">
+              <div style="width:16%;background:var(--accent)"></div>
+              <div style="width:16%;background:var(--gold)"></div>
+              <div style="width:16%;background:var(--green)"></div>
+              <div style="width:16%;background:var(--urdu)"></div>
+              <div style="width:16%;background:var(--red)"></div>
+              <div style="width:10%;background:var(--ink-soft)"></div>
+              <div style="width:10%;background:var(--line)"></div>
+            </div>
+            <p class="legend">Rough visual only — SAP publishes ranges, not exact percentages, and may update them at any time.</p>
+            <div class="tblwrap"><table>
+              <tr><th>Exam topic area</th><th>Weight</th><th>Covered in this course</th></tr>
+              <tr><td>General Ledger Accounting</td><td>&gt; 12%</td><td>Lessons 5–10 and onwards</td></tr>
+              <tr><td>Accounts Payable &amp; Accounts Receivable</td><td>&gt; 12%</td><td>Lesson 10 and onwards</td></tr>
+              <tr><td>Asset Accounting</td><td>&gt; 12%</td><td>Later lessons</td></tr>
+              <tr><td>Financial Closing</td><td>&gt; 12%</td><td>Later lessons</td></tr>
+              <tr><td>Organizational Assignments &amp; Process Integration</td><td>&gt; 12%</td><td>Lessons 5–6 and throughout</td></tr>
+              <tr><td class="hl"><b>Overview &amp; Deployment of SAP S/4HANA</b></td><td class="hl">&lt; 8–10%</td><td class="hl"><b>← This lesson (Lesson 1)</b> and Lesson 2</td></tr>
+              <tr><td>Managing Clean Core</td><td>≤ 10%</td><td>Introduced in Section 9 of this lesson</td></tr>
+            </table></div>
+            <div class="box trick"><span class="box-title">Exam strategy</span>
+              <p>Lesson 1's topic is small in weight — but it is the <b>easiest marks in the whole exam</b>. Definitions, the S/4HANA vs ECC differences, editions and Fiori/GUI questions are direct. Learn this lesson well and you start the exam with confidence. <span class="urdu">(Aasan number pehle pakke karo.)</span></p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 14 TRAPS ============ -->
+          <section class="lesson" id="s14" data-toc>
+            <h2><span class="no">14</span> Exam traps &amp; beginner confusions — Lesson 1</h2>
+            <div class="box trap"><span class="box-title">Trap 1 — “S/4HANA can run on any database”</span>
+              <p>False. ECC could run on many databases. <b>S/4HANA runs ONLY on SAP HANA.</b> This is the single most-tested fact of this topic.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 2 — Mixing up FI and CO</span>
+              <p>FI = external, legal reporting (for tax, banks, auditors). CO = internal management costing. If an option says “CO prepares the statutory balance sheet” — wrong, that is FI.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 3 — “Client” means customer</span>
+              <p>Not in SAP. Client = a separate environment inside the system (Section 12). Customer is a different word in SAP — a business partner you sell to.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 4 — Fiori replaced everything</span>
+              <p>Fiori is the new face, but the <b>SAP GUI still exists and works</b> in S/4HANA, and both use the same data. “GUI is removed in S/4HANA” is a wrong statement.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 5 — Private Edition = Public Cloud</span>
+              <p>No. <b>Private Edition</b> = your own dedicated system on cloud hosting, highly customisable (like on-premise). <b>Public Edition</b> = shared, standard, SAP-run. Your exam is Private Edition.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 6 — SAP is only accounting software</span>
+              <p>SAP is a full ERP — accounting is just one part (FI/CO). Purchase, sales, stock, HR and production are all inside the same system. That integration is the whole point of ERP.</p>
+            </div>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 15 GLOSSARY ============ -->
+          <section class="lesson" id="s15" data-toc>
+            <h2><span class="no">15</span> Lesson 1 glossary (A–Z)</h2>
+            <p class="sub">Every new word of this lesson, in one place. Read it once now; use it for revision later.</p>
+            <dl class="glossary">
+              <dt>ACDOCA</dt><dd>The table name of the Universal Journal in S/4HANA — the single table where FI and CO line items are stored together. (Full lesson: Lesson 9.)</dd>
+              <dt>Business Partner (BP)</dt><dd>In S/4HANA, customers and vendors are created once as a “Business Partner” instead of in separate places.</dd>
+              <dt>Clean Core</dt><dd>Keeping the standard SAP system unmodified as much as possible, so upgrades stay easy.</dd>
+              <dt>Client</dt><dd>In SAP: a separate, self-contained environment inside one system (e.g. testing vs live), shown by a 3-digit number. Not a customer!</dd>
+              <dt>Cloud</dt><dd>Software running on servers in a data centre, used over the internet, instead of on your own office computer.</dd>
+              <dt>CO (Controlling)</dt><dd>SAP's internal costing module — cost centres, profit centres, product costing. For management, not for the tax office.</dd>
+              <dt>Configuration</dt><dd>Setting SAP's built-in options to fit a company — no programming needed. Done mainly in SPRO.</dd>
+              <dt>Consultant</dt><dd>An SAP expert who implements and supports SAP. An FI consultant specialises in finance.</dd>
+              <dt>Database</dt><dd>The store where the software keeps all data — every entry, master record and amount.</dd>
+              <dt>Document</dt><dd>SAP's name for a posted journal entry. Every posting in SAP creates a document with a unique number.</dd>
+              <dt>ECC</dt><dd>ERP Central Component — the previous SAP generation (2004), runnable on many databases.</dd>
+              <dt>End User</dt><dd>A normal employee who uses SAP daily for their own job (e.g. an accountant posting entries).</dd>
+              <dt>ERP</dt><dd>Enterprise Resource Planning — one software for the whole company, sharing one database.</dd>
+              <dt>FI (Financial Accounting)</dt><dd>SAP's legal/external accounting module — G/L, AP, AR, assets, bank, financial statements.</dd>
+              <dt>FICO</dt><dd>FI + CO spoken together — the finance side of SAP.</dd>
+              <dt>Fiori</dt><dd>SAP's modern, browser-based face — apps shown as tiles; works on mobile too.</dd>
+              <dt>G/L Account</dt><dd>General Ledger account — SAP's name for a ledger account (e.g. Cash, Sales, Rent Expense).</dd>
+              <dt>HANA</dt><dd>SAP's in-memory database. Keeps data in RAM for very fast, real-time reporting. S/4HANA runs only on HANA.</dd>
+              <dt>Implementation</dt><dd>The project of setting up SAP in a company for the first time.</dd>
+              <dt>Module</dt><dd>One big part of SAP for one department's work (FI, CO, MM, SD, HCM, PP…), all sharing one database.</dd>
+              <dt>On-Premise</dt><dd>SAP installed on the company's own servers, managed by the company itself.</dd>
+              <dt>Private Edition</dt><dd>S/4HANA Cloud Private Edition — a company's own dedicated S/4HANA system hosted in the cloud; the edition your C_TS4FI exam covers.</dd>
+              <dt>R/3</dt><dd>The classic SAP generation of 1992 that made SAP world-famous.</dd>
+              <dt>S/4HANA</dt><dd>The current SAP ERP generation (2015) — runs only on HANA, simpler data model, Fiori user experience.</dd>
+              <dt>SAP</dt><dd>German company (founded 1972) and its ERP software. Full form: Systems, Applications &amp; Products in Data Processing.</dd>
+              <dt>SAP GUI</dt><dd>The classic installed program for using SAP — menus, trees and T-codes.</dd>
+              <dt>SPRO</dt><dd>The transaction where consultants do configuration settings. (You will use it from Lesson 5.)</dd>
+              <dt>T-code</dt><dd>Transaction Code — a short shortcut code that opens a screen/task in SAP, e.g. FB50.</dd>
+              <dt>Universal Journal</dt><dd>S/4HANA's idea of storing FI and CO entries together in one table (ACDOCA), so no FI–CO reconciliation is needed.</dd>
+            </dl>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 16 SUMMARY ============ -->
+          <section class="lesson" id="s16" data-toc>
+            <h2><span class="no">16</span> Summary — key points for C_TS4FI</h2>
+            <ul class="clean">
+              <li><b>ERP</b> = one software, one database, for the whole company. Integration + real-time data is its core promise.</li>
+              <li><b>SAP</b> = Systems, Applications &amp; Products in Data Processing — a German company (1972) and the world's leading ERP software.</li>
+              <li><b>Modules</b>: FI (legal accounting), CO (internal costing), MM (purchase/stock), SD (sales), HCM (HR/payroll), PP (production) — all on one database.</li>
+              <li><b>FICO</b> = FI + CO. Your exam is FI: G/L, AP, AR, Asset Accounting, Bank, Closing.</li>
+              <li>Generations: <b>R/3 (1992) → ECC (2004) → S/4HANA (2015)</b>.</li>
+              <li><b>S/4HANA runs only on the HANA database</b> — HANA is an in-memory database, so reporting is real-time.</li>
+              <li>S/4HANA simplifications: <b>one</b> journal table (ACDOCA / Universal Journal), <b>one</b> Business Partner for customers &amp; vendors.</li>
+              <li>Editions: On-Premise (own servers), <b>Cloud Private Edition</b> (own system, cloud-hosted — your exam), Cloud Public Edition (shared, standard, SAP-run).</li>
+              <li>Two faces, same data: classic <b>SAP GUI</b> (T-codes) and modern <b>Fiori</b> (browser tiles).</li>
+              <li>SAP meanings: <b>Client</b> = system environment, not customer. <b>Configuration</b> = settings without programming, done in <b>SPRO</b>.</li>
+              <li>Exam facts: <b>C_TS4FI · 80 questions · 180 minutes · 61% to pass</b> · this lesson's topic (Overview &amp; Deployment) weighs under ~10% — small but easy marks.</li>
+            </ul>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <!-- ============ 17 SELF TEST ============ -->
+          <section class="lesson" id="s17" data-toc>
+            <h2><span class="no">17</span> Self-test — 10 MCQs</h2>
+            <p class="sub">Exam style: choose one answer, get instant feedback. Aim for 8/10 before moving to Lesson 2.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart self-test</button>
+          <div class="mark-read-row"><button type="button" class="mark-read-btn" aria-pressed="false">Mark Read</button></div>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow" aria-hidden="true">→</span>
+            <div>
+              <b>Next: Lesson 2 — SAP Architecture</b><br/>
+              <span style="color:var(--ink-soft)">The three layers of SAP, what a Client really is, and how a request travels from your screen to the database — explained just as simply. Lesson 2 will arrive as its own separate document, like this one.</span>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 1 of the C_TS4FI Exam-Prep series · course created by Muhammad Asad Ullah Ibrahim · Screen pictures in this lesson are learning illustrations re-created in the style of SAP GUI / Fiori, not actual SAP screenshots · Exam facts (80 questions, 180 min, 61% cut score, topic weights) follow SAP's published C_TS4FI exam description; SAP may update them — always confirm on SAP's official certification page before booking.
+          </footer>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      // ---- Theme switch (in-memory; starts from system preference) ----
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent = (t==='dark') ? 'Light theme' : 'Dark theme'; }
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) apply('dark'); else apply('light');
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+        });
+      })();
+
+      // ---- Shared progress store (same store used by Lessons 2-10 for gating) ----
+      var SAP_STORE_KEY='sapCts4fiProgress_v1';
+      function sapLoadStore(){
+        try{
+          var d=JSON.parse(localStorage.getItem(SAP_STORE_KEY)||'{}');
+          if(!d||typeof d!=='object'||Array.isArray(d)) d={};
+          if(!d.lessons||typeof d.lessons!=='object') d.lessons={};
+          return d;
+        }catch(e){ return {lessons:{}}; }
+      }
+      function sapSaveStore(d){
+        try{ localStorage.setItem(SAP_STORE_KEY,JSON.stringify(d)); }catch(e){}
+      }
+      function sapLessonEntry(store,n){
+        if(!store.lessons[n]||typeof store.lessons[n]!=='object') store.lessons[n]={};
+        return store.lessons[n];
+      }
+
+      // ---- Mark Read: buttons, sidebar ticks, progress (percent + count + top bar) ----
+      // State is persisted to the shared store (lesson 1) and restored on load.
+      (function(){
+        var bar=document.getElementById('progressBar');
+        var countEl=document.getElementById('readCount');
+        var pctEl=document.getElementById('readPct');
+        var fillEl=document.getElementById('readBar');
+        var sections=Array.prototype.slice.call(document.querySelectorAll('section.lesson[data-toc]'));
+        var total=sections.length;
+        var read={};
+        // Restore saved read state for lesson 1
+        (function(){
+          var store=sapLoadStore();
+          var L=store.lessons['1'];
+          if(L&&Array.isArray(L.readSections)){
+            L.readSections.forEach(function(id){ read[id]=true; });
+          }
+        })();
+        function persist(){
+          var store=sapLoadStore();
+          var L=sapLessonEntry(store,'1');
+          L.readSections=Object.keys(read);
+          L.allRead=(total>0 && Object.keys(read).length>=total);
+          sapSaveStore(store);
+        }
+        function tocItem(id){
+          var a=document.querySelector('#tocList a[href="#'+id+'"]');
+          return a ? a.parentElement : null;
+        }
+        function applyState(sec){
+          var btn=sec.querySelector('.mark-read-btn');
+          var li=tocItem(sec.id);
+          var isRead=!!read[sec.id];
+          if(btn){
+            btn.classList.toggle('is-read',isRead);
+            btn.textContent=isRead?'Read ✓':'Mark Read';
+            btn.setAttribute('aria-pressed',isRead?'true':'false');
+          }
+          if(li) li.classList.toggle('read',isRead);
+        }
+        function update(){
+          var n=Object.keys(read).length;
+          var pct=total>0 ? Math.round((n/total)*100) : 0;
+          if(bar) bar.style.width=pct+'%';
+          if(fillEl) fillEl.style.width=pct+'%';
+          if(countEl) countEl.textContent=n+' of '+total+' sections read';
+          if(pctEl) pctEl.textContent=pct+'%';
+        }
+        sections.forEach(function(sec){
+          var btn=sec.querySelector('.mark-read-btn');
+          if(!btn) return;
+          applyState(sec);
+          btn.addEventListener('click',function(){
+            if(read[sec.id]){ delete read[sec.id]; } else { read[sec.id]=true; }
+            applyState(sec);
+            persist();
+            update();
+          });
+        });
+        update();
+      })();
+
+      // ---- Sidebar scrollspy: highlight the section currently on screen ----
+      (function(){
+        var links={};
+        document.querySelectorAll('#tocList li').forEach(function(li){
+          var a=li.querySelector('a'); if(a) links[a.getAttribute('href').slice(1)]=a;
+        });
+        var sections=Array.prototype.slice.call(document.querySelectorAll('section.lesson[data-toc]'));
+        if(!sections.length) return;
+        var current=null;
+        function setActive(id){
+          if(current===id) return;
+          current=id;
+          Object.keys(links).forEach(function(k){
+            links[k].classList.toggle('active', k===id);
+          });
+        }
+        function onScroll(){
+          var line=150; // px below the top of the viewport
+          var activeId=sections[0].id;
+          for(var i=0;i<sections.length;i++){
+            if(sections[i].getBoundingClientRect().top<=line) activeId=sections[i].id;
+            else break;
+          }
+          // At the very bottom, the last section is the one on screen
+          var h=document.documentElement;
+          if(h.scrollTop+h.clientHeight>=h.scrollHeight-4) activeId=sections[sections.length-1].id;
+          setActive(activeId);
+        }
+        Object.keys(links).forEach(function(k){
+          links[k].addEventListener('click',function(){ setActive(k); });
+        });
+        document.addEventListener('scroll',onScroll,{passive:true});
+        window.addEventListener('resize',onScroll);
+        onScroll();
+      })();
+
+      // ---- Self-test quiz ----
+      (function(){
+        var QUESTIONS=[
+          {q:"What does ERP stand for?",opts:["Enterprise Resource Planning","Electronic Report Processing","Enterprise Recording Program","External Resource Portal"],a:0,why:"ERP = Enterprise Resource Planning — one software planning and running the resources of the whole enterprise (company)."},
+          {q:"What is the core idea of an ERP system?",opts:["Each department keeps its own separate database","All departments share one database and work on the same live data","It is only used by the accounts department","It replaces the need for accountants"],a:1,why:"Integration is the heart of ERP: one database, one version of the truth, real-time for everyone."},
+          {q:"What is the full form of SAP?",opts:["Software And Programming","Systems, Applications & Products in Data Processing","Standard Accounting Package","Systems And Processes"],a:1,why:"SAP = Systems, Applications & Products in Data Processing. It is also the name of the German company founded in 1972."},
+          {q:"Which pair together is called FICO?",opts:["FI and MM","CO and SD","FI and CO","FI and HCM"],a:2,why:"FICO = FI (Financial Accounting) + CO (Controlling) — the finance side of SAP."},
+          {q:"What is the main difference between FI and CO?",opts:["FI is for small companies, CO for large ones","FI is external/legal reporting; CO is internal management costing","FI is old, CO is new","There is no difference"],a:1,why:"FI serves the outside world (law, tax, banks, auditors). CO serves inside management (costs and profitability)."},
+          {q:"Which database can SAP S/4HANA run on?",opts:["Oracle only","Any database","Only SAP HANA","SQL Server only"],a:2,why:"The most-tested fact of this topic: S/4HANA runs ONLY on the SAP HANA database. ECC was the one that allowed many databases."},
+          {q:"Why is HANA so fast?",opts:["It stores data in memory (RAM) instead of only on disk","It uses smaller fonts","It deletes old data automatically","It works only at night"],a:0,why:"HANA is an in-memory database — data sits in RAM, so reports come back in seconds, in real time."},
+          {q:"In S/4HANA, FI and CO line items are stored together in one table. What is it called?",opts:["BKPF","The Universal Journal (ACDOCA)","The Trial Balance Table","FAGLFLEXT only"],a:1,why:"The Universal Journal, table ACDOCA, holds FI and CO items together — so FI–CO reconciliation is no longer needed."},
+          {q:"What does the word 'Client' mean inside SAP?",opts:["A customer who buys from the company","A separate, self-contained environment within one SAP system","The SAP consultant","A type of bank account"],a:1,why:"Classic exam trap: in SAP, a Client is an environment inside the system (like test vs live), identified by a 3-digit number — not a customer."},
+          {q:"Which statement about SAP Fiori is correct?",opts:["Fiori is a separate accounting module","Fiori completely removed the SAP GUI from S/4HANA","Fiori is the modern browser-based user experience with app tiles; the GUI still exists and both use the same data","Fiori works only on desktop computers"],a:2,why:"Fiori = modern tile-based face in the browser (also mobile). The classic GUI still works in S/4HANA. Same system, same data."}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function saveQuizCompletion(){
+          var store=sapLoadStore();
+          var L=sapLessonEntry(store,'1');
+          L.quizDone=true;
+          L.quizAnswered=answered;
+          L.quizTotal=QUESTIONS.length;
+          sapSaveStore(store);
+        }
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  saveQuizCompletion();
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=8?' — Excellent! You are ready for Lesson 2.':' — Re-read the sections above once, then try again. You can do it.');
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+  </body>
+</html>

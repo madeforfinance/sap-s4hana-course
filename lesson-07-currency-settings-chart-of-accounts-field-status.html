@@ -1,0 +1,1508 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 7 — Currency Settings, Chart of Accounts &amp; Field Status · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .35s ease}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+      .toc-note + .toc-note{border-top:none;margin-top:0;padding-top:2px}
+
+      /* Reading progress box in the sidebar */
+      .progress-box{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:12px}
+      .progress-box .pct{font-size:1.3rem;font-weight:700;color:var(--ink);line-height:1.1}
+      .progress-track{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:7px 0 5px}
+      .progress-fill{height:100%;width:0%;background:var(--green);border-radius:99px;transition:width .35s ease}
+      .progress-box .lbl{font-size:.78rem;color:var(--ink-soft)}
+
+      /* ACTIVE section in sidebar — clearly selected (blue) */
+      nav.toc a.active{background:#0a6ed1;color:#fff;font-weight:700;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+      nav.toc a.active:hover{background:#0a6ed1;color:#fff}
+      nav.toc a.active .dot{border-color:#fff}
+      /* READ section in sidebar — green tick */
+      nav.toc a .tick{margin-left:auto;flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:transparent}
+      nav.toc li.read a .tick{background:var(--green);border-color:var(--green);color:var(--surface)}
+      nav.toc a.active .tick{border-color:rgba(255,255,255,.55)}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      /* gate / locked screen */
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;margin-top:26px;box-shadow:var(--shadow);max-width:760px}
+      @media (max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      .btn-ghost{background:transparent;color:var(--accent-ink);border:2px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .btn:disabled{opacity:.55;cursor:default}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600;font-size:.93rem;margin:0}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      /* ---------- Mark Read ---------- */
+      .sec-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:26px;padding-top:18px}
+      .mark-read{cursor:pointer;font:700 .95rem "Source Sans 3",sans-serif;border-radius:10px;padding:11px 22px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:9px;min-height:48px;transition:background .15s,color .15s}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read .box{width:20px;height:20px;border:2px solid currentColor;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;line-height:1}
+      .mark-read.done{background:var(--green);color:var(--surface);border-color:var(--green)}
+      .mark-read.done .box{background:rgba(255,255,255,.22)}
+      .read-status{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+      section.lesson.is-read{border-color:var(--green)}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 7 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <div class="wrap">
+      <!-- ============ GATE / LOCKED SCREEN (shown until Lesson 6 is complete or the gate test is passed) ============ -->
+      <div id="gateScreen">
+        <section class="gate-card" aria-labelledby="gateTitle">
+          <div class="gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          </div>
+          <h2 id="gateTitle">Lesson 7 is locked</h2>
+          <p>Lesson 7 opens only when <b>Lesson 6 is fully complete</b> — every Lesson 6 section marked Read <b>and</b> the Lesson 6 self-test answered.</p>
+          <p>If you have already studied Lesson 6, you can unlock Lesson 7 by passing the <b>Gate Test</b> below: 5 questions from Lesson 6. You need <b>5 / 5</b> to pass. Only your marks are shown after you submit — the correct answers are never displayed.</p>
+
+          <div class="gate-lockbox" id="gateLockBox" hidden>
+            <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+            <p>Locked until: <b id="gateLockUntil">—</b></p>
+            <p>Time remaining: <b id="gateCountdown">—</b></p>
+            <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+          </div>
+
+          <div id="gateTestArea">
+            <div id="gateQuestions"></div>
+            <p id="gateScore" aria-live="polite"></p>
+            <p id="gateMsg" aria-live="polite"></p>
+            <div class="gate-actions">
+              <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+              <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+            </div>
+            <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+          </div>
+
+          <div class="gate-admin">
+            <button class="btn btn-ghost" id="adminBtn" type="button">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 21 2"/><path d="M15 8l3 3"/></svg>Admin Unlock
+            </button>
+            <div class="gate-admin-form" id="adminForm" hidden>
+              <label for="adminPw">Admin password</label>
+              <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+              <p id="adminMsg" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+        </section>
+      </div>
+
+      <div id="lessonContent" hidden>
+      <header class="hero">
+        <span class="kicker">Lesson 7 · Basic Settings — Money, Accounts &amp; Screens</span>
+        <h1>Currency Settings, Chart of Accounts &amp; Field Status</h1>
+        <p class="lede">Your company code from Lessons 5–6 now gets three more foundations: <b>Currency Settings</b> — in which money its books are kept, and how foreign money is translated into it; the <b>Chart of Accounts</b> — the complete list of G/L accounts it may post to; and <b>Field Status</b> — the rules that decide which boxes on a posting screen must be filled, may be filled, or stay hidden. <span class="urdu">Pehle paisa tay karo, phir khaaton ki list banao, phir form ke rules set karo — yehi is lesson ka khulasa hai.</span></p>
+        <div class="hero-meta">
+          <span class="chip">Video time <b>03:57:35 – 05:27:24</b></span>
+          <span class="chip">Level <b>Beginner · Zero SAP assumed</b></span>
+          <span class="chip">Exam <b>C_TS4FI · Organisational structures &amp; basic settings</b></span>
+          <span class="chip">Key T-codes <b>OB08 · OB22 · OB13 · OB62 · OBD4 · OBC4</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <div class="progress-box">
+            <span class="pct" id="pctText">0%</span>
+            <div class="progress-track"><div class="progress-fill" id="sideFill"></div></div>
+            <span class="lbl" id="countText">0 of 18 sections marked read</span>
+          </div>
+          <ol>
+            <li><a href="#s1"><span class="dot"></span>Where Lesson 7 fits — money, accounts, screens<span class="tick">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span>Currency in SAP — one posting, several amounts<span class="tick">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span>Currency keys, ISO codes &amp; decimals (OY03)<span class="tick">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span>The company code currency &amp; parallel currencies (OB22)<span class="tick">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span>Exchange rates — types, quotations &amp; the rate table (OB07 · OB08)<span class="tick">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span>Worked example — a USD purchase in a PKR company code<span class="tick">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span>Chart of Accounts — the master list of G/L accounts (OB13)<span class="tick">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span>Three kinds of chart — operating, group &amp; country (OB62)<span class="tick">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span>The G/L account master — two segments (FS00)<span class="tick">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span>Account groups — number ranges &amp; control (OBD4)<span class="tick">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span>Field Status — what it is and why it exists<span class="tick">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span>Field Status in detail — variant, groups &amp; posting keys (OBC4 · OBC5 · OB41)<span class="tick">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span>The priority rule — when two field statuses fight<span class="tick">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span>Tables to know<span class="tick">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span>Exam traps<span class="tick">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span>A–Z glossary<span class="tick">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span>Summary<span class="tick">✓</span></a></li>
+            <li><a href="#s18"><span class="dot"></span>Self-test (12 questions)<span class="tick">✓</span></a></li>
+          </ol>
+          <p class="toc-note">The <b>blue highlight</b> in this menu always shows the section on your screen right now. Press <b>Mark Read</b> at the end of a section to tick it green here.</p>
+          <p class="toc-note">Screens in this lesson are <b>re-created illustrations</b> made for learning — they are not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <!-- ============ S1 ============ -->
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Where Lesson 7 fits — money, accounts, screens</h2>
+            <p class="sub">A quick recap of Lessons 5–6, then the map of this lesson (video 03:57:35 onwards).</p>
+
+            <p>In Lesson 5 you built the skeleton — the <b>Company Code</b>. In Lesson 6 you gave it four rules: business area, fiscal year variant, credit control area and posting period variant. Before the first real posting can happen, three more basic settings are missing. Think of opening a brand-new shop:</p>
+            <ul class="clean">
+              <li><b>Currency Settings</b> (video 03:57:35) — <i>“In which currency do I keep my register? And when a customer pays in dollars, how do I write that in rupees?”</i></li>
+              <li><b>Chart of Accounts</b> (video 04:18:47) — <i>“What is the complete list of accounts (khate) in my register — Cash, Bank, Sales, Rent…?”</i></li>
+              <li><b>Field Status</b> (video 04:49:13) — <i>“On my entry form, which boxes are compulsory, which are optional, and which should not even be shown?”</i></li>
+            </ul>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Video time</th><th>Topic</th><th>The one question it answers</th><th>Key T-codes</th></tr>
+                <tr><td class="hl"><code>03:57:35</code></td><td><b>Currency Settings</b></td><td>“In which currencies are amounts stored, and at what rate is foreign money translated?”</td><td><code>OY03 · OB07 · OB08 · OB22</code></td></tr>
+                <tr><td class="hl"><code>04:18:47</code></td><td><b>Chart of Accounts</b></td><td>“What is the full list of G/L accounts, and which company codes use it?”</td><td><code>OB13 · OB62 · OBD4 · FS00</code></td></tr>
+                <tr><td class="hl"><code>04:49:13</code></td><td><b>Field Status</b></td><td>“On the posting screen, which fields are required, optional, displayed or hidden?”</td><td><code>OBC4 · OBC5 · OB41</code></td></tr>
+              </table>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Setting up a new shop’s cash register</span>
+              <p>Before the first sale, a shopkeeper does three things. <b>One:</b> he decides the till counts in rupees — and pins a small rate card next to it: “$1 = Rs 278” for the day a tourist pays in dollars. <b>Two:</b> he labels the compartments of the drawer — cash, bank, sales, expenses — that labelling is his chart of accounts. <b>Three:</b> he prints his bill book with some boxes marked with a red star (must fill), some left plain (fill if you like), and some columns removed completely (not needed). Currency, chart of accounts, field status — exactly these three, in SAP.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Reminder · G/L Account</span>
+              <p>A <b>G/L account</b> (General Ledger account) is one single account in the main ledger — Cash, Bank, Sales Revenue, Rent Expense, and so on. You already know this from Financial Accounting: it is the “ledger account” or “khata” you post journal entries to. Almost everything in this lesson is about preparing these accounts and the rules around them.</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S2 ============ -->
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> Currency in SAP — one posting, several amounts</h2>
+            <p class="sub">Video 03:57:35 — first the accounting idea, then the SAP settings.</p>
+
+            <p>Take a posting you already understand. Your Pakistani company buys fabric from a US supplier for <b>USD 1,000</b>. In your manual books (kept in rupees) you would write one line: <i>Purchases Dr — Rs 278,000</i> (at today’s rate of 278). One amount, one currency — simple.</p>
+            <p>SAP is more careful. It stores <b>the same posting in several currencies at the same time</b>, because different readers need different views of the same truth:</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Transaction Currency (Document Currency)</span>
+              <p>The <b>transaction currency</b> is the currency of the business deal itself — the currency printed on the invoice. Here: <b>USD</b>, because the supplier billed in dollars. SAP also calls it the <b>document currency</b>, and its technical field is <code>WAERS</code> in the document header. Amount in transaction currency: <code>WRBTR</code>.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Local Currency (Company Code Currency)</span>
+              <p>The <b>local currency</b> is the currency of the company code’s legal books — the currency of its official Balance Sheet and tax filings. For a Pakistani company code: <b>PKR</b>. Every posting is <b>always</b> translated into local currency; this is the amount your statutory (legal) reports use. Amount in local currency: <code>DMBTR</code>.</p>
+              <p class="urdu">Local currency woh hai jisme company ki official, qanooni books banti hain. Pakistan ki company code ki local currency PKR hogi — ye badli nahi ja sakti aasani se.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Parallel Currency</span>
+              <p>A <b>parallel currency</b> is an <i>additional</i> currency in which SAP values every posting <b>at the same time</b> as the local currency — for example the <b>group currency</b> (the parent company’s currency, say EUR) so the head office can consolidate (combine) all companies without translating later. Section 4 explains the types.</p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 300" role="img" aria-label="Diagram showing one USD posting stored in three currencies at once">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box-g" x="40" y="105" width="190" height="90" rx="12"/>
+                <text class="svg-title" x="135" y="140" text-anchor="middle">SUPPLIER INVOICE</text>
+                <text class="svg-sub" x="135" y="160" text-anchor="middle">USD 1,000</text>
+                <text class="svg-sub" x="135" y="178" text-anchor="middle">transaction currency</text>
+
+                <path class="svg-arrow" d="M230 128 H300"/>
+                <path class="svg-arrow" d="M230 150 H300"/>
+                <path class="svg-arrow" d="M230 172 H300"/>
+
+                <rect class="svg-box-a" x="310" y="42" width="410" height="58" rx="10"/>
+                <text class="svg-title" x="515" y="66" text-anchor="middle">TRANSACTION CURRENCY — USD 1,000</text>
+                <text class="svg-sub" x="515" y="86" text-anchor="middle">the currency on the invoice itself (WRBTR)</text>
+
+                <rect class="svg-box-a" x="310" y="121" width="410" height="58" rx="10"/>
+                <text class="svg-title" x="515" y="145" text-anchor="middle">LOCAL CURRENCY — PKR 278,000</text>
+                <text class="svg-sub" x="515" y="165" text-anchor="middle">legal books of the company code (DMBTR) — always stored</text>
+
+                <rect class="svg-box-gr" x="310" y="200" width="410" height="58" rx="10"/>
+                <text class="svg-title" x="515" y="224" text-anchor="middle">GROUP CURRENCY — EUR 920</text>
+                <text class="svg-sub" x="515" y="244" text-anchor="middle">parallel currency — only if the company code is set up for it</text>
+              </svg>
+              <figcaption>One real-world event, one SAP document — but the amount is stored in every currency the company code is configured to track, translated at the exchange rate of the posting date.</figcaption>
+            </figure>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>Invoice ki currency = transaction. Books ki currency = local. Boss ki currency = group.</b> The invoice decides the first, the law decides the second, the head office decides the third.</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S3 ============ -->
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Currency keys, ISO codes &amp; decimals (OY03)</h2>
+            <p class="sub">How SAP names currencies — and one small setting that causes big confusion if ignored.</p>
+
+            <p>SAP never writes the word “rupees” in its tables. Every currency is stored as a short <b>currency key</b> — almost always the international <b>ISO code</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Currency Key &amp; ISO Code</span>
+              <p>A <b>currency key</b> is the 3-letter code that identifies a currency everywhere in SAP: <code>PKR</code> (Pakistani rupee), <code>USD</code> (US dollar), <code>EUR</code> (euro), <code>AED</code> (UAE dirham), <code>JPY</code> (Japanese yen). SAP follows the <b>ISO 4217</b> standard — the same codes you see at airports and money changers. The list of allowed currencies is checked in transaction <code>OY03</code> (SPRO → SAP NetWeaver → General Settings → Currencies → <i>Check Currency Codes</i>) and stored in table <code>TCURC</code>.</p>
+            </div>
+
+            <h3>The decimal-places trap</h3>
+            <p>Most currencies divide into 100 small units (1 rupee = 100 paisa), so SAP stores amounts with <b>2 decimals</b>. But not all currencies work that way:</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Currency</th><th>Small units</th><th>Decimals in SAP</th><th>What USD 100 looks like stored</th></tr>
+                <tr><td><code>USD</code>, <code>PKR</code>, <code>EUR</code></td><td>100 (cents / paisa)</td><td>2</td><td>100.00</td></tr>
+                <tr><td><code>JPY</code> (yen)</td><td>None — no “cents”</td><td class="hl">0</td><td>100 (never 100.00)</td></tr>
+                <tr><td><code>KWD</code> (Kuwaiti dinar)</td><td>1,000 fils</td><td class="hl">3</td><td>100.000</td></tr>
+              </table>
+            </div>
+            <p>These exceptions are maintained in table <code>TCURX</code> (SPRO → Currencies → <i>Set Decimal Places for Currencies</i>). SAP stores <b>all</b> amounts internally as if they had 2 decimals, and uses <code>TCURX</code> to shift the decimal point when displaying or converting. That is why a yen amount entered carelessly can suddenly become 100 times too big or too small.</p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>“An amount in JPY appears 100 times larger after conversion.” The cause is almost always the <b>decimal places</b> setting (<code>TCURX</code>), not the exchange rate. Remember: <b>rates translate value; decimals place the point.</b></p>
+            </div>
+
+            <h3>The currency checklist in SPRO</h3>
+            <ul class="clean">
+              <li><b>Check currency codes</b> — <code>OY03</code> · table <code>TCURC</code> — which currencies exist at all.</li>
+              <li><b>Check exchange rate types</b> — <code>OB07</code> · table <code>TCURV</code> — which <i>kinds</i> of rate exist (Section 5).</li>
+              <li><b>Define translation ratios</b> — <code>OBBS</code> · table <code>TCURF</code> — the units a rate is quoted in (Section 5).</li>
+              <li><b>Enter exchange rates</b> — <code>OB08</code> · table <code>TCURR</code> — the actual daily rates (Section 5).</li>
+              <li><b>Set decimal places</b> — table <code>TCURX</code> — the exceptions like JPY and KWD above.</li>
+            </ul>
+            <p class="urdu">Ye paanch settings mil kar “currency settings” banti hain. In mein se roz ka kaam sirf OB08 hai — baaki aam tor par aik dafa set hoti hain.</p>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S4 ============ -->
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> The company code currency &amp; parallel currencies (OB22)</h2>
+            <p class="sub">Where the local currency was set (back in Lesson 5), and how extra parallel currencies are switched on.</p>
+
+            <h3>The local currency — decided once, at birth</h3>
+            <p>You already met this setting without noticing its importance: when the company code was defined in <code>OX02</code> (Lesson 5), one field fixed its currency — <b>Currency</b>, stored as <code>T001-WAERS</code>. That single field is the company code’s <b>local currency</b>. Every document posted in that company code is translated into it, every legal report reads it, and the trial balance balances in it.</p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>The company code currency <b>cannot simply be changed later</b>. Once documents exist, changing <code>WAERS</code> would rewrite history — SAP treats the local currency as a decision you make <b>before the first posting</b>. In an exam scenario, “the consultant wants to change the company code currency after go-live” is a red flag answer.</p>
+            </div>
+
+            <h3>Parallel currencies — up to two more views of the same books</h3>
+            <p>Classic SAP company codes can carry, in addition to the local currency, <b>two more currencies</b> in which every posting is also valued — maintained in transaction <code>OB22</code> (<i>Define Additional Local Currencies</i>). Each parallel currency has a <b>currency type</b> — a code that states <i>why</i> this extra view exists:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Currency type</th><th>Name</th><th>Why it exists — in simple words</th></tr>
+                <tr><td class="hl"><code>10</code></td><td>Company code currency</td><td>The local currency itself (the legal books).</td></tr>
+                <tr><td class="hl"><code>30</code></td><td>Group currency</td><td>The parent company’s currency. All subsidiaries keep a parallel copy of every amount in it, so group consolidation (Lesson 5’s <b>Company</b>) needs no later translation.</td></tr>
+                <tr><td class="hl"><code>40</code></td><td>Hard currency</td><td>A stable foreign currency (usually USD) used by companies in countries with <b>high inflation</b>, where the local currency’s value melts too fast to trust for reporting.</td></tr>
+                <tr><td class="hl"><code>50</code></td><td>Index-based currency</td><td>A currency used in inflation-index reporting required by law in some countries.</td></tr>
+                <tr><td class="hl"><code>60</code></td><td>Global company currency</td><td>A currency defined for a <b>Company</b> (the consolidation unit from Lesson 5) — like group currency, but attached to the company rather than the whole group.</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Ledger</span>
+              <p>You will need one more word soon. A <b>ledger</b> in SAP is a complete set of books kept under one set of accounting rules — for example your leading ledger <code>0L</code> holds the official books. Parallel currencies are configured <b>per ledger</b> in S/4HANA, because different rule-sets may need different currency views. The full Ledger lesson comes later in this course; for today, just remember: <i>ledger = one full set of books</i>.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · One match, three scoreboards</span>
+              <p>A cricket match is one event. But the stadium scoreboard shows runs, the TV shows runs and required rate, and the radio describes it in another language — all live, all from the same balls bowled. Parallel currencies are the same: <b>one posting</b>, shown live in local, group and hard currency. Nobody re-plays the match to get the other scoreboard.</p>
+            </div>
+
+            <h3>S/4HANA note <span class="examtag">S/4HANA favourite</span></h3>
+            <p>In S/4HANA the <b>Universal Journal</b> (table <code>ACDOCA</code> — full lesson later) can store many currency amounts per line: the transaction currency, the company code currency, and additional parallel / freely defined currencies per ledger. The beginner-level truth stays the same: <b>the company code currency is always there; every extra currency must be deliberately switched on in Customizing (OB22 / ledger settings) before postings begin</b> — you cannot add a parallel currency later and expect old postings to have values in it.</p>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S5 ============ -->
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Exchange rates — types, quotations &amp; the rate table (OB07 · OB08)</h2>
+            <p class="sub">The rate card pinned next to the till — SAP’s version, with four moving parts.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Exchange Rate</span>
+              <p>An <b>exchange rate</b> is the price of one currency in terms of another: “1 USD = 278 PKR”. SAP stores thousands of these — per currency pair, per rate type, per date — in table <code>TCURR</code>, and uses the rate valid on a document’s <b>posting / translation date</b> to convert its amounts.</p>
+            </div>
+
+            <h3>Part 1 — Exchange rate types (OB07): one pair of currencies, several honest prices</h3>
+            <p>A money changer does not have ONE rate for dollars. He <b>buys</b> your dollars cheap and <b>sells</b> you dollars expensive, and the newspaper prints a middle “average” rate. SAP copies this real-world idea with <b>exchange rate types</b> (table <code>TCURV</code>, checked in <code>OB07</code>):</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Rate type</th><th>Meaning</th><th>Used for</th></tr>
+                <tr><td class="hl"><code>M</code></td><td><b>Average rate</b> (standard translation)</td><td>The everyday rate for <b>postings</b> and most translations. When SAP asks “which rate type?”, the answer is almost always <b>M</b>.</td></tr>
+                <tr><td class="hl"><code>B</code></td><td>Bank <b>selling</b> rate</td><td>The rate at which the bank sells foreign currency — used in some bank / payment processes.</td></tr>
+                <tr><td class="hl"><code>G</code></td><td>Bank <b>buying</b> rate</td><td>The rate at which the bank buys foreign currency.</td></tr>
+              </table>
+            </div>
+            <p>Each exchange rate type also carries two quiet but important settings: the <b>reference currency</b> (a base currency all rates can be derived through — often USD or EUR) and the flags for which <b>quotation</b> is standard (next part).</p>
+
+            <h3>Part 2 — Direct vs indirect quotation</h3>
+            <p>The same fact can be written two ways, and SAP supports both (you met this at any money changer):</p>
+            <ul class="clean">
+              <li><b>Direct quotation</b> — “How much local money for ONE unit of foreign?” → <b>1 USD = 278.00 PKR</b>. The foreign unit is fixed at 1 (or 100), the local amount moves.</li>
+              <li><b>Indirect quotation</b> — “How much foreign money for ONE unit of local?” → <b>1 PKR = 0.003597 USD</b>. The local unit is fixed; the foreign amount moves.</li>
+            </ul>
+            <p>In the rate table, indirect quotation is marked with a leading slash in the “from currency” — you will see it in the illustration below. A rate type defines which quotation is the <b>standard</b> for a currency pair, so users always enter rates the same way.</p>
+
+            <h3>Part 3 — Translation ratios (OBBS): rates are quoted in units</h3>
+            <div class="box term">
+              <span class="box-title">New term · Translation Ratio</span>
+              <p>A <b>translation ratio</b> says in which <b>units</b> a rate between two currencies is quoted — for example <b>1 : 1</b> (1 USD = 278 PKR) or <b>100 : 1</b> for very small currencies whose 1-unit rate would be a long decimal. Ratios are defined per currency pair and rate type in <code>OBBS</code> (table <code>TCURF</code>) and are <b>valid from</b> a date — change the ratio, and you must enter new rates from that date.</p>
+            </div>
+
+            <h3>Part 4 — Entering the rates themselves (OB08)</h3>
+            <p>All of the above exists so that one simple daily job works: typing the day’s rates into <code>OB08</code> (<i>Enter Exchange Rates</i>, table <code>TCURR</code>). Each row is: <b>rate type + from-currency + valid-from date + rate + ratio + to-currency</b>. In real companies these rows are often loaded automatically from a central-bank feed; the manual screen below is what the exam expects you to know.</p>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the OB08 exchange rate table">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OB08 — Change View “Currency Exchange Rates”: Overview · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Table: TCURR — Exchange Rates</span><br>
+ExRt&nbsp;&nbsp;From&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Valid from&nbsp;&nbsp;&nbsp;&nbsp;Rate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ratio&nbsp;&nbsp;To<br>
+<span class="hl2">M</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26.11.2026&nbsp;&nbsp;&nbsp;<span class="kw">278.00000</span>&nbsp;&nbsp;&nbsp;1:1&nbsp;&nbsp;&nbsp;&nbsp;PKR<br>
+<span class="hl2">M</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EUR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26.11.2026&nbsp;&nbsp;&nbsp;<span class="kw">301.45000</span>&nbsp;&nbsp;&nbsp;1:1&nbsp;&nbsp;&nbsp;&nbsp;PKR<br>
+<span class="hl2">M</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AED&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26.11.2026&nbsp;&nbsp;&nbsp;<span class="kw">75.68000</span>&nbsp;&nbsp;&nbsp;&nbsp;1:1&nbsp;&nbsp;&nbsp;&nbsp;PKR<br>
+<span class="hl2">M</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">/PKR</span>&nbsp;&nbsp;&nbsp;&nbsp;26.11.2026&nbsp;&nbsp;&nbsp;<span class="kw">0.003597</span>&nbsp;&nbsp;&nbsp;&nbsp;1:1&nbsp;&nbsp;&nbsp;&nbsp;USD&nbsp;&nbsp;<span class="cm">← “/” = indirect quotation</span><br>
+<span class="cm">▸ New Entries → rate type M, from/to currencies, valid-from date, rate → Save</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · The rate card’s four corners</span>
+              <p><b>Type</b> (which price — M), <b>Quotation</b> (which way it is written), <b>Ratio</b> (in what units), <b>Table</b> (the rates themselves — OB08/TCURR). Exam questions attack one corner at a time; naming all four keeps you safe.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>If no rate exists in <code>TCURR</code> for the posting date, SAP looks for the <b>most recent older rate</b> for that pair and type — it does not stop the world. But if there is <b>no rate at all</b> for the pair, the posting fails. And remember which type FI postings use by default: <b>M</b>, not B or G.</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S6 ============ -->
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Worked example — a USD purchase in a PKR company code</h2>
+            <p class="sub">All of Sections 2–5 happening inside one real posting.</p>
+
+            <p><b>Setup.</b> Company code <code>PK01</code> (Ibrahim Apparel &amp; Trading, Pakistan): local currency <b>PKR</b>, one parallel currency — <b>group currency EUR</b> (type 30). Rates in <code>TCURR</code> for today, type <code>M</code>: USD → PKR <b>278.00</b>; USD → EUR <b>0.92</b>.</p>
+            <p><b>Event.</b> A supplier invoice arrives: fabric, <b>USD 1,000</b>, dated today. The accountant posts it with <code>FB60</code> (vendor invoice — full lesson later in this course):</p>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of a foreign currency vendor invoice posting">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> FB60 — Enter Vendor Invoice (simplified) · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Document header</span><br>
+Vendor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">US-SUPPLIER-01</span>&nbsp;&nbsp;&nbsp;&nbsp;Invoice date: 26.11.2026&nbsp;&nbsp;&nbsp;Posting date: 26.11.2026<br>
+Currency&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="kw">USD</span> <span class="cm">(transaction currency — typed by the user)</span><br>
+Exch. rate&nbsp;&nbsp;&nbsp;: <span class="kw">278.00</span> <span class="cm">(proposed automatically from TCURR, type M — can be overwritten)</span><br>
+<br>
+<span class="dim">Line items — what SAP stores for the SAME document</span><br>
+Purchases (Dr)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: USD <span class="hl2">1,000.00</span>&nbsp;&nbsp;| PKR <span class="hl2">278,000.00</span>&nbsp;&nbsp;| EUR <span class="hl2">920.00</span><br>
+Vendor payable (Cr) : USD <span class="hl2">1,000.00</span>&nbsp;&nbsp;| PKR <span class="hl2">278,000.00</span>&nbsp;&nbsp;| EUR <span class="hl2">920.00</span></div>
+            </div>
+
+            <h3>What just happened, step by step</h3>
+            <ul class="clean">
+              <li><b>1.</b> The user typed only <b>USD 1,000</b> — the currency of the paper invoice.</li>
+              <li><b>2.</b> SAP read the posting date, went to <code>TCURR</code>, and proposed rate type <b>M</b> for USD→PKR: <b>278.00</b>. (A user with authority may overwrite the proposed rate on the document; the document then remembers the rate actually used.)</li>
+              <li><b>3.</b> SAP translated: local amount <b>PKR 278,000</b> — this is the amount the legal books, the trial balance and the tax reports will use.</li>
+              <li><b>4.</b> Because a group currency was switched on in <code>OB22</code>, SAP also translated into <b>EUR 920</b> at the same moment — no extra work for the accountant, ever.</li>
+              <li><b>5.</b> All three amounts were saved on the document lines (in S/4HANA, in the Universal Journal <code>ACDOCA</code>). If the rate changes tomorrow, this document does <b>not</b> change — history keeps the rate of its own day. Later revaluation of open items is a separate, later topic.</li>
+            </ul>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · The money changer’s receipt</span>
+              <p>When you change dollars at the airport, the receipt shows three things: dollars given, rate applied, rupees received. SAP’s document is that receipt — with the group currency written on it too, for the head office. And just like the paper receipt, it is never reprinted when tomorrow’s rate changes.</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S7 ============ -->
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> Chart of Accounts — the master list of G/L accounts (OB13)</h2>
+            <p class="sub">Video 04:18:47 — the second big topic. Again: accounting idea first, SAP setting second.</p>
+
+            <p>In your Financial Accounting studies you have already drawn this by hand many times: the list of <b>every account</b> a business uses — Cash, Bank, Capital, Purchases, Sales, Rent, Salaries, Electricity… — each with a number. Accountants call that list the <b>chart of accounts</b>. SAP uses exactly the same idea and the same name.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Chart of Accounts (CoA)</span>
+              <p>A <b>Chart of Accounts</b> is the complete, organised list of all <b>G/L accounts</b> that a company (or group of companies) is allowed to post to. Every G/L account in SAP <b>belongs to exactly one chart of accounts</b>. The chart itself is defined once in transaction <code>OB13</code>, stored in table <code>T004</code>, and has a <b>4-character key</b> — for example SAP’s well-known standard chart <code>YCOA</code> in S/4HANA (the classic example was <code>INT</code>). Its technical field name is <code>KTOPL</code>.</p>
+              <p class="urdu">Chart of Accounts = tamam khaaton ki mukammal list. Jo khata is list mein nahi, us par entry nahi ho sakti — bilkul waise hi jaise register mein wohi safha khulta hai jo pehle se bana ho.</p>
+            </div>
+
+            <h3>What is defined when you create a chart (OB13)?</h3>
+            <ul class="clean">
+              <li><b>Chart key &amp; description</b> — e.g. <code>YCOA</code>, “Standard Chart of Accounts”.</li>
+              <li><b>Length of the G/L account number</b> — how many digits account numbers in this chart have: up to <b>10 digits</b>. This is decided <b>per chart</b>, not per account — choose 6, and every account number in that chart is up to 6 digits.</li>
+              <li><b>Controlling integration</b> — whether cost elements (CO view of expense accounts) are created manually or automatically. (CO is a later course topic; the field simply lives here.)</li>
+              <li><b>Group chart of accounts</b> — an optional link to the group chart (Section 8).</li>
+              <li><b>Status</b> — a chart can be <b>blocked</b> while it is still being built, so nobody posts to a half-finished list.</li>
+            </ul>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · The register’s index page</span>
+              <p>A paper ledger register starts with an <b>index</b>: page 1 Cash, page 2 Bank, page 3 Sales… The index itself holds no amounts — it only declares which accounts exist and where. The Chart of Accounts is SAP’s index page. <b>Amounts live in the accounts; the chart only lists them.</b></p>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>OB13 = “Oh Bhai, 13 — list banao.”</b> And the chart’s field name <code>KTOPL</code> reads like “<b>K</b>haaton ki <b>TOP L</b>ist” — the top list of accounts. Silly, but it sticks.</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S8 ============ -->
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Three kinds of chart — operating, group &amp; country (OB62)</h2>
+            <p class="sub">The part of the Chart of Accounts topic the exam loves most.</p>
+
+            <p>One chart serves daily work. But big organisations have two more needs: the <b>head office</b> wants every country’s numbers in ONE common list, and a <b>local law</b> sometimes demands accounts numbered in a government-prescribed way. SAP solves both without disturbing daily work — with three <i>roles</i> a chart can play:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th></th><th>Operating Chart of Accounts</th><th>Group Chart of Accounts</th><th>Country Chart of Accounts</th></tr>
+                <tr><td><b>Purpose</b></td><td class="hl">Day-to-day postings — the chart the company code actually works with</td><td>One common list for the whole group, so all companies’ results can be combined and compared</td><td>A chart prescribed by a country’s law / tax authority</td></tr>
+                <tr><td><b>Assigned where?</b></td><td class="hl">To the company code — <code>OB62</code></td><td>To the <b>operating chart</b> — in <code>OB13</code></td><td>To the company code — <code>OB62</code> (as an additional assignment)</td></tr>
+                <tr><td><b>How many per company code?</b></td><td class="hl">Exactly <b>one</b></td><td>— (via its operating chart)</td><td>At most <b>one</b>, and optional</td></tr>
+                <tr><td><b>Link is stored…</b></td><td>—</td><td>In the <b>group account number</b> field of each G/L account (chart segment)</td><td>In the <b>alternative account number</b> field of each G/L account (company code segment)</td></tr>
+              </table>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 320" role="img" aria-label="Diagram showing operating, group and country charts of accounts">
+                <defs>
+                  <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box-gr" x="230" y="16" width="300" height="56" rx="10"/>
+                <text class="svg-title" x="380" y="40" text-anchor="middle">GROUP CHART (e.g. GRP1)</text>
+                <text class="svg-sub" x="380" y="59" text-anchor="middle">one list for the whole group — reporting only</text>
+
+                <rect class="svg-box-a" x="60" y="128" width="290" height="64" rx="10"/>
+                <text class="svg-title" x="205" y="154" text-anchor="middle">OPERATING CHART — PK01</text>
+                <text class="svg-sub" x="205" y="173" text-anchor="middle">Pakistan company code posts here daily</text>
+
+                <rect class="svg-box-a" x="410" y="128" width="290" height="64" rx="10"/>
+                <text class="svg-title" x="555" y="154" text-anchor="middle">OPERATING CHART — AE01</text>
+                <text class="svg-sub" x="555" y="173" text-anchor="middle">UAE company code may SHARE this chart</text>
+
+                <rect class="svg-box-g" x="60" y="238" width="290" height="56" rx="10"/>
+                <text class="svg-title" x="205" y="262" text-anchor="middle">COUNTRY CHART — PK (legal)</text>
+                <text class="svg-sub" x="205" y="281" text-anchor="middle">alternative numbers for local law reports</text>
+
+                <path class="svg-arrow" d="M330 128 L360 76" style="marker-end:url(#arr2)"/>
+                <path class="svg-arrow" d="M470 128 L420 76" style="marker-end:url(#arr2)"/>
+                <path class="svg-line" d="M205 192 V234"/>
+              </svg>
+              <figcaption>Each operating account carries two quiet links: a group account number (upwards, to the group chart) and an alternative account number (downwards, to the country chart). Postings always happen in the operating chart only.</figcaption>
+            </figure>
+
+            <h3>Three facts the exam builds questions on</h3>
+            <ul class="clean">
+              <li><b>Sharing:</b> the <b>same operating chart can be assigned to many company codes</b> — even in different countries and different local currencies. One chart, many company codes is normal, not an error. (Remember the variant principle from Lesson 6: define once, assign many times.)</li>
+              <li><b>One only:</b> a company code can have <b>exactly one operating chart</b>. There is no “second daily chart”.</li>
+              <li><b>No postings in group / country charts:</b> nobody posts directly to group or country accounts. They exist only as <b>mapping targets</b> — reporting views reached through the group / alternative account number stored on each operating account.</li>
+            </ul>
+
+            <div class="box term">
+              <span class="box-title">New term · Assign Chart of Accounts to Company Code (OB62)</span>
+              <p>Transaction <code>OB62</code> is where the operating chart (and optionally a country chart) is <b>assigned</b> to a company code — the same assignment is also visible in the company code’s global parameters (<code>OBY6</code>, Lesson 5). Until this assignment exists, the company code has no accounts and cannot post anything.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · One student, three roll numbers</span>
+              <p>A student has one name but three numbers: his <b>class roll number</b> (used daily — the operating account), his <b>board examination number</b> (used when results of all schools are combined — the group account number), and his <b>CNIC-style national number</b> (used for government records — the alternative / country account number). He is one person; the numbers are just different views for different readers. A G/L account is the same.</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S9 ============ -->
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> The G/L account master — two segments (FS00)</h2>
+            <p class="sub">A chart is only a list of numbers until each account is created as master data. Here is how one account is built.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Master Data &amp; Segments</span>
+              <p><b>Master data</b> is the standing data SAP reuses in every transaction — accounts, customers, vendors (compare Lesson 6: master data vs transaction data). A G/L account’s master record is built in <b>two segments</b> (parts), because some facts about an account are the same for the whole group, while others differ per company:</p>
+            </div>
+
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>1 · Chart of Accounts Segment — table <code>SKA1</code></h4>
+                <p>Created <b>once per chart</b> (T-code <code>FSP0</code>). Holds what is true everywhere the chart is used:</p>
+                <ul class="clean">
+                  <li>Account number &amp; name (texts in table <code>SKAT</code>)</li>
+                  <li><b>Account group</b> (Section 10)</li>
+                  <li>P&amp;L account or Balance Sheet account</li>
+                  <li><b>Group account number</b> — the link to the group chart (Section 8)</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>2 · Company Code Segment — table <code>SKB1</code></h4>
+                <p>Created <b>once per company code</b> that uses the account (T-code <code>FSS0</code>). Holds what may differ per company:</p>
+                <ul class="clean">
+                  <li>Account currency (which currency the account may be posted in)</li>
+                  <li>Tax category, reconciliation account type</li>
+                  <li><b>Field status group</b> (Section 12 — remember this field!)</li>
+                  <li><b>Alternative account number</b> — the link to the country chart</li>
+                </ul>
+              </div>
+            </div>
+
+            <p>Transaction <code>FS00</code> — <i>Edit G/L Account Centrally</i> — maintains <b>both segments on one screen</b>, which is why consultants live in FS00 and the separate FSP0 / FSS0 are used mainly for mass work.</p>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the FS00 G/L account master screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> FS00 — Edit G/L Account Centrally · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">G/L Account: 400000 · Company Code: PK01 · Chart: YCOA</span><br>
+<span class="kw">[ Chart of Accounts segment — SKA1 ]</span><br>
+Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">Sales Revenue — Domestic</span><br>
+Account group&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">REVN</span> (Revenue accounts)&nbsp;&nbsp;&nbsp;P&amp;L / BS&nbsp;: <span class="hl2">P&amp;L account</span><br>
+Group acct no.&nbsp;&nbsp;&nbsp;: <span class="hl2">300000</span> <span class="cm">→ the same revenue in the GROUP chart</span><br>
+<span class="kw">[ Company Code segment — SKB1 ]</span><br>
+Acct currency&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">PKR</span>&nbsp;&nbsp;&nbsp;Tax category: <span class="hl2">*</span> (all tax types allowed)<br>
+Field status grp : <span class="hl2">REVN-FS</span> <span class="cm">→ controls the posting screen (Section 12)</span><br>
+Alternative acct : <span class="hl2">704000</span> <span class="cm">→ this account’s number in the COUNTRY chart</span></div>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>“The account exists in the chart but cannot be posted in company code PK01.” Classic cause: the <b>company code segment (SKB1) was never created</b> for PK01. An account is postable in a company code only when <b>both</b> segments exist. And the reverse: one chart segment can serve many company codes — you do <b>not</b> recreate the account name per company.</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S10 ============ -->
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> Account groups — number ranges &amp; control (OBD4)</h2>
+            <p class="sub">The last piece of the Chart of Accounts topic: how accounts are organised inside the chart.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Account Group (G/L)</span>
+              <p>An <b>account group</b> is a category inside a chart of accounts — Assets, Liabilities, Revenue, Expenses, Cash &amp; Bank… — defined per chart in transaction <code>OBD4</code> (table <code>T077S</code>). Every G/L account <b>must</b> belong to one account group (you saw the field in the SKA1 segment above). The group does two jobs:</p>
+            </div>
+
+            <h3>Job 1 — It controls the number range</h3>
+            <p>Each group owns a <b>number interval</b>: for example Assets = 100000–199999, Revenue = 400000–499999. When you create a new account, SAP only accepts a number inside its group’s interval. This is why experienced accountants can “read” a number: a 4xxxxx account is revenue before they even see its name.</p>
+
+            <h3>Job 2 — It controls the master-data screen</h3>
+            <p>The account group also carries a <b>field status for the account’s own master record</b>: while creating an account of this group, which fields are required, optional or suppressed? Example: for a <b>reconciliation account</b> group, certain fields behave differently than for a normal expense account. Hold this thought — it is <i>one half</i> of the Field Status topic, and Section 11 separates the two halves carefully.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Example account group</th><th>Typical number range</th><th>What it quietly enforces</th></tr>
+                <tr><td><code>ASST</code> — Assets</td><td>100000 – 199999</td><td>Balance sheet accounts live here</td></tr>
+                <tr><td><code>LIAB</code> — Liabilities &amp; Equity</td><td>200000 – 299999</td><td>Capital, loans, payables control accounts</td></tr>
+                <tr><td><code>REVN</code> — Revenue</td><td>400000 – 499999</td><td>P&amp;L statement accounts</td></tr>
+                <tr><td><code>EXPN</code> — Expenses</td><td>500000 – 599999</td><td>P&amp;L statement accounts</td></tr>
+                <tr><td><code>CASH</code> — Cash &amp; Bank</td><td>110000 – 119999</td><td>Often its own group for tighter control</td></tr>
+              </table>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Aisles in a warehouse</span>
+              <p>A warehouse does not throw goods anywhere: aisle 1 is grains, aisle 2 is oils. The aisle decides <b>where a new item may be placed</b> (number range) and <b>what label it must carry</b> (master-data fields). Account groups are the aisles of the chart of accounts — <code>OBD4</code> is where you paint the aisle signs.</p>
+            </div>
+
+            <h3>Creating a chart of accounts — the full recipe</h3>
+            <ul class="clean">
+              <li><b>Step 1 — Define the chart:</b> <code>OB13</code> — key, description, account-number length, optional group chart link.</li>
+              <li><b>Step 2 — Assign it:</b> <code>OB62</code> — operating chart (and optional country chart) to each company code.</li>
+              <li><b>Step 3 — Define account groups:</b> <code>OBD4</code> — groups with number intervals, per chart.</li>
+              <li><b>Step 4 — Create the accounts:</b> <code>FS00</code> — chart segment + company code segment for every account.</li>
+              <li><b>Step 5 — Unblock &amp; post:</b> remove the chart’s block (if set in OB13) once the list is complete.</li>
+            </ul>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S11 ============ -->
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> Field Status — what it is and why it exists</h2>
+            <p class="sub">Video 04:49:13 — the third topic. It answers a question every form-designer asks.</p>
+
+            <p>Picture the SAP posting screen for a journal entry (you will use <code>FB50</code> soon). It has <b>dozens</b> of possible fields per line: account, amount, cost center, profit center, business area, text, assignment, tax code, payment terms, trading partner… No real posting needs all of them — and some postings desperately need a few of them. If the accountant forgets the <b>cost center</b> on a rent posting, CO reporting breaks. If the screen asks for a <b>trading partner</b> on a simple cash expense, it only wastes time.</p>
+            <p>Somebody must decide, field by field: <b>compulsory, allowed, shown-but-locked, or invisible</b>. That decision is the <b>field status</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Field Status</span>
+              <p>The <b>field status</b> of a field controls how that field behaves on a data-entry screen. Every field gets exactly one of <b>four</b> statuses:</p>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Status</th><th>Meaning in simple words</th><th>What the user sees</th></tr>
+                <tr><td class="hl"><b>Required</b> (Must fill)</td><td>The posting <b>cannot be saved</b> while this field is empty</td><td>Field shown, usually marked; error if left blank</td></tr>
+                <tr><td class="hl"><b>Optional</b> (May fill)</td><td>Fill it if relevant, leave it if not — both are fine</td><td>Field shown, normal</td></tr>
+                <tr><td class="hl"><b>Display</b> (Show only)</td><td>The value is shown but <b>cannot be typed or changed</b> — it was filled by the system or a default</td><td>Field shown, greyed out</td></tr>
+                <tr><td class="hl"><b>Suppress</b> (Hide)</td><td>The field is <b>not shown at all</b> and can hold no value in this context</td><td>Field invisible</td></tr>
+              </table>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · A printed admission form</span>
+              <p>A school admission form has boxes with a red star — <i>student name, father’s name</i> (<b>Required</b>). Some boxes have no star — <i>hobbies</i> (<b>Optional</b>). The office stamps the <i>roll number</i> itself — you may read it but not write it (<b>Display</b>). And the form for Class 1 has no <i>previous board marks</i> box at all (<b>Suppress</b>). Field status is exactly this printing decision — made once by the consultant, obeyed by every posting screen afterwards.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Critical distinction · Two different “field statuses”</span>
+              <p>Beginners mix up two settings that share the name. Keep them apart from today:</p>
+              <p><b>(A) Master-data field status</b> — controls the screen where you <i>create an account / customer / vendor</i>. For G/L accounts it comes from the <b>account group</b> (<code>OBD4</code>, Section 10).</p>
+              <p><b>(B) Posting field status</b> — controls the screen where you <i>post a document</i> (FB50, FB60…). It comes from the <b>field status group</b> of the G/L account combined with the <b>posting key</b>. Sections 12–13 are about <b>(B)</b>.</p>
+              <p class="urdu">Aik field status khata BANATE waqt ka form control karta hai, dusra ENTRY karte waqt ka. Naam aik hai, kaam do hain — exam yahin phasata hai.</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S12 ============ -->
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> Field Status in detail — variant, groups &amp; posting keys (OBC4 · OBC5 · OB41)</h2>
+            <p class="sub">The posting-side field status (B) has three moving parts. Learn them in order.</p>
+
+            <h3>Part 1 — The Field Status Variant (OBC4 / OBC5)</h3>
+            <div class="box term">
+              <span class="box-title">New term · Field Status Variant</span>
+              <p>A <b>field status variant</b> is a named bundle of <b>field status groups</b> — another use of the Lesson 6 <b>variant principle</b>: define once, assign to many company codes. The variant is defined in <code>OBC4</code> and assigned to each company code in <code>OBC5</code> (it also appears in the company code’s global parameters, <code>OBY6</code>). SAP delivers a standard variant, commonly <code>1000</code>, which most projects copy. Technical field: <code>T001-FSTVA</code>.</p>
+            </div>
+
+            <h3>Part 2 — Field Status Groups (OBC4)</h3>
+            <div class="box term">
+              <span class="box-title">New term · Field Status Group</span>
+              <p>Inside the variant live <b>field status groups</b> — small rule-cards, one per <i>kind</i> of account. A group says, for every field on the posting screen, which of the four statuses it has. Each G/L account then <b>carries one group</b> in its company code segment (the <code>SKB1</code> field you saw in FS00, Section 9). Groups are 4 characters; SAP delivers examples like <code>G001</code> (general), <code>G005</code> (cost accounts), <code>G052</code> (reconciliation-type accounts) — projects usually create their own.</p>
+            </div>
+            <p>Why per account-kind? Because the right rules differ by account: postings to <b>expense accounts</b> should demand a <b>cost center</b> (Required); postings to the <b>bank account</b> should not even show one (Suppress); postings to a <b>vendor reconciliation account</b> need fields that a salary account never sees.</p>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the OBC4 field status group screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OBC4 — Field Status Group “EXPN” (Expenses) inside variant 1000 · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Field group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status</span><br>
+Cost center&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="kw">Required entry</span> <span class="cm">← an expense without a cost center is useless for CO</span><br>
+Profit center&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="kw">Optional entry</span><br>
+Business area&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">Optional entry</span><br>
+Text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">Optional entry</span><br>
+Trading partner&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="st">Suppress</span> <span class="cm">← internal expenses have no group partner</span><br>
+Value date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="st">Suppress</span></div>
+            </div>
+
+            <h3>Part 3 — Posting Keys (OB41)</h3>
+            <div class="box term">
+              <span class="box-title">New term · Posting Key</span>
+              <p>A <b>posting key</b> is a 2-digit code that tells SAP what kind of line is being posted — debit or credit, and to what kind of account. You have actually been using their paper ancestors for years: <code>40</code> = <b>debit to a G/L account</b>, <code>50</code> = <b>credit to a G/L account</b>, <code>31</code> = credit to a vendor, <code>21</code> = debit to a vendor, <code>01</code> = debit to a customer, <code>11</code> = credit to a customer. Posting keys are maintained in <code>OB41</code> (table <code>TBSL</code>) — and <b>each posting key also carries its own field status</b>, because a vendor line and a G/L line should not show identical fields.</p>
+              <p class="urdu">Posting key = line ki qisam ka code. 40 matlab G/L debit, 50 matlab G/L credit. Ye code khud bhi kuch fields ke rules rakhta hai.</p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 300" role="img" aria-label="Diagram showing how field status variant, group and posting key combine on the posting screen">
+                <defs>
+                  <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box" x="30" y="30" width="330" height="66" rx="10"/>
+                <text class="svg-title" x="195" y="56" text-anchor="middle">FIELD STATUS VARIANT (OBC4)</text>
+                <text class="svg-sub" x="195" y="76" text-anchor="middle">assigned to the company code in OBC5</text>
+
+                <rect class="svg-box-a" x="30" y="126" width="330" height="66" rx="10"/>
+                <text class="svg-title" x="195" y="152" text-anchor="middle">FIELD STATUS GROUP of the account</text>
+                <text class="svg-sub" x="195" y="172" text-anchor="middle">stored on the G/L account — SKB1 (FS00)</text>
+
+                <rect class="svg-box-g" x="30" y="222" width="330" height="56" rx="10"/>
+                <text class="svg-title" x="195" y="246" text-anchor="middle">POSTING KEY (OB41)</text>
+                <text class="svg-sub" x="195" y="264" text-anchor="middle">e.g. 40 = G/L debit — has its own field status</text>
+
+                <path class="svg-arrow" d="M360 159 H440" style="marker-end:url(#arr3)"/>
+                <path class="svg-line" d="M360 63 C 430 63 420 130 448 138"/>
+                <path class="svg-line" d="M360 250 C 430 250 420 180 448 172"/>
+
+                <rect class="svg-box-gr" x="455" y="110" width="275" height="90" rx="10"/>
+                <text class="svg-title" x="592" y="140" text-anchor="middle">THE POSTING SCREEN</text>
+                <text class="svg-sub" x="592" y="160" text-anchor="middle">each field ends up Required,</text>
+                <text class="svg-sub" x="592" y="178" text-anchor="middle">Optional, Display or Suppressed</text>
+              </svg>
+              <figcaption>Three rule-sources meet on every line you post. The account’s field status group and the posting key are the two that actually combine field by field — Section 13 gives the tie-break rule.</figcaption>
+            </figure>
+
+            <h3>The assignment chain — one clean line to memorise</h3>
+            <ul class="clean">
+              <li><b>Variant → Company Code:</b> <code>OBC5</code> assigns the field status variant to the company code.</li>
+              <li><b>Group → G/L Account:</b> each account’s company code segment (<code>FS00</code>) names its field status group.</li>
+              <li><b>Key → Line:</b> every posted line carries a posting key (<code>OB41</code>).</li>
+              <li><b>Result:</b> for each field, SAP merges the group’s status with the key’s status — using the priority rule next.</li>
+            </ul>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S13 ============ -->
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> The priority rule — when two field statuses fight</h2>
+            <p class="sub">One small rule, endlessly examined. Learn it with the reason, not by rote.</p>
+
+            <p>On a real line, the field status group may say “Cost Center: <b>Optional</b>” while the posting key says “Cost Center: <b>Required</b>”. SAP must pick one behaviour. It does not average them and it does not ask you — it follows a fixed <b>priority order</b>:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Priority</th><th>Status</th><th>Why it sits here</th></tr>
+                <tr><td class="hl"><b>1 (highest)</b></td><td><b>Suppress</b></td><td>A hidden field can hold no value — nothing else can overrule invisibility.</td></tr>
+                <tr><td class="hl"><b>2</b></td><td><b>Display</b></td><td>A display-only field cannot accept typing, so “required” cannot be satisfied by the user — display wins over required.</td></tr>
+                <tr><td class="hl"><b>3</b></td><td><b>Required</b></td><td>Between “must fill” and “may fill”, the stricter rule protects the data.</td></tr>
+                <tr><td class="hl"><b>4 (lowest)</b></td><td><b>Optional</b></td><td>The relaxed default — it wins only when nothing stricter is said anywhere.</td></tr>
+              </table>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · “Chhupa, Dikha, Bharo, Chhoro”</span>
+              <p>Priority order in Roman Urdu: <b>Chhupa</b> (Suppress) sab se taqatwar, phir <b>Dikha</b> (Display), phir <b>Bharo</b> (Required — bharna zaroori), sab se kamzor <b>Chhoro</b> (Optional — chhor bhi sakte ho). In English: <b>S–D–R–O</b> — “<b>S</b>creens <b>D</b>emand <b>R</b>espect, <b>O</b>ptional last.”</p>
+            </div>
+
+            <h3>Worked mini-example</h3>
+            <p>You post a debit (posting key <code>40</code>) to the Rent account, whose field status group is <code>EXPN</code>:</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Field</th><th>Group EXPN says</th><th>Posting key 40 says</th><th>Result on screen</th></tr>
+                <tr><td>Cost Center</td><td>Required</td><td>Optional</td><td class="hl"><b>Required</b> — Required (3) beats Optional (4)</td></tr>
+                <tr><td>Trading Partner</td><td>Suppress</td><td>Optional</td><td class="hl"><b>Suppressed</b> — Suppress (1) beats everything</td></tr>
+                <tr><td>Assignment</td><td>Optional</td><td>Display</td><td class="hl"><b>Display</b> — Display (2) beats Optional (4)</td></tr>
+              </table>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>Two favourites: <b>(1)</b> “Can a field be made required if it is suppressed in the posting key?” — <b>No.</b> Suppress has the highest priority; the field stays hidden. <b>(2)</b> “Where is the field status group stored?” — on the <b>G/L account’s company code segment</b> (SKB1), not on the chart segment and not on the company code itself. The company code only holds the <b>variant</b> (OBC5).</p>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S14 ============ -->
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> Tables to know</h2>
+            <p class="sub">The exam occasionally names a table directly. These are this lesson’s tables.</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Table</th><th>What it stores</th><th>Belongs to</th></tr>
+                <tr><td><code>TCURC</code></td><td>Currency codes (the allowed currency keys)</td><td>Currency — OY03</td></tr>
+                <tr><td><code>TCURX</code></td><td>Decimal-place exceptions (JPY = 0, KWD = 3…)</td><td>Currency</td></tr>
+                <tr><td><code>TCURV</code></td><td>Exchange rate types (M, B, G…)</td><td>Currency — OB07</td></tr>
+                <tr><td><code>TCURF</code></td><td>Translation ratios per currency pair</td><td>Currency — OBBS</td></tr>
+                <tr><td><code>TCURR</code></td><td>The exchange rates themselves, by date</td><td>Currency — OB08</td></tr>
+                <tr><td><code>T001</code></td><td>Company codes — field <code>WAERS</code> = local currency</td><td>Currency / Lesson 5</td></tr>
+                <tr><td><code>T004</code></td><td>Charts of accounts (the chart definitions)</td><td>CoA — OB13</td></tr>
+                <tr><td><code>SKA1</code></td><td>G/L accounts — chart of accounts segment</td><td>CoA — FSP0 / FS00</td></tr>
+                <tr><td><code>SKB1</code></td><td>G/L accounts — company code segment (incl. field status group)</td><td>CoA — FSS0 / FS00</td></tr>
+                <tr><td><code>SKAT</code></td><td>G/L account names / texts</td><td>CoA</td></tr>
+                <tr><td><code>T077S</code></td><td>G/L account groups (number ranges)</td><td>CoA — OBD4</td></tr>
+                <tr><td><code>TBSL</code></td><td>Posting keys and their field status</td><td>Field Status — OB41</td></tr>
+                <tr><td><code>ACDOCA</code></td><td>Universal Journal — where posted amounts in all currencies finally live</td><td>S/4HANA (later lesson)</td></tr>
+              </table>
+            </div>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S15 ============ -->
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> Exam traps</h2>
+            <p class="sub">The mistakes C_TS4FI questions are designed to catch. Read these twice.</p>
+            <ul class="clean">
+              <li><b>Trap 1 — “Change the company code currency after go-live.”</b> The local currency (<code>T001-WAERS</code>) is fixed when the company code is created and cannot simply be changed once postings exist. It is a before-you-start decision.</li>
+              <li><b>Trap 2 — “Postings use the bank selling rate.”</b> Standard FI translation uses exchange rate type <b>M</b> (average rate). B and G exist for specific bank processes.</li>
+              <li><b>Trap 3 — “A JPY amount is 100× too large — the rate must be wrong.”</b> Blame <b>decimal places</b> (<code>TCURX</code>: JPY has 0 decimals), not the exchange rate.</li>
+              <li><b>Trap 4 — “Each company code needs its own chart of accounts.”</b> False. One <b>operating chart</b> can be assigned to <b>many</b> company codes; but each company code has <b>exactly one</b> operating chart.</li>
+              <li><b>Trap 5 — “You can post directly to the group chart.”</b> Never. Group and country charts are <b>mapping / reporting</b> views only, reached through the <b>group account number</b> (chart segment) and <b>alternative account number</b> (company code segment).</li>
+              <li><b>Trap 6 — “The account is in the chart, so it can be posted.”</b> Only if the <b>company code segment (SKB1)</b> also exists for that company code. Chart segment alone (SKA1) is not postable.</li>
+              <li><b>Trap 7 — “Account group and field status group are the same thing.”</b> The <b>account group</b> (OBD4) controls number ranges and the <i>master-data</i> screen. The <b>field status group</b> (OBC4) controls the <i>posting</i> screen. Different objects, different jobs.</li>
+              <li><b>Trap 8 — “Required beats Suppress.”</b> The priority is <b>Suppress → Display → Required → Optional</b>. A field suppressed in the posting key stays hidden no matter what the group says.</li>
+              <li><b>Trap 9 — “The field status variant is assigned to the chart of accounts.”</b> No — the variant is assigned to the <b>company code</b> (OBC5); the <b>group</b> is assigned to each <b>G/L account</b> (SKB1).</li>
+              <li><b>Trap 10 — “Parallel currencies can be added later and old documents will show values.”</b> Parallel currencies (OB22) must be active <b>before</b> posting; historical documents have no values in a currency that was switched on afterwards.</li>
+            </ul>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S16 ============ -->
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> A–Z glossary</h2>
+            <p class="sub">Every technical term from this lesson, in one line each.</p>
+            <dl class="glossary">
+              <dt>Account Group (OBD4)</dt><dd>Category of G/L accounts inside a chart; controls the number range and the master-data screen’s field status. Table T077S.</dd>
+              <dt>Alternative Account Number</dt><dd>Field on the company code segment (SKB1) holding the account’s number in the country chart of accounts.</dd>
+              <dt>Chart of Accounts</dt><dd>The complete list of G/L accounts a company may post to; 4-character key, field KTOPL, table T004; defined in OB13.</dd>
+              <dt>Company Code Currency</dt><dd>The local currency of a company code (T001-WAERS); currency of its legal books; set in OX02.</dd>
+              <dt>Country Chart of Accounts</dt><dd>Optional chart prescribed by a country’s law; assigned to a company code in OB62; used via alternative account numbers.</dd>
+              <dt>Currency Key</dt><dd>The 3-letter ISO code of a currency (PKR, USD, EUR); table TCURC; checked in OY03.</dd>
+              <dt>Currency Type</dt><dd>Code stating why a currency view exists: 10 company code, 30 group, 40 hard, 50 index-based, 60 global company currency.</dd>
+              <dt>Direct Quotation</dt><dd>Rate written as local amount per 1 unit of foreign currency (1 USD = 278 PKR).</dd>
+              <dt>Display (field status)</dt><dd>Field is shown but cannot be changed; priority 2 in the field status priority rule.</dd>
+              <dt>Exchange Rate</dt><dd>Price of one currency in another, stored by type and date in TCURR; entered in OB08.</dd>
+              <dt>Exchange Rate Type</dt><dd>Kind of rate: M = average (standard for postings), B = bank selling, G = bank buying; table TCURV, OB07.</dd>
+              <dt>Field Status</dt><dd>Rule deciding whether a screen field is Required, Optional, Display or Suppressed.</dd>
+              <dt>Field Status Group</dt><dd>A rule-card inside a field status variant, carried by each G/L account (SKB1); defined in OBC4.</dd>
+              <dt>Field Status Variant</dt><dd>Named bundle of field status groups, assigned to a company code in OBC5; defined in OBC4.</dd>
+              <dt>FS00 / FSP0 / FSS0</dt><dd>Maintain a G/L account centrally / chart segment only / company code segment only.</dd>
+              <dt>Group Account Number</dt><dd>Field on the chart segment (SKA1) holding the account’s number in the group chart of accounts.</dd>
+              <dt>Group Chart of Accounts</dt><dd>One common chart for the whole group for consolidation and comparison; linked in OB13 to the operating chart.</dd>
+              <dt>Group Currency</dt><dd>Parallel currency in the parent company’s currency (type 30), for group reporting without later translation.</dd>
+              <dt>Hard Currency</dt><dd>Parallel currency (type 40) in a stable foreign currency, used in high-inflation countries.</dd>
+              <dt>Indirect Quotation</dt><dd>Rate written as foreign amount per 1 unit of local currency (1 PKR = 0.003597 USD); marked with “/” in OB08.</dd>
+              <dt>Ledger</dt><dd>One complete set of books under one set of accounting rules (leading ledger 0L); parallel currencies are set per ledger in S/4HANA.</dd>
+              <dt>Local Currency</dt><dd>Same as company code currency — the currency of the legal books; every posting is stored in it (amount field DMBTR).</dd>
+              <dt>Master Data</dt><dd>Standing data reused by transactions — G/L accounts, customers, vendors — as opposed to transaction (posting) data.</dd>
+              <dt>OB08 / OB22 / OB62</dt><dd>Enter exchange rates / define additional (parallel) local currencies / assign chart of accounts to company code.</dd>
+              <dt>OB13 / OBD4 / OBC4 / OBC5 / OB41</dt><dd>Define chart of accounts / define account groups / define field status variant &amp; groups / assign variant to company code / maintain posting keys.</dd>
+              <dt>Operating Chart of Accounts</dt><dd>The chart a company code posts in daily; exactly one per company code; one chart can serve many company codes.</dd>
+              <dt>Optional (field status)</dt><dd>Field may be filled or left empty; lowest priority (4) in the priority rule.</dd>
+              <dt>Parallel Currency</dt><dd>An additional currency in which every posting is valued at the same time as the local currency; set up in OB22.</dd>
+              <dt>Posting Key</dt><dd>2-digit code for the kind of posting line (40 = G/L debit, 50 = G/L credit, 31 = vendor credit…); carries its own field status; OB41, table TBSL.</dd>
+              <dt>Required (field status)</dt><dd>Field must be filled before the document can be saved; priority 3.</dd>
+              <dt>Segment (of a G/L account)</dt><dd>One of the two parts of a G/L account master: chart segment (SKA1) and company code segment (SKB1).</dd>
+              <dt>Suppress (field status)</dt><dd>Field is hidden and holds no value; highest priority (1) in the priority rule.</dd>
+              <dt>Transaction Currency</dt><dd>Currency of the business document itself (the invoice currency); amount field WRBTR.</dd>
+              <dt>Translation Ratio</dt><dd>The units in which an exchange rate is quoted (e.g. 1:1 or 100:1) per currency pair; OBBS, table TCURF.</dd>
+            </dl>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S17 ============ -->
+          <section class="lesson" id="s17">
+            <h2><span class="no">17</span> Summary — the whole lesson on one screen</h2>
+            <ul class="clean">
+              <li><b>Currency:</b> every posting is stored in the <b>transaction currency</b> (the invoice’s currency, <code>WRBTR</code>) and always translated into the <b>local / company code currency</b> (<code>T001-WAERS</code>, set in <code>OX02</code>, amount <code>DMBTR</code>) — plus any <b>parallel currencies</b> switched on in <code>OB22</code> (types: 30 group, 40 hard, 50 index, 60 global company).</li>
+              <li><b>Currency settings</b> = currency codes (<code>OY03</code> / <code>TCURC</code>), decimal places (<code>TCURX</code> — JPY 0, KWD 3), rate types (<code>OB07</code> / <code>TCURV</code> — <b>M</b> is the posting standard), translation ratios (<code>OBBS</code> / <code>TCURF</code>), and the rates themselves (<code>OB08</code> / <code>TCURR</code>), in direct or indirect quotation.</li>
+              <li><b>Chart of Accounts</b> (<code>OB13</code>, table <code>T004</code>, field <code>KTOPL</code>): the full list of G/L accounts; it also fixes the <b>length of account numbers</b> (max 10 digits). Assigned to company codes in <code>OB62</code>.</li>
+              <li><b>Three chart roles:</b> <b>operating</b> (exactly one per company code; one chart can serve many company codes), <b>group</b> (linked via the <b>group account number</b> in SKA1), <b>country</b> (linked via the <b>alternative account number</b> in SKB1). Nobody posts in group or country charts.</li>
+              <li><b>G/L account master</b> = chart segment (<code>SKA1</code>, once per chart) + company code segment (<code>SKB1</code>, once per company code); both are needed before posting; maintained together in <code>FS00</code>.</li>
+              <li><b>Account groups</b> (<code>OBD4</code>, <code>T077S</code>): categories inside the chart that control the <b>number range</b> of new accounts and the field status of the <b>master-data</b> screen.</li>
+              <li><b>Field Status</b> (posting side): the <b>variant</b> is defined in <code>OBC4</code> and assigned to the company code in <code>OBC5</code>; each G/L account carries a <b>field status group</b> (SKB1); each line carries a <b>posting key</b> (<code>OB41</code>) with its own field status. The two merge by priority: <b>Suppress → Display → Required → Optional</b>.</li>
+            </ul>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — khatam kar ke Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <!-- ============ S18 ============ -->
+          <section class="lesson" id="s18">
+            <h2><span class="no">18</span> Self-test — 12 questions</h2>
+            <p class="sub">Click an answer to check yourself. Explanations appear instantly — no marks are saved anywhere.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart the test</button>
+            <div class="sec-foot">
+            <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+            <span class="read-status">Not read yet — test de kar Mark Read dabayein</span>
+          </div>
+        </section>
+
+          <div class="next-lesson">
+            <span class="arrow">→</span>
+            <div>
+              <b>Next: Lesson 8 — Retained Earnings Account</b><br>
+              <span style="color:var(--ink-soft)">A small preview only: at year-end, all your revenue and expense accounts must empty themselves into the Balance Sheet — profit (or loss) lands in one special account called <b>Retained Earnings</b>. In Lesson 8 you will learn how SAP knows which account that is, where it is defined for the chart of accounts, and why every P&amp;L account must point to it before the year can close. Nothing more for now — first make sure today’s currency, chart and field status are solid.</span>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 7 of the SAP S/4HANA Financial Accounting series · Prepared for C_TS4FI (SAP S/4HANA Cloud Private Edition, Financial Accounting) exam preparation · All SAP screens shown are re-created illustrations for learning, not real SAP screenshots.
+            <br/>course created by Muhammad Asad Ullah Ibrahim
+          </footer>
+        </main>
+      </div>
+      </div>
+    </div>
+
+    <script>
+      // ---- Shared course progress store (localStorage, shared by all lessons) ----
+      window.SAPProgress=(function(){
+        var KEY='sapCts4fiProgress_v1';
+        function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+        function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+        function getLesson(n){ var s=load(), L=null;
+          if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+          if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+          return L; }
+        function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+          for(var p in patch){ cur[p]=patch[p]; }
+          s.lessons[k]=cur; saveAll(s); return cur; }
+        function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+          return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+        function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+          s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+        return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+      })();
+
+      // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+      function sha256Hex(ascii){
+        ascii=unescape(encodeURIComponent(ascii));
+        function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+        var maxWord=Math.pow(2,32), i, j, result='';
+        var words=[], asciiBitLength=ascii.length*8;
+        var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+        var primeCounter=k.length, isComposite={};
+        for(var candidate=2; primeCounter<64; candidate++){
+          if(!isComposite[candidate]){
+            for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+            hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+            k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+          }
+        }
+        ascii+='\x80';
+        while(ascii.length%64-56) ascii+='\x00';
+        for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+        words[words.length]=((asciiBitLength/maxWord)|0);
+        words[words.length]=(asciiBitLength);
+        for(j=0;j<words.length;){
+          var w=words.slice(j,j+=16), oldHash=hash;
+          hash=hash.slice(0,8);
+          for(i=0;i<64;i++){
+            var w15=w[i-15], w2=w[i-2];
+            var a=hash[0], e=hash[4];
+            var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+            var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+            hash=[(temp1+temp2)|0].concat(hash);
+            hash[4]=(hash[4]+temp1)|0;
+          }
+          for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+        }
+        for(i=0;i<8;i++){
+          for(j=3;j+1;j--){
+            var b=(hash[i]>>(j*8))&255;
+            result+=((b<16)?0:'')+b.toString(16);
+          }
+        }
+        return result;
+      }
+
+      // ---- Lesson 7 gating: locked until Lesson 6 is fully complete, or the gate test is passed 5/5 ----
+      (function(){
+        var THIS_LESSON=7, PREV_LESSON=6, PREV_SECTIONS=16, LOCK_MS=60*60*1000;
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var GATE_Q=[
+          {q:"What is a Business Area used for?",opts:["To report results by area of responsibility across company codes","To define the fiscal year calendar for a company code","To control which posting periods are open for posting","To assign a chart of accounts to a company code"],a:0},
+          {q:"Which T-code defines a Fiscal Year Variant?",opts:["OB52","OB29","OBB8","OX02"],a:1},
+          {q:"Which is the standard calendar fiscal year variant?",opts:["V3","K1","K4","V9"],a:2},
+          {q:"What is a Credit Control Area?",opts:["The area where exchange rates are maintained","A unit that groups company codes for tax reporting","The smallest unit that produces a balance sheet","The unit that controls customer credit limits"],a:3},
+          {q:"Which T-code opens/closes Posting Periods?",opts:["OB29","OB52","OB08","OBD4"],a:1}
+        ];
+        var gateScreen=document.getElementById('gateScreen');
+        var content=document.getElementById('lessonContent');
+        var lockBox=document.getElementById('gateLockBox');
+        var lockUntilEl=document.getElementById('gateLockUntil');
+        var countdownEl=document.getElementById('gateCountdown');
+        var testArea=document.getElementById('gateTestArea');
+        var qWrap=document.getElementById('gateQuestions');
+        var scoreEl=document.getElementById('gateScore');
+        var msgEl=document.getElementById('gateMsg');
+        var attemptsEl=document.getElementById('gateAttempts');
+        var submitBtn=document.getElementById('gateSubmit');
+        var retryBtn=document.getElementById('gateRetry');
+        var adminBtn=document.getElementById('adminBtn');
+        var adminForm=document.getElementById('adminForm');
+        var adminPw=document.getElementById('adminPw');
+        var adminSubmit=document.getElementById('adminSubmit');
+        var adminMsg=document.getElementById('adminMsg');
+        var timer=null, selected={};
+
+        function isPrevComplete(){
+          var L=window.SAPProgress.getLesson(PREV_LESSON);
+          if(!L) return false;
+          var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+          var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+          return !!(allRead&&quiz);
+        }
+        function unlockLesson(){
+          if(timer){ clearInterval(timer); timer=null; }
+          gateScreen.hidden=true; gateScreen.style.display='none';
+          content.hidden=false; content.style.display='';
+          window.scrollTo(0,0);
+        }
+        function updateCountdown(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var rem=g.lockUntil-Date.now();
+          if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+          var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+          countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        }
+        function showLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          lockBox.hidden=false;
+          testArea.style.display='none';
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+          updateCountdown();
+          if(timer) clearInterval(timer);
+          timer=setInterval(updateCountdown,1000);
+        }
+        function refreshLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var now=Date.now();
+          if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+          if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+          lockBox.hidden=true;
+          testArea.style.display='';
+          return false;
+        }
+        function updateAttempts(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+        }
+        function renderGate(){
+          selected={};
+          scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+          submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+          qWrap.innerHTML='';
+          GATE_Q.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='gate-q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                selected[qi]=oi;
+                var bs=opts.querySelectorAll('.gate-opt');
+                bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+                msgEl.textContent='';
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); qWrap.appendChild(box);
+          });
+        }
+        submitBtn.addEventListener('click',function(){
+          if(refreshLock()) return;
+          if(Object.keys(selected).length<GATE_Q.length){
+            msgEl.textContent='Please answer all 5 questions before submitting.';
+            scoreEl.textContent='';
+            return;
+          }
+          var score=0;
+          GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+          qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+          submitBtn.hidden=true;
+          scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          if(score===GATE_Q.length){
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            msgEl.textContent='Gate test passed. Lesson 7 is now unlocked.';
+            msgEl.className='ok';
+            updateAttempts();
+            setTimeout(unlockLesson,900);
+          }else{
+            g.fails=(g.fails||0)+1;
+            msgEl.textContent='Go back and complete previous lesson.';
+            msgEl.className='';
+            if(g.fails>=3){
+              g.lockUntil=Date.now()+LOCK_MS;
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              updateAttempts();
+              refreshLock();
+            }else{
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              retryBtn.hidden=false;
+              updateAttempts();
+            }
+          }
+        });
+        retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+        adminBtn.addEventListener('click',function(){
+          adminForm.hidden=!adminForm.hidden;
+          if(!adminForm.hidden) adminPw.focus();
+        });
+        function tryAdminUnlock(){
+          var val=adminPw.value;
+          if(!val) return;
+          if(sha256Hex(val)===ADMIN_HASH){
+            var g=window.SAPProgress.getGate(THIS_LESSON);
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            adminMsg.className=''; adminMsg.style.color='var(--green)';
+            adminMsg.textContent='Unlocked. Opening Lesson 7…';
+            adminPw.value='';
+            setTimeout(unlockLesson,700);
+          }else{
+            adminMsg.style.color=''; adminMsg.className='err';
+            adminMsg.textContent='Incorrect password. Please try again.';
+            adminPw.value='';
+            adminPw.focus();
+          }
+        }
+        adminSubmit.addEventListener('click',tryAdminUnlock);
+        adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+        // ---- Initial state ----
+        var g0=window.SAPProgress.getGate(THIS_LESSON);
+        if(isPrevComplete()||g0.unlocked===true){
+          unlockLesson();
+        }else{
+          gateScreen.hidden=false; gateScreen.style.display='';
+          content.hidden=true; content.style.display='none';
+          if(!refreshLock()) renderGate();
+          updateAttempts();
+        }
+      })();
+    </script>
+
+    <script>
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent=(t==='dark'?'Dark':'Light'); }
+        apply('light');
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark'?'light':'dark');
+        });
+
+        /* ---------- Mark Read + sidebar progress ---------- */
+        var sections=[].slice.call(document.querySelectorAll('section.lesson'));
+        var tocItems={};
+        document.querySelectorAll('nav.toc li').forEach(function(li){
+          var a=li.querySelector('a');
+          if(a) tocItems[a.getAttribute('href').slice(1)]={li:li,a:a};
+        });
+        var readSet={}, total=sections.length;
+        var pctText=document.getElementById('pctText'), sideFill=document.getElementById('sideFill'),
+            countText=document.getElementById('countText'), readbar=document.getElementById('progressBar');
+
+        function updateProgress(){
+          var n=Object.keys(readSet).length;
+          var pct=total?Math.round(n/total*100):0;
+          pctText.textContent=pct+'%';
+          sideFill.style.width=pct+'%';
+          readbar.style.width=pct+'%';
+          countText.textContent=n+' of '+total+' sections marked read';
+          try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(7,{readSections:arr, allRead:(total>0&&arr.length===total)}); } }catch(e){}
+        }
+        var secRefs={};
+        sections.forEach(function(sec){
+          var btn=sec.querySelector('.mark-read'), status=sec.querySelector('.read-status'), lbl=sec.querySelector('.mr-label');
+          if(!btn) return;
+          var unreadText=status.textContent;
+          secRefs[sec.id]={sec:sec,btn:btn,status:status,lbl:lbl,unreadText:unreadText};
+          btn.addEventListener('click',function(){
+            var id=sec.id;
+            if(readSet[id]){
+              delete readSet[id];
+              sec.classList.remove('is-read'); btn.classList.remove('done');
+              lbl.textContent='Mark Read'; status.textContent=unreadText;
+              if(tocItems[id]) tocItems[id].li.classList.remove('read');
+            }else{
+              readSet[id]=true;
+              sec.classList.add('is-read'); btn.classList.add('done');
+              lbl.textContent='Read ✓'; status.textContent='✓ Marked as read — sidebar mein green tick lag gaya';
+              if(tocItems[id]) tocItems[id].li.classList.add('read');
+            }
+            updateProgress();
+          });
+        });
+        updateProgress();
+
+        /* ---------- Restore saved Mark Read state from the shared store ---------- */
+        try{
+          var savedL7=window.SAPProgress&&window.SAPProgress.getLesson(7);
+          if(savedL7&&savedL7.readSections){
+            savedL7.readSections.forEach(function(id){
+              var r=secRefs[id];
+              if(r&&!readSet[id]){
+                readSet[id]=true;
+                r.sec.classList.add('is-read'); r.btn.classList.add('done');
+                r.lbl.textContent='Read ✓'; r.status.textContent='✓ Marked as read — sidebar mein green tick lag gaya';
+                if(tocItems[id]) tocItems[id].li.classList.add('read');
+              }
+            });
+            updateProgress();
+          }
+        }catch(e){}
+
+        /* ---------- Scroll-spy: active section highlighting ---------- */
+        var current=null;
+        function setActive(id){
+          if(current===id) return; current=id;
+          Object.keys(tocItems).forEach(function(k){ tocItems[k].a.classList.toggle('active', k===id); });
+        }
+        if('IntersectionObserver' in window){
+          var spy=new IntersectionObserver(function(entries){
+            entries.forEach(function(en){ if(en.isIntersecting) setActive(en.target.id); });
+          },{rootMargin:'-30% 0px -55% 0px', threshold:0});
+          sections.forEach(function(s){ spy.observe(s); });
+        }else{
+          window.addEventListener('scroll',function(){
+            var y=window.scrollY+window.innerHeight*0.35, best=sections[0].id;
+            sections.forEach(function(s){ if(s.offsetTop<=y) best=s.id; });
+            setActive(best);
+          },{passive:true});
+        }
+        if(sections.length) setActive(sections[0].id);
+      })();
+    </script>
+
+    <script>
+      (function(){
+        var QUESTIONS=[
+          {q:"A Pakistani company code receives a supplier invoice in USD. Which currency is the 'local currency' of this posting, and where was it defined?",opts:["USD — defined in OB08 with the exchange rate","PKR — defined in the company code itself (OX02), stored as T001-WAERS","EUR — defined in the group chart of accounts","The currency typed by the user on the document"],a:1,why:"The local (company code) currency is fixed in the company code definition — OX02, field T001-WAERS. USD here is only the transaction currency of the invoice."},
+          {q:"Which exchange rate type does SAP use as the standard for translating foreign-currency FI postings?",opts:["B — bank selling rate","G — bank buying rate","M — average rate","The rate type of the group currency"],a:2,why:"Type M (average rate) is the standard translation rate type for postings. B and G are bank buying/selling rates used in specific bank processes."},
+          {q:"A user complains that a JPY amount appears 100 times too large. What is the most likely cause?",opts:["The exchange rate in TCURR is wrong","The decimal places setting — JPY has 0 decimals (TCURX)","The translation ratio in OBBS is 100:1","The posting key suppresses the decimal field"],a:1,why:"JPY has no sub-units, so TCURX defines 0 decimal places. Decimal errors shift amounts by factors of 100 — rates translate value, decimals place the point."},
+          {q:"Where are the actual exchange rates (for example USD → PKR for a given date) stored and entered?",opts:["Table T001, entered in OX02","Table TCURR, entered with OB08","Table TCURV, entered with OB07","Table SKB1, entered with FS00"],a:1,why:"OB08 maintains the rates in TCURR. TCURV (OB07) holds only the rate TYPES; T001 holds company codes; SKB1 holds G/L account company code segments."},
+          {q:"What is a parallel currency of type 30?",opts:["The transaction currency of the document","The hard currency for high-inflation countries","The group currency — every posting is also valued in the parent company's currency","An index-based currency for legal inflation reporting"],a:2,why:"Currency type 30 = group currency. Type 40 = hard currency, type 50 = index-based currency. Parallel currencies are switched on in OB22, before postings begin."},
+          {q:"Which statement about the Chart of Accounts is correct?",opts:["Every company code must have its own unique chart of accounts","One operating chart of accounts can be assigned to many company codes, but a company code has exactly one operating chart","A chart of accounts is defined per client in FS00","The chart of accounts stores the balances of all accounts"],a:1,why:"Define once, assign many times (variant principle). The chart only LISTS accounts — balances live on the accounts/documents, not in the chart (OB13/T004)."},
+          {q:"How does an operating G/L account connect to the group chart of accounts and to the country chart of accounts?",opts:["Group: alternative account number (SKB1) · Country: group account number (SKA1)","Group: group account number (SKA1) · Country: alternative account number (SKB1)","Both links are stored in the company code (OBY6)","Group and country charts are assigned to the account in OB62"],a:1,why:"Group account number sits in the CHART segment (SKA1) because the group view is the same for all company codes; the alternative (country) number sits in the COMPANY CODE segment (SKB1) because each country may differ."},
+          {q:"A G/L account exists in the chart of accounts but posting to it in company code PK01 fails. What is the most likely reason?",opts:["The account group has no number range","The company code segment (SKB1) for PK01 was never created","The field status variant is not assigned","The account is missing from the group chart"],a:1,why:"An account is postable in a company code only when BOTH segments exist: SKA1 (chart) and SKB1 (that company code)."},
+          {q:"What does the G/L account group (OBD4) control?",opts:["Which posting periods are open","The number range for new accounts and the field status of the master-data screen","The field status of the posting screen (FB50)","The exchange rate type for the account"],a:1,why:"Account groups (T077S) own a number interval and the field status used when CREATING the account master. The POSTING screen is controlled by field status groups (OBC4) + posting keys — Trap 7."},
+          {q:"Where is the field status group of a G/L account stored, and where is the field status variant assigned?",opts:["Group: chart segment SKA1 · Variant: assigned to the chart in OB13","Group: company code segment SKB1 · Variant: assigned to the company code in OBC5","Group: company code (OBY6) · Variant: assigned to the account in FS00","Group: posting key (OB41) · Variant: assigned in OB62"],a:1,why:"The group travels with the account's company code segment (SKB1, visible in FS00). The variant is a company-code-level assignment (OBC5). The posting key carries its OWN separate field status."},
+          {q:"For one field, the field status group says 'Required' but the posting key says 'Suppress'. What does the user see on the posting screen?",opts:["A required field — required beats suppress","An optional field","The field is not shown at all — Suppress has the highest priority","An error message when opening the transaction"],a:2,why:"Priority: Suppress (1) → Display (2) → Required (3) → Optional (4). A suppressed field stays hidden whatever the other source says."},
+          {q:"For one field, the field status group says 'Optional' and the posting key says 'Display'. What is the result?",opts:["Optional — the account's group always wins","Required — the stricter of the two wins","Display — Display (priority 2) beats Optional (priority 4)","Suppress — conflicting settings hide the field"],a:2,why:"Display sits at priority 2, above Required (3) and Optional (4). Remember S–D–R–O: 'Screens Demand Respect, Optional last.'"}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=10?' — Excellent! You are ready for Lesson 8.':' — Re-read the sections above once, then try again. You can do it.');
+                  try{ if(window.SAPProgress) window.SAPProgress.saveLesson(7,{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1473 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Part 2 · Lesson 4 — General Ledger Postings Practical · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8; --green-ink:#ffffff;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527; --green-ink:#0e2417;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .15s linear}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35;border-left:3px solid transparent}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc li.active a{background:var(--accent);color:#fff;font-weight:700;border-left-color:var(--accent-ink)}
+      [data-theme="dark"] nav.toc li.active a{color:#0e1a26}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px;background:var(--surface)}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.active.read a{color:#fff}
+      [data-theme="dark"] nav.toc li.active.read a{color:#0e1a26}
+      nav.toc .tick{display:none;color:var(--green);font-weight:700;flex:none}
+      nav.toc li.read .tick{display:inline}
+      nav.toc li.active .tick{color:inherit}
+      .toc-progress{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+      .toc-progress .pct{font-weight:700;font-size:1.05rem}
+      .toc-progress .track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:6px 0}
+      .toc-progress .fill{height:100%;width:0;background:var(--green);border-radius:99px;transition:width .2s}
+      .toc-progress .count{font-size:.82rem;color:var(--ink-soft)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      section.lesson.is-read{border-color:var(--green)}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .sec-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:22px;padding-top:16px}
+      .mark-read{cursor:pointer;font:inherit;font-weight:700;font-size:.95rem;border-radius:9px;padding:11px 22px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:9px;min-height:48px;transition:background .15s,color .15s}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read .box{width:20px;height:20px;border:2px solid currentColor;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+      .mark-read .box svg{width:13px;height:13px;display:none}
+      .mark-read.done{background:var(--green);color:var(--green-ink);border-color:var(--green)}
+      .mark-read.done .box svg{display:block}
+      .read-status{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);flex-wrap:wrap}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      ol.steps{margin:.4em 0 .8em;padding-left:1.4em}
+      ol.steps li{margin:.45em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+      .btn-ghost{background:var(--surface);color:var(--accent-ink);border:1px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+
+      /* ---------- Gate (locked) screen ---------- */
+      .gate-wrap{max-width:760px;margin:0 auto;padding:34px 18px 80px}
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;box-shadow:var(--shadow)}
+      @media(max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form[hidden]{display:none}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{color:var(--accent);display:inline-flex}
+      .next-lesson .arrow svg{width:26px;height:26px}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Part 2 · Lesson 4</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <!-- ================= LOCKED / GATE SCREEN ================= -->
+    <div class="gate-wrap" id="gateScreen" hidden>
+      <section class="gate-card" aria-labelledby="gateTitle">
+        <div class="gate-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
+        <h2 id="gateTitle">Part 2 · Lesson 4 is locked</h2>
+        <p>This lesson opens only after <b>Part 2 · Lesson 3</b> is fully complete — every section marked Read <b>and</b> its self-test answered. If you have not finished Part 2 · Lesson 3 in this browser, complete it first.</p>
+        <p>You can also open this lesson right now by passing the <b>Gate Test</b> below: 5 questions from Part 2 · Lesson 3 (advanced reporting, Financial Statement Version — OB58, line items — FBL3N, document tracking — FB03, table queries — SE16N, and tax amounts). You need <b>5 / 5</b>. Only your score is shown — correct answers are never displayed.</p>
+
+        <div class="gate-lockbox" id="gateLockBox" hidden>
+          <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+          <p>Locked until: <b id="gateLockUntil">—</b></p>
+          <p>Time remaining: <b id="gateCountdown">—</b></p>
+          <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+        </div>
+
+        <div id="gateTestArea">
+          <div id="gateQuestions"></div>
+          <p id="gateScore" aria-live="polite"></p>
+          <p id="gateMsg" aria-live="polite"></p>
+          <div class="gate-actions">
+            <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+            <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+          </div>
+          <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+        </div>
+
+        <div class="gate-admin">
+          <button class="btn btn-ghost" id="adminBtn" type="button">Admin Unlock</button>
+          <div class="gate-admin-form" id="adminForm" hidden>
+            <label for="adminPw">Admin password</label>
+            <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+            <div class="gate-actions">
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+            </div>
+            <p id="adminMsg" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+      </section>
+    </div>
+
+    <!-- ================= LESSON CONTENT ================= -->
+    <div id="lessonContent" hidden>
+    <div class="wrap">
+      <header class="hero">
+        <span class="kicker">Part 2 · Lesson 4 · Practical — General Ledger Postings</span>
+        <h1>General Ledger Postings — Practical</h1>
+        <p class="lede">Up to now you have <b>built</b> the house: company codes, the chart of accounts, period rules, retained earnings — and in the last lesson you learned to <b>read</b> what is inside it. Today you finally do the accountant’s real daily work: <b>post entries yourself</b>. You will check and create G/L accounts in <b>FS00</b>, post with the friendly <b>FB50</b> screen and the classic <b>F-02</b> screen, display a document in <b>FB03</b>, change what is changeable in <b>FB02</b>, reverse a wrong entry in <b>FB08</b>, and learn the two safety nets — <b>park</b> and <b>hold</b> — that let you stop halfway without losing your work. <span class="urdu">Aaj hum sirf parhenge nahi — khud entry karenge, ghalat entry wapas lenge, aur adhoori entry ko sambhal kar rakhna bhi seekhenge.</span></p>
+        <div class="hero-meta">
+          <span class="chip">Course segment <b>Part 2 · Practical postings</b></span>
+          <span class="chip">Level <b>Beginner · Zero SAP assumed</b></span>
+          <span class="chip">Exam <b>C_TS4FI · G/L accounting — posting, display, change, reversal</b></span>
+          <span class="chip">Key T-codes <b>FS00 · FB50 · F-02 · FB03 · FB02 · FB08</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span><span>Where the course stands — from building to posting</span><span class="tick">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span><span>The G/L account master — what an account really is</span><span class="tick">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span><span>Step by step — FS00: display, create &amp; extend a G/L account</span><span class="tick">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span><span>Anatomy of a posting — header, line items, debits &amp; credits</span><span class="tick">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span><span>Posting keys &amp; document types — the two control codes</span><span class="tick">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span><span>Step by step — FB50: your first G/L posting</span><span class="tick">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span><span>Worked example — office rent, posted end to end</span><span class="tick">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span><span>Step by step — F-02: the classic posting screen</span><span class="tick">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span><span>FB50 vs F-02 — which screen, when?</span><span class="tick">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span><span>Step by step — FB03: display &amp; verify a document</span><span class="tick">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span><span>FB02 — change a document: what you may and may not touch</span><span class="tick">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span><span>FB08 — reversal: undoing a posting the legal way</span><span class="tick">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span><span>Park &amp; hold — the two safety nets for unfinished work</span><span class="tick">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span><span>When postings refuse — the five errors you will meet first</span><span class="tick">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span><span>Exam traps</span><span class="tick">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span><span>A–Z glossary</span><span class="tick">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span><span>Summary — the whole lesson on one screen</span><span class="tick">✓</span></a></li>
+            <li><a href="#s18"><span class="dot"></span><span>Self-test — 10 questions</span><span class="tick">✓</span></a></li>
+            <li><a href="#s19"><span class="dot"></span><span>Coming next — Part 2 · Lesson 5 preview</span><span class="tick">✓</span></a></li>
+          </ol>
+          <div class="toc-progress">
+            <span class="pct" id="pctText">0%</span>
+            <div class="track"><div class="fill" id="sideFill"></div></div>
+            <span class="count" id="countText">0 of 19 sections marked read</span>
+          </div>
+          <p class="toc-note">Screens in this lesson are <b>re-created illustrations</b> made for learning — they are not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <!-- ============ S1 ============ -->
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Where the course stands — from building to posting</h2>
+            <p class="sub">Everything so far was preparation. Today the preparation starts earning its keep.</p>
+
+            <p>Look back at what you already know. In Part 1 you built the <b>enterprise structure</b> (company, company code), the <b>chart of accounts</b>, the <b>fiscal year</b> and <b>posting period</b> rules, <b>retained earnings</b>, <b>ledgers</b> and <b>document types</b>. In Part 2 · Lessons 1–2 you repeated all of that practically — searching company details, setting account series and lengths, creating unique codes, and assigning the Posting Period Variant and retained earnings account. In Part 2 · Lesson 3 you learned to <b>read</b>: reports, line items in FBL3N, documents in FB03, and table queries in SE16N.</p>
+
+            <p>One thing is still missing: nothing has actually been <b>posted</b> by you yet. A chart of accounts with no entries is like a cash book with blank pages. This lesson fills the pages. Here is the complete map of today’s work:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Job</th><th>Question it answers</th><th>Main tools</th></tr>
+                <tr><td><b>1 · Prepare the account</b></td><td>“Does this G/L account exist for my company code, and is it set up correctly for posting?”</td><td class="hl">FS00</td></tr>
+                <tr><td><b>2 · Post the entry</b></td><td>“Record this transaction — debit one account, credit another.”</td><td class="hl">FB50 · F-02</td></tr>
+                <tr><td><b>3 · Check the entry</b></td><td>“Show me exactly what was posted, and let me fix small mistakes.”</td><td class="hl">FB03 · FB02</td></tr>
+                <tr><td><b>4 · Undo the entry</b></td><td>“This posting is wrong — cancel it in a legal, traceable way.”</td><td class="hl">FB08</td></tr>
+                <tr><td><b>5 · Pause the entry</b></td><td>“I am not finished / not sure — save my work without posting it.”</td><td class="hl">Park (FV50 · FBV0) · Hold (FB50)</td></tr>
+              </table>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Khata khul gaya, ab entry hogi</span>
+              <p>Ab tak aap ne <b>khata (ledger book) banaya</b> — pages numbered (chart of accounts), har page par heading (account names), aur dukaan ke khulne ke timings (posting periods). Aaj pehli dafa <b>us khate mein entry likhenge</b>: karaya (rent) diya to Rent page par debit, Cash/Bank page par credit. Aur agar ghalti ho jaye to page phaar nahi sakte — qanoon kehta hai ke ek nayi <b>ulti entry (reversal)</b> karke ghalti ko neutralize karo, taake record hamesha saaf aur traceable rahe.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Posting</span>
+              <p>A <b>posting</b> is the act of saving a balanced accounting entry into SAP so that it becomes part of the official books. Before you press Post, your entry is just typing on a screen — it affects nothing. The moment SAP accepts it, it receives a <b>document number</b>, lands in the Universal Journal (ACDOCA), changes account balances, and can never be deleted — only reversed. <span class="urdu">Posting matlab entry ko pakka kar dena — jaise pen se likhi hui entry; pencil wali draft nahi.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S2 ============ -->
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> The G/L account master — what an account really is</h2>
+            <p class="sub">You cannot post to an account that does not exist — and “exists” in SAP means two separate things.</p>
+
+            <p>In your paper accounting, a ledger account is just a page with a name: “Rent Expense”, “Bank”, “Capital”. In SAP a G/L account is a <b>master record</b> — a stored definition that controls <i>how</i> the account behaves every time someone posts to it. That master record has two segments, and you met both in Part 1:</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 230" role="img" aria-label="Diagram: a G/L account master has a chart of accounts segment (SKA1) and a company code segment (SKB1); both together make the account postable">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+                </defs>
+                <text class="svg-title" x="360" y="24" text-anchor="middle">One G/L account = two segments</text>
+                <rect class="svg-box-a" x="20" y="52" width="300" height="86" rx="10"/>
+                <text class="svg-title" x="170" y="82" text-anchor="middle">Chart of Accounts segment</text>
+                <text class="svg-sub" x="170" y="104" text-anchor="middle">Table SKA1 · valid for the whole chart</text>
+                <text class="svg-sub" x="170" y="122" text-anchor="middle">Account number, name, account type,</text>
+                <text class="svg-sub" x="170" y="138" text-anchor="middle">account group, P&amp;L or Balance Sheet</text>
+                <rect class="svg-box-g" x="400" y="52" width="300" height="86" rx="10"/>
+                <text class="svg-title" x="550" y="82" text-anchor="middle">Company Code segment</text>
+                <text class="svg-sub" x="550" y="104" text-anchor="middle">Table SKB1 · one per company code</text>
+                <text class="svg-sub" x="550" y="122" text-anchor="middle">Currency, tax category, field status group,</text>
+                <text class="svg-sub" x="550" y="138" text-anchor="middle">line item display, open item mgmt</text>
+                <path class="svg-arrow" d="M320 95 H396"/>
+                <rect class="svg-box-gr" x="170" y="168" width="380" height="42" rx="10"/>
+                <text class="svg-sub" x="360" y="194" text-anchor="middle">Both segments exist → the account can be posted in that company code</text>
+              </svg>
+              <figcaption>Illustration — an account defined only in the chart (SKA1) cannot receive postings in a company code until its company code segment (SKB1) also exists.</figcaption>
+            </figure>
+
+            <h3>The fields that control posting <span class="examtag">Exam favourite</span></h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Field</th><th>Where</th><th>What it controls, in simple words</th></tr>
+                <tr><td><b>Account type</b></td><td>Chart segment</td><td>The account’s family: <b>A</b> Assets, <b>D</b> Customers, <b>K</b> Vendors, <b>M</b> Materials, <b>S</b> G/L accounts. A pure G/L account like Rent or Bank carries type <b>S</b>.</td></tr>
+                <tr><td><b>Account group</b></td><td>Chart segment</td><td>Controls the number range the account number must fall in (the series you set in Part 2) and which fields are required / optional / hidden when the master is created — its <b>field status</b>.</td></tr>
+                <tr><td><b>P&amp;L statement account / Balance Sheet account</b></td><td>Chart segment</td><td>One radio choice: is this an income/expense account (P&amp;L) or an asset/liability/equity account (Balance Sheet)? P&amp;L accounts need the retained earnings assignment (OB53) to work at year end.</td></tr>
+                <tr><td><b>Field Status Group</b></td><td>Company code segment</td><td>Decides which extra fields appear — and which are compulsory — when someone posts to this account. Example: an expense account’s group can force a <b>cost centre</b> on every posting.</td></tr>
+                <tr><td><b>Line Item Display</b></td><td>Company code segment</td><td>A tick box. If ON, you can see every individual entry of this account in FBL3N. If OFF, only totals are stored for display. Almost all real accounts keep it ON.</td></tr>
+                <tr><td><b>Open Item Management</b></td><td>Company code segment</td><td>A tick box. If ON, every entry stays “open” until it is matched (cleared) with an opposite entry — used for clearing accounts like bank clearing or GR/IR. Expense and revenue accounts normally keep it OFF.</td></tr>
+                <tr><td><b>Tax category</b></td><td>Company code segment</td><td>Tells SAP whether postings to this account may / must carry a tax code (input tax, output tax, or “posting without tax allowed”).</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key terms · Master data vs transaction data</span>
+              <p><b>Master data</b> is the long-lived “definition” data — G/L accounts, vendors, customers. It changes rarely. <b>Transaction data</b> is the day-to-day movement recorded against that master data — your postings. FS00 maintains master data; FB50 creates transaction data. <span class="urdu">Master data = dukaan ke shelf aur un par lage label; transaction data = roz ka sauda jo un shelves par hota hai.</span></p>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · “SKA pehle, SKB baad mein”</span>
+              <p><b>SKA1</b> = chart segment — the account’s <i>identity</i> (one per chart). <b>SKB1</b> = company code segment — the account’s <i>permission to work</i> in one company code. Identity first, permission second — jaise pehle CNIC banta hai (SKA1), phir kisi sheher mein job ki permission milti hai (SKB1).</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S3 ============ -->
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Step by step — FS00: display, create &amp; extend a G/L account</h2>
+            <p class="sub">FS00 is the one screen where G/L accounts are displayed, created, changed and extended — centrally, for chart and company code together.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · FS00 — Central G/L account maintenance</span>
+              <p><b>FS00</b> maintains a G/L account <i>centrally</i>: both segments (chart + company code) in one transaction. Older separate transactions exist — FSP0 (chart segment only), FSS0 (company code segment only) — but FS00 is the everyday tool and the exam’s default answer. <span class="urdu">FS00 aik hi counter hai jahan account ki dono files — chart wali aur company code wali — aik saath khulti hain.</span></p>
+            </div>
+
+            <h3>Task A — Display an account before you post to it</h3>
+            <ol class="steps">
+              <li>Type <code>FS00</code> in the command field and press Enter.</li>
+              <li>Enter the <b>G/L account number</b> (for example <span class="mono">630100</span> — Office Rent) and the <b>company code</b> (for example <span class="mono">PK01</span>).</li>
+              <li>Press the <b>Display</b> (glasses) icon — or simply press Enter — to open the account in display mode.</li>
+              <li>Read the three tabs: <b>Type/Description</b> (account type, account group, P&amp;L or Balance Sheet choice, names), <b>Control Data</b> (currency, tax category, line item display, open item management), <b>Create/Bank/Interest</b> (field status group, and house-bank details where relevant).</li>
+              <li>Check the two things that decide whether your posting will work: <b>Line Item Display</b> is ticked, and the <b>Field Status Group</b> matches the account’s job (an expense account should demand a cost centre).</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of the FS00 G/L account display screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FS00 — Display G/L Account Centrally · ILLUSTRATION (not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="dim">G/L Account</span>   <span class="hl2">630100</span>        <span class="dim">Company Code</span>  <span class="hl2">PK01</span>   <span class="dim">Ibrahim Apparel &amp; Trading</span>
+<span class="dim">──────────────────────────────────────────────────────────────</span>
+<span class="kw">Tab: Type / Description</span>
+  Account type ............ <span class="st">S</span>  <span class="dim">(G/L account)</span>
+  Account group ........... <span class="st">EXPN</span>  <span class="dim">(Expenses)</span>
+  <span class="st">[x]</span> P&amp;L statement account      <span class="dim">[ ] Balance Sheet account</span>
+  Short text .............. <span class="st">Office Rent</span>
+  G/L account long text ... <span class="st">Office Rent Expense</span>
+<span class="kw">Tab: Control Data</span>
+  Account currency ........ <span class="st">PKR</span>
+  Tax category ............ <span class="st">-</span>  <span class="dim">(posting without tax allowed)</span>
+  Line item display ....... <span class="st">[x] ON</span>
+  Open item management .... <span class="dim">[ ] OFF</span>
+<span class="kw">Tab: Create / Bank / Interest</span>
+  Field status group ...... <span class="st">G004</span>  <span class="dim">(cost centre required)</span>
+<span class="cm">→ Account is fully created in chart PKOP and company code PK01: postable.</span></div>
+            </div>
+
+            <h3>Task B — Create a brand-new account</h3>
+            <ol class="steps">
+              <li>In FS00, enter the <b>new account number</b> — it must fall inside a number range of an account group in your chart (remember the series from Part 2: e.g. expenses 600000–699999) — plus the company code.</li>
+              <li>Press the <b>Create</b> (blank page) icon. SAP may offer <b>“with template”</b>: copying an existing similar account and changing its name is the fastest safe route.</li>
+              <li>Fill the <b>Type/Description</b> tab: account group, P&amp;L or Balance Sheet choice, short text and long text.</li>
+              <li>Fill the <b>Control Data</b> tab: currency, tax category, tick <b>Line Item Display</b>; tick Open Item Management <i>only</i> for clearing-type accounts.</li>
+              <li>Fill the <b>Create/Bank/Interest</b> tab: the <b>Field Status Group</b>.</li>
+              <li><b>Save</b> (Ctrl+S). The account now exists in SKA1 and SKB1 together — it can be posted immediately.</li>
+            </ol>
+
+            <h3>Task C — Extend an existing account to another company code</h3>
+            <p>“Extend” means: the chart segment already exists, and you create only the missing company code segment. In FS00, enter the account number and the <b>new</b> company code, press Create, fill the company-code tabs (Control Data, Create/Bank/Interest) and save. The Type/Description data is already there from the chart segment.</p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · “Account does not exist in company code”</span>
+              <p>If FB50 later refuses with <i>“Account 630100 does not exist in company code PK02”</i>, the chart segment exists but the <b>company code segment is missing</b> for PK02. The fix is Task C in FS00 — not creating a new account number. Exam questions love this exact error.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S4 ============ -->
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> Anatomy of a posting — header, line items, debits &amp; credits</h2>
+            <p class="sub">Every SAP posting — whether from FB50, an invoice, or payroll — is stored as one document with the same skeleton.</p>
+
+            <p>You already know double-entry bookkeeping: every transaction touches at least two accounts, total debits equal total credits. SAP stores exactly that, in a fixed shape called a <b>document</b>:</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 250" role="img" aria-label="Diagram: an accounting document has one header (BKPF) and at least two line items (ACDOCA in S/4HANA), and total debit must equal total credit">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+                </defs>
+                <text class="svg-title" x="360" y="24" text-anchor="middle">One document — one header, many lines</text>
+                <rect class="svg-box-a" x="110" y="44" width="500" height="64" rx="10"/>
+                <text class="svg-title" x="360" y="70" text-anchor="middle">HEADER — one per document (table BKPF)</text>
+                <text class="svg-sub" x="360" y="92" text-anchor="middle">Document date · Posting date · Document type SA · Company code · Currency · Reference · Header text</text>
+                <rect class="svg-box" x="60" y="132" width="280" height="52" rx="10"/>
+                <text class="svg-sub" x="200" y="154" text-anchor="middle">Line 1 · Rent Expense 630100</text>
+                <text class="svg-sub" x="200" y="172" text-anchor="middle">DEBIT 50,000 PKR</text>
+                <rect class="svg-box" x="380" y="132" width="280" height="52" rx="10"/>
+                <text class="svg-sub" x="520" y="154" text-anchor="middle">Line 2 · Bank Account 110100</text>
+                <text class="svg-sub" x="520" y="172" text-anchor="middle">CREDIT 50,000 PKR</text>
+                <path class="svg-line" d="M300 108 L250 130"/>
+                <path class="svg-line" d="M420 108 L470 130"/>
+                <rect class="svg-box-gr" x="185" y="204" width="350" height="36" rx="10"/>
+                <text class="svg-sub" x="360" y="227" text-anchor="middle">Rule: Σ Debit = Σ Credit — otherwise SAP refuses to post</text>
+              </svg>
+              <figcaption>Illustration — line items live in the Universal Journal (ACDOCA) in S/4HANA; the header lives in BKPF. The pair together is “the document”.</figcaption>
+            </figure>
+
+            <h3>The header fields you will type every day</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Field</th><th>Simple meaning</th><th>Why it matters</th></tr>
+                <tr><td><b>Document date</b></td><td>The date printed on the source paper (invoice / voucher date).</td><td>Evidence of when the business event happened.</td></tr>
+                <tr><td><b>Posting date</b></td><td>The date on which the entry counts in the books.</td><td>Decides the <b>posting period and fiscal year</b> — and the period must be open (OB52), otherwise posting is refused.</td></tr>
+                <tr><td><b>Document type</b></td><td>A two-letter code (e.g. <span class="mono">SA</span>) classifying the entry.</td><td>Controls the number range and which account types may be used — Section 5.</td></tr>
+                <tr><td><b>Reference</b></td><td>The external paper’s number (supplier invoice no., cheque no.).</td><td>Your bridge back to the physical document.</td></tr>
+                <tr><td><b>Header text</b></td><td>A short free-text note for the whole document.</td><td>Future readers thank you. Auditors too.</td></tr>
+              </table>
+            </div>
+
+            <h3>And each line item carries…</h3>
+            <ul class="clean">
+              <li><b>G/L account</b> — which page of the ledger this line hits.</li>
+              <li><b>Debit / Credit indicator</b> — in classic screens shown as posting key or an S/H flag (S = Soll = debit, H = Haben = credit, from German).</li>
+              <li><b>Amount</b> — in document currency.</li>
+              <li><b>Text</b> — a line-level note (“Rent – November”).</li>
+              <li><b>Extra assignments</b> demanded by the field status group — most often <b>cost centre</b> for expense lines, sometimes profit centre, assignment, or tax code.</li>
+            </ul>
+
+            <div class="box term">
+              <span class="box-title">Key term · Cost centre</span>
+              <p>A <b>cost centre</b> is a label for <i>where</i> inside the company a cost belongs — a department, branch or shop floor. It is not an account; it is an extra tag on the posting line so management can ask “how much did the Faisalabad office spend on rent?” <span class="urdu">Account batata hai kharcha kis cheez par hua; cost centre batata hai kis department ne kiya.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S5 ============ -->
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Posting keys &amp; document types — the two control codes</h2>
+            <p class="sub">Two small codes quietly control every posting. Learn them once; they appear in almost every C_TS4FI question paper.</p>
+
+            <h3>Posting keys — one per line item <span class="examtag">Memorise the G/L pair</span></h3>
+            <p>A <b>posting key</b> is a two-digit code attached to each line item. It answers three questions at once: is this line a <b>debit or credit</b>, what <b>kind of account</b> it hits, and which fields the line will ask for.</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Posting key</th><th>Meaning</th><th>Used for</th></tr>
+                <tr><td class="hl"><b>40</b></td><td>Debit to a G/L account</td><td>Expense / asset lines in a manual G/L posting</td></tr>
+                <tr><td class="hl"><b>50</b></td><td>Credit to a G/L account</td><td>Bank / liability / income lines in a manual G/L posting</td></tr>
+                <tr><td><b>31</b></td><td>Credit to a vendor</td><td>Vendor invoice (accounts payable)</td></tr>
+                <tr><td><b>21</b></td><td>Debit to a vendor</td><td>Vendor payment / debit memo side</td></tr>
+                <tr><td><b>01</b></td><td>Debit to a customer</td><td>Customer invoice (accounts receivable)</td></tr>
+                <tr><td><b>11</b></td><td>Credit to a customer</td><td>Customer payment / credit memo side</td></tr>
+              </table>
+            </div>
+            <p>In FB50 you never type posting keys — you choose Debit or Credit in a column and SAP fills the key (40/50) behind the scenes. In F-02 you type the keys yourself. That single difference explains most of the FB50 vs F-02 story in Section 9.</p>
+
+            <h3>Document types — one per document</h3>
+            <p>A <b>document type</b> is a two-letter code on the header (defined in OBA7, from Part 1 · Lesson 9). It classifies the whole entry and controls its <b>number range</b> and permitted account types.</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Type</th><th>Stands for</th><th>Typical use</th></tr>
+                <tr><td class="hl"><b>SA</b></td><td>G/L account document</td><td>General manual G/L postings — FB50 and F-02 default</td></tr>
+                <tr><td><b>KR</b></td><td>Vendor invoice</td><td>Accounts payable invoices</td></tr>
+                <tr><td><b>KZ</b></td><td>Vendor payment</td><td>Paying a vendor</td></tr>
+                <tr><td><b>DR</b></td><td>Customer invoice</td><td>Accounts receivable invoices</td></tr>
+                <tr><td><b>DZ</b></td><td>Customer payment</td><td>Receiving from a customer</td></tr>
+                <tr><td><b>AB</b></td><td>Accounting document (general)</td><td>Also used as the standard <b>reversal</b> document type</td></tr>
+              </table>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory tricks · 40/50 and SA</span>
+              <p><b>“Chaar-sau Debit, Pachaas Credit”</b> — 40 ki awaz mein “D” chhupa hai: <b>40 = Debit, 50 = Credit</b>. Ulta yaad karne ki ghalti sab se aam hai — is jumle ko ratta laga lein. Aur <b>SA = “S”ab ka “A”am</b> — the general, everyday G/L document type.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S6 ============ -->
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Step by step — FB50: your first G/L posting</h2>
+            <p class="sub">FB50 is the “Enjoy” posting screen: header on top, all lines in one table, debit and credit totals shown live. This is where beginners — and most accountants — post.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Enjoy transaction</span>
+              <p><b>Enjoy transactions</b> are SAP’s friendlier, single-screen versions of older multi-screen transactions. FB50 is the Enjoy version of G/L posting: everything visible at once, no posting keys to memorise, and a traffic-light balance indicator. <span class="urdu">Enjoy screen matlab aik hi screen par poora kaam — purani screens ki tarah har line ke liye alag page nahi khulta.</span></p>
+            </div>
+
+            <ol class="steps">
+              <li>Type <code>FB50</code> and press Enter. If SAP asks, confirm the <b>company code</b> (PK01) — FB50 remembers the last one used.</li>
+              <li>Fill the <b>header</b>: Document date, Posting date, Document type <span class="mono">SA</span>, Reference, and a short Header text.</li>
+              <li>In the line table, enter line 1: G/L account, choose <b>D</b> (Debit) in the D/C column, amount, text, and the cost centre if the field status group asks for it.</li>
+              <li>Enter line 2: G/L account, <b>C</b> (Credit), amount, text.</li>
+              <li>Watch the <b>balance light</b> at the top: red while debits ≠ credits, <b>green when the difference is zero</b>. SAP will not post a red document.</li>
+              <li>(Recommended habit) Press <b>Simulate</b> first — SAP shows the exact document it is about to save, so you can catch a wrong account before it becomes permanent.</li>
+              <li>Press <b>Post</b> (Ctrl+S). SAP replies: <i>“Document 100000123 was posted in company code PK01”</i> — note that number; it is your proof and your search key for FB03.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of the FB50 enter G/L account document screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FB50 — Enter G/L Account Document · ILLUSTRATION (not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="dim">Company Code</span> <span class="hl2">PK01</span>   <span class="dim">Doc. date</span> <span class="hl2">05.11.2026</span>   <span class="dim">Posting date</span> <span class="hl2">05.11.2026</span>   <span class="dim">Type</span> <span class="hl2">SA</span>
+<span class="dim">Reference</span> <span class="hl2">CHQ-8841</span>   <span class="dim">Header text</span> <span class="hl2">Office rent – November 2026</span>
+<span class="dim">──────────────────────────────────────────────────────────────</span>
+<span class="kw">G/L acct      D/C    Amount          Text                 Cost Ctr</span>
+<span class="st">630100</span>        D      <span class="st">50,000.00</span>      Rent – November      <span class="st">PK-ADMIN</span>
+<span class="st">110100</span>        C      <span class="st">50,000.00</span>      Rent – November
+<span class="dim">──────────────────────────────────────────────────────────────</span>
+<span class="dim">Total debit</span>  <span class="st">50,000.00</span>    <span class="dim">Total credit</span>  <span class="st">50,000.00</span>    <span class="dim">Difference</span>  <span class="hl2">0.00  ● BALANCED</span>
+<span class="cm">→ Simulate checked the entry. Post (Ctrl+S) saves it as a document.</span></div>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Simulate</span>
+              <p><b>Simulate</b> means “show me the final document exactly as it would be saved — but save nothing yet.” It is a free rehearsal: wrong account, wrong side, missing cost centre — all visible with zero consequences. Professionals simulate before every non-routine posting. <span class="urdu">Simulate = dress rehearsal; asal performance (posting) us ke baad.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S7 ============ -->
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> Worked example — office rent, posted end to end</h2>
+            <p class="sub">One complete story, from paper voucher to document number — the exact rhythm you will repeat thousands of times in a real job.</p>
+
+            <p><b>The business event:</b> On 5 November 2026, Ibrahim Apparel &amp; Trading (company code PK01) pays the November office rent of <b>PKR 50,000</b> by cheque from its bank account. The cheque number is 8841. In plain accounting you already know the journal:</p>
+
+            <div class="screen" role="img" aria-label="Illustration of the rent journal entry as a document overview">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>Journal (manual book) → SAP document · ILLUSTRATION</span></div>
+              <div class="screen-body"><span class="kw">Rent Expense A/c ............ Dr   50,000</span>
+<span class="kw">      To Bank A/c ...................  50,000</span>
+<span class="cm">(Being office rent for November 2026 paid by cheque 8841)</span>
+<span class="dim">──────────────────────────────────────────────────────────────</span>
+<span class="dim">In SAP (FB50, type SA):</span>
+<span class="dim">Line 1</span>  <span class="st">630100 Office Rent</span>     <span class="hl2">D  50,000.00</span>   Cost centre <span class="st">PK-ADMIN</span>
+<span class="dim">Line 2</span>  <span class="st">110100 Bank – Main</span>     <span class="hl2">C  50,000.00</span>
+<span class="dim">Result:</span> <span class="st">Document 100000123 posted in company code PK01, fiscal year 2026, period 11</span></div>
+            </div>
+
+            <h3>What just happened inside SAP — follow the chain</h3>
+            <ol class="steps">
+              <li><b>Period check:</b> posting date 05.11.2026 → period 11 of fiscal year 2026. SAP checked OB52: period 11 is open for account type S and for document type SA’s range — posting allowed.</li>
+              <li><b>Master checks:</b> both accounts exist in PK01 (SKB1), rent account’s field status group G004 demanded a cost centre — supplied (PK-ADMIN).</li>
+              <li><b>Balance check:</b> debit 50,000 = credit 50,000. Green light.</li>
+              <li><b>Number assignment:</b> document type SA drew the next free number from its number range: <span class="mono">100000123</span>.</li>
+              <li><b>Storage:</b> header saved in BKPF; two line items saved in ACDOCA — one row per line, carrying account, amount, cost centre, posting date and the document key (100000123 + PK01 + 2026).</li>
+              <li><b>Balances updated:</b> Rent Expense now shows +50,000 debit in FBL3N and in the trial balance; Bank shows −50,000. The Lesson 3 reports read exactly these rows.</li>
+            </ol>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Entry ke baad khata khud bolta hai</span>
+              <p>Manual system mein entry likhne ke baad aap ko khud total karna parta tha. SAP mein entry post hote hi <b>har report khud update</b> ho jati hai — kyun ke report koi alag register nahi, wohi ACDOCA wali rows ka jama (sum) hai. Isi liye Lesson 3 mein kaha tha: total ajeeb lage to drill-down karke usi document tak pahuncho jo aap ne abhi banaya.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+          <!-- ============ S8 ============ -->
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Step by step — F-02: the classic posting screen</h2>
+            <p class="sub">F-02 is the original SAP posting screen: one line at a time, driven by posting keys. Older consultants still swear by it — and the exam still asks about it.</p>
+
+            <p>The biggest mental shift: in F-02 you do not fill a table. You enter a <b>header</b>, then you describe the <b>first line</b> (account + posting key), press Enter, fill that line’s amount on the next screen, and immediately describe the <b>next line</b> on the same screen. Line by line, like a conversation with SAP.</p>
+
+            <ol class="steps">
+              <li>Type <code>F-02</code> and press Enter.</li>
+              <li>Fill the <b>header</b>: document date, posting date, type <span class="mono">SA</span>, company code <span class="mono">PK01</span>, currency <span class="mono">PKR</span>, reference.</li>
+              <li>At the bottom, in the <b>“First line item”</b> area: Posting key <span class="mono">40</span> (debit G/L), Account <span class="mono">630100</span>. Press Enter.</li>
+              <li>The item screen opens: enter Amount <span class="mono">50,000</span>, Text, and Cost centre <span class="mono">PK-ADMIN</span>. At the bottom, in <b>“Next line item”</b>: Posting key <span class="mono">50</span> (credit G/L), Account <span class="mono">110100</span>. Press Enter.</li>
+              <li>Enter the credit line’s Amount <span class="mono">50,000</span> and Text. Leave the “Next line item” area <b>empty</b> this time and press Enter — or open the menu <b>Document → Simulate</b> to see the complete document.</li>
+              <li>Check the simulated document (debit = credit), then <b>Post</b> (Ctrl+S). SAP issues the document number, exactly as in FB50.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of the F-02 classic posting screen showing posting keys">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>F-02 — Enter G/L Account Posting: Header Data · ILLUSTRATION (not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="dim">Document date</span> <span class="hl2">05.11.2026</span>   <span class="dim">Type</span> <span class="hl2">SA</span>   <span class="dim">Company code</span> <span class="hl2">PK01</span>
+<span class="dim">Posting date</span>  <span class="hl2">05.11.2026</span>   <span class="dim">Currency</span> <span class="hl2">PKR</span>  <span class="dim">Reference</span> <span class="hl2">CHQ-8841</span>
+<span class="dim">──────────────────────────────────────────────────────────────</span>
+<span class="kw">First line item</span>
+  Posting key .. <span class="st">40</span>   <span class="dim">(40 = Debit, G/L account)</span>
+  Account ...... <span class="st">630100</span>  <span class="dim">(Office Rent)</span>
+<span class="dim">→ Enter → item screen: Amount 50,000 · Cost centre PK-ADMIN</span>
+<span class="dim">→ Next line item: Posting key</span> <span class="st">50</span> <span class="dim">Account</span> <span class="st">110100</span> <span class="dim">(Bank – Main)</span>
+<span class="cm">→ Simulate, then Post. Same document, same checks — older road.</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · F-02 = “F”orm purana, “02” line-by-line</span>
+              <p>F-02 mein har line ka apna page khulta hai — <b>“aik waqt mein aik line”</b>. Agar interview ya exam mein poochha jaye “posting keys kahan type hote hain?” — jawab hamesha F-02 (aur doosri classic F- screens), FB50 nahi.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S9 ============ -->
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> FB50 vs F-02 — which screen, when?</h2>
+            <p class="sub">Both create exactly the same document in the same tables. Only the driving experience differs.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Point</th><th>FB50 (Enjoy)</th><th>F-02 (Classic)</th></tr>
+                <tr><td><b>Layout</b></td><td>Single screen: header + all lines in one table</td><td>Header screen, then one screen per line item</td></tr>
+                <tr><td><b>Debit / Credit</b></td><td>Choose D or C in a column</td><td>Type the posting key (40 / 50 …)</td></tr>
+                <tr><td><b>Balance check</b></td><td class="hl">Live traffic light while typing</td><td>Visible in Simulate / document overview</td></tr>
+                <tr><td><b>Account types</b></td><td>G/L accounts only</td><td>G/L, vendor and customer lines (keys 31, 01 …) in one document</td></tr>
+                <tr><td><b>Extras</b></td><td>Tree / screen variants, hold document, fast entry templates</td><td>Supports special G/L indicators and classic cross-company flows</td></tr>
+                <tr><td><b>Result</b></td><td colspan="2">Identical: one document in BKPF + ACDOCA, type SA by default, next number from the same range</td></tr>
+              </table>
+            </div>
+
+            <p><b>Practical rule:</b> pure G/L entries (rent, salaries accrual, depreciation adjustments) → FB50, because it is faster and safer. Entries mixing vendors/customers, or when a senior insists on posting keys → F-02 family. In Fiori, the app <b>“Post General Journal Entries”</b> is the modern face of the same FB50 idea — same document, same checks.</p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · FB50 cannot post to vendors/customers</span>
+              <p>A favourite wrong statement: “In FB50 you can enter a vendor line by typing the vendor number.” No — FB50 is for <b>G/L accounts only</b>. Vendor and customer lines need the classic transactions (F-02 with keys 31/21/01/11, or the dedicated invoice transactions). If an exam option claims FB50 handles all account types, it is false.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S10 ============ -->
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> Step by step — FB03: display &amp; verify a document</h2>
+            <p class="sub">Posting without verifying is typing blindfolded. FB03 — which you met for tracking in Lesson 3 — is how you prove your own entry.</p>
+
+            <ol class="steps">
+              <li>Type <code>FB03</code>. Enter the three-part <b>document key</b>: document number (<span class="mono">100000123</span>), company code (<span class="mono">PK01</span>), fiscal year (<span class="mono">2026</span>). Press Enter.</li>
+              <li>The <b>document overview</b> opens: header on top (dates, type SA, reference, who entered it and when), every line below with account, debit/credit and amount.</li>
+              <li><b>Verify like an auditor:</b> Do the accounts match the voucher? Are debit and credit on the correct sides? Is the posting date in the intended period? Is the cost centre present on the expense line?</li>
+              <li><b>Double-click any line</b> to see its full detail — text, assignment, tax data, and the account assignments (cost centre / profit centre).</li>
+              <li>Use the <b>environment / follow-on</b> options when needed: the same document can be reached from FBL3N by double-clicking its line — the drill-down path from Lesson 3 ends here.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Illustration of the FB03 document display">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FB03 — Display Document: Overview · ILLUSTRATION (not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="dim">Document No.</span> <span class="hl2">100000123</span>  <span class="dim">Company Code</span> <span class="hl2">PK01</span>  <span class="dim">Fiscal Year</span> <span class="hl2">2026</span>
+<span class="dim">Doc. date</span> <span class="st">05.11.2026</span>  <span class="dim">Posting date</span> <span class="st">05.11.2026</span>  <span class="dim">Period</span> <span class="st">11</span>  <span class="dim">Type</span> <span class="st">SA</span>
+<span class="dim">Reference</span> <span class="st">CHQ-8841</span>   <span class="dim">Entered by</span> <span class="st">ASAD</span>   <span class="dim">on</span> <span class="st">05.11.2026 10:42</span>
+<span class="dim">──────────────────────────────────────────────────────────────</span>
+<span class="kw">Itm  PK   Account    Description        Amount        Curr</span>
+<span class="st">  1   40   630100     Office Rent        50,000.00     PKR</span>  <span class="dim">Cost ctr PK-ADMIN</span>
+<span class="st">  2   50   110100     Bank – Main        50,000.00     PKR</span>
+<span class="cm">→ Balanced. Nothing here can be edited in FB03 — display only.</span></div>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Document key</span>
+              <p>A document is uniquely identified by <b>three fields together</b>: document number + company code + fiscal year (from Lesson 3). FB03, FB02 and FB08 all ask for the same three. The same number 100000123 can legally exist in another company code or another year — it would be a completely different document. <span class="urdu">Document number akela CNIC number nahi — us ke saath company code aur saal bhi chahiye, jaise naam ke saath walid ka naam.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S11 ============ -->
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> FB02 — change a document: what you may and may not touch</h2>
+            <p class="sub">Posted documents are almost — but not quite — carved in stone. FB02 lets you polish the words, never the numbers.</p>
+
+            <p>Open FB02 with the same document key (number + company code + fiscal year). SAP shows the document with a small set of fields open for editing. The rule behind it is the golden rule of accounting systems: <b>anything that changes the accounting result is locked; anything that only explains it better can be changed</b>.</p>
+
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>You CAN change (FB02)</h4>
+                <ul class="clean">
+                  <li><b>Header text</b> and <b>reference</b> (if not already used as a clearing reference)</li>
+                  <li><b>Line item text</b> — fix a typo, add the cheque number</li>
+                  <li><b>Assignment field</b> on a line</li>
+                  <li><b>Payment terms / payment method / house bank</b> on vendor &amp; customer lines</li>
+                  <li><b>Document header’s</b> “entered by” style data — no, not even this; only the explanation fields above</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>You can NEVER change</h4>
+                <ul class="clean">
+                  <li><b>Amount</b> — not one rupee</li>
+                  <li><b>G/L account</b> or posting key</li>
+                  <li><b>Posting date</b> — and therefore the period</li>
+                  <li><b>Document type</b> and <b>company code</b></li>
+                  <li><b>Cost centre</b> and other account assignments on a posted line</li>
+                  <li>Anything at all on a <b>cleared</b> item, or in a document that has already been reversed</li>
+                </ul>
+              </div>
+            </div>
+
+            <p>So if you posted rent of 50,000 but the voucher says 55,000, FB02 cannot rescue you — the amount is locked. The professional path is: <b>reverse the wrong document (FB08)</b> and <b>post a fresh, correct one</b>. That is exactly the next section.</p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Register par pen ki entry</span>
+              <p>FB02 aisa hai jaise register mein pen se likhi entry ke <b>neeche note add karna</b> — “cheque no. 8841 tha” likh sakte hain. Lekin rakam ya tareekh par pen pherna (overwrite) mana hai; woh ghalti ho to poori entry ko kaat kar (reversal) nayi entry likhi jati hai — aur kaati hui entry bhi parhi ja sakti hai. Audit trail kabhi nahi tootta.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S12 ============ -->
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> FB08 — reversal: undoing a posting the legal way</h2>
+            <p class="sub">SAP has no Delete button for posted documents — deliberately. A reversal cancels an entry by posting its exact mirror image.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Reversal</span>
+              <p>A <b>reversal</b> creates a <i>new</i> document whose every line is the opposite of the original: each debit becomes a credit and each credit becomes a debit, in the same amounts. The two documents together net to zero, and both stay in the books forever, linked to each other. <span class="urdu">Reversal = ghalti ko mitana nahi, us ke barabar ki ulti entry karke asar khatam karna — dono entries record mein rehti hain.</span></p>
+            </div>
+
+            <ol class="steps">
+              <li>Type <code>FB08</code>. Enter the document key: number, company code, fiscal year.</li>
+              <li>Enter a <b>Reversal reason</b> — a small code explaining <i>why</i> (standard reasons: <span class="mono">01</span> reversal in current period, <span class="mono">02</span> reversal in closed period, <span class="mono">03</span> actual reversal in current period with negative postings where allowed). The reason also decides whether the reversal posts into the same period or the currently open one.</li>
+              <li>Give the <b>posting date</b> for the reversal document (default: today / the original date, depending on the reason).</li>
+              <li>Press <b>Display before reversal</b> if you want one last look, then <b>Post</b>. SAP creates the reversal document (standard type <span class="mono">AB</span> unless configured otherwise) and stamps the original with the reversal document’s number and date.</li>
+              <li>Verify in FB03: the original now shows <b>“Reversed with …”</b> and the reversal document shows <b>“Reversal of …”</b>. Balances are back to where they were before the wrong entry.</li>
+            </ol>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 210" role="img" aria-label="Diagram: original document and its reversal mirror each other and net to zero">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+                </defs>
+                <text class="svg-title" x="360" y="24" text-anchor="middle">Reversal — the mirror-image document</text>
+                <rect class="svg-box-r" x="20" y="52" width="290" height="86" rx="10"/>
+                <text class="svg-title" x="165" y="80" text-anchor="middle">Original · Doc 100000123</text>
+                <text class="svg-sub" x="165" y="102" text-anchor="middle">Rent 630100 — Debit 50,000</text>
+                <text class="svg-sub" x="165" y="120" text-anchor="middle">Bank 110100 — Credit 50,000</text>
+                <path class="svg-arrow" d="M310 95 H406"/>
+                <text class="svg-sub" x="358" y="84" text-anchor="middle">FB08</text>
+                <rect class="svg-box-gr" x="410" y="52" width="290" height="86" rx="10"/>
+                <text class="svg-title" x="555" y="80" text-anchor="middle">Reversal · Doc 100000140 (AB)</text>
+                <text class="svg-sub" x="555" y="102" text-anchor="middle">Rent 630100 — Credit 50,000</text>
+                <text class="svg-sub" x="555" y="120" text-anchor="middle">Bank 110100 — Debit 50,000</text>
+                <rect class="svg-box" x="210" y="158" width="300" height="36" rx="10"/>
+                <text class="svg-sub" x="360" y="181" text-anchor="middle">Together: net effect = 0 · both documents stay visible</text>
+              </svg>
+              <figcaption>Illustration — a reversal never erases history; it adds an equal and opposite chapter.</figcaption>
+            </figure>
+
+            <h3>Rules and neighbours of FB08 <span class="examtag">Exam favourite</span></h3>
+            <ul class="clean">
+              <li><b>One document at a time:</b> FB08 reverses a single document. For many documents at once, the mass reversal transaction is <b>F.80</b>.</li>
+              <li><b>Cleared items block reversal:</b> if a line of the document has already been cleared (e.g. the bank line matched in reconciliation), the clearing must be reset first (FBRA) — you cannot reverse a settled entry directly.</li>
+              <li><b>A reversal cannot itself be reversed</b> in the ordinary way; and an already-reversed document cannot be reversed again. To “undo the undo”, post a fresh normal entry.</li>
+              <li><b>Closed period?</b> If the original period is closed, choose a reversal reason / posting date that lands the reversal in an <b>open</b> period — the original document stays untouched in its closed period.</li>
+              <li><b>Documents from other modules</b> (e.g. a goods receipt from MM or billing from SD) are reversed in their own module, not with FB08.</li>
+            </ul>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S13 ============ -->
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> Park &amp; hold — the two safety nets for unfinished work</h2>
+            <p class="sub">Real life interrupts: a missing cost centre, a manager who must approve, a phone call mid-entry. SAP gives you two different ways to stop safely — and the exam tests the difference hard.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Point</th><th>Park document</th><th>Hold document</th></tr>
+                <tr><td><b>T-codes</b></td><td class="hl">FV50 (park G/L), F-65 (classic park), FBV0 (post parked), FBV2 / FBV3 (change / display)</td><td class="hl">Inside FB50 — “Hold” button</td></tr>
+                <tr><td><b>Gets a real document number?</b></td><td><b>Yes</b> — from the document type’s number range</td><td><b>No</b> — only a temporary user-held name/number</td></tr>
+                <tr><td><b>Must be balanced?</b></td><td><b>No</b> — can be saved incomplete and unbalanced</td><td><b>No</b> — can also be incomplete</td></tr>
+                <tr><td><b>Updates balances?</b></td><td>No — parked documents change no totals and appear in no reports</td><td>No</td></tr>
+                <tr><td><b>Who can finish it?</b></td><td><b>Another user</b> can open, complete and post it (FBV0) — built for maker-checker approval</td><td>Only the <b>same user</b> who held it</td></tr>
+                <tr><td><b>Typical use</b></td><td>Clerk prepares → senior checks and posts; incomplete data received late in the day</td><td>Your own pause: phone rang, you will continue in ten minutes</td></tr>
+              </table>
+            </div>
+
+            <h3>Parking, step by step (G/L)</h3>
+            <ol class="steps">
+              <li>Open <code>FV50</code> — it looks like FB50. Enter header and whatever lines you already know; the entry may stay unbalanced.</li>
+              <li>Press <b>Save as Parked</b>. SAP assigns a real document number and confirms the document is parked.</li>
+              <li>Later — by you or a colleague — open <code>FBV0</code>, give the document key, review / complete the lines until the balance is zero.</li>
+              <li>Press <b>Post</b> in FBV0. Only now do balances move and the document becomes a normal posted document, keeping the number it received when parked.</li>
+            </ol>
+
+            <h3>Holding, step by step</h3>
+            <ol class="steps">
+              <li>In FB50, halfway through an entry, press <b>Hold</b>. SAP asks for a temporary hold name — accept the suggestion or type your own.</li>
+              <li>Close the screen safely. Nothing is posted, nothing is numbered.</li>
+              <li>Return to FB50 and choose <b>“Held document”</b> retrieval: your draft re-opens exactly as you left it. Finish it and post normally — or delete the held draft if it is no longer needed.</li>
+            </ol>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Park = file mein lagana, Hold = drawer mein rakhna</span>
+              <p><b>Park</b> matlab adhoori file ko <b>office file mein laga kar number de dena</b> — koi doosra clerk ya officer bhi usay nikaal kar mukammal kar sakta hai. <b>Hold</b> matlab kagaz apne <b>personal drawer</b> mein rakhna — sirf aap hi usay wapas nikaal sakte hain, aur us par koi official number nahi laga.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · “Parked documents update the ledger”</span>
+              <p>False — and it is asked constantly. A parked document has a number but <b>no effect</b> on balances, line items or reports until it is posted with FBV0. Likewise, a parked document <b>can</b> be deleted (FBV2 → delete) — unlike a posted one, which can only be reversed.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S14 ============ -->
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> When postings refuse — the five errors you will meet first</h2>
+            <p class="sub">Every SAP error message is a clue, not a punishment. These five cover almost everything a beginner meets in the first month.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Error (short form)</th><th>Real cause</th><th>Fix</th></tr>
+                <tr><td>“Posting period 011 2026 is not open”</td><td>Period closed or never opened for this account type / company code in OB52 (the Posting Period Variant of Lessons 1–2)</td><td>Post into an open period, or have the period opened in OB52 by an authorised user</td></tr>
+                <tr><td>“Account 630100 does not exist in company code PK02”</td><td>Chart segment exists, company code segment (SKB1) missing</td><td>Extend the account in FS00 for that company code (Section 3, Task C)</td></tr>
+                <tr><td>“Field Cost Centre is a required field…”</td><td>The account’s <b>Field Status Group</b> demands a cost centre and you left it blank</td><td>Enter the cost centre — or, if the demand itself is wrong, the FSG in the account master (FS00) must be corrected by master-data owners</td></tr>
+                <tr><td>“Document is not balanced / difference too large”</td><td>Total debit ≠ total credit (typo in an amount, a missing line)</td><td>Simulate, compare each line with the voucher, fix the amount — SAP never posts an unbalanced document</td></tr>
+                <tr><td>“No account is specified / account is blocked for posting”</td><td>The account is flagged <b>blocked for posting</b> in its master, or marked for deletion</td><td>Check the block flags in FS00 (Display → blocking data); unblock only with proper authority</td></tr>
+              </table>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Habit · Error parhna seekho</span>
+              <p>Error message ko double-click karein — SAP aksar lambi wazahat (long text) deta hai ke masla kya hai aur hal kya ho sakta hai. Aur F1 help har field par mojood hai. Consultant ki pehchan yahi hai: woh error se ghabrata nahi, <b>parhta</b> hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+          <!-- ============ S15 ============ -->
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> Exam traps</h2>
+            <p class="sub">The statements C_TS4FI loves to test — each one is a trap that catches candidates who “almost” know this lesson.</p>
+
+            <div class="box trap">
+              <span class="box-title">Trap 1 · “A posted document can be deleted if it is wrong”</span>
+              <p>Never. Posted documents cannot be deleted or edited in their amounts/accounts. The only correction is a <b>reversal (FB08)</b> plus a fresh posting. Deletion exists only for <b>parked</b> documents (and held drafts).</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 2 · “In FB02 you can correct the amount”</span>
+              <p>FB02 changes only explanation fields — texts, reference, assignment, payment data on subledger lines. Amount, account, posting date, document type and cost centre are locked forever at posting time.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 3 · “40 is credit, 50 is debit”</span>
+              <p>Reversed on purpose in options. Burn it in: <b>40 = Debit G/L, 50 = Credit G/L</b>. (“Chaar-sau Debit, Pachaas Credit.”)</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 4 · “FB50 can post vendor and customer lines”</span>
+              <p>FB50 is G/L-only. Mixed documents with vendor/customer lines use classic transactions such as F-02 with posting keys 31 / 21 / 01 / 11, or the dedicated AP/AR transactions.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 5 · “A parked document affects account balances”</span>
+              <p>It does not — parked documents are invisible to balances and reports until posted via FBV0. But they <b>do</b> already own a real document number, unlike held documents.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 6 · “FB08 reverses many documents at once”</span>
+              <p>FB08 = exactly <b>one</b> document. Mass reversal is <b>F.80</b>. And a document whose items are already cleared cannot be reversed until the clearing is reset (FBRA).</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 7 · “Document number alone finds the document”</span>
+              <p>The document key is three parts: <b>number + company code + fiscal year</b>. FB03 / FB02 / FB08 all demand all three — the same number can exist elsewhere as a different document.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 8 · “Posting date and document date do the same job”</span>
+              <p>The <b>posting date</b> decides period and fiscal year — and must fall in an open period. The document date is only the date on the source paper. Confusing them is a classic source of “period not open” errors.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S16 ============ -->
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> A–Z glossary</h2>
+            <p class="sub">Every technical term of this lesson, in one place, in simple words.</p>
+
+            <dl class="glossary">
+              <dt>ACDOCA</dt><dd>The Universal Journal table in S/4HANA where every posted line item is stored. All balances and reports are built from its rows.</dd>
+              <dt>BKPF</dt><dd>The table holding document <b>headers</b> — one row per document (dates, type, company code, reference).</dd>
+              <dt>Clearing</dt><dd>Matching an open item with its settlement (invoice with payment) so both become “cleared”. Cleared items stay visible; they are never deleted.</dd>
+              <dt>Cost centre</dt><dd>An internal label showing <i>where</i> a cost belongs (department/branch). Required on expense lines when the field status group demands it.</dd>
+              <dt>Document</dt><dd>One complete, balanced accounting entry in SAP: one header + at least two line items, identified by number + company code + fiscal year.</dd>
+              <dt>Document type</dt><dd>Two-letter header code (SA, KR, KZ, DR, DZ, AB…) that classifies the entry and controls its number range and allowed account types. Defined in OBA7.</dd>
+              <dt>Enjoy transaction</dt><dd>SAP’s friendlier single-screen version of a classic transaction — FB50 is the Enjoy G/L posting screen.</dd>
+              <dt>F-02</dt><dd>Classic G/L posting transaction: header screen, then one screen per line, driven by posting keys.</dd>
+              <dt>F.80</dt><dd>Mass reversal — reverses many documents in one run (FB08 handles exactly one).</dd>
+              <dt>FB02</dt><dd>Change document: texts, reference, assignment and subledger payment data only. Amounts, accounts and dates are locked.</dd>
+              <dt>FB03</dt><dd>Display document — read-only view of one complete posted document.</dd>
+              <dt>FB08</dt><dd>Individual reversal of one posted document, using a reversal reason.</dd>
+              <dt>FB50</dt><dd>Enjoy G/L posting transaction: header and all lines on one screen, D/C column instead of posting keys, live balance light.</dd>
+              <dt>FBV0</dt><dd>Post a parked document — the step that turns a parked draft into a real posting with balance effect.</dd>
+              <dt>Field Status Group</dt><dd>Master-data setting (company code segment) deciding which fields are required / optional / hidden during posting to that account — e.g. cost centre required.</dd>
+              <dt>FS00</dt><dd>Central G/L account maintenance: display, create, change and extend G/L accounts (chart + company code segments together).</dd>
+              <dt>FV50</dt><dd>Park G/L document (Enjoy style); F-65 is the classic parking transaction.</dd>
+              <dt>Hold document</dt><dd>A personal, unnumbered draft saved inside FB50; only the same user can retrieve and finish it. No balance effect.</dd>
+              <dt>Line item</dt><dd>One row of a document: one account, one amount, debit or credit, plus text and assignments.</dd>
+              <dt>Line Item Display</dt><dd>Account-master tick that allows the account’s individual entries to be listed (FBL3N). Kept ON for almost all accounts.</dd>
+              <dt>Open Item Management</dt><dd>Account-master tick making entries stay “open” until cleared — for clearing accounts such as bank clearing or GR/IR.</dd>
+              <dt>Park document</dt><dd>An incomplete / unbalanced entry saved <b>with</b> a real document number but <b>without</b> any balance effect, completable and postable by another user (FBV0).</dd>
+              <dt>Posting</dt><dd>Saving a balanced entry into the books: it receives a document number, updates balances, and can afterwards only be reversed — never deleted.</dd>
+              <dt>Posting key</dt><dd>Two-digit code per line item controlling debit/credit and account type: 40 = Dr G/L, 50 = Cr G/L, 31 = Cr vendor, 21 = Dr vendor, 01 = Dr customer, 11 = Cr customer.</dd>
+              <dt>Posting date</dt><dd>The date that decides the posting period and fiscal year of a document; must fall in an open period (OB52).</dd>
+              <dt>Reversal</dt><dd>A new mirror-image document that cancels a posted document’s effect; both documents remain in the books, cross-referenced.</dd>
+              <dt>Reversal reason</dt><dd>Code given in FB08 explaining why a document is reversed; it also steers the reversal’s posting period behaviour.</dd>
+              <dt>Simulate</dt><dd>A no-save preview of the finished document before posting — the professional’s safety check.</dd>
+              <dt>SKA1 / SKB1</dt><dd>Tables of the two G/L master segments: SKA1 = chart of accounts segment, SKB1 = company code segment.</dd>
+            </dl>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S17 ============ -->
+          <section class="lesson" id="s17">
+            <h2><span class="no">17</span> Summary — the whole lesson on one screen</h2>
+            <p class="sub">If you remember one screen before the exam, make it this one.</p>
+
+            <ul class="clean">
+              <li><b>FS00</b> maintains the G/L master centrally: chart segment (SKA1 — number, name, type, group, P&amp;L/BS) + company code segment (SKB1 — currency, tax, field status group, line item display, open item management). Both must exist before posting.</li>
+              <li>A <b>document</b> = one header (BKPF) + line items (ACDOCA). <b>Posting date</b> decides period &amp; year; the period must be open.</li>
+              <li><b>Posting keys:</b> 40 = Dr G/L, 50 = Cr G/L. <b>Document types:</b> SA = general G/L document; types control number ranges (OBA7).</li>
+              <li><b>FB50</b> (Enjoy, G/L only, D/C column, live balance light) and <b>F-02</b> (classic, posting keys, all account types) create identical documents. Always <b>Simulate</b> before Post.</li>
+              <li><b>FB03</b> displays; <b>FB02</b> changes texts/reference/assignment only — never amount, account, date or cost centre.</li>
+              <li><b>FB08</b> reverses one document with a reversal reason, creating a mirror document (usually type AB). Mass reversal = <b>F.80</b>. Cleared items must be reset (FBRA) first. Posted documents are never deleted.</li>
+              <li><b>Park</b> (FV50 → FBV0): real document number, unbalanced allowed, no balance effect, another user can post it. <b>Hold</b> (FB50): no number, personal draft, same user only.</li>
+              <li>Top errors: period not open (OB52), account not extended (FS00), required field from the field status group, unbalanced document, blocked account.</li>
+            </ul>
+
+            <div class="box trick">
+              <span class="box-title">One-line memory chain</span>
+              <p><b>FS00 account banata hai · FB50 / F-02 entry karte hain · FB03 dikhata hai · FB02 lafz badalta hai · FB08 entry wapas leta hai · Park file mein, Hold drawer mein.</b> — FS00 builds, FB50/F-02 post, FB03 shows, FB02 rewords, FB08 reverses; park is the office file, hold is your own drawer.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S18 ============ -->
+          <section class="lesson" id="s18">
+            <h2><span class="no">18</span> Self-test — 10 questions</h2>
+            <p class="sub">Answer all 10. Explanations appear after each answer — this self-test is part of completing the lesson.</p>
+
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn btn-ghost" id="resetQuiz" type="button">Reset self-test</button>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S19 ============ -->
+          <section class="lesson" id="s19">
+            <h2><span class="no">19</span> Coming next — Part 2 · Lesson 5 preview</h2>
+            <p class="sub">A small look ahead only — Lesson 5 itself arrives as its own document.</p>
+
+            <p>You can now post pure G/L entries. But real companies rarely pay rent out of a bare journal — they receive <b>invoices from vendors</b> and send <b>invoices to customers</b>, and those live in the subledgers: <b>Accounts Payable</b> and <b>Accounts Receivable</b>. That is where Part 2 goes next.</p>
+
+            <div class="next-lesson">
+              <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div>
+                <b>Part 2 · Lesson 5 — Accounts Payable &amp; Receivable Practical (preview)</b><br>
+                Vendor and customer master data, posting vendor invoices and payments, customer invoices and incoming payments, open item clearing in practice, and how subledger lines reconcile automatically with the G/L reconciliation accounts. It will unlock once this lesson is fully complete — every section marked Read and the self-test answered.
+              </div>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <footer>
+            course created by Muhammad Asad Ullah Ibrahim<br>
+            Part 2 · Lesson 4 of the SAP S/4HANA Financial Accounting series · Prepared for C_TS4FI (SAP S/4HANA Cloud Private Edition, Financial Accounting) exam preparation · All SAP screens shown are re-created illustrations for learning, not real SAP screenshots.
+          </footer>
+        </main>
+      </div>
+    </div>
+    </div>
+
+<script>
+
+    // ---- Shared course progress store (localStorage, shared by all lessons) ----
+    window.SAPProgress=(function(){
+      var KEY='sapCts4fiProgress_v1';
+      function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+      function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+      function getLesson(n){ var s=load(), L=null;
+        if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+        if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+        return L; }
+      function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+        for(var p in patch){ cur[p]=patch[p]; }
+        s.lessons[k]=cur; saveAll(s); return cur; }
+      function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+        return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+      function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+        s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+      return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+    })();
+
+    // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+    function sha256Hex(ascii){
+      ascii=unescape(encodeURIComponent(ascii));
+      function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+      var maxWord=Math.pow(2,32), i, j, result='';
+      var words=[], asciiBitLength=ascii.length*8;
+      var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+      var primeCounter=k.length, isComposite={};
+      for(var candidate=2; primeCounter<64; candidate++){
+        if(!isComposite[candidate]){
+          for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+          hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+          k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+        }
+      }
+      ascii+='\x80';
+      while(ascii.length%64-56) ascii+='\x00';
+      for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+      words[words.length]=((asciiBitLength/maxWord)|0);
+      words[words.length]=(asciiBitLength);
+      for(j=0;j<words.length;){
+        var w=words.slice(j,j+=16), oldHash=hash;
+        hash=hash.slice(0,8);
+        for(i=0;i<64;i++){
+          var w15=w[i-15], w2=w[i-2];
+          var a=hash[0], e=hash[4];
+          var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+          var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+          hash=[(temp1+temp2)|0].concat(hash);
+          hash[4]=(hash[4]+temp1)|0;
+        }
+        for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+      }
+      for(i=0;i<8;i++){
+        for(j=3;j+1;j--){
+          var b=(hash[i]>>(j*8))&255;
+          result+=((b<16)?0:'')+b.toString(16);
+        }
+      }
+      return result;
+    }
+
+    // ---- Part 2 Lesson 4 gating: locked until Part 2 Lesson 3 is fully complete, or the gate test is passed 5/5 ----
+    (function(){
+      var THIS_LESSON='p2-4', PREV_LESSON='p2-3', PREV_SECTIONS=17, LOCK_MS=60*60*1000;
+      var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+      var GATE_Q=[
+        {q:"The Balance Sheet / Profit & Loss structure used by the financial statement report (S_ALR_87012284) is defined as a Financial Statement Version. Which transaction defines it?",opts:["OB52","OB58","OBBO","FBL3N"],a:1},
+        {q:"In FBL3N, an item shows no clearing document and no clearing date. What is its status, and what does that mean?",opts:["It is cleared — it has been settled by a payment","It is an open item — it has not yet been settled / matched","It is a parked item — it has no document number","It is reversed — its effect is already cancelled"],a:1},
+        {q:"Which combination uniquely identifies one document for display in FB03?",opts:["Document number alone","Document number + posting date","Document number + company code + fiscal year","Company code + user name + document type"],a:2},
+        {q:"A consultant wants to list all company codes directly from the company code table. Which transaction and table are correct?",opts:["SE16N — table T001","FBL3N — table SKB1","OB58 — table T030","FB03 — table ACDOCA"],a:0},
+        {q:"Which report shows tax amounts grouped by tax code for a company code and period, and which second check confirms the same total?",opts:["S_ALR_87012284 — confirmed in OB58","S_ALR_87012357 — confirmed with FBL3N on the tax G/L account","FBL3N — confirmed in SE16N on table T001","FB03 — confirmed in OB52"],a:1}
+      ];
+      var gateScreen=document.getElementById('gateScreen');
+      var content=document.getElementById('lessonContent');
+      var lockBox=document.getElementById('gateLockBox');
+      var lockUntilEl=document.getElementById('gateLockUntil');
+      var countdownEl=document.getElementById('gateCountdown');
+      var testArea=document.getElementById('gateTestArea');
+      var qWrap=document.getElementById('gateQuestions');
+      var scoreEl=document.getElementById('gateScore');
+      var msgEl=document.getElementById('gateMsg');
+      var attemptsEl=document.getElementById('gateAttempts');
+      var submitBtn=document.getElementById('gateSubmit');
+      var retryBtn=document.getElementById('gateRetry');
+      var adminBtn=document.getElementById('adminBtn');
+      var adminForm=document.getElementById('adminForm');
+      var adminPw=document.getElementById('adminPw');
+      var adminSubmit=document.getElementById('adminSubmit');
+      var adminMsg=document.getElementById('adminMsg');
+      var timer=null, selected={};
+
+      function isPrevComplete(){
+        var L=window.SAPProgress.getLesson(PREV_LESSON);
+        if(!L) return false;
+        var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+        var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+        return !!(allRead&&quiz);
+      }
+      function unlockLesson(){
+        if(timer){ clearInterval(timer); timer=null; }
+        gateScreen.hidden=true; gateScreen.style.display='none';
+        content.hidden=false; content.style.display='';
+        window.scrollTo(0,0);
+      }
+      function updateCountdown(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var rem=g.lockUntil-Date.now();
+        if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+        var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+        countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+      }
+      function showLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        lockBox.hidden=false;
+        testArea.style.display='none';
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        updateCountdown();
+        if(timer) clearInterval(timer);
+        timer=setInterval(updateCountdown,1000);
+      }
+      function refreshLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var now=Date.now();
+        if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+        if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+        lockBox.hidden=true;
+        testArea.style.display='';
+        return false;
+      }
+      function updateAttempts(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+      }
+      function renderGate(){
+        selected={};
+        scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+        submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+        qWrap.innerHTML='';
+        GATE_Q.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='gate-q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              selected[qi]=oi;
+              var bs=opts.querySelectorAll('.gate-opt');
+              bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+              msgEl.textContent='';
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); qWrap.appendChild(box);
+        });
+      }
+      submitBtn.addEventListener('click',function(){
+        if(refreshLock()) return;
+        if(Object.keys(selected).length<GATE_Q.length){
+          msgEl.textContent='Please answer all 5 questions before submitting.';
+          scoreEl.textContent='';
+          return;
+        }
+        var score=0;
+        GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+        qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+        submitBtn.hidden=true;
+        scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        if(score===GATE_Q.length){
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          msgEl.textContent='Gate test passed. Part 2 · Lesson 4 is now unlocked.';
+          msgEl.className='ok';
+          updateAttempts();
+          setTimeout(unlockLesson,900);
+        }else{
+          g.fails=(g.fails||0)+1;
+          msgEl.textContent='Go back and complete previous lesson.';
+          msgEl.className='';
+          if(g.fails>=3){
+            g.lockUntil=Date.now()+LOCK_MS;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            updateAttempts();
+            refreshLock();
+          }else{
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            retryBtn.hidden=false;
+            updateAttempts();
+          }
+        }
+      });
+      retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+      adminBtn.addEventListener('click',function(){
+        adminForm.hidden=!adminForm.hidden;
+        if(!adminForm.hidden) adminPw.focus();
+      });
+      function tryAdminUnlock(){
+        var val=adminPw.value;
+        if(!val) return;
+        if(sha256Hex(val)===ADMIN_HASH){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          adminMsg.className=''; adminMsg.style.color='var(--green)';
+          adminMsg.textContent='Unlocked. Opening Part 2 · Lesson 4…';
+          adminPw.value='';
+          setTimeout(unlockLesson,700);
+        }else{
+          adminMsg.style.color=''; adminMsg.className='err';
+          adminMsg.textContent='Incorrect password. Please try again.';
+          adminPw.value='';
+          adminPw.focus();
+        }
+      }
+      adminSubmit.addEventListener('click',tryAdminUnlock);
+      adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+      // ---- Initial state ----
+      var g0=window.SAPProgress.getGate(THIS_LESSON);
+      if(isPrevComplete()||g0.unlocked===true){
+        unlockLesson();
+      }else{
+        gateScreen.hidden=false; gateScreen.style.display='';
+        content.hidden=true; content.style.display='none';
+        if(!refreshLock()) renderGate();
+        updateAttempts();
+      }
+    })();
+        </script>
+
+<script>
+    (function(){
+      "use strict";
+      var THIS_KEY='p2-4';
+      /* ---------- Theme switch (top right, default Light) ---------- */
+      var themeBtn=document.getElementById('themeBtn');
+      var themeLabel=document.getElementById('themeLabel');
+      function applyTheme(t){
+        document.documentElement.setAttribute('data-theme',t);
+        if(themeLabel) themeLabel.textContent=(t==='dark'?'Dark':'Light');
+      }
+      applyTheme('light');
+      themeBtn.addEventListener('click',function(){
+        var cur=document.documentElement.getAttribute('data-theme');
+        applyTheme(cur==='dark'?'light':'dark');
+      });
+
+      /* ---------- Mark Read + sidebar progress + scroll-spy ---------- */
+      var sections=[].slice.call(document.querySelectorAll('section.lesson'));
+      var tocItems={};
+      [].slice.call(document.querySelectorAll('#tocList li')).forEach(function(li){
+        var a=li.querySelector('a');
+        if(a) tocItems[a.getAttribute('href').slice(1)]={li:li,a:a};
+      });
+      var readSet={}, total=sections.length;
+      var pctText=document.getElementById('pctText'), sideFill=document.getElementById('sideFill'),
+          countText=document.getElementById('countText'), bar=document.getElementById('progressBar');
+
+      function persist(){
+        try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(THIS_KEY,{readSections:arr, allRead:(total>0&&arr.length===total)}); } }catch(e){}
+      }
+      function updateProgress(){
+        var n=Object.keys(readSet).length;
+        var pct=total?Math.round(n/total*100):0;
+        if(pctText) pctText.textContent=pct+'%';
+        if(sideFill) sideFill.style.width=pct+'%';
+        if(countText) countText.textContent=n+' of '+total+' sections marked read';
+        if(bar) bar.style.width=pct+'%';
+      }
+      function reflect(sec){
+        var id=sec.id, on=!!readSet[id];
+        var btn=sec.querySelector('.mark-read'), status=sec.querySelector('.read-status'), label=sec.querySelector('.mr-label');
+        if(btn) btn.classList.toggle('done',on);
+        if(label) label.textContent=on?'Read':'Mark Read';
+        if(status) status.textContent=on?'Marked as read':'Not read yet';
+        sec.classList.toggle('is-read',on);
+        if(tocItems[id]) tocItems[id].li.classList.toggle('read',on);
+      }
+      // Restore this lesson's saved read state
+      try{
+        var saved=window.SAPProgress?window.SAPProgress.getLesson(THIS_KEY):null;
+        if(saved&&saved.readSections){ saved.readSections.forEach(function(id){ readSet[id]=true; }); }
+      }catch(e){}
+      sections.forEach(function(sec){
+        reflect(sec);
+        var btn=sec.querySelector('.mark-read');
+        if(btn) btn.addEventListener('click',function(){
+          if(readSet[sec.id]) delete readSet[sec.id]; else readSet[sec.id]=true;
+          reflect(sec); updateProgress(); persist();
+        });
+      });
+      updateProgress();
+
+      // Scroll-spy: highlight the section currently on screen in the sidebar
+      if('IntersectionObserver' in window){
+        var spy=new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if(en.isIntersecting&&tocItems[en.target.id]){
+              Object.keys(tocItems).forEach(function(k){ tocItems[k].li.classList.remove('active'); });
+              tocItems[en.target.id].li.classList.add('active');
+            }
+          });
+        },{rootMargin:'-25% 0px -65% 0px'});
+        sections.forEach(function(s){ spy.observe(s); });
+      }
+    })();
+    </script>
+
+<script>    (function(){
+      var QUESTIONS=[
+        {q:"Which transaction maintains a G/L account centrally — chart segment and company code segment together?",opts:["FSP0","FS00","FSS0","SE16N"],a:1,why:"FS00 is the central transaction. FSP0 maintains only the chart segment and FSS0 only the company code segment; SE16N only displays tables."},
+        {q:"Posting FB50 refuses with: 'Account 630100 does not exist in company code PK02'. The account exists in the chart of accounts. What is missing?",opts:["The account group","The company code segment (SKB1) for PK02 — extend the account in FS00","The retained earnings assignment","The document type SA"],a:1,why:"An account is postable in a company code only when its company code segment (SKB1) exists there. The fix is extending the account in FS00, not creating a new number."},
+        {q:"Which posting keys are used for a manual G/L posting — debit line and credit line?",opts:["01 and 11","40 and 50","31 and 21","50 and 40"],a:1,why:"40 = debit to a G/L account, 50 = credit to a G/L account. 01/11 are customer keys, 31/21 are vendor keys — and the order in option D is reversed."},
+        {q:"Which statement about FB50 is correct?",opts:["Vendor and customer lines can be entered in FB50","FB50 needs posting keys typed for every line","FB50 is the Enjoy G/L posting screen — G/L accounts only, with a D/C column and a live balance indicator","FB50 posts documents without a document number"],a:2,why:"FB50 is G/L-only, uses the D/C column (SAP fills keys 40/50 internally), shows the balance traffic light live, and of course issues a document number on posting."},
+        {q:"A document was posted with the wrong amount. Which correction path is correct?",opts:["Open FB02 and change the amount","Delete the document and repost","Reverse the document with FB08 and post a new, correct document","Change the amount in table ACDOCA via SE16N"],a:2,why:"Amounts are locked after posting; posted documents can never be deleted or edited in value. The legal correction is reversal (FB08) plus a fresh correct posting."},
+        {q:"In FB02, which of these CAN be changed on a posted document?",opts:["The amount of a line item","The G/L account of a line item","The line item text and the assignment field","The posting date"],a:2,why:"FB02 allows only explanation-type fields: texts, reference, assignment, and payment data on subledger lines. Amount, account, posting date, document type and cost centre are locked."},
+        {q:"What does FB08 require, and what does it create?",opts:["Nothing but the document number; it deletes the document","A reversal reason; it creates a new mirror-image document that cancels the original's effect","A new posting date only; it edits the original document","The original user's password; it parks the document"],a:1,why:"FB08 needs the document key plus a reversal reason, and it posts a new document with every line reversed. The original is never deleted or edited."},
+        {q:"What is the difference between a parked document and a held document?",opts:["Parked documents update balances; held documents do not","A parked document receives a real document number and can be completed/posted by another user (FBV0); a held document has no number and only the same user can retrieve it","Held documents must be balanced; parked documents must not be","There is no difference"],a:1,why:"Park = official draft with a number, unbalanced allowed, no balance effect, maker-checker friendly. Hold = personal unnumbered draft for the same user only."},
+        {q:"A parked document has been completed and is balanced. Which transaction posts it into the books?",opts:["FB50","FBV0","FB08","F-02"],a:1,why:"FBV0 posts parked documents. Only at that moment do balances change — the document keeps the number it received when it was parked."},
+        {q:"Posting fails with 'Posting period 011 2026 is not open'. Where is this controlled?",opts:["OB58 — Financial Statement Version","OBA7 — document types","OB52 — open/close posting periods via the Posting Period Variant","FS00 — account master"],a:2,why:"Open and closed periods are controlled in OB52 through the company code's Posting Period Variant (created in OBBO, assigned in OBBP). The posting date must fall in an open period."}
+      ];
+      var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+      var answered=0, correct=0;
+      function render(){
+        quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+        QUESTIONS.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              if(box.dataset.done) return; box.dataset.done='1'; answered++;
+              var buttons=opts.querySelectorAll('.opt');
+              buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+              if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+              explain.classList.add('show');
+              if(answered===QUESTIONS.length){
+                try{ if(window.SAPProgress) window.SAPProgress.saveLesson('p2-4',{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=8?' — Excellent! Mark every section Read to complete this lesson.':' — Re-read the sections above once, then try again. You can do it.');
+              } else {
+                scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+              }
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+        });
+      }
+      render();
+      document.getElementById('resetQuiz').addEventListener('click',render);
+    })();
+</script>
+  </body>
+</html>

@@ -1,0 +1,1287 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 9 — Document Type &amp; Number Range, Document Splitting, Universal Journal · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .35s ease}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0;display:flex;gap:9px;align-items:baseline}
+      nav.toc li a{flex:1}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      /* gate / locked screen */
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;margin-top:26px;box-shadow:var(--shadow);max-width:760px}
+      @media (max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      .btn-ghost{background:transparent;color:var(--accent-ink);border:2px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .btn:disabled{opacity:.55;cursor:default}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600;font-size:.93rem;margin:0}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+
+      /* ---------- Sidebar active (scroll-spy) + read ticks ---------- */
+      nav.toc a.active{background:var(--accent);color:#fff;font-weight:700;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+      nav.toc li.active .dot{border-color:var(--accent);background:var(--accent)}
+      nav.toc a.active:hover{background:var(--accent);color:#fff}
+      nav.toc .tick{margin-left:auto;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;line-height:1;color:transparent;flex:none;align-self:center}
+      nav.toc li.read .tick{background:var(--green);border-color:var(--green);color:#fff}
+      nav.toc li.read a{font-weight:600}
+
+      /* ---------- Sidebar read progress ---------- */
+      .read-progress{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 12px;background:var(--surface2)}
+      .read-progress .pct{font-size:1.25rem;font-weight:700;color:var(--ink)}
+      .read-progress .lbl{font-size:.78rem;color:var(--ink-soft)}
+      .read-progress .progress-track{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:7px}
+      .read-progress .progress-fill{height:100%;width:0%;background:var(--green);border-radius:99px;transition:width .35s ease}
+
+      /* ---------- Mark Read ---------- */
+      .sec-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:26px;padding-top:18px}
+      .mark-read{cursor:pointer;font:600 .95rem "Source Sans 3",sans-serif;font-weight:700;border-radius:10px;padding:11px 22px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:9px;min-height:48px;transition:background .15s,color .15s}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read .box{width:20px;height:20px;border:2px solid currentColor;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;line-height:1}
+      .mark-read.done{background:var(--green);color:#fff;border-color:var(--green)}
+      .mark-read.done .box{background:rgba(255,255,255,.22)}
+      .read-status{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+      section.lesson.is-read{border-color:var(--green)}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 9 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <div class="wrap">
+      <!-- ============ GATE / LOCKED SCREEN (shown until Lesson 8 is complete or the gate test is passed) ============ -->
+      <div id="gateScreen">
+        <section class="gate-card" aria-labelledby="gateTitle">
+          <div class="gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          </div>
+          <h2 id="gateTitle">Lesson 9 is locked</h2>
+          <p>Lesson 9 opens only when <b>Lesson 8 is fully complete</b> — every Lesson 8 section marked Read <b>and</b> the Lesson 8 self-test answered.</p>
+          <p>If you have already studied Lesson 8, you can unlock Lesson 9 by passing the <b>Gate Test</b> below: 5 questions from Lesson 8. You need <b>5 / 5</b> to pass. Only your marks are shown after you submit — the correct answers are never displayed.</p>
+
+          <div class="gate-lockbox" id="gateLockBox" hidden>
+            <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+            <p>Locked until: <b id="gateLockUntil">—</b></p>
+            <p>Time remaining: <b id="gateCountdown">—</b></p>
+            <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+          </div>
+
+          <div id="gateTestArea">
+            <div id="gateQuestions"></div>
+            <p id="gateScore" aria-live="polite"></p>
+            <p id="gateMsg" aria-live="polite"></p>
+            <div class="gate-actions">
+              <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+              <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+            </div>
+            <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+          </div>
+
+          <div class="gate-admin">
+            <button class="btn btn-ghost" id="adminBtn" type="button">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 21 2"/><path d="M15 8l3 3"/></svg>Admin Unlock
+            </button>
+            <div class="gate-admin-form" id="adminForm" hidden>
+              <label for="adminPw">Admin password</label>
+              <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+              <p id="adminMsg" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+        </section>
+      </div>
+
+      <div id="lessonContent" hidden>
+      <header class="hero">
+        <span class="kicker">Lesson 9 · Video 06:26:05 – 08:06:10</span>
+        <h1>Document Type &amp; Number Range, Document Splitting, Universal Journal</h1>
+        <p class="lede">Everything you built in Lessons 5–8 was the <em>structure</em> — company code, chart of accounts, ledger. Now the actual work begins: <strong>posting</strong>. Every posting in SAP is a <strong>document</strong>, and this lesson covers the three things that decide what a document looks like: its <strong>type and number</strong> (Part A), how SAP automatically <strong>splits</strong> it so every profit centre and segment balances on its own (Part B), and the single table — the <strong>Universal Journal</strong> — where every line of every document is stored (Part C). <span class="urdu">(Aaj hum seekhenge ke SAP mein har entry ek "document" hoti hai, usko number aur type kaise milta hai, entry khud-ba-khud profit centres mein kaise bantti hai, aur saari entries aik hi table ACDOCA mein kaise store hoti hain.)</span></p>
+        <div class="hero-meta">
+          <span class="chip">Part A · <b>Document Type &amp; Number Range</b> — 06:26:05</span>
+          <span class="chip">Part B · <b>Document Splitting</b> — 06:49:20</span>
+          <span class="chip">Part C · <b>Universal Journal</b> — 07:38:00</span>
+          <span class="chip">Key T-codes · <b>OBA7 · FBN1 · FB03</b></span>
+          <span class="chip">Key table · <b>ACDOCA</b></span>
+          <span class="chip">Level · <b>Beginner — zero SAP assumed</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <div class="read-progress">
+            <div><span class="pct" id="readPct">0%</span> <span class="lbl">of this lesson read</span></div>
+            <div class="progress-track"><div class="progress-fill" id="readFill"></div></div>
+            <div class="lbl" id="readCount" style="margin-top:6px">0 of 17 sections marked read</div>
+          </div>
+          <ol>
+            <li><span class="dot"></span><a href="#s1">Where we are</a></li>
+            <li><span class="dot"></span><a href="#s2">What is a Document in SAP?</a></li>
+            <li><span class="dot"></span><a href="#s3">Document Type — the label on every document</a></li>
+            <li><span class="dot"></span><a href="#s4">Define a Document Type in OBA7</a></li>
+            <li><span class="dot"></span><a href="#s5">Number Ranges — every document gets a number</a></li>
+            <li><span class="dot"></span><a href="#s6">Why Document Splitting exists</a></li>
+            <li><span class="dot"></span><a href="#s7">How Document Splitting works</a></li>
+            <li><span class="dot"></span><a href="#s8">Configuring Document Splitting — steps</a></li>
+            <li><span class="dot"></span><a href="#s9">Entry View vs General Ledger View</a></li>
+            <li><span class="dot"></span><a href="#s10">The Universal Journal — one table for everything</a></li>
+            <li><span class="dot"></span><a href="#s11">Inside ACDOCA — fields &amp; benefits</a></li>
+            <li><span class="dot"></span><a href="#s12">One posting, end to end</a></li>
+            <li><span class="dot"></span><a href="#s13">T-codes &amp; Tables</a></li>
+            <li><span class="dot"></span><a href="#s14">Exam Traps</a></li>
+            <li><span class="dot"></span><a href="#s15">Glossary A–Z</a></li>
+            <li><span class="dot"></span><a href="#s16">Summary</a></li>
+            <li><span class="dot"></span><a href="#s17">Self-Test — 14 Questions</a></li>
+          </ol>
+          <p class="toc-note">The blue highlight in this menu always shows the section on your screen right now. Press <b>Mark Read</b> at the end of a section to tick it green here. Screens shown in this lesson are re-created illustrations for learning — not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Where we are in the course</h2>
+            <p class="sub">A quick recap, so this lesson sits in the right place in your head.</p>
+            <ul class="clean">
+              <li><b>Lesson 5</b> — Company and <strong>Company Code</strong>: the legal unit that keeps its own books.</li>
+              <li><b>Lesson 6</b> — Business Area, <strong>Fiscal Year Variant</strong>, Credit Control Area, <strong>Posting Period Variant</strong>.</li>
+              <li><b>Lesson 7</b> — Currencies, the <strong>Chart of Accounts</strong> and Field Status.</li>
+              <li><b>Lesson 8</b> — the <strong>Retained Earnings Account</strong> (<code>OB53</code>) and the <strong>Ledger</strong> (<code>0L</code> leading ledger, <code>FINSC_LEDGER</code>).</li>
+            </ul>
+            <p>Think of it like building a shop. Lessons 5–8 built the shop: rooms, shelves, account books. But nobody has written a single sale yet. From this lesson on, real <em>entries</em> start — and in SAP, an entry is never just typed into a book. It is created as a formal, numbered, classified <strong>document</strong>. That one idea runs through all three parts of this lesson.</p>
+            <div class="box term"><span class="box-title">New term — Posting</span><p><b>Posting</b> means saving an accounting entry permanently into SAP's books. When you "post" in SAP, the system creates a document, gives it a number, and writes its lines into the database. <span class="urdu">(Posting = entry ko pakka karke system mein save kar dena.)</span></p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> What is a Document in SAP?</h2>
+            <p class="sub">Your journal entry from manual accounting — wearing a uniform, carrying an ID card.</p>
+            <p>In your Financial Accounting studies, the basic unit of bookkeeping is the <strong>journal entry</strong>: a date, some debit lines, some credit lines, debits equal credits. SAP uses exactly the same idea — it just calls it a <strong>document</strong> and gives it a strict structure.</p>
+            <div class="box term"><span class="box-title">New term — Document (Accounting Document)</span><p>The SAP name for one complete journal entry. A document is only saved when total debits = total credits. It is the smallest complete unit of accounting in SAP — you can never post "half an entry". <span class="urdu">(Document = aik mukammal journal entry — debit barabar credit.)</span></p></div>
+            <p>Every SAP document has two parts:</p>
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>1 · Document Header — one per document</h4>
+                <p>Information that applies to the <em>whole</em> entry: <b>document number</b>, <b>company code</b>, <b>fiscal year</b>, <b>document type</b>, <b>posting date</b>, <b>document date</b>, currency, reference, and who entered it. Stored in table <code>BKPF</code>.</p>
+              </div>
+              <div class="mini-card">
+                <h4>2 · Line Items — two or more per document</h4>
+                <p>The individual debit and credit lines: account, amount, cost centre / profit centre, text, tax code and so on. In classic ECC these lived in table <code>BSEG</code>; in S/4HANA every line is written into the Universal Journal, table <code>ACDOCA</code> (Part C of this lesson).</p>
+              </div>
+            </div>
+            <figure class="diagram">
+              <svg viewBox="0 0 760 300" role="img" aria-label="Anatomy of an SAP document: one header and several line items">
+                <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text x="380" y="28" text-anchor="middle" class="svg-title">One SAP Document = 1 Header + Many Line Items</text>
+                <rect x="150" y="48" width="460" height="86" rx="10" class="svg-box-a"/>
+                <text x="380" y="74" text-anchor="middle" class="svg-title">DOCUMENT HEADER — table BKPF</text>
+                <text x="380" y="96" text-anchor="middle" class="svg-sub">Doc. No. 1900000042 · Company Code PK01 · Fiscal Year 2026</text>
+                <text x="380" y="114" text-anchor="middle" class="svg-sub">Type KR · Posting Date 15 Nov 2026 · Currency PKR · Entered by ASAD</text>
+                <line x1="380" y1="134" x2="380" y2="158" class="svg-arrow"/>
+                <rect x="40" y="162" width="210" height="58" rx="10" class="svg-box"/>
+                <text x="145" y="186" text-anchor="middle" class="svg-title">Line 1 · Expense A/c</text>
+                <text x="145" y="205" text-anchor="middle" class="svg-sub">Debit 100,000</text>
+                <rect x="275" y="162" width="210" height="58" rx="10" class="svg-box"/>
+                <text x="380" y="186" text-anchor="middle" class="svg-title">Line 2 · Expense A/c</text>
+                <text x="380" y="205" text-anchor="middle" class="svg-sub">Debit 60,000</text>
+                <rect x="510" y="162" width="210" height="58" rx="10" class="svg-box-g"/>
+                <text x="615" y="186" text-anchor="middle" class="svg-title">Line 3 · Vendor A/c</text>
+                <text x="615" y="205" text-anchor="middle" class="svg-sub">Credit 160,000</text>
+                <text x="380" y="252" text-anchor="middle" class="svg-sub">Debits 160,000 = Credits 160,000 → document balances → SAP allows posting</text>
+                <text x="380" y="276" text-anchor="middle" class="svg-sub">Line items are stored in the Universal Journal — table ACDOCA (Part C)</text>
+              </svg>
+              <figcaption>Anatomy of an SAP accounting document. The header (BKPF) is created once; each debit/credit is a separate line item.</figcaption>
+            </figure>
+            <h3>How is a document identified?</h3>
+            <p>Three things together make a document unique — like a person's name + father's name + city:</p>
+            <ul class="clean">
+              <li><b>Company Code</b> — whose books? (field <code>BUKRS</code>)</li>
+              <li><b>Fiscal Year</b> — which year? (field <code>GJAHR</code>)</li>
+              <li><b>Document Number</b> — which entry? (field <code>BELNR</code>)</li>
+            </ul>
+            <p>Document number <code>1900000042</code> can exist in company code PK01 <em>and</em> in company code PK02, and again in the next fiscal year — no clash, because the three-part key is different. Remember this: it explains why number ranges are defined <b>per company code</b> (Section 5).</p>
+            <div class="box analogy"><span class="box-title">Analogy — the invoice pad</span><p>Think of a manual invoice book. The <b>header</b> is the top of the page: date, invoice number, shop name. The <b>lines</b> are the items written below. You cannot tear out half a page and call it an invoice — and SAP cannot save half a document either.</p></div>
+            <div class="box term"><span class="box-title">New terms — Posting Date vs Document Date</span><p><b>Posting date</b> decides <em>which period and fiscal year</em> the entry belongs to — SAP derives the period from it (Lesson 6). <b>Document date</b> is the date printed on the original paper (e.g. the vendor's invoice date). They can be different. <span class="examtag">Exam favourite</span></p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Document Type — the label on every document</h2>
+            <p class="sub">Part A begins. Video: 06:26:05.</p>
+            <p>Imagine thousands of documents posted every day: vendor invoices, customer invoices, payments, salary entries, depreciation, goods receipts. If they were all mixed in one pile, finding and controlling them would be a nightmare. So SAP stamps every document with a two-character label — its <strong>document type</strong>.</p>
+            <div class="box term"><span class="box-title">New term — Document Type</span><p>A <b>two-character code</b> (like <code>SA</code>, <code>KR</code>, <code>DR</code>) that classifies a document by the <em>kind of business transaction</em> it represents. It is entered in the document header and controls important behaviour of the document — above all, <b>which number range</b> the document number comes from and <b>which kinds of accounts</b> may be posted to. <span class="urdu">(Document type = entry ki qism batane wala label — ye invoice hai, payment hai, ya aam G/L entry hai.)</span></p></div>
+            <div class="box analogy"><span class="box-title">Analogy — hospital file colours</span><p>In a hospital, patient files get different coloured folders: red for emergency, blue for OPD, green for surgery. The colour does not change the treatment inside — it tells everyone at a glance <em>what kind of case this is</em> and which register number series it follows. Document type is that colour on the accounting file.</p></div>
+            <h3>The standard document types you must know</h3>
+            <p>SAP delivers many ready-made types. You normally <em>use</em> these rather than inventing new ones. The pattern is easy: first letter hints at the area — <b>K</b> = vendor (German <em>Kreditor</em>), <b>D</b> = customer (<em>Debitor</em>), <b>S</b> = G/L account (<em>Sachkonto</em>), <b>A</b> = assets.</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Type</th><th>Meaning</th><th>Used for</th><th>Typical entry screen</th></tr>
+                <tr><td><code>SA</code></td><td>G/L account document</td><td>General journal entries — expenses, provisions, adjustments</td><td><code>FB50</code> / <code>F-02</code></td></tr>
+                <tr><td><code>KR</code></td><td>Vendor invoice</td><td>Recording a supplier's bill (Accounts Payable)</td><td><code>FB60</code></td></tr>
+                <tr><td><code>KG</code></td><td>Vendor credit memo</td><td>A supplier reduces what you owe (return / rebate)</td><td><code>FB65</code></td></tr>
+                <tr><td><code>KZ</code></td><td>Vendor payment</td><td>Paying a supplier</td><td><code>F-53</code></td></tr>
+                <tr><td><code>DR</code></td><td>Customer invoice</td><td>Billing a customer (Accounts Receivable)</td><td><code>FB70</code></td></tr>
+                <tr><td><code>DG</code></td><td>Customer credit memo</td><td>You reduce what a customer owes you</td><td><code>FB75</code></td></tr>
+                <tr><td><code>DZ</code></td><td>Customer payment</td><td>Receiving money from a customer</td><td><code>F-28</code></td></tr>
+                <tr><td><code>AA</code></td><td>Asset posting</td><td>Buying / retiring a fixed asset</td><td>Asset Accounting</td></tr>
+                <tr><td><code>AF</code></td><td>Depreciation posting</td><td>The automatic monthly depreciation run</td><td><code>AFAB</code></td></tr>
+                <tr><td><code>AB</code></td><td>Accounting document</td><td>A general type used by the system, e.g. for clearing</td><td>System-generated</td></tr>
+                <tr><td><code>RE</code></td><td>Invoice receipt</td><td>Vendor invoice arriving through Materials Management invoice verification</td><td><code>MIRO</code></td></tr>
+                <tr><td><code>WE</code></td><td>Goods receipt</td><td>Stock received into the warehouse (creates an FI document for the value)</td><td><code>MIGO</code></td></tr>
+                <tr><td><code>ZP</code></td><td>Payment posting</td><td>Documents created by the automatic payment program</td><td><code>F110</code></td></tr>
+              </table>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick — read the letters</span><p><b>K</b>reditor = vendor (think "K = Khareedari / supplier"), <b>D</b>ebitor = customer ("D = Dena hai customer ne"), <b>R</b> = invoice (<em>Rechnung</em>), <b>G</b> = credit memo (<em>Gutschrift</em>), <b>Z</b> = payment (<em>Zahlung</em>). So <b>KR</b> = Kreditor + Rechnung = <b>vendor invoice</b>; <b>DZ</b> = Debitor + Zahlung = <b>customer payment</b>. Once you see the pattern, you can decode types you have never memorised.</p></div>
+            <h3>What does a document type actually control?</h3>
+            <ul class="clean">
+              <li><b>Number range</b> — every document type points to one number range; the document number is drawn from it at posting (Section 5).</li>
+              <li><b>Account types allowed</b> — which kinds of accounts may appear in the document: <b>A</b>ssets, <b>D</b> (customers), <b>K</b> (vendors), <b>M</b>aterials, <b>S</b> (G/L accounts). A <code>KR</code> document, for example, is not allowed to contain a customer line.</li>
+              <li><b>Reverse document type</b> — which type is used when this document is reversed (cancelled). If left blank, the same type is used.</li>
+              <li><b>Required fields</b> — whether a <em>reference number</em> or <em>document header text</em> must be entered.</li>
+              <li><b>Control flags</b> — e.g. whether negative postings are permitted, whether intercompany postings are allowed, whether a trading partner must be entered.</li>
+              <li><b>Authorization group</b> — optionally restricts who may post with this type.</li>
+            </ul>
+            <div class="box trap"><span class="box-title">Trap 1 — Level of definition</span><p>Document types are defined at <b>client level</b> — one definition is valid for <b>all company codes</b> in the client. Number ranges, in contrast, are defined <b>per company code</b>. Exam questions love swapping these two levels.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> Define a Document Type in OBA7 — step by step</h2>
+            <p class="sub">Configuration T-code: <code>OBA7</code> · also under SPRO → Financial Accounting → Financial Accounting Global Settings → Document → Document Types.</p>
+            <p>You rarely create brand-new types — projects usually copy a standard type and adjust it. But the exam tests whether you know what lives inside a document type, so let us open one.</p>
+            <ol class="clean">
+              <li>Run <code>OBA7</code>. You see the list of all document types in the client.</li>
+              <li>Select a type (say <code>SA</code>) and open its details — or copy it to create your own (custom types usually start with a letter you choose, e.g. <code>ZS</code>).</li>
+              <li>Fill the <b>Properties</b>: the <b>number range</b> key it should draw numbers from, the <b>reverse document type</b>, and the <b>authorization group</b> if needed.</li>
+              <li>Tick the <b>Account types allowed</b>: Assets / Customer / Vendor / Material / G/L account.</li>
+              <li>Set <b>Control data</b>: reference number required? Document header text required? Negative postings allowed? Intercompany postings?</li>
+              <li>Save — the change goes into a <b>transport request</b> (Lesson 2) because document types are client-level configuration.</li>
+            </ol>
+            <div class="screen" role="img" aria-label="Illustration of the OBA7 document type list">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>OBA7 — Change View "Document Types": Overview · ILLUSTRATION (not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="cm">-- Document types are defined once, for the whole client --</span>
+<span class="kw">Type</span>   <span class="kw">Description</span>                    <span class="kw">No. Range</span>   <span class="kw">Rev. Type</span>
+<span class="hl2">SA</span>     G/L account document           <span class="st">01</span>          SA
+<span class="hl2">KR</span>     Vendor invoice                 <span class="st">51</span>          KG
+<span class="hl2">KG</span>     Vendor credit memo             <span class="st">51</span>          KR
+<span class="hl2">KZ</span>     Vendor payment                 <span class="st">53</span>          KZ
+<span class="hl2">DR</span>     Customer invoice               <span class="st">18</span>          DG
+<span class="hl2">DZ</span>     Customer payment               <span class="st">14</span>          DZ
+<span class="hl2">AA</span>     Asset posting                  <span class="st">03</span>          AA
+<span class="dim">Notice: KR and KG point to the SAME number range (51),</span>
+<span class="dim">and KR's reverse type is KG — reversing an invoice</span>
+<span class="dim">creates a credit-memo-type document.</span></div>
+            </div>
+            <div class="box term"><span class="box-title">New term — Reverse Document Type</span><p>When you cancel (reverse) a document, SAP creates a <em>new</em> document with the opposite debit/credit lines — it never deletes the original. The <b>reverse document type</b> says which type that cancelling document carries. Classic pair: a <code>KR</code> vendor invoice reverses with type <code>KG</code>. <span class="urdu">(Reverse = entry ko delete nahi karte, uske bar-aks nayi entry banti hai.)</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 2 — "Document type is set per company code"</span><p>False. One definition, whole client. What <em>does</em> differ per company code is the number range behind it — the same type <code>SA</code> can draw numbers from range 01 in PK01 and a different interval in PK02, because ranges live per company code.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Number Ranges — every document gets a number</h2>
+            <p class="sub">Configuration T-code: <code>FBN1</code> · number range object: <code>RF_BELEG</code>.</p>
+            <p>Auditors hate gaps and duplicates in document numbers. SAP solves this with <strong>number ranges</strong>: pre-defined pools of numbers. When a document is posted, SAP takes the <em>next free number</em> from the pool that its document type points to.</p>
+            <div class="box term"><span class="box-title">New term — Number Range (Interval)</span><p>A defined block of document numbers — e.g. from <code>1900000000</code> to <code>1999999999</code> — maintained <b>per company code</b> and usually <b>per fiscal year</b>. Each interval has a short two-character key (like <code>01</code>, <code>49</code>, <code>51</code>) which is what you enter inside the document type. <span class="urdu">(Number range = numbers ka aik block; har document ko isme se agla number milta hai.)</span></p></div>
+            <figure class="diagram">
+              <svg viewBox="0 0 760 270" role="img" aria-label="How a document type draws its number from a number range">
+                <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text x="380" y="28" text-anchor="middle" class="svg-title">At posting time, the number comes from the type's range</text>
+                <rect x="30" y="60" width="210" height="80" rx="10" class="svg-box-a"/>
+                <text x="135" y="90" text-anchor="middle" class="svg-title">Document Type KR</text>
+                <text x="135" y="110" text-anchor="middle" class="svg-sub">points to range key 51</text>
+                <text x="135" y="128" text-anchor="middle" class="svg-sub">(set in OBA7)</text>
+                <line x1="240" y1="100" x2="300" y2="100" class="svg-arrow" marker-end="url(#arr2)"/>
+                <rect x="305" y="60" width="220" height="80" rx="10" class="svg-box-g"/>
+                <text x="415" y="86" text-anchor="middle" class="svg-title">Range 51 — Co. Code PK01</text>
+                <text x="415" y="106" text-anchor="middle" class="svg-sub">1900000000 – 1999999999</text>
+                <text x="415" y="124" text-anchor="middle" class="svg-sub">Current number: 1900000041</text>
+                <line x1="525" y1="100" x2="585" y2="100" class="svg-arrow" marker-end="url(#arr2)"/>
+                <rect x="590" y="60" width="150" height="80" rx="10" class="svg-box-gr"/>
+                <text x="665" y="90" text-anchor="middle" class="svg-title">Posted Doc.</text>
+                <text x="665" y="110" text-anchor="middle" class="svg-sub">BELNR</text>
+                <text x="665" y="128" text-anchor="middle" class="svg-sub">1900000042</text>
+                <rect x="150" y="180" width="460" height="60" rx="10" class="svg-box"/>
+                <text x="380" y="204" text-anchor="middle" class="svg-title">FBN1 maintains the intervals — per company code, per fiscal year</text>
+                <text x="380" y="224" text-anchor="middle" class="svg-sub">Different company code = its own separate pools of numbers</text>
+              </svg>
+              <figcaption>The chain: Document type (OBA7) → range key → interval in FBN1 for that company code → next number at posting.</figcaption>
+            </figure>
+            <h3>Internal vs external number assignment</h3>
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>Internal assignment — the normal way</h4>
+                <p><b>SAP itself</b> gives the next number, in strict sequence, at the moment of posting. The user never types a document number. Almost all FI documents work this way.</p>
+              </div>
+              <div class="mini-card">
+                <h4>External assignment — the exception</h4>
+                <p>The <b>user</b> types the number, and SAP only checks that it lies inside the interval and is not already used. Used when numbers must come from an outside system or a pre-printed book. In FBN1 the interval is flagged <code>Ext</code>.</p>
+              </div>
+            </div>
+            <h3>Setting up a range in FBN1 — steps</h3>
+            <ol class="clean">
+              <li>Run <code>FBN1</code> and enter the <b>company code</b>.</li>
+              <li>Choose <em>Intervals</em> and the <b>fiscal year</b> — ranges are normally created <b>year-dependent</b>: the same key (e.g. <code>01</code>) gets a fresh interval for each fiscal year, so numbering restarts cleanly each year and old years stay untouched.</li>
+              <li>Add the interval: <em>from number</em>, <em>to number</em>, and tick <code>Ext</code> only for external assignment.</li>
+              <li>Make sure intervals for different types in the same company code and year <b>do not overlap</b> — a document number must stay unique within company code + fiscal year (Section 2), so two types may share one range, but two different ranges must never cover the same numbers.</li>
+              <li>Save. Note: number range changes are <b>not</b> transported in the usual way — they are maintained directly in each system, because the "current number" is live data, not settings.</li>
+            </ol>
+            <div class="screen" role="img" aria-label="Illustration of FBN1 number range intervals">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FBN1 — Accounting Document Number Ranges · Company Code PK01 · ILLUSTRATION (not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">No</span>    <span class="kw">Year</span>   <span class="kw">From Number</span>     <span class="kw">To Number</span>       <span class="kw">Current</span>      <span class="kw">Ext</span>
+<span class="hl2">01</span>    2026   0100000000      0199999999      0100000873   <span class="dim">[ ]</span>
+<span class="hl2">49</span>    2026   4900000000      4999999999      4900000012   <span class="dim">[ ]</span>
+<span class="hl2">51</span>    2026   1900000000      1999999999      1900000041   <span class="dim">[ ]</span>
+<span class="hl2">X1</span>    9999   9000000000      9099999999      9000000007   <span class="dim">[ ]  year-independent</span>
+<span class="cm">-- "Current" is the last number used; the next posting takes +1.</span>
+<span class="cm">-- Year 9999 = the interval is valid for all years.</span></div>
+            </div>
+            <div class="box trap"><span class="box-title">Trap 3 — Gaps in numbers</span><p>With <b>internal</b> assignment, numbers should follow in sequence — but gaps can still appear in real life: a posting that fails or rolls back after taking a number, or <b>number range buffering</b> (SAP pre-loads a block of numbers into memory for speed; unused buffered numbers are lost on restart). The exam point: a gap does <b>not</b> automatically mean fraud or a missing document — but every gap must be explainable. Also remember: two document types <b>can</b> share one number range — "every type needs its own range" is false.</p></div>
+            <div class="box trick"><span class="box-title">Memory trick — type is the label, range is the token counter</span><p>At a bank counter you take a token. The <b>document type</b> decides <em>which counter's queue</em> you join (vendor invoices here, payments there). The <b>number range</b> is that counter's token machine. OBA7 writes the queue names; FBN1 fills the token machines — separately for every branch (company code).</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Why Document Splitting exists — the problem</h2>
+            <p class="sub">Part B begins. Video: 06:49:20. First, feel the problem — then the solution is obvious.</p>
+            <p>From Lesson 5 you know the <strong>Profit Centre</strong>: an internal unit (like a branch or product line) for which management wants its own profit report. And from Lesson 6, the <strong>Segment</strong>: a division of the company reported to the outside world (required by IFRS / GAAP segment reporting).</p>
+            <div class="box term"><span class="box-title">Quick recall — Profit Centre &amp; Segment</span><p><b>Profit Centre</b> = internal responsibility area; you want its own P&amp;L <em>and</em> Balance Sheet. <b>Segment</b> = a reportable business division; in SAP it is normally derived automatically from the profit centre of a line. Both are called <b>account assignment objects</b> — extra "tags" carried on line items.</p></div>
+            <p>Now the problem. Your company has two profit centres: <b>PC-LAHORE</b> and <b>PC-KARACHI</b>. A vendor sends ONE combined bill of Rs 160,000 — Rs 100,000 of expenses belong to Lahore, Rs 60,000 to Karachi. You post it the simple way:</p>
+            <ul class="clean">
+              <li>Debit Expense — Lahore — 100,000 (profit centre entered ✓)</li>
+              <li>Debit Expense — Karachi — 60,000 (profit centre entered ✓)</li>
+              <li>Credit Vendor — 160,000 (<b>profit centre: ???</b>)</li>
+            </ul>
+            <p>The vendor line covers <em>both</em> branches, so you cannot tag it with one profit centre. Result: the P&amp;L per profit centre works, but a <strong>Balance Sheet per profit centre is impossible</strong> — Lahore's books show an expense with no matching payable; Karachi's payable is hidden inside one mixed line. The vendor line does not balance to zero for either profit centre.</p>
+            <div class="box analogy"><span class="box-title">Analogy — two brothers, one electricity bill</span><p>Two brothers share a house but keep separate accounts. One WAPDA bill of Rs 16,000 arrives; the elder used Rs 10,000 of electricity, the younger Rs 6,000. If the bill stays as one line "payable 16,000", neither brother's personal ledger balances. The fair solution: <b>split the payable</b> — 10,000 owed by elder, 6,000 by younger. Each brother's books now balance alone. That is exactly what SAP does — automatically.</p></div>
+            <div class="box term"><span class="box-title">New term — Document Splitting</span><p>An automatic function of the General Ledger in S/4HANA: at posting time, SAP <b>splits line items</b> (like the vendor line above) across the profit centres / segments appearing in the document, in the <b>same proportion</b> as the lines that caused them — so that debits = credits <em>for every single profit centre and segment separately</em>. After splitting, you can produce a complete Balance Sheet per profit centre and per segment. <span class="urdu">(Document splitting = aik line ko profit centres ke hisaab se khud-ba-khud baant dena, taake har profit centre ki balance sheet alag ban sake.)</span></p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> How Document Splitting works</h2>
+            <p class="sub">Same invoice as Section 6 — now watch SAP fix it, and learn the three splitting rules.</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 760 330" role="img" aria-label="Document splitting: one vendor line split across two profit centres">
+                <defs><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text x="190" y="26" text-anchor="middle" class="svg-title">AS ENTERED (Entry View)</text>
+                <text x="570" y="26" text-anchor="middle" class="svg-title">AFTER SPLITTING (G/L View)</text>
+                <rect x="30" y="44" width="320" height="52" rx="10" class="svg-box"/>
+                <text x="190" y="66" text-anchor="middle" class="svg-title">Dr Expense · Lahore · 100,000</text>
+                <text x="190" y="84" text-anchor="middle" class="svg-sub">Profit Centre: PC-LAHORE</text>
+                <rect x="30" y="106" width="320" height="52" rx="10" class="svg-box"/>
+                <text x="190" y="128" text-anchor="middle" class="svg-title">Dr Expense · Karachi · 60,000</text>
+                <text x="190" y="146" text-anchor="middle" class="svg-sub">Profit Centre: PC-KARACHI</text>
+                <rect x="30" y="168" width="320" height="52" rx="10" class="svg-box-r"/>
+                <text x="190" y="190" text-anchor="middle" class="svg-title">Cr Vendor · 160,000</text>
+                <text x="190" y="208" text-anchor="middle" class="svg-sub">Profit Centre: — none — ✗</text>
+                <line x1="355" y1="140" x2="405" y2="140" class="svg-arrow" marker-end="url(#arr3)"/>
+                <rect x="410" y="44" width="320" height="52" rx="10" class="svg-box"/>
+                <text x="570" y="66" text-anchor="middle" class="svg-title">Dr Expense · Lahore · 100,000</text>
+                <text x="570" y="84" text-anchor="middle" class="svg-sub">Profit Centre: PC-LAHORE</text>
+                <rect x="410" y="106" width="320" height="52" rx="10" class="svg-box"/>
+                <text x="570" y="128" text-anchor="middle" class="svg-title">Dr Expense · Karachi · 60,000</text>
+                <text x="570" y="146" text-anchor="middle" class="svg-sub">Profit Centre: PC-KARACHI</text>
+                <rect x="410" y="168" width="320" height="52" rx="10" class="svg-box-gr"/>
+                <text x="570" y="190" text-anchor="middle" class="svg-title">Cr Vendor · 100,000 · Lahore</text>
+                <text x="570" y="208" text-anchor="middle" class="svg-sub">split in the same ratio 100 : 60</text>
+                <rect x="410" y="230" width="320" height="52" rx="10" class="svg-box-gr"/>
+                <text x="570" y="252" text-anchor="middle" class="svg-title">Cr Vendor · 60,000 · Karachi</text>
+                <text x="570" y="270" text-anchor="middle" class="svg-sub">now Lahore balances AND Karachi balances</text>
+                <text x="380" y="312" text-anchor="middle" class="svg-sub">You typed 3 lines. SAP stored 4. Total still 160,000 — nothing changed, only divided fairly.</text>
+              </svg>
+              <figcaption>Active splitting of the vendor line. The split follows the ratio of the expense lines that caused it.</figcaption>
+            </figure>
+            <h3>The three splitting rules</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Rule</th><th>When it runs</th><th>What it does</th></tr>
+                <tr><td><b>Active split</b></td><td>At posting time, on the new document</td><td>Splits lines like vendor / customer / tax lines across the characteristics (profit centre, segment) of the "driving" lines — e.g. expense and revenue lines — in the same proportion.</td></tr>
+                <tr><td><b>Passive split</b></td><td>Later, when that item is <em>cleared</em> (e.g. the vendor is paid)</td><td>The clearing document <b>inherits</b> the split of the original open item — the payment is divided between Lahore and Karachi exactly as the invoice was. No fresh decision needed.</td></tr>
+                <tr><td><b>Zero-balance clearing</b></td><td>At posting time, if a characteristic still does not balance to zero</td><td>SAP adds extra <b>clearing line items</b> on a special <b>zero-balance clearing account</b> so every profit centre / segment balances to exactly zero. Example: cash paid from Lahore's bank for Karachi's expense.</td></tr>
+              </table>
+            </div>
+            <div class="box term"><span class="box-title">New terms — Splitting Characteristics &amp; Item Category</span><p><b>Splitting characteristics</b> are the fields the split is calculated for — normally <b>Profit Centre</b> and <b>Segment</b> (Business Area is also possible). <b>Item category</b> is SAP's internal label for <em>what kind of line this is</em> — balance sheet account, customer, vendor, cash, revenue, expense, asset, tax… The splitting rules are written per item category: e.g. "vendor lines (category 03000) split like the expense lines in the document".</p></div>
+            <div class="box term"><span class="box-title">New terms — Inheritance &amp; Default Account Assignment</span><p><b>Inheritance:</b> if a document has only one profit centre anywhere, lines without one simply <em>inherit</em> it. <b>Default account assignment:</b> if a characteristic is still empty after inheritance, SAP fills it with a fixed <b>constant</b> value you configured (e.g. a dummy profit centre) — so no line is ever left untagged.</p></div>
+            <div class="box trap"><span class="box-title">Trap 4 — Splitting is not optional decoration</span><p>If document splitting is active and a line needs a profit centre / segment but gets none (no entry, no inheritance, no default), posting <b>fails</b> — SAP will not save an untagged line. That strictness is the whole point: reports per segment are only trustworthy if <em>every</em> line carries the tag.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Configuring Document Splitting — steps</h2>
+            <p class="sub">SPRO path: Financial Accounting → General Ledger Accounting → Business Transactions → Document Splitting.</p>
+            <p>You do not need to memorise every click, but the exam expects you to know the <em>sequence</em> and the key ideas. The standard setup SAP delivers covers most cases — projects mostly activate and adjust.</p>
+            <ol class="clean">
+              <li><b>Classify G/L accounts</b> — assign each account an <b>item category</b> (expense, revenue, balance sheet, cash…). This tells the splitting engine how each account's lines behave.</li>
+              <li><b>Classify document types</b> — assign each document type a <b>business transaction</b> and <b>variant</b> (e.g. vendor invoice = business transaction 0300, variant 0001). This tells SAP <em>which splitting rules</em> apply to documents of this type.</li>
+              <li><b>Define splitting characteristics</b> — choose the fields to split for: <b>Profit Centre</b> and <b>Segment</b>, and mark them as <b>zero-balance</b> characteristics (each value must balance to zero) and, if needed, <b>mandatory</b>.</li>
+              <li><b>Define the zero-balance clearing account</b> — the G/L account SAP uses for the automatic clearing lines of rule 3.</li>
+              <li><b>Define default account assignment</b> — the constant profit centre / segment used when a line would otherwise stay empty.</li>
+              <li><b>Activate document splitting</b> — switch it on at <b>client level</b>, then activate it <b>per company code</b>. Both switches are needed.</li>
+            </ol>
+            <div class="box term"><span class="box-title">New term — Business Transaction (splitting)</span><p>Not the business event itself, but SAP's <em>category</em> for it inside the splitting rules: e.g. "vendor invoice", "customer invoice", "payment", "goods receipt". Combined with a <b>variant</b> (a numbered variation of the rules), it decides exactly how a document of a given type will be split. SAP delivers a standard splitting method — <b>0000000012</b> — containing the standard rules; most companies use it unchanged.</p></div>
+            <div class="box trap"><span class="box-title">Trap 5 — Activation level</span><p>Document splitting is <b>not</b> activated per document type and <b>not</b> per ledger. It is switched on for the <b>client</b> and then for each <b>company code</b>. And documents posted <em>before</em> activation are <b>not</b> split afterwards — splitting happens at posting time only.</p></div>
+            <div class="box trap"><span class="box-title">Trap 6 — Where does the Segment come from?</span><p>Users normally do <b>not</b> type the segment. It is <b>derived from the profit centre</b> — each profit centre master record carries its segment. Split by profit centre, and the segment follows automatically.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> Entry View vs General Ledger View</h2>
+            <p class="sub">The two faces of the same document — a favourite exam topic since S/4HANA.</p>
+            <p>Because of splitting, one document now exists in two views. When you display a document with <code>FB03</code>, you can switch between them:</p>
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>Entry View — "what the user typed"</h4>
+                <p>The document exactly as entered: 3 lines in our example. This view is based on the classic tables <code>BKPF</code> (header) + <code>BSEG</code> (lines). Vendor and customer open-item management also works on this view.</p>
+              </div>
+              <div class="mini-card">
+                <h4>General Ledger View — "what SAP stored for reporting"</h4>
+                <p>The document <em>after</em> splitting: 4 lines in our example, every line carrying its ledger, profit centre and segment. This view is read from the Universal Journal, <code>ACDOCA</code>, and can be shown <b>per ledger</b>.</p>
+              </div>
+            </div>
+            <div class="screen" role="img" aria-label="Illustration of FB03 showing entry view and general ledger view">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FB03 — Display Document 1900000042 · PK01 · 2026 · ILLUSTRATION (not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="cm">-- ENTRY VIEW (as typed) --</span>
+  001  Expense A/c        <span class="hl2">Dr 100,000</span>   PC: Lahore
+  002  Expense A/c        <span class="hl2">Dr  60,000</span>   PC: Karachi
+  003  Vendor A/c         <span class="hl2">Cr 160,000</span>   PC: <span class="dim">—</span>
+<span class="cm">-- GENERAL LEDGER VIEW · Ledger 0L (after splitting) --</span>
+  0001 Expense A/c        <span class="hl2">Dr 100,000</span>   PC: Lahore   Seg: Textiles
+  0002 Expense A/c        <span class="hl2">Dr  60,000</span>   PC: Karachi  Seg: Garments
+  0003 Vendor A/c         <span class="hl2">Cr 100,000</span>   PC: Lahore   Seg: Textiles
+  0004 Vendor A/c         <span class="hl2">Cr  60,000</span>   PC: Karachi  Seg: Garments
+<span class="cm">-- Lahore: 100,000 Dr = 100,000 Cr ✓   Karachi: 60,000 = 60,000 ✓ --</span></div>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick — two photographs</span><p>The <b>Entry View</b> is the photo <em>you</em> took of the entry. The <b>G/L View</b> is the photo after SAP's editor finished it — same event, more detail filled in. When a report looks "different" from the entry screen, you are simply looking at the other photograph.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> The Universal Journal — one table for everything</h2>
+            <p class="sub">Part C begins. Video: 07:38:00. This is the heart of S/4HANA Finance — and of this lesson.</p>
+            <p>First, the problem with the <em>old</em> SAP (ECC). Finance data was scattered across many tables, because each sub-area kept its own copy:</p>
+            <ul class="clean">
+              <li><code>BSEG</code> — G/L line items, but <b>CO</b> (Controlling) kept its own lines in <code>COEP</code>.</li>
+              <li><code>GLT0</code> and <code>FAGLFLEXT</code> — separate <b>totals</b> tables, updated alongside the lines.</li>
+              <li><code>BSIS / BSAS / BSID / BSAD / BSIK / BSAK</code> — separate <b>index</b> tables for open and cleared items of G/L, customers and vendors.</li>
+              <li>Asset Accounting and the Material Ledger kept their own tables again.</li>
+            </ul>
+            <p>Consequences: the same amount stored four or five times, FI and CO figures that had to be <em>reconciled</em> at month-end (and sometimes disagreed), and slow reporting because totals had to be maintained. You already know double-entry bookkeeping — imagine keeping the same journal in five notebooks and re-checking nightly that they agree. That was ECC.</p>
+            <div class="box term"><span class="box-title">New term — Universal Journal (Table ACDOCA)</span><p>S/4HANA's single line-item table for <b>all</b> of Finance: General Ledger, Controlling, Asset Accounting and Material Ledger lines are written into <b>one</b> table — <code>ACDOCA</code>. One line carries <em>everything</em> at once: ledger, company code, account, amount in several currencies, cost centre, profit centre, segment, asset, material… Because there is only one copy, there is nothing left to reconcile. <span class="urdu">(Universal Journal = saari finance entries ki aik hi bari register — ACDOCA. FI, CO, assets — sab aik jagah.)</span></p></div>
+            <figure class="diagram">
+              <svg viewBox="0 0 760 300" role="img" aria-label="Old ECC many tables merged into one Universal Journal ACDOCA">
+                <defs><marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text x="175" y="26" text-anchor="middle" class="svg-title">ECC — many tables</text>
+                <text x="575" y="26" text-anchor="middle" class="svg-title">S/4HANA — one table</text>
+                <rect x="55" y="44" width="240" height="40" rx="8" class="svg-box-r"/><text x="175" y="69" text-anchor="middle" class="svg-sub">BSEG · G/L line items</text>
+                <rect x="55" y="92" width="240" height="40" rx="8" class="svg-box-r"/><text x="175" y="117" text-anchor="middle" class="svg-sub">COEP · Controlling lines</text>
+                <rect x="55" y="140" width="240" height="40" rx="8" class="svg-box-r"/><text x="175" y="165" text-anchor="middle" class="svg-sub">GLT0 / FAGLFLEXT · totals</text>
+                <rect x="55" y="188" width="240" height="40" rx="8" class="svg-box-r"/><text x="175" y="213" text-anchor="middle" class="svg-sub">BSIS, BSID, BSIK… · indexes</text>
+                <line x1="300" y1="135" x2="415" y2="135" class="svg-arrow" marker-end="url(#arr4)"/>
+                <rect x="420" y="84" width="310" height="102" rx="10" class="svg-box-a"/>
+                <text x="575" y="118" text-anchor="middle" class="svg-title">ACDOCA — Universal Journal</text>
+                <text x="575" y="140" text-anchor="middle" class="svg-sub">FI-GL + CO + Asset Accounting</text>
+                <text x="575" y="158" text-anchor="middle" class="svg-sub">+ Material Ledger — every line, once</text>
+                <text x="575" y="240" text-anchor="middle" class="svg-sub">Totals &amp; indexes are no longer stored tables —</text>
+                <text x="575" y="258" text-anchor="middle" class="svg-sub">they are calculated on the fly from ACDOCA (compatibility views)</text>
+              </svg>
+              <figcaption>From many overlapping tables to one single source of truth. This merge is the technical foundation of "SAP S/4HANA Finance".</figcaption>
+            </figure>
+            <h3>What happened to the old tables?</h3>
+            <ul class="clean">
+              <li><b><code>BKPF</code></b> (document header) — <b>still exists</b>, unchanged in its role.</li>
+              <li><b><code>BSEG</code></b> — still exists for the <b>entry view</b> and for open-item management of customers/vendors, but the <em>reporting</em> truth for the G/L is ACDOCA.</li>
+              <li><b>Totals tables</b> (<code>GLT0</code>, <code>FAGLFLEXT</code>) and <b>secondary index tables</b> (<code>BSIS</code>, <code>BSAS</code>, …) — <b>no longer stored</b>. SAP replaced them with <b>compatibility views</b>: they carry the old names, but behind the scenes they calculate their values live from ACDOCA, so old programs and reports keep working.</li>
+              <li><b><code>COEP</code></b> (CO actual lines) — likewise replaced by a view on ACDOCA; CO postings are simply ACDOCA lines with CO fields filled.</li>
+            </ul>
+            <div class="box term"><span class="box-title">New term — Compatibility View</span><p>A database <b>view</b> that wears the name of a removed table. Programs that used to read <code>GLT0</code> still "read GLT0" — but the data is produced at that moment from ACDOCA. Like renaming the shop but keeping the old signboard, so old customers still find it.</p></div>
+            <div class="box analogy"><span class="box-title">Analogy — five notebooks vs one register</span><p>ECC was a shop with five notebooks: sales, expenses, stock, assets, and a totals notebook re-copied every night — and a monthly fight when they disagreed. S/4HANA keeps <b>one big register (ACDOCA)</b>. Need a total? Add the lines on the spot — the HANA database is fast enough that pre-copied totals are unnecessary. One register, one truth, no nightly copying, no fights.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> Inside ACDOCA — fields &amp; benefits</h2>
+            <p class="sub">You do not need every field — but these names appear again and again in the exam.</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Field</th><th>Meaning</th><th>Why it matters</th></tr>
+                <tr><td><code>RLDNR</code></td><td>Ledger</td><td>Which set of books this line belongs to (Lesson 8: <code>0L</code>, <code>2L</code>…). Every ledger's lines live side by side in the same table.</td></tr>
+                <tr><td><code>RBUKRS</code></td><td>Company code</td><td>The "R" fields are the key fields of ACDOCA — R for the leading/reference dimension.</td></tr>
+                <tr><td><code>GJAHR</code> · <code>BELNR</code> · <code>DOCLN</code></td><td>Fiscal year · Document number · Line item number</td><td>Together with ledger and company code, they identify one line. Note <code>DOCLN</code> has <b>6 digits</b> — the old 999-line limit of classic documents no longer comes from the table.</td></tr>
+                <tr><td><code>RACCT</code></td><td>G/L account</td><td>The account posted to.</td></tr>
+                <tr><td><code>PRCTR</code> · <code>SEGMENT</code></td><td>Profit centre · Segment</td><td>The splitting characteristics of Sections 6–8 — stored on every line, which is what makes Balance Sheets per profit centre/segment possible.</td></tr>
+                <tr><td><code>RCNTR</code></td><td>Cost centre</td><td>The CO dimension — on the <em>same</em> line as the FI data. This is the FI–CO merge made visible.</td></tr>
+                <tr><td><code>HSL</code> · <code>KSL</code> · <code>TSL</code></td><td>Amounts: company-code currency · group currency · transaction currency</td><td>One line carries all currency amounts at once (Lesson 7's parallel currencies).</td></tr>
+                <tr><td><code>BUDAT</code></td><td>Posting date</td><td>Decides period and fiscal year.</td></tr>
+              </table>
+            </div>
+            <h3>The benefits — the exam's favourite list</h3>
+            <ul class="clean">
+              <li><b>Single source of truth</b> — FI and CO read the same lines; the old FI–CO reconciliation at period-end is <b>gone</b>.</li>
+              <li><b>Faster closing</b> — no totals tables to update, no reconciliation steps; many period-end jobs simply disappeared.</li>
+              <li><b>Rich reporting</b> — because every dimension sits on one line, you can slice the same data by ledger, profit centre, segment, cost centre, asset… without extra tables.</li>
+              <li><b>Multi-GAAP ready</b> — all ledgers in one table means parallel accounting (Lesson 8) is just a filter on <code>RLDNR</code>.</li>
+              <li><b>Extension Ledger</b> — S/4HANA also offers a special ledger type that stores <em>only adjustment/delta postings</em> on top of an underlying standard ledger (e.g. management adjustments) — possible only because ACDOCA is one table.</li>
+            </ul>
+            <div class="box term"><span class="box-title">New term — ACDOCP</span><p>The planning twin of ACDOCA: plan data for Finance is stored in table <code>ACDOCP</code>, with (almost) the same structure — so plan vs actual comparisons read two tables built the same way. <span class="examtag">Exam favourite</span></p></div>
+            <div class="box trap"><span class="box-title">Trap 7 — "BSEG was deleted"</span><p>Careful. The exam distinguishes: <b>totals and secondary index tables</b> were removed and replaced by compatibility views. <code>BKPF</code> and <code>BSEG</code> still physically exist (entry view, open items). "ACDOCA replaced BSEG completely" is the wrong answer; "ACDOCA is the single source for G/L reporting, merging FI and CO lines" is the right one.</p></div>
+            <div class="box trap"><span class="box-title">Trap 8 — One ACDOCA line per posting?</span><p>No — one ACDOCA line per <b>line item, per ledger</b>. Post a document into ledgers <code>0L</code> and <code>2L</code> and every item appears twice in ACDOCA — once per <code>RLDNR</code>. That is how the G/L view "per ledger" in <code>FB03</code> works.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> One posting, end to end — all three parts together</h2>
+            <p class="sub">Watch a single vendor invoice travel through everything you learned today.</p>
+            <ol class="clean">
+              <li>You open <code>FB60</code> (Enter Vendor Invoice) and type the bill: expenses for Lahore 100,000 and Karachi 60,000, vendor credit 160,000.</li>
+              <li>The screen proposes document type <b><code>KR</code></b> — from Part A you know what that controls: vendor + G/L account types allowed, and number range <b>51</b>.</li>
+              <li>You press <em>Post</em>. SAP checks: debits = credits ✓ · posting period open (Lesson 6) ✓ · field status satisfied (Lesson 7) ✓.</li>
+              <li><b>Document splitting</b> runs: the vendor line is split 100,000 / 60,000 across the two profit centres; segments are derived; every profit centre balances to zero.</li>
+              <li>SAP draws the next number from range 51 for company code PK01: document <b>1900000042</b> is born. The header goes to <code>BKPF</code>, the entry-view lines to <code>BSEG</code>.</li>
+              <li>Every line — entry view <em>and</em> split G/L view, for every assigned ledger — is written into the <b>Universal Journal, <code>ACDOCA</code></b>, complete with cost centre, profit centre, segment and all currencies.</li>
+              <li>From that second, reports — trial balance, profit centre Balance Sheet, segment report, CO cost centre report — all read this one document from this one table. No reconciliation, ever.</li>
+            </ol>
+            <div class="box trick"><span class="box-title">Memory trick — the passport office</span><p><b>Document type</b> is the <em>category stamp</em> on the passport (visitor? worker?). <b>Number range</b> is the <em>serial number</em> printed on it. <b>Splitting</b> is the officer noting <em>every city</em> you will visit, not just the first. And <b>ACDOCA</b> is the <em>central register</em> where every passport ever issued is recorded — one register for the whole country.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> T-codes &amp; Tables of Lesson 9</h2>
+            <div class="tblwrap">
+              <table>
+                <tr><th>T-code / Object</th><th>What it is</th></tr>
+                <tr><td><code>OBA7</code></td><td>Define document types (client level): number range key, account types allowed, reverse type, controls</td></tr>
+                <tr><td><code>FBN1</code></td><td>Maintain document number ranges — per company code, per fiscal year; object <code>RF_BELEG</code></td></tr>
+                <tr><td><code>FB03</code></td><td>Display a document — switch between Entry View and General Ledger View here</td></tr>
+                <tr><td><code>FB50</code> / <code>F-02</code></td><td>Post a G/L document (type <code>SA</code>) — full posting practice comes in Lesson 10</td></tr>
+                <tr><td><code>FB60</code> / <code>FB70</code></td><td>Enter vendor invoice (type <code>KR</code>) / customer invoice (type <code>DR</code>)</td></tr>
+                <tr><td>SPRO → … → Document Splitting</td><td>Classify accounts &amp; document types, define characteristics, zero-balance clearing account, defaults, activation (client + company code)</td></tr>
+                <tr><td><code>SE16N</code> on <code>ACDOCA</code></td><td>Look directly into the Universal Journal (read-only inspection for learning)</td></tr>
+              </table>
+            </div>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Table</th><th>What it holds</th></tr>
+                <tr><td><code>BKPF</code></td><td>Document header — one row per document (number, type, dates, company code, fiscal year)</td></tr>
+                <tr><td><code>BSEG</code></td><td>Line items of the <b>entry view</b>; basis for customer/vendor open-item management</td></tr>
+                <tr><td><code>ACDOCA</code></td><td><b>Universal Journal</b> — every journal line of FI-GL, CO, Asset Accounting and Material Ledger, per ledger, after splitting</td></tr>
+                <tr><td><code>ACDOCP</code></td><td>Plan data in the same structure as ACDOCA</td></tr>
+                <tr><td><code>T003</code></td><td>Document types master (the OBA7 definitions)</td></tr>
+                <tr><td><code>NRIV</code></td><td>Number range intervals (the FBN1 data, incl. current number level)</td></tr>
+                <tr><td><code>GLT0</code> / <code>BSIS</code> / <code>COEP</code></td><td>Old totals / index / CO-line tables — in S/4HANA these are <b>compatibility views</b> on ACDOCA, not stored tables</td></tr>
+              </table>
+            </div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> Exam Traps — read these twice</h2>
+            <p class="sub">Traps 1–8 appeared inside the sections. Here is the complete set for Lesson 9.</p>
+            <div class="box trap"><span class="box-title">Trap 1 — Level of definition (types)</span><p>Document types are defined at <b>client level</b> (OBA7), valid for all company codes. Number ranges are <b>per company code</b> (FBN1). The exam swaps these constantly.</p></div>
+            <div class="box trap"><span class="box-title">Trap 2 — Who assigns the number?</span><p>With <b>internal</b> assignment, <b>SAP</b> assigns the next number automatically at posting — the user never enters it. With <b>external</b> assignment, the user enters it and SAP only validates it.</p></div>
+            <div class="box trap"><span class="box-title">Trap 3 — Shared ranges &amp; gaps</span><p>Two document types <b>can</b> share one number range. And a gap in internal numbering (rollback, buffering) does not by itself prove a missing document — but intervals for the same company code + year must never <b>overlap</b>.</p></div>
+            <div class="box trap"><span class="box-title">Trap 4 — Untagged lines fail</span><p>With splitting active, a line that ends up with <b>no profit centre/segment</b> (no entry, no inheritance, no default) <b>cannot be posted</b>. Splitting is strict, not decorative.</p></div>
+            <div class="box trap"><span class="box-title">Trap 5 — Activation level (splitting)</span><p>Splitting is activated at <b>client level + per company code</b> — not per document type, not per ledger. Documents posted before activation are <b>not</b> split retroactively.</p></div>
+            <div class="box trap"><span class="box-title">Trap 6 — Segment entry</span><p>The segment is normally <b>derived from the profit centre</b>, not typed by the user.</p></div>
+            <div class="box trap"><span class="box-title">Trap 7 — "BSEG is gone"</span><p>False. <code>BKPF</code> and <code>BSEG</code> still exist. What disappeared as stored tables are the <b>totals tables</b> (GLT0, FAGLFLEXT) and <b>secondary indexes</b> (BSIS, BSAS…) — they are now <b>compatibility views</b> on ACDOCA.</p></div>
+            <div class="box trap"><span class="box-title">Trap 8 — ACDOCA granularity</span><p>ACDOCA holds one line per <b>line item per ledger</b>. A document in two ledgers = every line twice, distinguished by <code>RLDNR</code>.</p></div>
+            <div class="box trap"><span class="box-title">Trap 9 — Document identity</span><p>A document is uniquely identified by <b>company code + fiscal year + document number</b> — not by document number alone, and not by document type.</p></div>
+            <div class="box trap"><span class="box-title">Trap 10 — Reversal deletes nothing</span><p>Reversing a document creates a <b>new</b> document (with the reverse document type, e.g. KR → KG). The original stays. SAP accounting never erases posted documents.</p></div>
+            <div class="box trap"><span class="box-title">Trap 11 — FI–CO reconciliation still needed?</span><p>In S/4HANA, <b>no</b>. FI and CO post into the same ACDOCA lines, so there is nothing to reconcile. Any answer describing a period-end FI–CO reconciliation run belongs to ECC.</p></div>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> Glossary A–Z — every new term of Lesson 9</h2>
+            <dl class="glossary">
+              <dt>ACDOCA</dt><dd>The Universal Journal table — every Finance line item (FI-GL, CO, Asset Accounting, Material Ledger) in one table, per ledger.</dd>
+              <dt>ACDOCP</dt><dd>Planning table with the same structure as ACDOCA; holds plan data for plan/actual comparison.</dd>
+              <dt>Active Split</dt><dd>Splitting performed at posting time on the new document, dividing lines like vendor/customer/tax across the characteristics of the driving lines.</dd>
+              <dt>BELNR</dt><dd>Field name of the document number in the header (BKPF) and in ACDOCA.</dd>
+              <dt>BKPF</dt><dd>Table of document headers — one row per document.</dd>
+              <dt>BSEG</dt><dd>Table of line items in the entry view; still used for customer/vendor open-item management in S/4HANA.</dd>
+              <dt>Business Transaction (splitting)</dt><dd>SAP's category for a document inside the splitting rules (e.g. vendor invoice), combined with a variant; document types are classified to it.</dd>
+              <dt>Compatibility View</dt><dd>A view carrying the name of a removed ECC table (GLT0, BSIS, COEP…) that calculates its data live from ACDOCA.</dd>
+              <dt>Default Account Assignment</dt><dd>A configured constant (e.g. dummy profit centre) filled into a characteristic that is still empty after inheritance.</dd>
+              <dt>Document</dt><dd>One complete, balanced journal entry in SAP — header (BKPF) plus line items; identified by company code + fiscal year + document number.</dd>
+              <dt>Document Splitting</dt><dd>Automatic division of line items across profit centres/segments so each characteristic value balances to zero; basis for Balance Sheets per profit centre/segment.</dd>
+              <dt>Document Type</dt><dd>Two-character classification of a document (SA, KR, DR…), defined at client level in OBA7; controls number range and allowed account types.</dd>
+              <dt>Entry View</dt><dd>The document as the user entered it (BKPF + BSEG), before splitting.</dd>
+              <dt>Extension Ledger</dt><dd>A ledger that stores only delta/adjustment postings on top of an underlying standard ledger.</dd>
+              <dt>External Number Assignment</dt><dd>The user supplies the document number; SAP only checks it fits the interval and is unused.</dd>
+              <dt>FBN1</dt><dd>Transaction to maintain document number ranges per company code and fiscal year (object RF_BELEG).</dd>
+              <dt>General Ledger View</dt><dd>The document after splitting, per ledger, read from ACDOCA.</dd>
+              <dt>Inheritance</dt><dd>Splitting rule: a line without a characteristic takes the value that appears (uniquely) elsewhere in the document.</dd>
+              <dt>Internal Number Assignment</dt><dd>SAP automatically assigns the next free number from the range at posting time.</dd>
+              <dt>Item Category</dt><dd>Internal label of what a line is (vendor, customer, expense, revenue, cash, tax…) used by the splitting rules; G/L accounts are classified to item categories.</dd>
+              <dt>Number Range (Interval)</dt><dd>A block of document numbers (from–to) per company code/fiscal year; the document type points to one via a two-character key.</dd>
+              <dt>OBA7</dt><dd>Transaction to define document types.</dd>
+              <dt>Passive Split</dt><dd>At clearing time, the clearing document inherits the split of the original open item.</dd>
+              <dt>Posting</dt><dd>Saving an accounting entry permanently; creates a numbered document.</dd>
+              <dt>Posting Date</dt><dd>Date that decides the period/fiscal year of a document; different from the document date on the source paper.</dd>
+              <dt>Reverse Document Type</dt><dd>The document type used for the reversal document (e.g. KR reverses as KG).</dd>
+              <dt>RLDNR</dt><dd>The ledger field on every ACDOCA line.</dd>
+              <dt>Splitting Characteristic</dt><dd>A field the split is calculated for — normally Profit Centre and Segment; usually defined as zero-balance and mandatory.</dd>
+              <dt>Splitting Method 0000000012</dt><dd>SAP's delivered standard set of splitting rules, used unchanged by most companies.</dd>
+              <dt>Universal Journal</dt><dd>The concept of one joint line-item table (ACDOCA) for all of Finance in S/4HANA.</dd>
+              <dt>Zero-Balance Clearing Account</dt><dd>G/L account used for automatic clearing lines so every profit centre/segment balances to exactly zero.</dd>
+            </dl>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> Summary — Lesson 9 in one page</h2>
+            <ul class="clean">
+              <li>Every posting in SAP is a <b>document</b>: one <b>header</b> (BKPF) + balanced <b>line items</b>, uniquely identified by <b>company code + fiscal year + document number</b>.</li>
+              <li>The <b>document type</b> (OBA7, <b>client level</b>) classifies the entry and controls the <b>number range</b>, the <b>account types allowed</b>, and the <b>reverse document type</b>. Decode the letters: K = vendor, D = customer, R = invoice, G = credit memo, Z = payment, S = G/L.</li>
+              <li><b>Number ranges</b> (FBN1, <b>per company code</b>, usually per fiscal year) supply the document number — <b>internally</b> (SAP assigns) or <b>externally</b> (user assigns). Types can share a range; ranges must not overlap; gaps from buffering/rollback are explainable.</li>
+              <li><b>Document splitting</b> divides lines like vendor/customer across <b>profit centres and segments</b> (active split at posting, passive split at clearing, zero-balance clearing lines when needed), so a full <b>Balance Sheet per profit centre/segment</b> is possible. It is activated at client level + per company code, uses item categories, business transactions and standard method 0000000012, and the segment is derived from the profit centre.</li>
+              <li>Result: every document has two faces — the <b>Entry View</b> (as typed, BSEG) and the <b>General Ledger View</b> (after splitting, per ledger, ACDOCA).</li>
+              <li>The <b>Universal Journal (ACDOCA)</b> is S/4HANA's single line-item table for FI-GL, CO, Asset Accounting and Material Ledger. Totals and index tables became <b>compatibility views</b>; FI–CO reconciliation disappeared; planning lives in <b>ACDOCP</b>.</li>
+            </ul>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <section class="lesson" id="s17">
+            <h2><span class="no">17</span> Self-Test — 14 questions</h2>
+            <p class="sub">Tap an answer to check yourself. Explanations appear instantly — no marks leave this page.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart the test</button>
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box">✓</span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow" aria-hidden="true">→</span>
+            <div>
+              <b>Next: Lesson 10 — Tolerance, Post &amp; Park Document, G/L Reporting, F-02 Posting &amp; Accounts Payable</b>
+              <p style="margin:.2em 0 0">The final lesson of the series (video from 08:06:10). Now that documents, numbers and the Universal Journal are clear, you will learn how tolerance groups control small differences, how documents can be <b>parked</b> before posting, your first hands-on posting with <b>F-02</b>, G/L reporting — and then the Accounts Payable process end to end.</p>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 9 of 10 · SAP S/4HANA Financial Accounting · C_TS4FI Exam Prep Series<br>
+            course created by Muhammad Asad Ullah Ibrahim<br>
+            Screens in this lesson are re-created illustrations for learning, not real SAP screenshots. SAP, S/4HANA and C_TS4FI are trademarks of SAP SE; this study page is not affiliated with SAP.
+          </footer>
+        </main>
+      </div>
+      </div>
+    </div>
+
+    <script>
+      // ---- Shared course progress store (localStorage, shared by all lessons) ----
+      window.SAPProgress=(function(){
+        var KEY='sapCts4fiProgress_v1';
+        function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+        function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+        function getLesson(n){ var s=load(), L=null;
+          if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+          if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+          return L; }
+        function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+          for(var p in patch){ cur[p]=patch[p]; }
+          s.lessons[k]=cur; saveAll(s); return cur; }
+        function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+          return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+        function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+          s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+        return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+      })();
+
+      // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+      function sha256Hex(ascii){
+        ascii=unescape(encodeURIComponent(ascii));
+        function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+        var maxWord=Math.pow(2,32), i, j, result='';
+        var words=[], asciiBitLength=ascii.length*8;
+        var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+        var primeCounter=k.length, isComposite={};
+        for(var candidate=2; primeCounter<64; candidate++){
+          if(!isComposite[candidate]){
+            for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+            hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+            k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+          }
+        }
+        ascii+='\x80';
+        while(ascii.length%64-56) ascii+='\x00';
+        for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+        words[words.length]=((asciiBitLength/maxWord)|0);
+        words[words.length]=(asciiBitLength);
+        for(j=0;j<words.length;){
+          var w=words.slice(j,j+=16), oldHash=hash;
+          hash=hash.slice(0,8);
+          for(i=0;i<64;i++){
+            var w15=w[i-15], w2=w[i-2];
+            var a=hash[0], e=hash[4];
+            var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+            var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+            hash=[(temp1+temp2)|0].concat(hash);
+            hash[4]=(hash[4]+temp1)|0;
+          }
+          for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+        }
+        for(i=0;i<8;i++){
+          for(j=3;j+1;j--){
+            var b=(hash[i]>>(j*8))&255;
+            result+=((b<16)?0:'')+b.toString(16);
+          }
+        }
+        return result;
+      }
+
+      // ---- Lesson 9 gating: locked until Lesson 8 is fully complete, or the gate test is passed 5/5 ----
+      (function(){
+        var THIS_LESSON=9, PREV_LESSON=8, PREV_SECTIONS=14, LOCK_MS=60*60*1000;
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var GATE_Q=[
+          {q:"What is the Retained Earnings account used for?",opts:["To record the daily cash sales of the company","To carry forward the P&L balance to the next year","To store payments made to vendors","To calculate the monthly depreciation of assets"],a:1},
+          {q:"Which T-code defines the Retained Earnings account?",opts:["OB52","FS00","OB53","FAGLGVTR"],a:2},
+          {q:"What is the P&L statement account type?",opts:["A","X","D","S"],a:1},
+          {q:"What is the Leading Ledger in SAP?",opts:["2L — the main ledger that all company codes must have","An optional ledger used only for IFRS reporting","0L — the main ledger that all company codes must have","A separate ledger created manually for each company code"],a:2},
+          {q:"Which T-code creates a non-leading ledger?",opts:["FINSC_LEDGER","OBA7","FBN1","OB53"],a:0}
+        ];
+        var gateScreen=document.getElementById('gateScreen');
+        var content=document.getElementById('lessonContent');
+        var lockBox=document.getElementById('gateLockBox');
+        var lockUntilEl=document.getElementById('gateLockUntil');
+        var countdownEl=document.getElementById('gateCountdown');
+        var testArea=document.getElementById('gateTestArea');
+        var qWrap=document.getElementById('gateQuestions');
+        var scoreEl=document.getElementById('gateScore');
+        var msgEl=document.getElementById('gateMsg');
+        var attemptsEl=document.getElementById('gateAttempts');
+        var submitBtn=document.getElementById('gateSubmit');
+        var retryBtn=document.getElementById('gateRetry');
+        var adminBtn=document.getElementById('adminBtn');
+        var adminForm=document.getElementById('adminForm');
+        var adminPw=document.getElementById('adminPw');
+        var adminSubmit=document.getElementById('adminSubmit');
+        var adminMsg=document.getElementById('adminMsg');
+        var timer=null, selected={};
+
+        function isPrevComplete(){
+          var L=window.SAPProgress.getLesson(PREV_LESSON);
+          if(!L) return false;
+          var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+          var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+          return !!(allRead&&quiz);
+        }
+        function unlockLesson(){
+          if(timer){ clearInterval(timer); timer=null; }
+          gateScreen.hidden=true; gateScreen.style.display='none';
+          content.hidden=false; content.style.display='';
+          window.scrollTo(0,0);
+        }
+        function updateCountdown(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var rem=g.lockUntil-Date.now();
+          if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+          var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+          countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        }
+        function showLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          lockBox.hidden=false;
+          testArea.style.display='none';
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+          updateCountdown();
+          if(timer) clearInterval(timer);
+          timer=setInterval(updateCountdown,1000);
+        }
+        function refreshLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var now=Date.now();
+          if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+          if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+          lockBox.hidden=true;
+          testArea.style.display='';
+          return false;
+        }
+        function updateAttempts(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+        }
+        function renderGate(){
+          selected={};
+          scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+          submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+          qWrap.innerHTML='';
+          GATE_Q.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='gate-q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                selected[qi]=oi;
+                var bs=opts.querySelectorAll('.gate-opt');
+                bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+                msgEl.textContent='';
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); qWrap.appendChild(box);
+          });
+        }
+        submitBtn.addEventListener('click',function(){
+          if(refreshLock()) return;
+          if(Object.keys(selected).length<GATE_Q.length){
+            msgEl.textContent='Please answer all 5 questions before submitting.';
+            scoreEl.textContent='';
+            return;
+          }
+          var score=0;
+          GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+          qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+          submitBtn.hidden=true;
+          scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          if(score===GATE_Q.length){
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            msgEl.textContent='Gate test passed. Lesson 9 is now unlocked.';
+            msgEl.className='ok';
+            updateAttempts();
+            setTimeout(unlockLesson,900);
+          }else{
+            g.fails=(g.fails||0)+1;
+            msgEl.textContent='Go back and complete previous lesson.';
+            msgEl.className='';
+            if(g.fails>=3){
+              g.lockUntil=Date.now()+LOCK_MS;
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              updateAttempts();
+              refreshLock();
+            }else{
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              retryBtn.hidden=false;
+              updateAttempts();
+            }
+          }
+        });
+        retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+        adminBtn.addEventListener('click',function(){
+          adminForm.hidden=!adminForm.hidden;
+          if(!adminForm.hidden) adminPw.focus();
+        });
+        function tryAdminUnlock(){
+          var val=adminPw.value;
+          if(!val) return;
+          if(sha256Hex(val)===ADMIN_HASH){
+            var g=window.SAPProgress.getGate(THIS_LESSON);
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            adminMsg.className=''; adminMsg.style.color='var(--green)';
+            adminMsg.textContent='Unlocked. Opening Lesson 9…';
+            adminPw.value='';
+            setTimeout(unlockLesson,700);
+          }else{
+            adminMsg.style.color=''; adminMsg.className='err';
+            adminMsg.textContent='Incorrect password. Please try again.';
+            adminPw.value='';
+            adminPw.focus();
+          }
+        }
+        adminSubmit.addEventListener('click',tryAdminUnlock);
+        adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+        // ---- Initial state ----
+        var g0=window.SAPProgress.getGate(THIS_LESSON);
+        if(isPrevComplete()||g0.unlocked===true){
+          unlockLesson();
+        }else{
+          gateScreen.hidden=false; gateScreen.style.display='';
+          content.hidden=true; content.style.display='none';
+          if(!refreshLock()) renderGate();
+          updateAttempts();
+        }
+      })();
+    </script>
+    <script>
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent=(t==='dark'?'Dark':'Light'); }
+        apply('light');
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark'?'light':'dark');
+        });
+
+        /* ---------- Sidebar map: one TOC item per section ---------- */
+        var sections=[].slice.call(document.querySelectorAll('section.lesson'));
+        var tocItems={};
+        document.querySelectorAll('nav.toc li').forEach(function(li){
+          var a=li.querySelector('a'); if(!a) return;
+          var id=a.getAttribute('href').slice(1);
+          var tick=document.createElement('span'); tick.className='tick'; tick.textContent='\u2713'; tick.setAttribute('aria-hidden','true');
+          li.appendChild(tick);
+          tocItems[id]={li:li,a:a};
+        });
+
+        /* ---------- Mark Read + progress (percent, count, top bar) ---------- */
+        var bar=document.getElementById('progressBar');
+        var pctText=document.getElementById('readPct'), sideFill=document.getElementById('readFill'),
+            countText=document.getElementById('readCount');
+        var readSet={}, total=sections.length;
+        function updateProgress(){
+          var n=Object.keys(readSet).length;
+          var pct=total?Math.round(n/total*100):0;
+          if(pctText) pctText.textContent=pct+'%';
+          if(sideFill) sideFill.style.width=pct+'%';
+          if(bar) bar.style.width=pct+'%';
+          if(countText) countText.textContent=n+' of '+total+' sections marked read';
+          try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(9,{readSections:arr, allRead:(total>0&&arr.length===total)}); } }catch(e){}
+        }
+        sections.forEach(function(sec){
+          var btn=sec.querySelector('.mark-read'), status=sec.querySelector('.read-status'), lbl=sec.querySelector('.mr-label');
+          if(!btn) return;
+          btn.addEventListener('click',function(){
+            var id=sec.id, item=tocItems[id];
+            if(readSet[id]){
+              delete readSet[id];
+              sec.classList.remove('is-read'); btn.classList.remove('done');
+              lbl.textContent='Mark Read'; status.textContent='Not read yet';
+              if(item) item.li.classList.remove('read');
+            }else{
+              readSet[id]=true;
+              sec.classList.add('is-read'); btn.classList.add('done');
+              lbl.textContent='Read \u2713'; status.textContent='\u2713 Marked as read';
+              if(item) item.li.classList.add('read');
+            }
+            updateProgress();
+          });
+        });
+
+        /* ---------- Restore saved Mark Read state from the shared store ---------- */
+        try{
+          var savedL9=window.SAPProgress&&window.SAPProgress.getLesson(9);
+          if(savedL9&&savedL9.readSections){
+            savedL9.readSections.forEach(function(id){
+              var sec=document.getElementById(id);
+              if(!sec||readSet[id]) return;
+              readSet[id]=true;
+              sec.classList.add('is-read');
+              var rb=sec.querySelector('.mark-read');
+              if(rb){ rb.classList.add('done'); var rl=rb.querySelector('.mr-label'); if(rl) rl.textContent='Read \u2713'; }
+              var rst=sec.querySelector('.read-status'); if(rst) rst.textContent='\u2713 Marked as read';
+              if(tocItems[id]) tocItems[id].li.classList.add('read');
+            });
+          }
+        }catch(e){}
+        updateProgress();
+
+        /* ---------- Scroll-spy: highlight the section on screen ---------- */
+        var current=null;
+        function setActive(id){
+          if(current===id) return; current=id;
+          Object.keys(tocItems).forEach(function(k){
+            var on=(k===id);
+            tocItems[k].a.classList.toggle('active',on);
+            tocItems[k].li.classList.toggle('active',on);
+          });
+        }
+        if('IntersectionObserver' in window){
+          var spy=new IntersectionObserver(function(entries){
+            entries.forEach(function(en){ if(en.isIntersecting) setActive(en.target.id); });
+          },{rootMargin:'-30% 0px -55% 0px',threshold:0});
+          sections.forEach(function(s){ spy.observe(s); });
+        }else{
+          document.addEventListener('scroll',function(){
+            var y=window.scrollY+window.innerHeight*0.35, best=sections[0].id;
+            sections.forEach(function(s){ if(s.offsetTop<=y) best=s.id; });
+            setActive(best);
+          },{passive:true});
+        }
+        if(sections.length) setActive(sections[0].id);
+      })();
+    </script>
+    <script>
+      (function(){
+        var QUESTIONS=[
+          {q:"What uniquely identifies an accounting document in SAP?",opts:["The document number alone","Company code + fiscal year + document number","Document type + document number","The user who entered it + the posting date"],a:1,why:"BELNR alone is not unique — the same number can exist in another company code or another fiscal year. The three-part key company code + fiscal year + document number identifies a document (Trap 9)."},
+          {q:"At which level are document types defined?",opts:["Per company code","Per chart of accounts","At client level — valid for all company codes","Per ledger"],a:2,why:"OBA7 definitions are client-wide. What differs per company code is the number range the type draws from (Trap 1)."},
+          {q:"What does a document type control?",opts:["Only the description text shown on reports","The number range, the account types allowed, and the reverse document type","Which users exist in the system","The fiscal year variant of the company code"],a:1,why:"These three are the classic exam list: number range assignment, account types allowed (A/D/K/M/S), and the reverse document type — plus required-field and control flags."},
+          {q:"Document type KR is used for…",opts:["Customer payments","Vendor invoices","G/L account documents","Depreciation postings"],a:1,why:"K = Kreditor (vendor), R = Rechnung (invoice) → KR = vendor invoice, entered with FB60. Customer payment is DZ; G/L document is SA; depreciation is AF."},
+          {q:"With internal number assignment, who assigns the document number?",opts:["The user types it at posting","The vendor or customer on their invoice","SAP assigns the next free number from the range automatically at posting","The auditor at year-end"],a:2,why:"Internal assignment = system-assigned, strictly sequential. The user supplies the number only with external assignment (Trap 2)."},
+          {q:"Where are document number ranges maintained, and at what level?",opts:["OBA7 — at client level","FBN1 — per company code (usually per fiscal year)","OB53 — per chart of accounts","FINSC_LEDGER — per ledger"],a:1,why:"FBN1 maintains the intervals of object RF_BELEG per company code and fiscal year. OBA7 only stores the two-character range key inside the document type."},
+          {q:"Which statement about number ranges is correct?",opts:["Every document type must have its own exclusive number range","Two document types can share one number range","Number ranges of one company code may overlap freely","Gaps in internal numbering always mean a document was deleted"],a:1,why:"Sharing is allowed — KR and KG typically share range 51. Overlaps are not allowed, ranges are never 'deleted' documents, and gaps can come from rollbacks or buffering (Trap 3)."},
+          {q:"Why does SAP need document splitting?",opts:["To make documents shorter","So that a complete Balance Sheet can be created per profit centre and per segment — every characteristic value balances to zero","To translate documents into other languages","To speed up the logon process"],a:1,why:"Without splitting, lines like the vendor payable carry no profit centre, so a per-profit-centre Balance Sheet is impossible. Splitting divides those lines in the ratio of the driving lines."},
+          {q:"A vendor invoice has expense lines for two profit centres but the vendor line has none. With splitting active, what happens at posting?",opts:["Posting is rejected until the user splits the vendor line manually","The vendor line is split automatically across the two profit centres in the same proportion as the expense lines","The vendor line is posted to a dummy profit centre only","The document is parked instead of posted"],a:1,why:"That is the active split: vendor/customer/tax lines follow the characteristics of the expense/revenue lines, proportionally. The user still enters only one vendor line."},
+          {q:"When the vendor is paid later, the payment document automatically follows the invoice's split. This is called…",opts:["Active split","Inheritance","Passive split","Zero-balance clearing"],a:2,why:"Passive split: at clearing, the clearing document inherits the account assignment split of the original open item — no new calculation."},
+          {q:"At which levels is document splitting activated?",opts:["Per document type","Per ledger only","At client level, and then per company code","Per G/L account"],a:2,why:"Both switches are needed: client-level activation plus activation for each company code. Documents posted before activation are not split afterwards (Trap 5)."},
+          {q:"What is the Universal Journal?",opts:["A printed report of all journal entries","Table ACDOCA — the single line-item table for FI-GL, CO, Asset Accounting and Material Ledger in S/4HANA","A Fiori app for entering documents","The old GLT0 totals table with a new name"],a:1,why:"ACDOCA merges what ECC kept in BSEG, COEP, asset and ML tables into one line-item table — one line carries FI and CO dimensions together."},
+          {q:"What happened to the ECC totals table GLT0 and index table BSIS in S/4HANA?",opts:["They are still stored and updated as before","They were deleted and all old reports stopped working","They are no longer stored tables — they exist as compatibility views that read ACDOCA","They were moved to a separate archive system"],a:2,why:"Compatibility views keep the old names working while calculating values live from ACDOCA. BKPF and BSEG, by contrast, still physically exist (Trap 7)."},
+          {q:"Why is FI–CO reconciliation no longer needed at period-end in S/4HANA?",opts:["Because CO was removed from S/4HANA","Because FI and CO post into the same ACDOCA lines — there is only one copy of the data","Because reconciliation is now done by the auditor","Because period-end closing was abolished"],a:1,why:"One line carries both the G/L account and the cost centre. With a single source of truth there is nothing left to reconcile (Trap 11)."}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=12?' — Excellent! You are ready for Lesson 10.':' — Re-read the sections above once, then try again. You can do it.');
+                  try{ if(window.SAPProgress) window.SAPProgress.saveLesson(9,{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+  </body>
+</html>

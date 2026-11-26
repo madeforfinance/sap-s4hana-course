@@ -1,0 +1,1778 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Part 2 · Lesson 6 — Accounts Receivable &amp; Tax Practical · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8; --green-ink:#ffffff;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527; --green-ink:#0e2417;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .15s linear}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35;border-left:3px solid transparent}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc li.active a{background:var(--accent);color:#fff;font-weight:700;border-left-color:var(--accent-ink)}
+      [data-theme="dark"] nav.toc li.active a{color:#0e1a26}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px;background:var(--surface)}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.active.read a{color:#fff}
+      [data-theme="dark"] nav.toc li.active.read a{color:#0e1a26}
+      nav.toc .tick{display:none;color:var(--green);font-weight:700;flex:none}
+      nav.toc li.read .tick{display:inline}
+      nav.toc li.active .tick{color:inherit}
+      .toc-progress{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+      .toc-progress .pct{font-weight:700;font-size:1.05rem}
+      .toc-progress .track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:6px 0}
+      .toc-progress .fill{height:100%;width:0;background:var(--green);border-radius:99px;transition:width .2s}
+      .toc-progress .count{font-size:.82rem;color:var(--ink-soft)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      section.lesson.is-read{border-color:var(--green)}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .sec-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:22px;padding-top:16px}
+      .mark-read{cursor:pointer;font:inherit;font-weight:700;font-size:.95rem;border-radius:9px;padding:11px 22px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:9px;min-height:48px;transition:background .15s,color .15s}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read .box{width:20px;height:20px;border:2px solid currentColor;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+      .mark-read .box svg{width:13px;height:13px;display:none}
+      .mark-read.done{background:var(--green);color:var(--green-ink);border-color:var(--green)}
+      .mark-read.done .box svg{display:block}
+      .read-status{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);flex-wrap:wrap}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      ol.steps{margin:.4em 0 .8em;padding-left:1.4em}
+      ol.steps li{margin:.45em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+      .btn-ghost{background:var(--surface);color:var(--accent-ink);border:1px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+
+      /* ---------- Gate (locked) screen ---------- */
+      .gate-wrap{max-width:760px;margin:0 auto;padding:34px 18px 80px}
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;box-shadow:var(--shadow)}
+      @media(max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form[hidden]{display:none}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{color:var(--accent);display:inline-flex}
+      .next-lesson .arrow svg{width:26px;height:26px}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Part 2 · Lesson 6</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <!-- ================= LOCKED / GATE SCREEN ================= -->
+    <div class="gate-wrap" id="gateScreen" hidden>
+      <section class="gate-card" aria-labelledby="gateTitle">
+        <div class="gate-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
+        <h2 id="gateTitle">Part 2 · Lesson 6 is locked</h2>
+        <p>This lesson opens only after <b>Part 2 · Lesson 5</b> is fully complete — every section marked Read <b>and</b> its self-test answered. If you have not finished Part 2 · Lesson 5 in this browser, complete it first.</p>
+        <p>You can also open this lesson right now by passing the <b>Gate Test</b> below: 5 questions from Part 2 · Lesson 5 (vendor master through the Business Partner, FB60, the MIRO three-way match, the F110 payment program, F-44 clearing, partial vs residual payment, and down payments with F-47 / F-48). You need <b>5 / 5</b>. Only your score is shown — correct answers are never displayed.</p>
+
+        <div class="gate-lockbox" id="gateLockBox" hidden>
+          <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+          <p>Locked until: <b id="gateLockUntil">—</b></p>
+          <p>Time remaining: <b id="gateCountdown">—</b></p>
+          <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+        </div>
+
+        <div id="gateTestArea">
+          <div id="gateQuestions"></div>
+          <p id="gateScore" aria-live="polite"></p>
+          <p id="gateMsg" aria-live="polite"></p>
+          <div class="gate-actions">
+            <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+            <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+          </div>
+          <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+        </div>
+
+        <div class="gate-admin">
+          <button class="btn btn-ghost" id="adminBtn" type="button">Admin Unlock</button>
+          <div class="gate-admin-form" id="adminForm" hidden>
+            <label for="adminPw">Admin password</label>
+            <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+            <div class="gate-actions">
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+            </div>
+            <p id="adminMsg" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+      </section>
+    </div>
+
+    <!-- ================= LESSON CONTENT ================= -->
+    <div id="lessonContent" hidden>
+    <div class="wrap">
+      <header class="hero">
+        <span class="kicker">Part 2 · Lesson 6 · Practical — Accounts Receivable &amp; Tax</span>
+        <h1>Accounts Receivable &amp; Tax — Practical</h1>
+        <p class="lede">In the last lesson you paid the people you owe. Today the mirror image: the people who owe <b>you</b>. You will build the <b>customer master</b> through the <b>Business Partner (BP)</b>, post customer invoices in <b>FB70</b>, correct them with <b>FB75</b> credit memos, receive money in <b>F-28</b>, clear open items in <b>F-32</b>, chase late payers with the <b>dunning program F150</b>, and protect the business with <b>credit management</b>. Then the lesson adds the layer that sits on almost every sale and purchase: <b>tax</b> — input tax, output tax, tax codes in <b>FTXP</b>, account assignment in <b>OB40</b>, and a direct tax posting in <b>FB41</b>. <span class="urdu">Aaj hum seekhenge ke customers se paisay kis hisaab-kitab ke saath wasool hote hain, der se dene walon ko reminder (dunning) kaise jata hai, aur har sale/purchase par tax ka hisaab SAP mein kaise lagta hai.</span></p>
+        <div class="hero-meta">
+          <span class="chip">Course segment <b>Part 2 · Practical postings — subledgers &amp; tax</b></span>
+          <span class="chip">Level <b>Beginner · Zero SAP assumed</b></span>
+          <span class="chip">Exam <b>C_TS4FI · Accounts Receivable &amp; Taxes on Sales/Purchases</b></span>
+          <span class="chip">Key T-codes <b>BP · FB70 · FB75 · F-28 · F-32 · F150 · FTXP · OB40 · FB41</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span><span>Where the course stands — from owing money to being owed money</span><span class="tick">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span><span>The customer master &amp; the Business Partner (BP)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span><span>Customer account groups &amp; number ranges</span><span class="tick">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span><span>The reconciliation account — AR's bridge to the G/L</span><span class="tick">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span><span>Step by step — BP: create a customer</span><span class="tick">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span><span>Reading the customer ledger — FBL5N &amp; open items</span><span class="tick">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span><span>Step by step — FB70: enter a customer invoice</span><span class="tick">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span><span>FB75 — the customer credit memo</span><span class="tick">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span><span>Worked example — a sale, from invoice to open item</span><span class="tick">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span><span>Step by step — F-28: incoming payment</span><span class="tick">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span><span>Clearing customer open items — F-32</span><span class="tick">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span><span>Partial payment vs residual payment</span><span class="tick">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span><span>Dunning — chasing overdue customers with F150</span><span class="tick">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span><span>Credit management &amp; the Credit Control Area</span><span class="tick">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span><span>Taxes on Sales and Purchases — the big idea</span><span class="tick">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span><span>Tax codes — the recipe behind every tax line</span><span class="tick">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span><span>Step by step — FTXP: check a tax code</span><span class="tick">✓</span></a></li>
+            <li><a href="#s18"><span class="dot"></span><span>OB40 — telling SAP which G/L account receives the tax</span><span class="tick">✓</span></a></li>
+            <li><a href="#s19"><span class="dot"></span><span>Step by step — FB41: post tax on its own</span><span class="tick">✓</span></a></li>
+            <li><a href="#s20"><span class="dot"></span><span>Exam traps</span><span class="tick">✓</span></a></li>
+            <li><a href="#s21"><span class="dot"></span><span>A–Z glossary</span><span class="tick">✓</span></a></li>
+            <li><a href="#s22"><span class="dot"></span><span>Summary — the whole lesson on one screen</span><span class="tick">✓</span></a></li>
+            <li><a href="#s23"><span class="dot"></span><span>Self-test — 10 questions</span><span class="tick">✓</span></a></li>
+            <li><a href="#s24"><span class="dot"></span><span>Coming next — Part 2 · Lesson 7 preview</span><span class="tick">✓</span></a></li>
+          </ol>
+          <div class="toc-progress">
+            <span class="pct" id="pctText">0%</span>
+            <div class="track"><div class="fill" id="sideFill"></div></div>
+            <span class="count" id="countText">0 of 24 sections marked read</span>
+          </div>
+          <p class="toc-note">Screens in this lesson are <b>re-created illustrations</b> made for learning — they are not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <!-- ============ S1 ============ -->
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Where the course stands — from owing money to being owed money</h2>
+            <p class="sub">Lesson 5 was about money going out. This lesson is about money coming in — and the tax that rides on both.</p>
+
+            <p>In Part 2 · Lesson 5 you ran the full vendor cycle in Accounts Payable: master, invoice, payment, clearing. Now turn the whole picture around. When Ibrahim Apparel &amp; Trading sells winter jackets to a retailer in Lahore on 30 days' credit, the company needs the same kind of detailed side-ledger — but this time for the people who owe <b>us</b> money. That side-ledger is <b>Accounts Receivable</b>, shortened to <b>AR</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Accounts Receivable (AR)</span>
+              <p><b>Accounts Receivable</b> is the subledger (detailed side-book) for <b>customers</b> — everyone who has bought from you on credit and still has to pay. The G/L shows one total, “Trade Receivables”; the AR subledger shows the detail — customer by customer, invoice by invoice, due date by due date. <span class="urdu">Accounts Receivable = customers ka tafseeli register — kis ne kitna dena hai, kab dena hai.</span></p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Customer</span>
+              <p>In SAP language, a buyer is called a <b>customer</b> (in German-based SAP terms, a <i>Debitor</i> — which is why customer things so often carry the letter <b>D</b>). One customer = one master record + one account in the AR subledger. <span class="urdu">Customer = khareedar, jis ne udhaar par maal liya aur paisay dene hain.</span></p>
+            </div>
+
+            <p>The good news: the AR cycle is the AP cycle in a mirror. If you understood Lesson 5, you already know the shape of this lesson:</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 240" role="img" aria-label="Diagram: the accounts receivable cycle — create customer master, enter invoice, receive payment, clear the open items">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+                </defs>
+                <text class="svg-title" x="360" y="24" text-anchor="middle">The Accounts Receivable cycle</text>
+                <rect class="svg-box-a" x="20" y="60" width="150" height="66" rx="10"/>
+                <text class="svg-title" x="95" y="86" text-anchor="middle">1 · Master</text>
+                <text class="svg-sub" x="95" y="106" text-anchor="middle">BP — customer created</text>
+                <rect class="svg-box" x="200" y="60" width="150" height="66" rx="10"/>
+                <text class="svg-title" x="275" y="86" text-anchor="middle">2 · Invoice</text>
+                <text class="svg-sub" x="275" y="106" text-anchor="middle">FB70 — sale booked</text>
+                <rect class="svg-box" x="380" y="60" width="150" height="66" rx="10"/>
+                <text class="svg-title" x="455" y="86" text-anchor="middle">3 · Payment in</text>
+                <text class="svg-sub" x="455" y="106" text-anchor="middle">F-28 — money received</text>
+                <rect class="svg-box-gr" x="560" y="60" width="150" height="66" rx="10"/>
+                <text class="svg-title" x="635" y="86" text-anchor="middle">4 · Clearing</text>
+                <text class="svg-sub" x="635" y="106" text-anchor="middle">F-32 — items matched</text>
+                <path class="svg-arrow" d="M170 93 L196 93"/>
+                <path class="svg-arrow" d="M350 93 L376 93"/>
+                <path class="svg-arrow" d="M530 93 L556 93"/>
+                <rect class="svg-box-g" x="160" y="160" width="400" height="52" rx="10"/>
+                <text class="svg-sub" x="360" y="182" text-anchor="middle">Between invoice and payment, the bill sits as an OPEN ITEM</text>
+                <text class="svg-sub" x="360" y="200" text-anchor="middle">on the customer's account — visible any time in FBL5N</text>
+                <path class="svg-line" d="M275 126 L275 156"/>
+                <path class="svg-line" d="M455 126 L455 156"/>
+              </svg>
+              <figcaption>Illustration — every AR transaction in this lesson is one of these four steps. Master first, then invoice, then incoming payment, then clearing.</figcaption>
+            </figure>
+
+            <p>Two extra AR tools sit on top of this cycle, and both are exam favourites. <b>Dunning</b> is SAP's polite-but-firm reminder machine for customers who pay late. <b>Credit management</b> is the guard at the gate: it stops you from selling even more to a customer who has already reached their safe limit. And in the second half of the lesson you will meet <b>tax</b> — because almost every invoice in this lesson, and almost every invoice in Lesson 5, quietly carries a tax line that SAP calculates for you.</p>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · AP ulta = AR</span>
+              <p>Vendor ko <b>dena</b> hai, customer se <b>lena</b> hai. AP mein invoice vendor ko <b>credit</b> karta hai (hamari liability barhti hai); AR mein invoice customer ko <b>debit</b> karta hai (hamara asset barhta hai). Baaki saara khel — master, open item, payment, clearing — bilkul wohi hai, bas direction ulti hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S2 ============ -->
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> The customer master &amp; the Business Partner (BP)</h2>
+            <p class="sub">Just like vendors, customers in S/4HANA are Business Partners — the same central record, wearing a different hat.</p>
+
+            <p>You already know this idea from Lesson 5: in S/4HANA there is no separate old-style customer master. A customer is created as a <b>Business Partner</b> in transaction <code>BP</code>, and <b>roles</b> are added to say what that partner does. For a customer, the roles are the mirror of the vendor roles:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>BP role</th><th>What it adds</th><th>AP twin (Lesson 5)</th></tr>
+                <tr><td class="hl"><b>FLCU00 — Customer (FI)</b></td><td>The <b>company code data</b>: reconciliation account, payment terms, dunning procedure, tolerance group</td><td>FLVN00 — Vendor (FI)</td></tr>
+                <tr><td class="hl"><b>FLCU01 — Customer (Sales)</b></td><td>The <b>sales area data</b>: sales organisation, distribution channel, division — used by the Sales (SD) side for orders and billing</td><td>FLVN01 — Vendor (Purchasing)</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Role FLCU00 / FLCU01</span>
+              <p><b>FLCU00</b> is the accounting “hat” of a customer — without it, FI cannot post an invoice to that customer. <b>FLCU01</b> is the sales “hat” — without it, the sales team cannot create a sales order for that customer. Remember the pattern: <b>VN</b> = vendor, <b>CU</b> = customer, <b>00</b> = FI view, <b>01</b> = logistics view. <span class="urdu">FLCU00 = customer ka FI role (hisaab-kitab), FLCU01 = customer ka sales role.</span></p>
+            </div>
+
+            <h3>The customer master has three layers</h3>
+            <p>Exactly like the vendor master, the customer master is built in layers — each maintained by a different team:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Layer (segment)</th><th>What it holds</th><th>Who uses it</th></tr>
+                <tr><td><b>General data</b> (client level — valid everywhere)</td><td>Name, address, phone, email, tax numbers (e.g. the customer's NTN / sales tax registration)</td><td>Everyone — entered once for the whole system</td></tr>
+                <tr><td><b>Company code data</b> (FI view — per company code)</td><td><b>Reconciliation account</b>, payment terms, <b>dunning procedure</b>, credit-related fields, tolerance group</td><td>Finance (FI) — invoices FB70, payments F-28, dunning F150</td></tr>
+                <tr><td><b>Sales area data</b> (per sales area)</td><td>Sales terms, shipping and billing settings for orders</td><td>Sales (SD) — sales orders and billing documents</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Sales area</span>
+              <p>A <b>sales area</b> is the combination of <i>sales organisation + distribution channel + division</i> — in plain words: which sales unit is selling, through which channel (wholesale, retail, online…), and which product family. Customer sales data is maintained per sales area, just as FI data is maintained per company code. <span class="urdu">Sales area = kaunsi sales team, kis channel se, kaunsi product line bech rahi hai.</span></p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Aik dukaan, do register</span>
+              <p>Sochain ek mashhoor kapray ki dukaan hai jo hum se udhaar par jackets leti hai. Wahi dukaan kabhi kabhi hum ko purana stock wapas bhi bech deti hai. SAP mein is ke do alag record nahi bante — <b>aik hi Business Partner</b> hota hai, jis par customer role (FLCU00) bhi hai aur vendor role (FLVN00) bhi. Aik shakhs, do kirdar — bilkul Lesson 5 wali CNIC wali misaal.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · XD01 still exists — but BP is the answer</span>
+              <p>Older SAP used <code>XD01</code> (create customer), <code>XD02</code> (change) and <code>XD03</code> (display). In S/4HANA they still open, but behind the screen they create a Business Partner through <b>CVI (Customer/Vendor Integration)</b> — the same mechanism you met for vendors. If the exam asks how a customer is created in S/4HANA, the expected answer is <b>transaction BP with BP roles</b>. <span class="urdu">Purani screen khulti zaroor hai, magar andar se BP hi banta hai.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S3 ============ -->
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Customer account groups &amp; number ranges</h2>
+            <p class="sub">Before SAP lets you create a customer, it asks the same question it asked for vendors: what <i>kind</i> of customer is this?</p>
+
+            <p>Customer masters use <b>account groups</b> exactly like vendor masters do — only the configuration transaction and the standard group names differ. Customer account groups are configured in <code>OBD2</code> (vendors were <code>OBD3</code>).</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Customer account group</span>
+              <p>A <b>customer account group</b> is the category a customer belongs to — for example sold-to parties, ship-to parties, or one-time customers. The group controls three things: (1) the <b>number range</b> the customer number is drawn from, (2) which master-data fields are <b>required, optional or hidden</b> when the customer is created, and (3) whether the customer is a <b>one-time customer</b>. <span class="urdu">Account group = customer ki qism; number aur fields isi se tay hote hain.</span></p>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Account group (typical SAP standard)</th><th>Used for</th><th>Number style</th></tr>
+                <tr><td class="hl"><b>0001 — Sold-to party</b></td><td>The normal customer who orders, receives the invoice and pays — your regular buyers</td><td>Internal number range, e.g. 100000–199999</td></tr>
+                <tr><td><b>0002 — Ship-to party</b></td><td>An address goods are delivered to (may be different from who pays)</td><td>Own number range</td></tr>
+                <tr><td class="hl"><b>CPD / CPDA — One-time customer</b></td><td>A walk-in buyer you will probably never trade with again</td><td>One shared master; name/address typed per invoice</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · One-time customer</span>
+              <p>A <b>one-time customer</b> uses one shared master record for many rare buyers. Because the master holds no real name or address, SAP asks for the customer's name, address and bank details <b>inside each invoice</b> instead. <span class="urdu">One-time customer = aik shared record; asal naam-pata har invoice mein alag se likhna parta hai.</span></p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Partner functions</span>
+              <p>In the sales world, one business deal can involve several partners with different jobs: the <b>sold-to party</b> (places the order), the <b>ship-to party</b> (receives the goods), the <b>bill-to party</b> (receives the invoice) and the <b>payer</b> (actually pays). These jobs are called <b>partner functions</b>. In FI you mostly meet the payer — the one whose account the invoice and payment hit. <span class="urdu">Partner functions = aik deal mein har partner ka apna kaam: order dene wala, maal lene wala, bill lene wala, paisay dene wala.</span></p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · OBD2 vs OBD3 — one letter apart</span>
+              <p>Customer account groups: <code>OBD2</code>. Vendor account groups: <code>OBD3</code>. G/L account groups (Part 1): <code>OBD4</code>. The exam loves this family. Memory line: <b>“2 = Customer (Debitor), 3 = Vendor (Kreditor), 4 = G/L.”</b> <span class="urdu">OBD2 customer, OBD3 vendor, OBD4 G/L — number ke saath yaad kar lein.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S4 ============ -->
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> The reconciliation account — AR's bridge to the G/L</h2>
+            <p class="sub">The single most important field in the customer's company code data — and the exam's favourite AR question.</p>
+
+            <p>You know this mechanism from AP; it works identically here, in the opposite direction. The AR subledger holds the detail for every customer, but the balance sheet cannot list hundreds of customers — it needs <b>one</b> G/L account: “Trade Receivables”. The bridge between the two is the <b>reconciliation account</b> (short: <b>recon account</b>).</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Reconciliation account (AR)</span>
+              <p>The <b>reconciliation account</b> is the G/L account entered in the customer's <b>company code data</b> (role FLCU00). Every time anything is posted to that customer — invoice, credit memo, payment, clearing — SAP updates this G/L account <b>automatically, in the same document</b>. That is why the AR subledger total and the G/L balance can never drift apart. <span class="urdu">Recon account woh pul hai jo customer ke hisaab ko G/L se har posting mein khud-ba-khud jor deta hai.</span></p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 230" role="img" aria-label="Diagram: customer postings in the AR subledger update the Trade Receivables reconciliation account in the general ledger automatically">
+                <defs>
+                  <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+                </defs>
+                <text class="svg-title" x="360" y="24" text-anchor="middle">One posting — two ledgers updated together</text>
+                <rect class="svg-box-a" x="30" y="55" width="290" height="120" rx="10"/>
+                <text class="svg-title" x="175" y="82" text-anchor="middle">AR subledger (detail)</text>
+                <text class="svg-sub" x="175" y="106" text-anchor="middle">Customer 100045 — invoice 590,000</text>
+                <text class="svg-sub" x="175" y="126" text-anchor="middle">Customer 100046 — invoice 240,000</text>
+                <text class="svg-sub" x="175" y="146" text-anchor="middle">Customer 100047 — credit memo −30,000</text>
+                <rect class="svg-box-gr" x="400" y="55" width="290" height="120" rx="10"/>
+                <text class="svg-title" x="545" y="82" text-anchor="middle">General Ledger (total)</text>
+                <text class="svg-sub" x="545" y="106" text-anchor="middle">Trade Receivables (recon account)</text>
+                <text class="svg-sub" x="545" y="126" text-anchor="middle">Balance: 800,000</text>
+                <text class="svg-sub" x="545" y="146" text-anchor="middle">= sum of all customer open balances</text>
+                <path d="M320 115 L396 115" stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+                <text class="svg-sub" x="360" y="205" text-anchor="middle">You post to the customer only. SAP updates the recon account itself — direct posting to it is refused.</text>
+              </svg>
+              <figcaption>Illustration — the subledger keeps the detail, the recon account keeps the total, and SAP keeps them equal with every single posting.</figcaption>
+            </figure>
+
+            <h3>Three facts the exam rotates around</h3>
+            <ul class="clean">
+              <li><b>Where it lives:</b> in the customer's <b>company code data</b> — so the same customer can point to a different recon account in a different company code.</li>
+              <li><b>How the G/L account is marked:</b> in FS00, a customer recon account carries <b>reconciliation account type D</b> (D = Debitor = customer). Vendor recon accounts carry type <b>K</b> (Kreditor). <span class="examtag">Exam favourite</span></li>
+              <li><b>Direct posting is impossible:</b> you can never type the recon account into FB50/FB70 as a normal line. SAP protects it so the subledger and G/L can never disagree. If you try, SAP stops you with an error.</li>
+            </ul>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · D lena, K dena</span>
+              <p><b>D</b> = Debitor = customer = hum ne <b>lena</b> hai. <b>K</b> = Kreditor = vendor = hum ne <b>dena</b> hai. D-lena, K-dena — recon account type kabhi confuse nahi hoga.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S5 ============ -->
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Step by step — BP: create a customer</h2>
+            <p class="sub">Now the practical part: creating a customer from an empty screen to a postable master record.</p>
+
+            <p>Scenario: a Faisalabad retailer, <b>City Style Garments</b>, will buy winter stock from us on credit. Before the first FB70 invoice can exist, the customer master must exist. Here is the full path:</p>
+
+            <ol class="steps">
+              <li>Open transaction <code>BP</code> and choose <b>Create Organisation</b> (a company) — or Create Person for an individual.</li>
+              <li>Select the <b>BP grouping</b> — the grouping decides the number range the new BP number comes from, just like the account group did. SAP assigns the number (internal numbering) or you type it (external numbering), as the grouping allows.</li>
+              <li>Fill the <b>general data</b>: name “City Style Garments”, address, city, country, language, and tax numbers on the Identification tab.</li>
+              <li>Add the role <b>FLCU00 — Customer (FI)</b>. A new view opens: enter the <b>company code</b>, then the FI fields — above all the <b>reconciliation account</b> (e.g. Trade Receivables), plus <b>payment terms</b> (e.g. 30 days net) and the <b>dunning procedure</b> (needed later in Section 13).</li>
+              <li>If the sales team will also sell to this customer through SAP sales orders, add role <b>FLCU01 — Customer (Sales)</b> and fill the sales area data.</li>
+              <li><b>Save.</b> SAP confirms the Business Partner number — and because of CVI, a linked customer number exists with the same or a mapped number.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the BP screen while creating a customer with role FLCU00">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>BP — Create Business Partner · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Business Partner</span>   <span class="hl2">100045</span>        <span class="dim">Grouping:</span> Internal number assignment
+<span class="dim">Name</span>               City Style Garments
+<span class="dim">City / Country</span>     Faisalabad / PK
+<span class="dim">Role</span>               <span class="hl2">FLCU00  Customer (FI)</span>
+<span class="dim">Company Code</span>       1000  Ibrahim Apparel &amp; Trading
+<span class="dim">Reconciliation Acct</span> <span class="hl2">140000  Trade Receivables</span>
+<span class="dim">Payment Terms</span>      0001  Payable immediately / <span class="st">ZB30  30 days net</span>
+<span class="dim">Dunning Procedure</span>  0001  Standard dunning procedure
+<span class="cm">— Save —&gt; "Business Partner 100045 was created"</span></div>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · BP grouping</span>
+              <p>The <b>grouping</b> chosen at BP creation controls the BP's number range — it is the BP-level cousin of the account group. Account groups still exist on the FI side (they drive field status for the customer data created through CVI), so both settings work together. <span class="urdu">Grouping = BP ka number kis range se aayega; account group = fields kaise behave karenge.</span></p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · “Created” is not “postable”</span>
+              <p>A BP with only general data cannot receive an FI invoice. The customer becomes postable in a company code only when role <b>FLCU00</b> is extended to that company code <b>and</b> a reconciliation account is entered. Forgetting the recon account is the most common beginner error — FB70 will refuse the posting. <span class="urdu">Sirf naam-pata dalna kaafi nahi; FLCU00 + recon account ke baghair invoice post nahi hogi.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S6 ============ -->
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Reading the customer ledger — FBL5N &amp; open items</h2>
+            <p class="sub">The mirror of FBL1N: one screen that answers “who owes us what, and since when?”</p>
+
+            <p>Everything posted to a customer lands as a <b>line item</b> on the customer's account. Transaction <code>FBL5N</code> — Customer Line Item Display — is where you read that account (FBL1N was the vendor twin in Lesson 5, FBL3N the G/L twin in Lesson 4).</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Open item</span>
+              <p>An <b>open item</b> is a line item that is not yet settled. A customer invoice is born as an open item (the customer still owes the money) and dies as a <b>cleared item</b> when a payment is matched to it. Open items are the heartbeat of AR: dunning, credit checks and ageing reports all read them. <span class="urdu">Open item = abhi tak ada na hua bill; paisay mil jayein to wohi item “cleared” ho jata hai.</span></p>
+            </div>
+
+            <h3>How to read FBL5N</h3>
+            <ol class="steps">
+              <li>Enter the <b>customer number</b> and <b>company code</b>.</li>
+              <li>Choose what to see: <b>Open items</b> (at a key date), <b>Cleared items</b>, or <b>All items</b> — and the posting-date range.</li>
+              <li>Execute. Each row is one document line: document number, type (DR invoice, DG credit memo, DZ payment), posting date, <b>due date</b>, amount, and a status symbol — open items and overdue items are visually flagged.</li>
+              <li>Double-click any row to jump into the document itself (the same FB03-style display you know).</li>
+            </ol>
+
+            <div class="box term">
+              <span class="box-title">Key term · Baseline date &amp; due date</span>
+              <p>The <b>baseline date</b> is the date from which the payment term starts counting — usually the invoice date. <b>Baseline date + payment terms = due date.</b> If the terms say “30 days net” and the baseline date is 1 November, the item is due on 1 December; from 2 December it is <b>overdue</b> and dunning can start. <span class="urdu">Baseline date woh tareekh hai jahan se udhaar ke din ginay jatay hain.</span></p>
+            </div>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the FBL5N customer line item display">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FBL5N — Customer Line Items · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Customer</span> 100045  City Style Garments        <span class="dim">Company Code</span> 1000
+<span class="dim">Type  Doc. No.    Posting Date   Due Date     Amount (PKR)   Status</span>
+DR    1800000123  01.11.2026     01.12.2026   <span class="hl2">590,000</span>        Open
+DR    1800000140  15.11.2026     15.12.2026   <span class="hl2">240,000</span>        Open
+DG    1800000151  20.11.2026     20.11.2026   <span class="st">−59,000</span>        Open
+<span class="cm">Total open balance: 771,000 PKR owed by this customer</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · FBL family</span>
+              <p><b>FBL1N</b> = vendor (1 = Kreditor side), <b>FBL3N</b> = G/L account, <b>FBL5N</b> = customer. Teenon ka kaam aik hi hai: line items dikhana. <b>1–3–5: vendor, G/L, customer.</b></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+          <!-- ============ S7 ============ -->
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> Step by step — FB70: enter a customer invoice</h2>
+            <p class="sub">The AR twin of FB60: booking a sale on credit, directly in FI, with no sales order behind it.</p>
+
+            <p>Not every sale travels through the Sales (SD) module. A service charge, a rent-out of shop space, a manual correction — or simply the FI-side practice this course focuses on — is entered directly in <code>FB70</code>, the Enjoy screen for customer invoices. (Its classic twin is <code>F-22</code>, just as F-43 was FB60's twin.)</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Posting keys for customers</span>
+              <p>Posting keys tell SAP what kind of line it is. For customers you need two: <b>01 = debit customer</b> (the customer owes more — an invoice) and <b>11 = credit customer</b> (the customer owes less — a payment or credit memo). On the G/L side you already know <b>40 = debit G/L</b> and <b>50 = credit G/L</b>. In FB70's Enjoy screen you do not type the customer keys — choosing “Invoice” or “Credit memo” sets them for you. <span class="urdu">01 = customer debit (bill bana), 11 = customer credit (bill kam hua).</span></p>
+            </div>
+
+            <h3>The FB70 steps</h3>
+            <ol class="steps">
+              <li>Open <code>FB70</code>. The transaction type at the top is <b>Invoice</b>. Enter the <b>company code</b> if asked.</li>
+              <li>Enter the <b>customer number</b> (e.g. 100045), the <b>invoice date</b>, the <b>posting date</b>, and the <b>gross amount</b> — the full amount the customer must pay, tax included (590,000 in our running example).</li>
+              <li>SAP proposes the <b>payment terms</b> and <b>baseline date</b> from the customer master; check the resulting <b>due date</b>.</li>
+              <li>In the line items, enter the <b>revenue G/L account</b> and the <b>net amount</b>, and a <b>tax code</b> if the sale is taxable (Section 16 explains tax codes; with a tax code, SAP calculates the tax line itself).</li>
+              <li>Check the balance light turns green (debits = credits), then <b>Post</b>. SAP returns a document number — document type <b>DR</b>.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the FB70 customer invoice screen with its journal entry">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FB70 — Enter Customer Invoice · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Customer</span>     100045  City Style Garments
+<span class="dim">Invoice Date</span>  01.11.2026     <span class="dim">Posting Date</span> 01.11.2026
+<span class="dim">Amount</span>        <span class="hl2">590,000 PKR</span>   <span class="dim">(gross, tax included)</span>
+<span class="dim">Terms</span>         ZB30 — 30 days net   <span class="dim">Due</span> 01.12.2026
+<span class="dim">Line items</span>
+  G/L 400000  Sales Revenue        <span class="hl2">500,000</span>   <span class="dim">Tax code</span> <span class="st">S1 (18% output)</span>
+<span class="cm">Resulting document (type DR):</span>
+  <span class="kw">Dr</span> Customer 100045 (key 01) ............ 590,000
+  <span class="kw">Cr</span> Sales Revenue (key 50) .............. 500,000
+  <span class="kw">Cr</span> Output Tax (automatic line) .........  90,000</div>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · FB70 vs the SD billing document</span>
+              <p>In real life most customer invoices are created by the Sales module's billing run, which posts the FI document automatically. FB70 is the <b>direct FI entry</b> — used when there is no sales order/billing behind the invoice. The exam tests both facts: billing creates the invoice from SD; FB70/F-22 creates it manually in FI with document type <b>DR</b>. <span class="urdu">SD billing auto-invoice banati hai; FB70 haath se FI mein invoice hai.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S8 ============ -->
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> FB75 — the customer credit memo</h2>
+            <p class="sub">When the customer owes less than the invoice said — damaged goods returned, a price correction, a goodwill discount after the fact.</p>
+
+            <p>A <b>credit memo</b> on the customer side reduces what the customer owes. It is the exact mirror of the vendor credit memo (FB65) from Lesson 5. In AR the transaction is <code>FB75</code> (classic twin <code>F-27</code>), document type <b>DG</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Customer credit memo</span>
+              <p>A <b>customer credit memo</b> is a document that credits the customer — it lowers the receivable. Typical reasons: the customer returned damaged or wrong goods, you overcharged, or you grant a rebate afterwards. It is <b>not</b> a payment: no money moves; the open amount simply shrinks. <span class="urdu">Credit memo = bill mein kami ka parcha — paisay nahi aate, bas lena kam ho jata hai.</span></p>
+            </div>
+
+            <h3>The entry</h3>
+            <p>Scenario: City Style Garments returns a bundle of jackets with stitching defects, worth 59,000 gross (50,000 net + 9,000 tax). In FB75 you choose transaction type <b>Credit memo</b>, enter the customer and the gross amount, and the revenue line with the same tax code as the original sale:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Line</th><th>Account</th><th>Posting key</th><th>Debit</th><th>Credit</th></tr>
+                <tr><td>1</td><td>Sales Revenue (or Sales Returns)</td><td>40</td><td class="hl">50,000</td><td>—</td></tr>
+                <tr><td>2</td><td>Output Tax (automatic — reverses part of the tax)</td><td>40</td><td class="hl">9,000</td><td>—</td></tr>
+                <tr><td>3</td><td>Customer 100045</td><td>11</td><td>—</td><td class="hl">59,000</td></tr>
+              </table>
+            </div>
+
+            <p>Notice the direction: the customer line is a <b>credit</b> (key 11) — it reduces the debit balance the invoice created. The credit memo now sits on the customer account as a <b>credit open item</b>, waiting to be cleared against the invoice it belongs to (Section 11 shows that clearing in F-32).</p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · Credit memo ≠ reversal</span>
+              <p>A credit memo is a <b>new business document</b> for a <b>new business event</b> (goods came back). It does not “undo” the original invoice. If the invoice itself was simply typed wrong, the correct tool is a <b>reversal (FB08)</b>, not a credit memo. The exam separates these two ideas carefully. <span class="urdu">Ghalti hui ho to reversal; maal wapas aaya ho to credit memo.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S9 ============ -->
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> Worked example — a sale, from invoice to open item</h2>
+            <p class="sub">One complete story with real numbers. Every later section refers back to it.</p>
+
+            <p><b>The business event:</b> On 1 November 2026, Ibrahim Apparel &amp; Trading sells 500 winter jackets to City Style Garments (customer 100045). Net price: <b>500,000 PKR</b>. Sales tax at 18% comes on top: <b>90,000 PKR</b>. The customer pays within 30 days.</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 210" role="img" aria-label="Diagram: gross amount 590,000 splits into net revenue 500,000 plus output tax 90,000">
+                <text class="svg-title" x="360" y="24" text-anchor="middle">One invoice — three lines</text>
+                <rect class="svg-box-a" x="230" y="45" width="260" height="52" rx="10"/>
+                <text class="svg-title" x="360" y="68" text-anchor="middle">Customer pays (gross)</text>
+                <text class="svg-sub" x="360" y="88" text-anchor="middle">590,000 PKR — Dr Customer (01)</text>
+                <path class="svg-line" d="M300 97 L215 140"/>
+                <path class="svg-line" d="M420 97 L505 140"/>
+                <rect class="svg-box-gr" x="60" y="142" width="290" height="52" rx="10"/>
+                <text class="svg-title" x="205" y="165" text-anchor="middle">Sales revenue (net) 500,000</text>
+                <text class="svg-sub" x="205" y="184" text-anchor="middle">Cr Revenue (50) — this is OUR income</text>
+                <rect class="svg-box-g" x="370" y="142" width="290" height="52" rx="10"/>
+                <text class="svg-title" x="515" y="165" text-anchor="middle">Output tax 90,000 (18%)</text>
+                <text class="svg-sub" x="515" y="184" text-anchor="middle">Cr Output Tax — government's money, held by us</text>
+              </svg>
+              <figcaption>Illustration — the customer is debited with the gross amount. The credit side splits: net revenue is ours, the tax portion belongs to the government from the first second.</figcaption>
+            </figure>
+
+            <h3>What SAP did, step by step</h3>
+            <ol class="steps">
+              <li><b>FB70 posted document 1800000123, type DR:</b> Dr Customer 590,000 · Cr Sales Revenue 500,000 · Cr Output Tax 90,000.</li>
+              <li>The customer line updated the <b>reconciliation account</b> (Trade Receivables) automatically — the G/L now shows 590,000 more receivables, without anyone touching the G/L account.</li>
+              <li>The invoice sits in <b>FBL5N as an open item</b>, due 01.12.2026 (baseline 01.11 + 30 days).</li>
+              <li>On 20 November the customer returns damaged jackets: <b>FB75 credit memo 1800000151, type DG</b> for 59,000 gross — Dr Revenue 50,000, Dr Output Tax 9,000, Cr Customer 59,000.</li>
+              <li>Net position in FBL5N: 590,000 − 59,000 = <b>531,000 still owed</b>, shown as two open items waiting to be matched (Section 11 clears them together).</li>
+            </ol>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Tax wala hissa amanat hai</span>
+              <p>Output tax ko kabhi apni kamai na samjhein. Customer se 590,000 aayenge, magar un mein se 90,000 <b>sarkar ki amanat</b> hai jo hum ne customer se collect ki hai — wohi raqam baad mein tax return mein jama hogi (Section 15 mein poori kahani). Revenue sirf 500,000 hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S10 ============ -->
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> Step by step — F-28: incoming payment</h2>
+            <p class="sub">The money arrives. F-28 books it into the bank and matches it against the customer's open items in the same step.</p>
+
+            <p>In AP you paid out with F-53; in AR you receive with <code>F-28</code> — Post Incoming Payments. One F-28 document does two jobs at once: it records the money in the bank account, and it <b>clears</b> the open items the payment settles. Document type: <b>DZ</b> (customer payment).</p>
+
+            <h3>The F-28 steps</h3>
+            <ol class="steps">
+              <li>Open <code>F-28</code>. Enter the <b>document date</b> and <b>posting date</b> (the day the money hit the bank).</li>
+              <li>In the bank data: the <b>bank G/L account</b> (or house bank account) and the <b>amount received</b> — 531,000 in our story.</li>
+              <li>In the open-item selection: the <b>customer account</b> 100045. SAP lists the customer's open items: invoice 590,000 and credit memo −59,000.</li>
+              <li><b>Activate</b> both items. The assigned total (531,000) now equals the amount received — the “not assigned” difference shows <b>zero</b>.</li>
+              <li><b>Post.</b> SAP creates the DZ document and marks both items <b>cleared</b>, stamping them with the clearing document number and clearing date.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the F-28 incoming payment screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>F-28 — Post Incoming Payments · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Bank account</span>   113000  Main Bank Account
+<span class="dim">Amount received</span> <span class="hl2">531,000 PKR</span>     <span class="dim">Value date</span> 28.11.2026
+<span class="kw">Customer</span>       100045  City Style Garments
+<span class="dim">Open items selected</span>
+  DR 1800000123  Invoice ....... <span class="hl2"> 590,000</span>
+  DG 1800000151  Credit memo ... <span class="st"> −59,000</span>
+<span class="dim">Amount assigned</span>  531,000      <span class="dim">Not assigned</span> <span class="hl2">0</span>
+<span class="cm">Resulting document (type DZ):  Dr Bank 531,000 · Cr Customer 531,000 — both items cleared</span></div>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Clearing (in F-28)</span>
+              <p><b>Clearing</b> means marking open items as settled by matching them against each other so their net balance is zero. F-28 clears <i>while</i> it posts the payment — you do not need a separate clearing step when the payment matches exactly. <span class="urdu">Clearing = hisaab barabar karke items ko “settled” mark karna.</span></p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · DZ vs KZ — direction letters</span>
+              <p><b>DZ</b> = customer payment (money <b>in</b>, AR). <b>KZ</b> = vendor payment (money <b>out</b>, AP, from F-53/F110). And the invoice types pair up too: <b>DR</b> customer invoice, <b>KR</b> vendor invoice; <b>DG</b> customer credit memo, <b>KG</b> vendor credit memo. D-family = customer, K-family = vendor — the same D/K trick as the recon account types. <span class="urdu">D wala har document customer ka, K wala vendor ka.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S11 ============ -->
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> Clearing customer open items — F-32</h2>
+            <p class="sub">Sometimes items must be matched without any money moving. That is F-32's whole job.</p>
+
+            <p><code>F-32</code> — Clear Customer — is the AR twin of F-44 (Clear Vendor). It matches open items on a customer account against <b>each other</b>: an invoice against a credit memo, a payment posted “on account” against the invoice it later turns out to belong to, and so on. No bank line, no new money — just matching.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Payment on account</span>
+              <p>A <b>payment on account</b> is money received that is posted to the customer <b>without</b> matching it to a specific invoice yet — it sits as a credit open item. Later, when the right invoice is identified, F-32 clears the two against each other. <span class="urdu">On-account payment = paisay aa gaye, magar abhi kisi khaas bill se match nahi kiye.</span></p>
+            </div>
+
+            <h3>The F-32 steps</h3>
+            <ol class="steps">
+              <li>Open <code>F-32</code>, enter the <b>customer</b> and <b>company code</b>, and the <b>clearing date</b>.</li>
+              <li>SAP lists all open items. <b>Activate</b> the items that belong together — for example an on-account payment of 59,000 against the credit memo DG of −59,000. The activated items must net to <b>zero</b> (items that leave a difference behind belong to the partial/residual cases in the next section).</li>
+              <li>When the activated items net to <b>zero</b>, post. SAP stamps every selected item with the same <b>clearing document number</b> and clearing date; they move from “open” to “cleared” in FBL5N.</li>
+            </ol>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · Clearing is not deleting — and FBRA undoes it</span>
+              <p>Cleared items are <b>not</b> deleted; they stay fully visible in FBL5N as cleared items, with their clearing document reference. If a clearing was done by mistake, you undo it with <code>FBRA</code> (Reset Cleared Items) — the items become open again. And remember from Lesson 5: a <b>cleared document cannot be reversed with FB08</b> until its clearing has been reset with FBRA first. <span class="urdu">Clearing khatam nahi karti, sirf “settled” ka thappa lagati hai — FBRA woh thappa utaarta hai.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S12 ============ -->
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> Partial payment vs residual payment</h2>
+            <p class="sub">The customer pays less than the full invoice. SAP gives you two different ways to book it — and the exam tests the difference hard.</p>
+
+            <p>Story: the invoice is <b>590,000</b> (forget the credit memo for this section). The customer transfers only <b>400,000</b> now and promises the rest later. In F-28 you choose one of two tabs — <b>Partial Payment</b> or <b>Residual Items</b>. The cash received is identical; what happens to the <b>open items</b> is completely different:</p>
+
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>Partial payment — invoice stays alive</h4>
+                <ul class="clean">
+                  <li>The <b>invoice stays open at the full 590,000</b>.</li>
+                  <li>The payment is posted as a <b>separate credit open item of 400,000</b> on the same customer account.</li>
+                  <li>FBL5N shows <b>two open items</b>; the balance owed reads 190,000.</li>
+                  <li>The original due date of the invoice keeps driving dunning and ageing.</li>
+                </ul>
+                <p><span class="urdu">Bill poora khula rehta hai; payment apna alag item ban kar saath khari hoti hai.</span></p>
+              </div>
+              <div class="mini-card">
+                <h4>Residual payment — invoice closes, leftover is born</h4>
+                <ul class="clean">
+                  <li>The <b>invoice is cleared</b> (closed) by the payment.</li>
+                  <li>SAP creates a <b>new open item — the residual item — of 190,000</b>, with its own document number and a fresh baseline/due date.</li>
+                  <li>FBL5N shows <b>one open item</b>: the residual 190,000.</li>
+                  <li>The leftover behaves like a small new invoice.</li>
+                </ul>
+                <p><span class="urdu">Bill band ho jata hai; baqi raqam aik naye chhote bill ki surat mein khuli rehti hai.</span></p>
+              </div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · Partial = purana bill zinda, Residual = naya bill paida</span>
+              <p><b>Partial:</b> purana bill zinda rehta hai, payment saathi item banti hai. <b>Residual:</b> purana bill mar jata hai (clear), baqi raqam ka <b>naya</b> bill (residual item) paida hota hai. Yehi farq AP mein bhi tha (Lesson 5) — dono taraf aik hi rule hai.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · The balance is the same — the items are not</span>
+              <p>Both methods leave the customer owing 190,000, so balance-based questions cannot separate them. The exam asks about the <b>items</b>: “the invoice remains open in full” = partial; “the invoice is cleared and a new open item is created” = residual. Also note: a small difference can instead be written off as a <b>payment difference</b> (within tolerance) — that is a third path, where the difference goes to a difference account and everything clears. <span class="urdu">Balance dono mein aik hai — farq sirf items ki kahani mein hai.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+          <!-- ============ S13 ============ -->
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> Dunning — chasing overdue customers with F150</h2>
+            <p class="sub">The due date passed and the money did not come. SAP's dunning program writes the reminders for you — politely first, firmly later.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Dunning</span>
+              <p><b>Dunning</b> is the process of reminding customers about <b>overdue</b> open items — the reminder letters (or emails) a business sends when payment is late. In SAP the dunning run is transaction <code>F150</code>. Dunning does not post the receivable again; it works on the open items that already exist. <span class="urdu">Dunning = takaza — der se paisay dene walay customer ko baqaida reminder bhejna.</span></p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Dunning procedure &amp; dunning levels</span>
+              <p>A <b>dunning procedure</b> (configured in <code>FBMP</code>, and stored in the customer's company code data) is the rulebook for reminders: how many <b>dunning levels</b> there are (commonly 3–4), how many days of delay trigger each level, what each letter says, and whether <b>dunning charges</b> or interest are added. Level 1 is a friendly note (“perhaps you forgot”); the last level is a final warning before legal steps. Every dunning run raises an item's level if it is still unpaid and enough days have passed. <span class="urdu">Dunning procedure = reminderon ka rulebook; har level pichle se zyada sakht hota hai.</span></p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 200" role="img" aria-label="Diagram: dunning levels rise as an overdue invoice stays unpaid — level 1 friendly reminder, level 2 firmer letter with charges, level 3 final notice">
+                <text class="svg-title" x="360" y="24" text-anchor="middle">One unpaid invoice climbing the dunning ladder</text>
+                <rect class="svg-box-r" x="20" y="60" width="180" height="66" rx="10"/>
+                <text class="svg-title" x="110" y="86" text-anchor="middle">Due date passes</text>
+                <text class="svg-sub" x="110" y="106" text-anchor="middle">Item becomes overdue</text>
+                <rect class="svg-box" x="230" y="60" width="150" height="66" rx="10"/>
+                <text class="svg-title" x="305" y="86" text-anchor="middle">Level 1</text>
+                <text class="svg-sub" x="305" y="106" text-anchor="middle">Friendly reminder</text>
+                <rect class="svg-box-g" x="410" y="60" width="150" height="66" rx="10"/>
+                <text class="svg-title" x="485" y="86" text-anchor="middle">Level 2</text>
+                <text class="svg-sub" x="485" y="106" text-anchor="middle">Firmer + charges</text>
+                <rect class="svg-box-r" x="590" y="60" width="120" height="66" rx="10"/>
+                <text class="svg-title" x="650" y="86" text-anchor="middle">Level 3</text>
+                <text class="svg-sub" x="650" y="106" text-anchor="middle">Final notice</text>
+                <path class="svg-arrow" d="M200 93 L226 93"/>
+                <path class="svg-arrow" d="M380 93 L406 93"/>
+                <path class="svg-arrow" d="M560 93 L586 93"/>
+                <text class="svg-sub" x="360" y="165" text-anchor="middle">Each F150 run checks: is the item still open, still overdue, and old enough for the next level?</text>
+                <text class="svg-sub" x="360" y="183" text-anchor="middle">Paying the item stops the climb instantly — cleared items are never dunned.</text>
+              </svg>
+              <figcaption>Illustration — dunning levels climb only while the item stays open and overdue. Payment ends the story at any level.</figcaption>
+            </figure>
+
+            <h3>How an F150 dunning run works</h3>
+            <ol class="steps">
+              <li><b>Parameters:</b> enter the run date, an identification, the company codes and the customers to include.</li>
+              <li><b>Schedule the dunning run:</b> SAP reads every open item of those customers, keeps the <b>overdue</b> ones, checks each customer's dunning procedure, and assigns or raises <b>dunning levels</b>. Items that must not be chased (e.g. blocked items) are skipped.</li>
+              <li><b>Print / output:</b> SAP produces the dunning notices from the run — one letter per customer, listing the overdue items, the level, and any dunning charges.</li>
+              <li>The customer master and the items remember the <b>last dunning date and level</b>, so the next run continues the ladder instead of restarting it.</li>
+            </ol>
+
+            <div class="box term">
+              <span class="box-title">Key term · Dunning block</span>
+              <p>A <b>dunning block</b> stops dunning for a customer or a single item — for example while a complaint about damaged goods is being resolved. Blocked items are skipped by F150 even when overdue. <span class="urdu">Dunning block = “is customer ko filhal reminder na bhejo” wala flag.</span></p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · Dunning needs three things in place</span>
+              <p>F150 produces nothing if (1) the customer master has <b>no dunning procedure</b>, (2) the items are <b>not yet overdue</b> (due date not passed, considering any grace days in the procedure), or (3) the items are <b>dunning-blocked</b>. And one more: dunning works on <b>open items only</b> — a paid (cleared) item can never be dunned. <span class="urdu">Procedure ho, item overdue ho, block na ho — teenon shartein lazmi hain.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S14 ============ -->
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> Credit management &amp; the Credit Control Area</h2>
+            <p class="sub">Dunning reacts after payment is late. Credit management acts <i>before</i> the sale — it caps how much risk one customer may carry.</p>
+
+            <p>Selling on credit is a loan in disguise: you hand over goods today and trust the customer to pay next month. <b>Credit management</b> is SAP's system for keeping that trust within safe limits — every customer gets a maximum total exposure, and SAP watches the running total.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Credit Control Area</span>
+              <p>A <b>Credit Control Area</b> is the organisational unit in which credit limits are set and monitored (configured in <code>OB45</code>). One or more <b>company codes</b> are assigned to a credit control area, so a customer's exposure can be watched across all of them together. It has its own currency. <span class="urdu">Credit Control Area = woh unit jahan customers ki udhaar-had (credit limit) tay aur monitor hoti hai; kai company codes is se jur sakte hain.</span></p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Credit limit &amp; credit exposure</span>
+              <p>The <b>credit limit</b> is the maximum amount of credit a customer may use — maintained in the customer's credit data (in the classic FI view with <code>FD32</code>; in S/4HANA Credit Management, in the BP role <b>UKM000</b> per <b>credit segment</b>). The <b>credit exposure</b> is how much of that limit is currently used: open items + open sales orders + deliveries not yet billed. When a new order would push exposure <b>over</b> the limit, the credit check reacts — warning, or blocking the order/delivery until someone releases it. <span class="urdu">Limit = zyada se zyada udhaar; exposure = is waqt kitna udhaar chal raha hai.</span></p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 190" role="img" aria-label="Diagram: credit exposure made of open items, open orders and unbilled deliveries is compared against the customer's credit limit">
+                <text class="svg-title" x="360" y="24" text-anchor="middle">Credit check: exposure versus limit</text>
+                <rect class="svg-box" x="30" y="55" width="180" height="60" rx="10"/>
+                <text class="svg-title" x="120" y="80" text-anchor="middle">Open items</text>
+                <text class="svg-sub" x="120" y="99" text-anchor="middle">Unpaid invoices (AR)</text>
+                <rect class="svg-box" x="225" y="55" width="180" height="60" rx="10"/>
+                <text class="svg-title" x="315" y="80" text-anchor="middle">Open orders</text>
+                <text class="svg-sub" x="315" y="99" text-anchor="middle">Orders not yet delivered</text>
+                <rect class="svg-box" x="420" y="55" width="180" height="60" rx="10"/>
+                <text class="svg-title" x="510" y="80" text-anchor="middle">Deliveries</text>
+                <text class="svg-sub" x="510" y="99" text-anchor="middle">Shipped, not yet billed</text>
+                <rect class="svg-box-a" x="615" y="55" width="90" height="60" rx="10"/>
+                <text class="svg-title" x="660" y="80" text-anchor="middle">=</text>
+                <text class="svg-sub" x="660" y="99" text-anchor="middle">Exposure</text>
+                <path class="svg-line" d="M120 115 L120 140"/>
+                <path class="svg-line" d="M315 115 L315 140"/>
+                <path class="svg-line" d="M510 115 L510 140"/>
+                <path class="svg-line" d="M660 115 L660 140"/>
+                <rect class="svg-box-gr" x="130" y="142" width="460" height="36" rx="10"/>
+                <text class="svg-sub" x="360" y="165" text-anchor="middle">Exposure is compared with the CREDIT LIMIT — over the limit: warning or block</text>
+              </svg>
+              <figcaption>Illustration — the credit check adds up everything the customer already owes or has committed, then compares it with the limit before allowing more.</figcaption>
+            </figure>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Mobile credit limit jaisa</span>
+              <p>Jaise mobile company aap ke number par aik credit limit lagati hai — limit khatam ho to mazeed calls ruk jati hain — bilkul waise hi SAP har customer ki limit lagata hai. Limit khatam, to naya order ruk jata hai jab tak paisay na aayein ya koi zimmedar shakhs order release na kare.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · Credit Control Area is not a company code</span>
+              <p>The credit control area is its <b>own</b> organisational unit. Several company codes can share one credit control area (then the limit is watched across all of them), and the assignment is company code → credit control area. Do not confuse it with the <b>controlling area</b> from Part 1 — similar name, completely different job: controlling area = internal cost reporting; credit control area = customer credit risk. <span class="urdu">Controlling Area aur Credit Control Area — naam milta julta, kaam bilkul alag.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S15 ============ -->
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> Taxes on Sales and Purchases — the big idea</h2>
+            <p class="sub">Almost every invoice in this course quietly carried a tax line. Now we open that black box.</p>
+
+            <p>When a business sells goods, the government charges a tax on the sale — in Pakistan this is the <b>sales tax (GST)</b> collected under the FBR system; other countries call it VAT or GST too. The seller adds the tax to the price, collects it from the customer, and later hands it to the government. The same business also <b>pays</b> tax inside the prices of its own purchases. SAP calls this whole area <b>Taxes on Sales/Purchases</b>, and it has exactly two directions:</p>
+
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>Output tax — tax on our SALES</h4>
+                <ul class="clean">
+                  <li>Arises when <b>we sell</b> (FB70 invoice, SD billing).</li>
+                  <li>We <b>collect</b> it from the customer inside the gross amount.</li>
+                  <li>It is a <b>liability</b>: money owed to the government.</li>
+                  <li>Posting: <b>Cr Output Tax</b> account.</li>
+                  <li>Account key in SAP: <b>MWS</b>.</li>
+                </ul>
+                <p><span class="urdu">Output tax = hamari sale par tax — customer se liya, sarkar ko dena hai.</span></p>
+              </div>
+              <div class="mini-card">
+                <h4>Input tax — tax on our PURCHASES</h4>
+                <ul class="clean">
+                  <li>Arises when <b>we buy</b> (FB60 / MIRO vendor invoice).</li>
+                  <li>We <b>pay</b> it to the vendor inside the gross amount.</li>
+                  <li>It is a <b>claim</b>: money we may recover from the government.</li>
+                  <li>Posting: <b>Dr Input Tax</b> account.</li>
+                  <li>Account key in SAP: <b>VST</b>.</li>
+                </ul>
+                <p><span class="urdu">Input tax = hamari khareed par tax — vendor ko diya, sarkar se wapas lena hai.</span></p>
+              </div>
+            </div>
+
+            <h3>The netting idea — why businesses only pay the difference</h3>
+            <p>At the end of the tax period, the company does not hand over all the output tax it collected. It first subtracts the input tax it already paid on purchases. Only the <b>difference</b> goes to the government:</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 180" role="img" aria-label="Diagram: output tax collected on sales minus input tax paid on purchases equals the net tax payable to the government">
+                <text class="svg-title" x="360" y="24" text-anchor="middle">The tax return in one line</text>
+                <rect class="svg-box-g" x="30" y="55" width="200" height="60" rx="10"/>
+                <text class="svg-title" x="130" y="80" text-anchor="middle">Output tax</text>
+                <text class="svg-sub" x="130" y="99" text-anchor="middle">Collected on sales: 90,000</text>
+                <rect class="svg-box" x="260" y="55" width="200" height="60" rx="10"/>
+                <text class="svg-title" x="360" y="80" text-anchor="middle">− Input tax</text>
+                <text class="svg-sub" x="360" y="99" text-anchor="middle">Paid on purchases: 36,000</text>
+                <rect class="svg-box-gr" x="490" y="55" width="200" height="60" rx="10"/>
+                <text class="svg-title" x="590" y="80" text-anchor="middle">= Payable</text>
+                <text class="svg-sub" x="590" y="99" text-anchor="middle">To government: 54,000</text>
+                <text class="svg-sub" x="360" y="150" text-anchor="middle">If input tax were bigger than output tax, the difference becomes a refund / carry-forward claim.</text>
+              </svg>
+              <figcaption>Illustration — the business is only the government's collection agent. It keeps neither the output tax nor loses the input tax; it settles the difference.</figcaption>
+            </figure>
+
+            <div class="box term">
+              <span class="box-title">Key term · Non-deductible input tax</span>
+              <p>Some purchases carry tax that the law does <b>not</b> allow you to claim back — <b>non-deductible input tax</b>. That tax is not posted to the input tax account; it becomes part of the <b>cost/expense</b> itself. Whether input tax is deductible is decided by the <b>tax code</b> used on the line (next section). <span class="urdu">Har input tax wapas nahi milta — jo na mile, woh kharcha ban jata hai.</span></p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · Tax is never revenue and never an expense (when deductible)</span>
+              <p>Deductible input tax is <b>not</b> part of your purchase cost, and output tax is <b>not</b> part of your sales revenue. Both live on balance-sheet tax accounts until they are netted and settled. If a question shows a purchase of 118,000 gross with 18% deductible tax, the expense is <b>100,000</b> — not 118,000. <span class="urdu">Tax P&amp;L mein nahi jata — woh balance sheet ke tax khaaton mein rehta hai.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S16 ============ -->
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> Tax codes — the recipe behind every tax line</h2>
+            <p class="sub">You never type a tax amount by hand in a normal invoice. You type a two-character code — and SAP cooks the tax line from it.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Tax code</span>
+              <p>A <b>tax code</b> is a two-character code (per country) that bundles everything SAP needs to calculate tax for one situation: the <b>tax type</b> (input or output), the <b>percentage rate</b> (e.g. 18%), and which <b>account key</b> the tax posts through. You enter the tax code on the invoice line (FB70/FB60) or it is proposed from the master data — SAP then calculates the tax amount and creates the tax line automatically. Tax codes are defined per <b>country / tax procedure</b> in transaction <code>FTXP</code>. <span class="urdu">Tax code = tax ki mukammal recipe aik chhote se code mein — rate, qism, aur khaata.</span></p>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Example tax code</th><th>Direction</th><th>Rate</th><th>Used on</th></tr>
+                <tr><td class="hl"><b>S1</b></td><td>Output tax</td><td>18%</td><td>Sales invoices (FB70) — standard-rated sales</td></tr>
+                <tr><td class="hl"><b>P1</b></td><td>Input tax</td><td>18%</td><td>Purchase invoices (FB60/MIRO) — deductible</td></tr>
+                <tr><td><b>S0 / P0</b></td><td>Output / Input</td><td>0%</td><td>Exempt or zero-rated transactions — posted with a code, but no tax amount</td></tr>
+                <tr><td><b>P2</b></td><td>Input tax</td><td>18%, non-deductible</td><td>Purchases whose tax becomes part of the cost</td></tr>
+              </table>
+            </div>
+            <p class="sub">Codes above are teaching examples — real systems name their codes to match their own tax setup.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · Tax category (in the G/L account master)</span>
+              <p>Whether a G/L account may carry tax at all is controlled in FS00 by the <b>tax category</b> field: <b>“&lt;”</b> = only input tax allowed, <b>“&gt;”</b> = only output tax allowed, <b>“*”</b> = all tax types allowed, <b>blank</b> = no tax postings to this account. A revenue account normally carries “&gt;”, an expense account “&lt;” or “*”. If the tax code's direction clashes with the account's category, SAP refuses the posting. <span class="urdu">Tax category = khaatay par kis qism ka tax lag sakta hai — ye FS00 mein tay hota hai.</span></p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Tax procedure &amp; account key</span>
+              <p>Each country has a <b>tax procedure</b> — the calculation scheme listing the steps (base amount, rate, account key) tax follows in that country. Inside it, an <b>account key</b> (also called a transaction key) like <b>MWS</b> (output tax) or <b>VST</b> (input tax) marks <i>where in the procedure</i> the tax amount is calculated and <i>through which key</i> its G/L account will be found (Section 18, OB40). <span class="urdu">Tax procedure = mulk ka tax hisaab-framework; account key (MWS/VST) = us framework mein tax ki seat.</span></p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · Tax codes belong to a country, not to a company code</span>
+              <p>A tax code is always defined for a <b>country</b> (the country of the tax procedure). Company codes in the same country share the same set of tax codes. Questions that say “the tax code is created per company code” are wrong. Also remember: the <b>rate lives inside the tax code</b> — you never maintain percentages on the invoice itself. <span class="urdu">Tax code mulk ke liye banta hai, company code ke liye nahi; rate code ke andar hota hai.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S17 ============ -->
+          <section class="lesson" id="s17">
+            <h2><span class="no">17</span> Step by step — FTXP: check a tax code</h2>
+            <p class="sub">Before trusting a tax code on a live invoice, look inside it. FTXP is where tax codes are created and inspected.</p>
+
+            <ol class="steps">
+              <li>Open <code>FTXP</code>. SAP first asks for the <b>country</b> (e.g. PK) — because tax codes live per country.</li>
+              <li>Enter the <b>tax code</b> you want to inspect, e.g. <code>S1</code>, and press Enter.</li>
+              <li>Read the header: the code's <b>description</b>, its <b>tax type</b> (input or output tax), and whether it is active.</li>
+              <li>Read the rate lines: each line shows an <b>account key</b> (MWS for output, VST for input), the <b>percentage rate</b> (e.g. 18.000%), and the level/step in the tax procedure where it applies.</li>
+              <li>Check the properties: is the tax <b>deductible</b>? Is there an <b>EU code</b> or other reporting marker your country needs? For our check: S1 = output tax, 18%, account key MWS — exactly what FB70 used in Section 7.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the FTXP tax code display for an output tax code">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FTXP — Display Tax Code · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Country</span>        PK  Pakistan          <span class="dim">Tax procedure</span> TAXPK (example)
+<span class="kw">Tax Code</span>       <span class="hl2">S1</span>  Output tax — standard rate sales
+<span class="dim">Tax type</span>       <span class="st">A  Output tax</span>
+<span class="dim">Acct Key   Level   Rate        Deductible</span>
+MWS        100     <span class="hl2">18.000 %</span>   —
+<span class="cm">Reading: a sale line carrying code S1 gets an automatic tax line of 18%,</span>
+<span class="cm">posted through account key MWS to the output tax account (found via OB40).</span></div>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Key term · Tax type A vs V</span>
+              <p>In FTXP, tax codes carry a <b>tax type</b>: <b>A = output tax</b> (Ausgang, sales side) and <b>V = input tax</b> (Vorsteuer, purchase side). SAP will not let you use an output code on a purchase line or an input code on a sales line — the direction is built into the code. <span class="urdu">A = output (sale), V = input (purchase) — code ki direction pehle se tay hai.</span></p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · FTXP vs OB40 — recipe vs address</span>
+              <p><b>FTXP</b> defines the tax code: rate and calculation. <b>OB40</b> answers a different question: <i>which G/L account</i> receives the calculated amount. A very common exam pairing — if postings calculate the right tax but land on the wrong account, the fault is in account determination (OB40), not in the tax code. Next section shows OB40. <span class="urdu">FTXP = kitna tax; OB40 = kis khaatay mein jayega.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S18 ============ -->
+          <section class="lesson" id="s18">
+            <h2><span class="no">18</span> OB40 — telling SAP which G/L account receives the tax</h2>
+            <p class="sub">The tax code calculates the amount. OB40 is the address book that says where that amount must be posted.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · OB40 — tax account assignment</span>
+              <p><code>OB40</code> is the configuration transaction for <b>automatic account determination</b> for tax postings. For each <b>account key / transaction key</b> (MWS, VST, and others) you assign the <b>G/L account</b> the tax amount should post to, per <b>chart of accounts</b>. When FB70 calculates 90,000 of output tax through key MWS, SAP looks into OB40 and finds “MWS → Output Tax account 175000” — and posts there, without the user ever typing that account. <span class="urdu">OB40 = tax ki manzil ka pata — MWS ka tax kis khaatay mein, VST ka kis mein.</span></p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 720 190" role="img" aria-label="Diagram: a tax code in FTXP calculates the amount, OB40 maps the account key MWS or VST to the tax G/L account">
+                <text class="svg-title" x="360" y="24" text-anchor="middle">From tax code to tax account — two lookups</text>
+                <rect class="svg-box-a" x="20" y="55" width="200" height="66" rx="10"/>
+                <text class="svg-title" x="120" y="81" text-anchor="middle">Tax code (FTXP)</text>
+                <text class="svg-sub" x="120" y="101" text-anchor="middle">S1 → 18%, key MWS</text>
+                <rect class="svg-box-g" x="260" y="55" width="200" height="66" rx="10"/>
+                <text class="svg-title" x="360" y="81" text-anchor="middle">OB40 lookup</text>
+                <text class="svg-sub" x="360" y="101" text-anchor="middle">MWS → account 175000</text>
+                <rect class="svg-box-gr" x="500" y="55" width="200" height="66" rx="10"/>
+                <text class="svg-title" x="600" y="81" text-anchor="middle">Tax line posted</text>
+                <text class="svg-sub" x="600" y="101" text-anchor="middle">Cr Output Tax 90,000</text>
+                <path class="svg-arrow" d="M220 88 L256 88"/>
+                <path class="svg-arrow" d="M460 88 L496 88"/>
+                <text class="svg-sub" x="360" y="155" text-anchor="middle">Same chain on the purchase side: P1 → 18%, key VST → OB40 → Input Tax account (debit).</text>
+              </svg>
+              <figcaption>Illustration — FTXP supplies the rate and the account key; OB40 turns the account key into a concrete G/L account per chart of accounts.</figcaption>
+            </figure>
+
+            <h3>What you set in OB40</h3>
+            <ol class="steps">
+              <li>Open <code>OB40</code> and choose the <b>transaction (account key)</b> — e.g. <b>MWS</b> for output tax.</li>
+              <li>Enter the <b>chart of accounts</b> of your company code.</li>
+              <li>Assign the <b>tax G/L account</b> (e.g. 175000 Output Tax). Where rules differ by tax code, the assignment can be refined per tax code.</li>
+              <li>Repeat for <b>VST</b> (input tax) and any other keys your tax procedure uses. Save — account determination is configuration, so it travels via a transport request.</li>
+            </ol>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · The tax account itself must be tax-ready</span>
+              <p>The G/L accounts assigned in OB40 must be created in FS00 as <b>balance sheet accounts</b> with the right settings (and typically “posting without tax allowed” where needed). If the OB40 account is missing, the invoice posting fails with an account-determination error — the tax code and rate were fine. When a posting fails, check in this order: <b>tax code exists (FTXP) → rate correct → OB40 account assigned → account exists in the company code.</b> <span class="urdu">Posting ruke to pehle code, phir rate, phir OB40 ka khaata check karein.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S19 ============ -->
+          <section class="lesson" id="s19">
+            <h2><span class="no">19</span> Step by step — FB41: post tax on its own</h2>
+            <p class="sub">Sometimes tax must be posted with no customer and no vendor in the document at all. FB41 exists for exactly that.</p>
+
+            <p>Normally tax lines are born inside invoices (FB70/FB60/MIRO). But real life produces tax-only situations: the tax authority's assessment adds tax for a past period, an import document carries tax that must be booked directly, or a correction must move tax between accounts. For these, SAP provides <code>FB41</code> — <b>Post Tax Payable</b> — a screen that posts tax amounts directly, using posting keys for tax lines.</p>
+
+            <div class="box term">
+              <span class="box-title">Key term · FB41 — Post Tax Payable</span>
+              <p><b>FB41</b> posts a document whose lines are <b>tax lines and their offset</b> — no subledger (customer/vendor) line is involved. You enter the <b>tax code</b>, and SAP proposes the tax account from OB40; the offsetting line goes to a G/L account you choose (for example a tax clearing or expense account). <span class="urdu">FB41 = sirf tax ki posting — na customer, na vendor, seedha tax khaata.</span></p>
+            </div>
+
+            <h3>The FB41 steps (worked mini-example)</h3>
+            <p>Scenario: a later tax assessment requires an extra <b>18,000</b> of output tax for a past period, to be charged against a tax expense/clearing account.</p>
+            <ol class="steps">
+              <li>Open <code>FB41</code>. Enter document date, posting date, company code and currency.</li>
+              <li>First line: posting key for the offsetting G/L line — <b>debit</b> the tax clearing/expense account with 18,000, entering the relevant <b>tax code</b> on the line so SAP knows which tax this belongs to.</li>
+              <li>SAP calculates and proposes the <b>tax line</b>: credit to the <b>output tax account</b> found through OB40 (key MWS).</li>
+              <li>Simulate, check the document balances, and <b>post</b>. The tax now sits in the output tax account, ready to flow into the next tax return — with no customer invoice anywhere in sight.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of an FB41 tax posting document">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span><span>FB41 — Post Tax Payable · Illustration (re-created for learning, not a real SAP screenshot)</span></div>
+              <div class="screen-body"><span class="kw">Company Code</span> 1000      <span class="dim">Tax code on line</span> <span class="st">S1 (output, 18%)</span>
+<span class="cm">Resulting document:</span>
+  <span class="kw">Dr</span> Tax Clearing / Expense (key 40) ..... 18,000
+  <span class="kw">Cr</span> Output Tax 175000 (via OB40/MWS) .... 18,000
+<span class="cm">No customer line, no vendor line — a pure tax document.</span></div>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap · FB41 is not “the tax version of FB70”</span>
+              <p>FB41 never creates a receivable or a payable — it cannot, because it has no subledger line. If a question describes tax arising <b>from a sale to a customer</b>, the answer is FB70 (or SD billing); FB41 is only for <b>standalone</b> tax postings such as assessments and corrections. <span class="urdu">Customer ke saath tax = FB70; akela tax = FB41.</span></p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+          <!-- ============ S20 ============ -->
+          <section class="lesson" id="s20">
+            <h2><span class="no">20</span> Exam traps</h2>
+            <p class="sub">The questions C_TS4FI loves to ask about this lesson — collected in one place.</p>
+
+            <div class="box trap">
+              <span class="box-title">Trap 1 · Customer creation in S/4HANA</span>
+              <p>Customers are created as <b>Business Partners</b> in <code>BP</code> — role <b>FLCU00</b> for FI data, <b>FLCU01</b> for sales data. XD01 still opens but works through CVI and creates a BP behind the screen. “Created” is not “postable”: without FLCU00 extended to the company code <b>and</b> a reconciliation account, FB70 refuses to post.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Trap 2 · The reconciliation account (AR edition)</span>
+              <p>The customer recon account lives in the <b>company code data</b>, is flagged in FS00 with recon account type <b>D</b> (vendor = K), is updated <b>automatically with every customer posting</b>, and can <b>never</b> be posted to directly. If a question offers “post the adjustment straight to the receivables recon account in FB50” — that option is always wrong.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Trap 3 · Document types and posting keys on the customer side</span>
+              <p><b>DR</b> invoice (FB70/F-22), <b>DG</b> credit memo (FB75/F-27), <b>DZ</b> incoming payment (F-28). Posting keys: <b>01</b> debit customer, <b>11</b> credit customer. The vendor family mirrors it: KR, KG, KZ, keys 31/21. Mixing D and K families is the single most common slip.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Trap 4 · Partial vs residual — read the items, not the balance</span>
+              <p>Both leave the same amount still owed. <b>Partial:</b> original invoice stays open in full + payment is its own open item. <b>Residual:</b> original invoice is cleared + a new residual open item is created for the difference. Any question describing item behaviour is testing exactly this.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Trap 5 · Dunning preconditions</span>
+              <p>F150 duns only items that are <b>open, overdue, and not dunning-blocked</b>, for customers whose master carries a <b>dunning procedure</b>. Dunning raises levels per the procedure; it does not create the receivable and it never touches cleared items.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Trap 6 · Credit Control Area confusions</span>
+              <p>The <b>Credit Control Area</b> (OB45) is an independent organisational unit; company codes are assigned to it, and limits are monitored per customer across it. It is <b>not</b> the controlling area and <b>not</b> a company code. Credit exposure = open items + open orders + unbilled deliveries.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Trap 7 · Tax directions and addresses</span>
+              <p><b>Output tax (MWS)</b> = on sales, a liability, credited. <b>Input tax (VST)</b> = on purchases, a claim, debited. The <b>rate</b> lives in the <b>tax code (FTXP)</b>, which is defined <b>per country</b>; the <b>account</b> comes from <b>OB40</b> via the account key. Deductible tax never touches the P&amp;L; non-deductible input tax becomes part of the cost.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Trap 8 · FB41's limits</span>
+              <p>FB41 posts <b>tax only</b> — no customer line, no vendor line, no receivable, no payable. Tax that arises from a customer sale belongs in FB70 or SD billing.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S21 ============ -->
+          <section class="lesson" id="s21">
+            <h2><span class="no">21</span> A–Z glossary</h2>
+            <p class="sub">Every technical term from this lesson, in one place, in simple words.</p>
+
+            <dl class="glossary">
+              <dt>Account key (MWS / VST)</dt><dd>The label inside a tax procedure that marks where tax is calculated and through which key its G/L account is found in OB40. MWS = output tax, VST = input tax.</dd>
+              <dt>Accounts Receivable (AR)</dt><dd>The subledger for customers — the detail behind the G/L's total receivables.</dd>
+              <dt>Baseline date</dt><dd>The date payment terms start counting from; baseline date + terms = due date.</dd>
+              <dt>Business Partner (BP)</dt><dd>The central master record for a person/organisation in S/4HANA; roles (FLCU00, FLVN00…) say what the partner does.</dd>
+              <dt>Clearing</dt><dd>Matching open items against each other so they are settled (net zero) and stamped with a clearing document number.</dd>
+              <dt>Credit Control Area</dt><dd>Organisational unit (OB45) in which customer credit limits are set and monitored; company codes are assigned to it.</dd>
+              <dt>Credit exposure</dt><dd>How much of a customer's credit limit is in use: open items + open orders + unbilled deliveries.</dd>
+              <dt>Credit limit</dt><dd>The maximum credit a customer may use; maintained per customer in the credit data (BP role UKM000 in S/4HANA Credit Management; classically FD32).</dd>
+              <dt>Credit memo (customer)</dt><dd>A document (FB75, type DG) that reduces what a customer owes — e.g. for returned goods. Not a payment and not a reversal.</dd>
+              <dt>Customer</dt><dd>A buyer who owes us money (SAP: Debitor — hence the letter D in AR document types and recon type).</dd>
+              <dt>Customer account group</dt><dd>The customer category (OBD2) controlling number range, master-data field status and the one-time-customer flag.</dd>
+              <dt>Dunning</dt><dd>Reminding customers about overdue items; run in F150, governed by the dunning procedure in the customer master.</dd>
+              <dt>Dunning block</dt><dd>A flag that excludes a customer or item from dunning, e.g. during a dispute.</dd>
+              <dt>Dunning level</dt><dd>How far up the reminder ladder an overdue item has climbed; each level is firmer than the last.</dd>
+              <dt>Dunning procedure</dt><dd>The rulebook (FBMP) for reminders: levels, intervals, letter texts, charges. Stored in the customer's company code data.</dd>
+              <dt>F-28</dt><dd>Post Incoming Payments — books money received from a customer into the bank and clears the matched open items (type DZ).</dd>
+              <dt>F-32</dt><dd>Clear Customer — matches a customer's open items against each other without money moving.</dd>
+              <dt>F150</dt><dd>The dunning run — selects overdue open items and produces dunning notices by level.</dd>
+              <dt>FB41</dt><dd>Post Tax Payable — posts tax amounts directly, with no customer or vendor line.</dd>
+              <dt>FB70 / FB75</dt><dd>Enjoy transactions for customer invoices (type DR) and customer credit memos (type DG). Classic twins: F-22 / F-27.</dd>
+              <dt>FBL5N</dt><dd>Customer Line Item Display — the AR reading screen (twins: FBL1N vendor, FBL3N G/L).</dd>
+              <dt>FLCU00 / FLCU01</dt><dd>BP roles for a customer: FLCU00 = FI (company code) data, FLCU01 = sales area data.</dd>
+              <dt>FTXP</dt><dd>Transaction to create/check tax codes — rates and calculation per country.</dd>
+              <dt>Input tax (VST)</dt><dd>Tax we pay on purchases; a claim against the government when deductible (Dr Input Tax account).</dd>
+              <dt>Non-deductible input tax</dt><dd>Input tax the law does not let us reclaim; it becomes part of the purchase cost/expense.</dd>
+              <dt>OB40</dt><dd>Account assignment for tax postings: maps each account key (MWS, VST…) to a G/L account per chart of accounts.</dd>
+              <dt>OB45</dt><dd>Configuration transaction for defining the Credit Control Area.</dd>
+              <dt>OBD2</dt><dd>Configuration transaction for customer account groups (OBD3 = vendor, OBD4 = G/L).</dd>
+              <dt>One-time customer</dt><dd>A shared master for rare buyers; name/address are typed inside each invoice instead of the master.</dd>
+              <dt>Open item</dt><dd>A line item not yet settled — the unit that dunning, clearing and credit checks all work on.</dd>
+              <dt>Output tax (MWS)</dt><dd>Tax we charge on sales and owe to the government (Cr Output Tax account).</dd>
+              <dt>Partial payment</dt><dd>Part-payment where the invoice stays open in full and the payment becomes its own open item.</dd>
+              <dt>Partner functions</dt><dd>The jobs partners play in a sales deal: sold-to, ship-to, bill-to, payer.</dd>
+              <dt>Payment on account</dt><dd>Money posted to a customer without matching a specific invoice yet; cleared later in F-32.</dd>
+              <dt>Payment terms</dt><dd>The agreed payment timing (e.g. 30 days net) proposed from the master into each invoice.</dd>
+              <dt>Posting keys 01 / 11</dt><dd>01 = debit customer (invoice), 11 = credit customer (payment / credit memo).</dd>
+              <dt>Reconciliation account</dt><dd>The G/L account in the customer's company code data (recon type D) that mirrors every customer posting automatically; direct posting to it is impossible.</dd>
+              <dt>Residual payment</dt><dd>Part-payment where the invoice is cleared and a new open (residual) item is created for the leftover amount.</dd>
+              <dt>Sales area</dt><dd>Sales organisation + distribution channel + division — the unit for which customer sales data is maintained.</dd>
+              <dt>Tax category</dt><dd>FS00 field on a G/L account: “&lt;” input tax only, “&gt;” output tax only, “*” all, blank = no tax.</dd>
+              <dt>Tax code</dt><dd>Two-character code (per country, FTXP) bundling tax type, rate and account key; entered on invoice lines so SAP calculates the tax line.</dd>
+              <dt>Tax procedure</dt><dd>A country's tax calculation scheme — the steps and account keys tax follows.</dd>
+              <dt>Tax type A / V</dt><dd>In FTXP: A = output tax, V = input tax.</dd>
+            </dl>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S22 ============ -->
+          <section class="lesson" id="s22">
+            <h2><span class="no">22</span> Summary — the whole lesson on one screen</h2>
+            <p class="sub">If you remember one screen before the exam, make it this one.</p>
+
+            <ul class="clean">
+              <li><b>Accounts Receivable</b> is the customer subledger under one G/L total. A <b>customer</b> in S/4HANA is a <b>Business Partner (BP)</b> with roles <b>FLCU00</b> (FI / company code data) and <b>FLCU01</b> (sales area data).</li>
+              <li>The <b>customer account group (OBD2)</b> controls number range, master-data field status and the one-time-customer flag. The <b>reconciliation account</b> (in the company code data; flagged “D” in FS00) mirrors every customer posting automatically — <b>direct posting to it is impossible</b>.</li>
+              <li><b>FBL5N</b> shows customer line items. An <b>open item</b> is unsettled; due dates come from <b>baseline date + payment terms</b>.</li>
+              <li><b>FB70</b> = customer invoice without a sales order (type <b>DR</b>, keys 01/50). <b>FB75</b> = customer credit memo (type <b>DG</b>, key 11 on the customer line) for returns and corrections — a business document, not a reversal.</li>
+              <li><b>F-28</b> books incoming payments (type <b>DZ</b>) and clears the matched items in the same document. <b>F-32</b> clears items against each other with no money moving; a wrong clearing is reset with <b>FBRA</b> (before any FB08 reversal of a cleared document).</li>
+              <li><b>Partial payment:</b> invoice stays open in full; payment is a separate open item. <b>Residual payment:</b> invoice is cleared; a new residual open item carries the difference.</li>
+              <li><b>Dunning (F150)</b> reminds customers about <b>open, overdue, unblocked</b> items by <b>dunning levels</b> from the <b>dunning procedure</b> in the customer master (configured in FBMP).</li>
+              <li><b>Credit management:</b> the <b>Credit Control Area (OB45)</b> is where customer <b>credit limits</b> are monitored; <b>credit exposure</b> = open items + open orders + unbilled deliveries; exceeding the limit triggers a warning or a block.</li>
+              <li><b>Output tax (MWS)</b> is charged on sales — collected from the customer, owed to the government (credit). <b>Input tax (VST)</b> is paid on purchases — a claim when deductible (debit). The tax return settles only the <b>difference</b>. Deductible tax never touches the P&amp;L.</li>
+              <li><b>Tax codes (FTXP)</b> are defined <b>per country</b> and carry the rate and the account key. <b>OB40</b> maps each account key to its tax G/L account per chart of accounts. <b>FB41</b> posts tax on its own — no customer, no vendor.</li>
+            </ul>
+
+            <div class="box trick">
+              <span class="box-title">One-line memory chain</span>
+              <p><b>BP customer banata hai · Recon account (D) pul hai · FB70 bill, FB75 kami ka parcha · F-28 wasooli, F-32 milan · F150 takaza, limit Credit Control Area se · Sale par MWS, khareed par VST · Rate FTXP mein, khaata OB40 mein, akela tax FB41 mein.</b> — BP creates the customer, the type-D recon account is the bridge, FB70 bills and FB75 reduces, F-28 collects and F-32 matches, F150 chases and the credit control area guards the limit, MWS rides on sales and VST on purchases, the rate lives in FTXP, the account in OB40, and standalone tax goes through FB41.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S23 ============ -->
+          <section class="lesson" id="s23">
+            <h2><span class="no">23</span> Self-test — 10 questions</h2>
+            <p class="sub">Answer all 10. Explanations appear after each answer — this self-test is part of completing the lesson.</p>
+
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn btn-ghost" id="resetQuiz" type="button">Reset self-test</button>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S24 ============ -->
+          <section class="lesson" id="s24">
+            <h2><span class="no">24</span> Coming next — Part 2 · Lesson 7 preview</h2>
+            <p class="sub">A small look ahead only — Lesson 7 itself arrives as its own document.</p>
+
+            <p>You can now run both subledgers end to end — vendors and customers — and you understand the tax layer that rides on their invoices. One big practical area remains: the long-lived things a company owns and the money it holds, plus the closing work that ends a period.</p>
+
+            <div class="next-lesson">
+              <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div>
+                <b>Part 2 · Lesson 7 — Asset, Bank, Controlling &amp; Closing Practical (preview)</b><br>
+                Asset master records and depreciation in practice, bank accounting and bank reconciliation, cost centers and profit centers in daily postings, the financial statement version in use, and the period-end closing routine — finishing with the course completion for the full Part 1 + Part 2 journey. It will unlock once this lesson is fully complete — every section marked Read and the self-test answered.
+              </div>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <footer>
+            course created by Muhammad Asad Ullah Ibrahim<br>
+            Part 2 · Lesson 6 of the SAP S/4HANA Financial Accounting series · Prepared for C_TS4FI (SAP S/4HANA Cloud Private Edition, Financial Accounting) exam preparation · All SAP screens shown are re-created illustrations for learning, not real SAP screenshots.
+          </footer>
+        </main>
+      </div>
+    </div>
+    </div>
+
+<script>
+
+    // ---- Shared course progress store (localStorage, shared by all lessons) ----
+    window.SAPProgress=(function(){
+      var KEY='sapCts4fiProgress_v1';
+      function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+      function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+      function getLesson(n){ var s=load(), L=null;
+        if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+        if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+        return L; }
+      function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+        for(var p in patch){ cur[p]=patch[p]; }
+        s.lessons[k]=cur; saveAll(s); return cur; }
+      function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+        return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+      function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+        s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+      return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+    })();
+
+    // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+    function sha256Hex(ascii){
+      ascii=unescape(encodeURIComponent(ascii));
+      function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+      var maxWord=Math.pow(2,32), i, j, result='';
+      var words=[], asciiBitLength=ascii.length*8;
+      var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+      var primeCounter=k.length, isComposite={};
+      for(var candidate=2; primeCounter<64; candidate++){
+        if(!isComposite[candidate]){
+          for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+          hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+          k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+        }
+      }
+      ascii+='\x80';
+      while(ascii.length%64-56) ascii+='\x00';
+      for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+      words[words.length]=((asciiBitLength/maxWord)|0);
+      words[words.length]=(asciiBitLength);
+      for(j=0;j<words.length;){
+        var w=words.slice(j,j+=16), oldHash=hash;
+        hash=hash.slice(0,8);
+        for(i=0;i<64;i++){
+          var w15=w[i-15], w2=w[i-2];
+          var a=hash[0], e=hash[4];
+          var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+          var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+          hash=[(temp1+temp2)|0].concat(hash);
+          hash[4]=(hash[4]+temp1)|0;
+        }
+        for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+      }
+      for(i=0;i<8;i++){
+        for(j=3;j+1;j--){
+          var b=(hash[i]>>(j*8))&255;
+          result+=((b<16)?0:'')+b.toString(16);
+        }
+      }
+      return result;
+    }
+
+    // ---- Part 2 Lesson 6 gating: locked until Part 2 Lesson 5 is fully complete, or the gate test is passed 5/5 ----
+    (function(){
+      var THIS_LESSON='p2-6', PREV_LESSON='p2-5', PREV_SECTIONS=20, LOCK_MS=60*60*1000;
+      var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+      var GATE_Q=[
+        {q:"In SAP S/4HANA, how is a new vendor created for accounting?",opts:["With XK01 only — BP is not used for vendors","As a Business Partner in transaction BP, with role FLVN00 for the FI (company code) data","Directly in FB60 at the time of the first invoice","In FS00, as a special G/L account"],a:1},
+        {q:"A supplier's bill for office services arrives and there is NO purchase order. Which transaction and document type are used to enter the invoice?",opts:["MIRO — type RE","FB60 — type KR","FB50 — type SA","F-53 — type KZ"],a:1},
+        {q:"In MIRO, the vendor's invoice price is far above the purchase order price, beyond tolerance. What happens?",opts:["The invoice is posted and the difference is charged to the vendor automatically","The invoice can be posted but is blocked for payment until the variance is resolved","SAP deletes the purchase order","The goods receipt is reversed automatically"],a:1},
+        {q:"Which statement about the F110 payment program is correct?",opts:["The proposal run posts the payment documents and clears the items","The proposal run only builds a draft list — the payment run posts the KZ documents and clears the items","F110 can pay only one vendor per run","Items that fail selection are paid anyway and reported later"],a:1},
+        {q:"A vendor invoice of 200,000 is settled with a RESIDUAL payment of 150,000 (clearing in F-53 / F-44). What does the vendor account show afterwards?",opts:["The invoice still open at 200,000 and a separate payment item of 150,000","The invoice cleared, and a new open residual item of 50,000","The invoice reduced to 50,000 with the same document number","Nothing — the difference is written off automatically"],a:1}
+      ];
+      var gateScreen=document.getElementById('gateScreen');
+      var content=document.getElementById('lessonContent');
+      var lockBox=document.getElementById('gateLockBox');
+      var lockUntilEl=document.getElementById('gateLockUntil');
+      var countdownEl=document.getElementById('gateCountdown');
+      var testArea=document.getElementById('gateTestArea');
+      var qWrap=document.getElementById('gateQuestions');
+      var scoreEl=document.getElementById('gateScore');
+      var msgEl=document.getElementById('gateMsg');
+      var attemptsEl=document.getElementById('gateAttempts');
+      var submitBtn=document.getElementById('gateSubmit');
+      var retryBtn=document.getElementById('gateRetry');
+      var adminBtn=document.getElementById('adminBtn');
+      var adminForm=document.getElementById('adminForm');
+      var adminPw=document.getElementById('adminPw');
+      var adminSubmit=document.getElementById('adminSubmit');
+      var adminMsg=document.getElementById('adminMsg');
+      var timer=null, selected={};
+
+      function isPrevComplete(){
+        var L=window.SAPProgress.getLesson(PREV_LESSON);
+        if(!L) return false;
+        var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+        var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+        return !!(allRead&&quiz);
+      }
+      function unlockLesson(){
+        if(timer){ clearInterval(timer); timer=null; }
+        gateScreen.hidden=true; gateScreen.style.display='none';
+        content.hidden=false; content.style.display='';
+        window.scrollTo(0,0);
+      }
+      function updateCountdown(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var rem=g.lockUntil-Date.now();
+        if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+        var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+        countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+      }
+      function showLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        lockBox.hidden=false;
+        testArea.style.display='none';
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        updateCountdown();
+        if(timer) clearInterval(timer);
+        timer=setInterval(updateCountdown,1000);
+      }
+      function refreshLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var now=Date.now();
+        if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+        if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+        lockBox.hidden=true;
+        testArea.style.display='';
+        return false;
+      }
+      function updateAttempts(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+      }
+      function renderGate(){
+        selected={};
+        scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+        submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+        qWrap.innerHTML='';
+        GATE_Q.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='gate-q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              selected[qi]=oi;
+              var bs=opts.querySelectorAll('.gate-opt');
+              bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+              msgEl.textContent='';
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); qWrap.appendChild(box);
+        });
+      }
+      submitBtn.addEventListener('click',function(){
+        if(refreshLock()) return;
+        if(Object.keys(selected).length<GATE_Q.length){
+          msgEl.textContent='Please answer all 5 questions before submitting.';
+          scoreEl.textContent='';
+          return;
+        }
+        var score=0;
+        GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+        qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+        submitBtn.hidden=true;
+        scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        if(score===GATE_Q.length){
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          msgEl.textContent='Gate test passed. Part 2 · Lesson 6 is now unlocked.';
+          msgEl.className='ok';
+          updateAttempts();
+          setTimeout(unlockLesson,900);
+        }else{
+          g.fails=(g.fails||0)+1;
+          msgEl.textContent='Go back and complete previous lesson.';
+          msgEl.className='';
+          if(g.fails>=3){
+            g.lockUntil=Date.now()+LOCK_MS;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            updateAttempts();
+            refreshLock();
+          }else{
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            retryBtn.hidden=false;
+            updateAttempts();
+          }
+        }
+      });
+      retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+      adminBtn.addEventListener('click',function(){
+        adminForm.hidden=!adminForm.hidden;
+        if(!adminForm.hidden) adminPw.focus();
+      });
+      function tryAdminUnlock(){
+        var val=adminPw.value;
+        if(!val) return;
+        if(sha256Hex(val)===ADMIN_HASH){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          adminMsg.className=''; adminMsg.style.color='var(--green)';
+          adminMsg.textContent='Unlocked. Opening Part 2 · Lesson 6…';
+          adminPw.value='';
+          setTimeout(unlockLesson,700);
+        }else{
+          adminMsg.style.color=''; adminMsg.className='err';
+          adminMsg.textContent='Incorrect password. Please try again.';
+          adminPw.value='';
+          adminPw.focus();
+        }
+      }
+      adminSubmit.addEventListener('click',tryAdminUnlock);
+      adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+      // ---- Initial state ----
+      var g0=window.SAPProgress.getGate(THIS_LESSON);
+      if(isPrevComplete()||g0.unlocked===true){
+        unlockLesson();
+      }else{
+        gateScreen.hidden=false; gateScreen.style.display='';
+        content.hidden=true; content.style.display='none';
+        if(!refreshLock()) renderGate();
+        updateAttempts();
+      }
+    })();
+        </script>
+
+<script>
+    (function(){
+      "use strict";
+      var THIS_KEY='p2-6';
+      /* ---------- Theme switch (top right, default Light) ---------- */
+      var themeBtn=document.getElementById('themeBtn');
+      var themeLabel=document.getElementById('themeLabel');
+      function applyTheme(t){
+        document.documentElement.setAttribute('data-theme',t);
+        if(themeLabel) themeLabel.textContent=(t==='dark'?'Dark':'Light');
+      }
+      applyTheme('light');
+      themeBtn.addEventListener('click',function(){
+        var cur=document.documentElement.getAttribute('data-theme');
+        applyTheme(cur==='dark'?'light':'dark');
+      });
+
+      /* ---------- Mark Read + sidebar progress + scroll-spy ---------- */
+      var sections=[].slice.call(document.querySelectorAll('section.lesson'));
+      var tocItems={};
+      [].slice.call(document.querySelectorAll('#tocList li')).forEach(function(li){
+        var a=li.querySelector('a');
+        if(a) tocItems[a.getAttribute('href').slice(1)]={li:li,a:a};
+      });
+      var readSet={}, total=sections.length;
+      var pctText=document.getElementById('pctText'), sideFill=document.getElementById('sideFill'),
+          countText=document.getElementById('countText'), bar=document.getElementById('progressBar');
+
+      function persist(){
+        try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(THIS_KEY,{readSections:arr, allRead:(total>0&&arr.length===total)}); } }catch(e){}
+      }
+      function updateProgress(){
+        var n=Object.keys(readSet).length;
+        var pct=total?Math.round(n/total*100):0;
+        if(pctText) pctText.textContent=pct+'%';
+        if(sideFill) sideFill.style.width=pct+'%';
+        if(countText) countText.textContent=n+' of '+total+' sections marked read';
+        if(bar) bar.style.width=pct+'%';
+      }
+      function reflect(sec){
+        var id=sec.id, on=!!readSet[id];
+        var btn=sec.querySelector('.mark-read'), status=sec.querySelector('.read-status'), label=sec.querySelector('.mr-label');
+        if(btn) btn.classList.toggle('done',on);
+        if(label) label.textContent=on?'Read':'Mark Read';
+        if(status) status.textContent=on?'Marked as read':'Not read yet';
+        sec.classList.toggle('is-read',on);
+        if(tocItems[id]) tocItems[id].li.classList.toggle('read',on);
+      }
+      // Restore this lesson's saved read state
+      try{
+        var saved=window.SAPProgress?window.SAPProgress.getLesson(THIS_KEY):null;
+        if(saved&&saved.readSections){ saved.readSections.forEach(function(id){ readSet[id]=true; }); }
+      }catch(e){}
+      sections.forEach(function(sec){
+        reflect(sec);
+        var btn=sec.querySelector('.mark-read');
+        if(btn) btn.addEventListener('click',function(){
+          if(readSet[sec.id]) delete readSet[sec.id]; else readSet[sec.id]=true;
+          reflect(sec); updateProgress(); persist();
+        });
+      });
+      updateProgress();
+
+      // Scroll-spy: highlight the section currently on screen in the sidebar
+      if('IntersectionObserver' in window){
+        var spy=new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if(en.isIntersecting&&tocItems[en.target.id]){
+              Object.keys(tocItems).forEach(function(k){ tocItems[k].li.classList.remove('active'); });
+              tocItems[en.target.id].li.classList.add('active');
+            }
+          });
+        },{rootMargin:'-25% 0px -65% 0px'});
+        sections.forEach(function(s){ spy.observe(s); });
+      }
+    })();
+    </script>
+
+<script>    (function(){
+      var QUESTIONS=[
+        {q:"In SAP S/4HANA, how is a new customer created for accounting?",opts:["With XD01 only — BP is not used for customers","As a Business Partner in transaction BP, with role FLCU00 for the FI (company code) data","Directly in FB70 at the time of the first invoice","In FS00, as a special G/L account"],a:1,why:"S/4HANA creates customers as Business Partners (transaction BP). Role FLCU00 adds the company code data — including the reconciliation account and dunning procedure — and FLCU01 adds sales area data. XD01 still opens but works through CVI and creates a BP behind the screen."},
+        {q:"Which statement about the AR reconciliation account is correct?",opts:["It can be posted to directly in FB50 like any other G/L account","It is updated automatically by every customer posting in the same document, and direct posting to it is not allowed","It is maintained in the customer's general data, valid for all company codes","It is flagged in FS00 with reconciliation account type K"],a:1,why:"The recon account sits in the customer's company code data and mirrors every subledger posting automatically — that is what keeps AR and the G/L equal. Direct posting is refused, and the FS00 flag for customers is D (Debitor); K is for vendors (Kreditor)."},
+        {q:"You sell services to a customer on credit. There is no sales order. Where do you enter the invoice, with which document type and posting keys?",opts:["FB60 — type KR, keys 31/40","FB70 — type DR, keys 01 (customer) / 50 (revenue)","F-28 — type DZ, keys 40/11","MIRO — type RE, keys 31/86"],a:1,why:"A direct FI customer invoice is FB70 (Enjoy) or F-22 (classic), document type DR. The customer line is a debit with key 01; the revenue line is a credit with key 50. FB60/KR is the vendor side; F-28 is a payment; MIRO belongs to purchasing."},
+        {q:"A customer returns damaged goods worth 59,000 (gross) from an earlier sale. Which document reduces the receivable?",opts:["An FB08 reversal of the original invoice","An FB75 credit memo — type DG — debiting revenue/tax and crediting the customer (key 11)","An F-32 clearing with no new document","A dunning notice from F150"],a:1,why:"Returned goods are a new business event, so a new business document answers them: the FB75 credit memo (DG) — Dr revenue 50,000, Dr output tax 9,000, Cr customer 59,000. FB08 reversal is only for correcting a wrongly posted document; F-32 only matches existing items; dunning only reminds."},
+        {q:"What does F-28 do when the amount received exactly matches the selected open items?",opts:["It only records the bank receipt; clearing must be done later in F-32","It posts the payment document (type DZ) and clears the matched open items in the same step","It creates a noted item with no balance effect","It runs the dunning program for the remaining items"],a:1,why:"F-28 (Post Incoming Payments) is a combined posting + clearing transaction: Dr bank, Cr customer, and the selected items are stamped cleared with the DZ document as the clearing document. F-32 is only needed when items must be matched without a payment."},
+        {q:"An invoice of 590,000 is settled by a PARTIAL payment of 400,000. What does FBL5N show afterwards?",opts:["The invoice cleared, and one new residual open item of 190,000","The invoice still open at 590,000, plus the payment as a separate open item of 400,000","Only one open item: the invoice reduced to 190,000 with the same document number","Nothing — both items disappear"],a:1,why:"Partial payment leaves the original invoice open in full and parks the payment next to it as its own open item; the balance owed (190,000) is the net of the two. Clearing the invoice and creating a fresh 190,000 item describes a RESIDUAL payment."},
+        {q:"A customer's invoice is 20 days overdue. The customer master has a dunning procedure, and the item is not blocked. What will the F150 dunning run do?",opts:["Reverse the invoice automatically","Include the item, assign or raise its dunning level per the procedure, and produce a dunning notice","Post a new receivable for the reminder fee to the G/L only","Nothing — dunning works only on vendor items"],a:1,why:"Dunning (F150) selects open, overdue, unblocked items of customers who carry a dunning procedure, assigns/raises the dunning level according to the procedure's intervals, and outputs the notice. It never reverses or reposts the receivable."},
+        {q:"What is a Credit Control Area?",opts:["Another name for a company code","The organisational unit in which customer credit limits are set and monitored; one or more company codes are assigned to it","A G/L account that collects doubtful receivables","The controlling area used for credit reporting"],a:1,why:"The Credit Control Area (defined in OB45) is its own organisational unit for credit management. Company codes are assigned to it, and a customer's credit limit and exposure are monitored per credit control area. It is neither a company code nor the controlling area — the similar name is a classic exam trap."},
+        {q:"Your company sells goods for 500,000 net plus 18% sales tax, and buys materials for 200,000 net plus 18% tax (fully deductible). What is the net tax position for the period?",opts:["Output tax 90,000 is revenue; nothing is payable","Payable to the government: 90,000 output tax − 36,000 input tax = 54,000","Payable: 90,000 + 36,000 = 126,000","A refund of 54,000 is due to the company"],a:1,why:"Output tax collected on sales (18% of 500,000 = 90,000) is a liability; input tax paid on purchases (18% of 200,000 = 36,000) is a deductible claim. The return settles only the difference: 90,000 − 36,000 = 54,000 payable. Neither tax touches revenue or expense."},
+        {q:"An invoice calculates the correct 18% tax, but the tax amount posts to the WRONG G/L account. Where is the fault most likely?",opts:["In the tax code's percentage rate in FTXP","In the account assignment in OB40, where the account key (e.g. MWS) is mapped to the tax account","In the customer's reconciliation account","In the payment terms of the customer master"],a:1,why:"FTXP supplies the rate and the account key; OB40 turns the account key into the concrete G/L account per chart of accounts. Right amount + wrong account = account determination (OB40) is wrong. The recon account and payment terms play no role in tax account determination."}
+      ];
+      var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+      var answered=0, correct=0;
+      function render(){
+        quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+        QUESTIONS.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              if(box.dataset.done) return; box.dataset.done='1'; answered++;
+              var buttons=opts.querySelectorAll('.opt');
+              buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+              if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+              explain.classList.add('show');
+              if(answered===QUESTIONS.length){
+                try{ if(window.SAPProgress) window.SAPProgress.saveLesson('p2-6',{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=8?' — Excellent! Mark every section Read to complete this lesson.':' — Re-read the sections above once, then try again. You can do it.');
+              } else {
+                scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+              }
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+        });
+      }
+      render();
+      document.getElementById('resetQuiz').addEventListener('click',render);
+    })();
+</script>
+  </body>
+</html>

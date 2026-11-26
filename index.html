@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Course Dashboard — SAP S/4HANA Financial Accounting (C_TS4FI) | All 17 Lessons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --surface2:#eef2f6; --ink:#16222e; --ink2:#43536a; --ink3:#6b7a8d;
+  --line:#d7dee6; --accent:#0a6ed1; --accent-ink:#ffffff; --accent-soft:#e3f0fc;
+  --green:#1e7d46; --green-soft:#e2f4e9; --green-ink:#ffffff;
+  --amber:#9a6206; --amber-soft:#fdf0d5; --red:#b3261e; --red-soft:#fbe7e5;
+  --shadow:0 1px 3px rgba(16,42,63,.10),0 4px 14px rgba(16,42,63,.06);
+  --radius:10px;
+}
+[data-theme="dark"]{
+  --bg:#0d141b; --surface:#16212c; --surface2:#1c2a38; --ink:#e8eef4; --ink2:#b3c2d1; --ink3:#8496a8;
+  --line:#2b3c4d; --accent:#4aa3e8; --accent-ink:#08131d; --accent-soft:#17334d;
+  --green:#3fbf72; --green-soft:#123526; --green-ink:#08130c;
+  --amber:#e0a83c; --amber-soft:#3a2c10; --red:#f0837c; --red-soft:#3d1a17;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16.5px;line-height:1.65}
+a{color:var(--accent)}
+h1,h2,h3{line-height:1.25;margin:0 0 .5em}
+h2{font-size:1.5rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.13rem;font-weight:700}
+p{margin:.55em 0}
+ul{margin:.5em 0 .9em;padding-left:1.3em}
+li{margin:.4em 0}
+svg.ic{width:18px;height:18px;flex:0 0 auto;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px}
+#readbar{position:fixed;top:0;left:0;height:4px;background:var(--green);width:0%;z-index:60;transition:width .35s ease}
+main{max-width:880px;margin:0 auto;padding:20px clamp(16px,4vw,32px) 70px}
+.topbar{display:flex;justify-content:flex-end;align-items:center;padding:4px 0 14px}
+.theme-btn{cursor:pointer;display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:.9rem;font-weight:700;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:10px 16px;min-height:44px;box-shadow:var(--shadow)}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:clamp(20px,3.5vw,34px);margin-bottom:22px}
+.kicker{font-size:.8rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-size:clamp(1.6rem,4.2vw,2.3rem);font-weight:800;letter-spacing:-.02em;margin:.25em 0 .35em}
+.hero .lede{color:var(--ink2);font-size:1.02rem;max-width:65ch;margin:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:18px 0 4px}
+.fact{background:var(--surface2);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px;text-align:center}
+.fact .big{font-size:1.45rem;font-weight:800;color:var(--accent);line-height:1.15}
+.fact .cap{font-size:.82rem;color:var(--ink2);font-weight:600;margin-top:3px}
+.hero .note-line{font-size:.88rem;color:var(--ink3);margin-top:12px}
+section.block{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:clamp(20px,3.4vw,34px);margin-bottom:22px}
+.sec-head{display:flex;align-items:flex-start;gap:14px;border-bottom:2px solid var(--surface2);padding-bottom:13px;margin-bottom:6px}
+.sec-badge{flex:0 0 auto;background:var(--accent);color:var(--accent-ink);font-weight:800;border-radius:9px;padding:7px 12px;font-size:.85rem;display:inline-flex;align-items:center;gap:7px}
+.sec-badge svg.ic{width:16px;height:16px}
+.sec-head .ts{color:var(--ink3);font-size:.85rem;font-weight:600}
+.note-text{color:var(--ink2)}
+.note-text b{color:var(--ink)}
+.course-progress{background:var(--surface2);border:1px solid var(--line);border-radius:var(--radius);padding:15px 17px;margin:16px 0 4px}
+.course-progress .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.course-progress .bigpct{font-size:1.45rem;font-weight:800}
+.course-progress .lbl{font-size:.9rem;color:var(--ink2);font-weight:600}
+.course-track{height:14px;border-radius:99px;background:var(--surface);border:1px solid var(--line);overflow:hidden;margin-top:9px}
+.course-fill{height:100%;width:0%;background:var(--green);border-radius:99px;transition:width .35s ease}
+.lesson-card{border:1.5px solid var(--line);border-radius:12px;padding:17px 19px;margin:15px 0;background:var(--surface);transition:border-color .15s}
+.lesson-card.is-done{border-color:var(--green);background:var(--green-soft)}
+.lesson-card .lc-top{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.lc-num{flex:0 0 auto;width:46px;height:46px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:1.15rem;display:flex;align-items:center;justify-content:center}
+.lesson-card.is-done .lc-num{background:var(--green);color:var(--green-ink)}
+.lesson-card h3{margin:0}
+.lesson-card .lc-meta{color:var(--ink3);font-size:.85rem;font-weight:600;margin-top:2px}
+.lesson-card .lc-desc{margin:.5em 0 .2em;color:var(--ink2);font-size:.97rem}
+.lesson-card .lc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px;align-items:center}
+.open-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;font-size:.95rem;border-radius:9px;padding:11px 20px;min-height:48px;border:2px solid var(--accent)}
+.open-btn:hover{filter:brightness(1.08)}
+.done-badge{display:none;font-weight:800;color:var(--green);font-size:.9rem;align-items:center;gap:6px}
+.lesson-card.is-done .done-badge{display:inline-flex}
+.mark-done{cursor:pointer;font:inherit;font-weight:700;font-size:.95rem;border-radius:9px;padding:11px 20px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:8px;min-height:48px;transition:background .15s,color .15s}
+.mark-done:hover{background:var(--green-soft)}
+.mark-done.done{background:var(--green);color:var(--green-ink);border-color:var(--green)}
+.mark-done svg.ic{width:17px;height:17px}
+.rules-list{list-style:none;padding-left:0;margin:.8em 0 .4em}
+.rules-list li{display:flex;gap:12px;align-items:flex-start;margin:.75em 0}
+.rules-list .ric{flex:0 0 auto;width:34px;height:34px;border-radius:9px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:2px}
+.rules-list .ric svg.ic{width:18px;height:18px}
+.rules-list li.warn .ric{background:var(--amber-soft);color:var(--amber)}
+.rules-list li.lock .ric{background:var(--red-soft);color:var(--red)}
+.rules-list b{color:var(--ink)}
+.rules-list span{color:var(--ink2)}
+.callout{border-radius:var(--radius);padding:13px 16px;margin:16px 0 4px;font-size:.96rem;background:var(--surface2);border:1px solid var(--line)}
+.callout .ct{font-weight:800;display:block;margin-bottom:3px;font-size:.84rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2)}
+footer.page{color:var(--ink3);font-size:.88rem;text-align:center;padding:6px 0 24px}
+footer.page .credit{font-weight:700;color:var(--ink2);font-size:.95rem}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="readbar"></div>
+
+<main>
+  <div class="topbar">
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch theme">
+      <svg class="ic" id="themeIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <span id="themeLabel">Dark Theme</span>
+    </button>
+  </div>
+
+  <header class="hero">
+    <div class="kicker">Course Dashboard</div>
+    <h1>SAP S/4HANA Financial Accounting — C_TS4FI Course</h1>
+    <p class="lede">SAP Certified Associate — SAP S/4HANA Cloud Private Edition, Financial Accounting. You already know Financial Accounting, but not SAP — this course starts from there. All <b>17 lessons</b> — 10 in Part 1 and 7 in Part 2 — are listed below in order. Keep all files in the same folder and open each lesson from here.</p>
+    <div class="facts">
+      <div class="fact"><div class="big">80</div><div class="cap">Questions</div></div>
+      <div class="fact"><div class="big">180 min</div><div class="cap">Time — 3 hours</div></div>
+      <div class="fact"><div class="big">61%</div><div class="cap">Cut score to pass</div></div>
+      <div class="fact"><div class="big">Associate</div><div class="cap">Level — beginner-friendly</div></div>
+      <div class="fact"><div class="big">17</div><div class="cap">Lessons in this course</div></div>
+    </div>
+    <p class="note-line">The largest part of the exam — General Ledger, Accounts Payable / Receivable and Financial Closing — is the same accounting you already know. What is new is only how that work is done in SAP, on which screen and with which setting. Before booking the exam, be sure to check the latest topics and weights on SAP's official certification page.</p>
+  </header>
+
+  <section class="block" id="lessons">
+    <div class="sec-head">
+      <span class="sec-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Lessons</span>
+      <div>
+        <h2 style="margin-bottom:2px">Part 1 — All 10 Lessons, in Order</h2>
+        <div class="ts">Each lesson is a separate file · Study them in number order · Part 2 follows below</div>
+      </div>
+    </div>
+
+    <div class="course-progress">
+      <div class="row"><span class="bigpct" id="coursePct">0%</span><span class="lbl" id="courseCount">0 of 17 lessons done</span></div>
+      <div class="course-track"><div class="course-fill" id="courseFill"></div></div>
+      <div class="lbl" id="courseMsg" style="margin-top:8px">Start with Lesson 1 — from the very beginning.</div>
+    </div>
+
+    <div class="lesson-card" id="lesson-1">
+      <div class="lc-top">
+        <div class="lc-num">1</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Introduction of SAP</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">What SAP is, what ERP is, and what S/4HANA and FICO mean — from the very beginning, linked to your accounting knowledge.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-01-introduction-of-sap.html">Open Lesson 1<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-2">
+      <div class="lc-top">
+        <div class="lc-num">2</div>
+        <div style="flex:1;min-width:200px">
+          <h3>SAP Architecture</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">The three parts of the SAP system — presentation layer, application server and database — and the journey of your entry inside the system.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-02-sap-architecture.html">Open Lesson 2<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-3">
+      <div class="lc-top">
+        <div class="lc-num">3</div>
+        <div style="flex:1;min-width:200px">
+          <h3>SAP Interface</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Working on SAP GUI and Fiori screens — logon, T-codes, the command field and all the shortcuts.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-03-sap-interface.html">Open Lesson 3<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-4">
+      <div class="lc-top">
+        <div class="lc-num">4</div>
+        <div style="flex:1;min-width:200px">
+          <h3>SAP ABAP Language</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">SAP's own programming language — how much ABAP an FI consultant needs to know, and how to read tables and programs.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-04-sap-abap-language.html">Open Lesson 4<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-5">
+      <div class="lc-top">
+        <div class="lc-num">5</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Enterprise Structure + Company &amp; Company Code</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">A company's identity in SAP — Enterprise Structure, Company, and the most important unit: creating a Company Code.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-05-enterprise-structure-company-and-company-code.html">Open Lesson 5<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-6">
+      <div class="lc-top">
+        <div class="lc-num">6</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Business Area / Fiscal Year Variant / Credit Control Area / Posting Period Variant</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Fiscal year settings, customer credit limits, and when posting is open or closed — four important settings together.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-06-business-area-fiscal-year-credit-control-posting-period.html">Open Lesson 6<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-7">
+      <div class="lc-top">
+        <div class="lc-num">7</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Currency Settings / Chart of Accounts / Field Status</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Which currency the money runs in, the master list of accounts (Chart of Accounts), and control of every field (Field Status).</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-07-currency-settings-chart-of-accounts-field-status.html">Open Lesson 7<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-8">
+      <div class="lc-top">
+        <div class="lc-num">8</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Retained Earnings Account / Ledger Creation</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Where profit and loss goes at year-end (Retained Earnings), and how to create a ledger in SAP.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-08-retained-earnings-account-ledger-creation.html">Open Lesson 8<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-9">
+      <div class="lc-top">
+        <div class="lc-num">9</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Document Type &amp; Number Range / Document Splitting / Universal Journal</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">The identity of every entry (Document Type), its number, Document Splitting, and S/4HANA's master table ACDOCA.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-09-document-type-number-range-document-splitting-universal-journal.html">Open Lesson 9<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-10">
+      <div class="lc-top">
+        <div class="lc-num">10</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Tolerance / Post &amp; Park / G/L Reporting / F-02 / Accounts Payable</h3>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Tolerance limits for small differences, parking entries, G/L reports, classic F-02 posting, and the complete AP system for paying vendors.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-10-tolerance-post-and-park-gl-reporting-f02-accounts-payable.html">Open Lesson 10<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="lessons-part2">
+    <div class="sec-head">
+      <span class="sec-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Part 2</span>
+      <div>
+        <h2 style="margin-bottom:2px">Part 2 — Practical Revision, 7 Lessons</h2>
+        <div class="ts">Start only after Part 1 · Study in the same order · Progress is counted in the overall bar above</div>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-p2-1">
+      <div class="lc-top">
+        <div class="lc-num">11</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Practical Revision: Company Details &amp; Chart of Accounts</h3>
+          <div class="lc-meta">Part 2 · Lesson 1 · Practical session</div>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Practical revision of Part 1 — finding company details and setting the series and length of the Chart of Accounts, hands-on.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-p2-01-practical-revision-company-chart-of-accounts.html">Open Lesson 1<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-p2-2">
+      <div class="lc-top">
+        <div class="lc-num">12</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Unique Codes, Posting Period Variant, Retained Earnings</h3>
+          <div class="lc-meta">Part 2 · Lesson 2 · Practical session</div>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Creating unique codes for company data, creating a Posting Period Variant, and assigning and verifying the Retained Earnings account.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-p2-02-codes-posting-period-retained-earnings.html">Open Lesson 2<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-p2-3">
+      <div class="lc-top">
+        <div class="lc-num">13</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Advanced Reporting, Line Item Checking &amp; Company Code Queries</h3>
+          <div class="lc-meta">Part 2 · Lesson 3 · Practical session</div>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Running advanced reports, checking line items, and questions and answers on the Company Code.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-p2-03-advanced-reporting-queries.html">Open Lesson 3<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-p2-4">
+      <div class="lc-top">
+        <div class="lc-num">14</div>
+        <div style="flex:1;min-width:200px">
+          <h3>GL Postings Practical</h3>
+          <div class="lc-meta">Part 2 · Lesson 4 · Practical session</div>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">G/L master with FS00, FB50 and F-02 postings, FB03 display, FB08 reversal — together with park and hold documents, hands-on.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-p2-04-gl-postings-practical.html">Open Lesson 4<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-p2-5">
+      <div class="lc-top">
+        <div class="lc-num">15</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Accounts Payable Practical</h3>
+          <div class="lc-meta">Part 2 · Lesson 5 · Practical session</div>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Creating a Vendor Business Partner, FB60 and MIRO invoices, F110 payment run and clearing — the complete payables cycle in practice.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-p2-05-accounts-payable-practical.html">Open Lesson 5<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-p2-6">
+      <div class="lc-top">
+        <div class="lc-num">16</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Accounts Receivable &amp; Tax Practical</h3>
+          <div class="lc-meta">Part 2 · Lesson 6 · Practical session</div>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Customer Business Partner, FB70 invoices, F-28 receipts, dunning and tax codes — the complete receivables and tax practical.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-p2-06-accounts-receivable-tax-practical.html">Open Lesson 6<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+
+    <div class="lesson-card" id="lesson-p2-7">
+      <div class="lc-top">
+        <div class="lc-num">17</div>
+        <div style="flex:1;min-width:200px">
+          <h3>Asset, Bank, Controlling &amp; Closing Practical</h3>
+          <div class="lc-meta">Part 2 · Lesson 7 · Practical session</div>
+        </div>
+        <span class="done-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Done</span>
+      </div>
+      <p class="lc-desc">Asset and bank accounting, cost and profit centers, and period-end closing — the final practical lesson of the course.</p>
+      <div class="lc-actions">
+        <a class="open-btn" href="lesson-p2-07-asset-bank-controlling-closing-practical.html">Open Lesson 7<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <button class="mark-done" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/></svg><span class="md-label">Mark Done</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="rules">
+    <div class="sec-head">
+      <span class="sec-badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Rules</span>
+      <div>
+        <h2 style="margin-bottom:2px">Course Rules — Please Read First</h2>
+        <div class="ts">All lessons from Lesson 2 onward follow these rules</div>
+      </div>
+    </div>
+
+    <ul class="rules-list">
+      <li>
+        <span class="ric"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span><b>Step 1 — Complete the previous lesson.</b> The next lesson will open only when <b>all sections of the previous lesson are marked as read</b> and that lesson's <b>questions have been answered</b>. You cannot move ahead after reading only half a lesson.</span>
+      </li>
+      <li>
+        <span class="ric"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span>
+        <span><b>Step 2 — Pass the gate test.</b> Before opening the next lesson, you must take a <b>gate test of 5 MCQs</b> based on the previous lesson. You pass only with <b>100% marks</b> — not even with 4 out of 5.</span>
+      </li>
+      <li>
+        <span class="ric"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/><path d="m3 3 18 18"/></svg></span>
+        <span><b>Correct answers are never shown.</b> After the test, only your <b>marks</b> will be shown. If you fail, you will only be told: <b>go back and complete previous lesson</b> — then try again.</span>
+      </li>
+      <li class="warn">
+        <span class="ric"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+        <span><b>3 consecutive fails = 1-hour lock.</b> If a candidate <b>fails the gate test in 3 consecutive attempts</b>, that lesson will be <b>locked for 1 hour</b> — during that time the lesson cannot be opened.</span>
+      </li>
+      <li class="lock">
+        <span class="ric"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        <span><b>Admin unlock.</b> A locked lesson will have an <b>Admin Password button</b>. Only the course admin can unlock the lesson early by entering the password. The password is not written anywhere on the page.</span>
+      </li>
+    </ul>
+
+    <div class="callout">
+      <span class="ct">In Simple Words</span>
+      <span class="note-text">Just like in school you move to the next class only after passing the previous class — here too, <b>every lesson is a door, and its key is fully completing the previous lesson and scoring 100% in the gate test.</b></span>
+    </div>
+  </section>
+
+  <footer class="page">
+    <p class="credit">course created by Muhammad Asad Ullah Ibrahim</p>
+    SAP S/4HANA Financial Accounting · C_TS4FI Exam Prep Series · Dashboard — keep this with all 17 lesson files in the same folder.
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var themeBtn=document.getElementById('themeBtn');
+  var themeLabel=document.getElementById('themeLabel');
+  var themeIcon=document.getElementById('themeIcon');
+  var SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/>';
+  var MOON='<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme',t);
+    if(t==='dark'){ themeLabel.textContent='Light Theme'; themeIcon.innerHTML=SUN; }
+    else{ themeLabel.textContent='Dark Theme'; themeIcon.innerHTML=MOON; }
+  }
+  applyTheme('light');
+  themeBtn.addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    applyTheme(cur==='dark' ? 'light' : 'dark');
+  });
+  var cards=[].slice.call(document.querySelectorAll('.lesson-card'));
+  var doneCount=0;
+  var coursePct=document.getElementById('coursePct'), courseCount=document.getElementById('courseCount'),
+      courseFill=document.getElementById('courseFill'), courseMsg=document.getElementById('courseMsg'),
+      readbar=document.getElementById('readbar');
+  var CHECK='<path d="M20 6 9 17l-5-5"/>';
+  var BOX='<rect x="3" y="3" width="18" height="18" rx="4"/>';
+  var MSGS={
+    0:'Start with Lesson 1 — from the very beginning.',
+    1:'Well done! The first lesson is complete — now keep the same pace.',
+    7:'Half the course is complete! Keep the same pace ahead as well.',
+    10:'Part 1 complete! Now start the practical revision in Part 2.',
+    16:'Just one more! The course ends after the last lesson.',
+    17:'Congratulations! All 17 lessons are complete — now start the round of revision and self-tests.'
+  };
+  function updateCourse(){
+    var total=cards.length, pct=Math.round(doneCount/total*100);
+    coursePct.textContent=pct+'%';
+    courseCount.textContent=doneCount+' of '+total+' lessons done';
+    courseFill.style.width=pct+'%';
+    readbar.style.width=pct+'%';
+    var msg=MSGS[0];
+    Object.keys(MSGS).forEach(function(k){ if(doneCount>=+k) msg=MSGS[k]; });
+    courseMsg.textContent=msg;
+  }
+  cards.forEach(function(card){
+    var btn=card.querySelector('.mark-done'), label=card.querySelector('.md-label'), icon=btn.querySelector('svg');
+    btn.addEventListener('click',function(){
+      var done=btn.classList.toggle('done');
+      card.classList.toggle('is-done',done);
+      label.textContent = done ? 'Done' : 'Mark Done';
+      icon.innerHTML = done ? CHECK : BOX;
+      doneCount += done ? 1 : -1;
+      updateCourse();
+    });
+  });
+  updateCourse();
+})();
+</script>
+</body>
+</html>

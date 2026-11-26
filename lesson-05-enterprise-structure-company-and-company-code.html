@@ -1,0 +1,1284 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 5 — Enterprise Structure &amp; Company Code · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:60;transition:width .1s linear}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35;transition:background .15s ease,color .15s ease}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc a.active{background:var(--accent);color:#fff;font-weight:700;box-shadow:inset 3px 0 0 rgba(255,255,255,.65)}
+      nav.toc a.active .dot{border-color:#fff;background:rgba(255,255,255,.35)}
+      nav.toc a.active .read-tick{color:#fff}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.read a.active{color:#fff}
+      nav.toc .read-tick{margin-left:auto;flex:none;font-weight:800;color:var(--green);font-size:.95rem;line-height:1;visibility:hidden}
+      nav.toc li.read .read-tick{visibility:visible}
+      .toc-progress{margin:0 0 14px;padding:11px 12px;background:var(--surface2);border:1px solid var(--line);border-radius:10px}
+      .toc-progress-head{display:flex;justify-content:space-between;align-items:baseline;font-size:.86rem;font-weight:700;color:var(--ink)}
+      .toc-progress-head #readPercent{color:var(--accent-ink);font-family:"JetBrains Mono",monospace}
+      .toc-progress-track{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:8px}
+      #tocProgressFill{height:100%;width:0;background:var(--green);border-radius:999px;transition:width .25s ease}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+      .mark-read-row{display:flex;justify-content:flex-end;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+      .mark-read-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--green);border:2px solid var(--green);border-radius:999px;padding:9px 20px;font:700 .92rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px;transition:background .15s ease,color .15s ease}
+      .mark-read-btn:hover{background:var(--green-soft)}
+      .mark-read-btn.is-read{background:var(--green);color:#fff;border-color:var(--green)}
+      .mark-read-btn.is-read:hover{background:var(--green);color:#fff;opacity:.92}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      /* gate / locked screen */
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;margin-top:26px;box-shadow:var(--shadow);max-width:760px}
+      @media (max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      .btn-ghost{background:transparent;color:var(--accent-ink);border:2px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .btn:disabled{opacity:.55;cursor:default}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600;font-size:.93rem;margin:0}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 5 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <div class="wrap">
+      <!-- ============ GATE / LOCKED SCREEN (shown until Lesson 4 is complete or the gate test is passed) ============ -->
+      <div id="gateScreen">
+        <section class="gate-card" aria-labelledby="gateTitle">
+          <div class="gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          </div>
+          <h2 id="gateTitle">Lesson 5 is locked</h2>
+          <p>Lesson 5 opens only when <b>Lesson 4 is fully complete</b> — every Lesson 4 section marked Read <b>and</b> the Lesson 4 self-test answered.</p>
+          <p>If you have already studied Lesson 4, you can unlock Lesson 5 by passing the <b>Gate Test</b> below: 5 questions from Lesson 4. You need <b>5 / 5</b> to pass. Only your marks are shown after you submit — the correct answers are never displayed.</p>
+
+          <div class="gate-lockbox" id="gateLockBox" hidden>
+            <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+            <p>Locked until: <b id="gateLockUntil">—</b></p>
+            <p>Time remaining: <b id="gateCountdown">—</b></p>
+            <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+          </div>
+
+          <div id="gateTestArea">
+            <div id="gateQuestions"></div>
+            <p id="gateScore" aria-live="polite"></p>
+            <p id="gateMsg" aria-live="polite"></p>
+            <div class="gate-actions">
+              <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+              <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+            </div>
+            <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+          </div>
+
+          <div class="gate-admin">
+            <button class="btn btn-ghost" id="adminBtn" type="button">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 21 2"/><path d="M15 8l3 3"/></svg>Admin Unlock
+            </button>
+            <div class="gate-admin-form" id="adminForm" hidden>
+              <label for="adminPw">Admin password</label>
+              <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+              <p id="adminMsg" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+        </section>
+      </div>
+
+      <div id="lessonContent" hidden>
+      <header class="hero">
+        <span class="kicker">Lesson 5 · Enterprise Structure</span>
+        <h1>Enterprise Structure, Company &amp; Company Code</h1>
+        <p class="lede">Before SAP lets you post even one journal entry, it asks one question: <b>“What does your business look like?”</b> In this lesson you will draw your business inside SAP — its legal companies, factories and offices — and you will meet the single most important object in all of SAP FI: the <b>Company Code</b>. <span class="urdu">Pehle business ka naqsha banao, phir accounting shuru hogi.</span></p>
+        <div class="hero-meta">
+          <span class="chip">Video time <b>01:34:50 – 02:26:45</b></span>
+          <span class="chip">Level <b>Beginner · Zero SAP assumed</b></span>
+          <span class="chip">Exam <b>C_TS4FI · Organisational structures</b></span>
+          <span class="chip">Key T-codes <b>OX02 · OX15 · OX16</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <div class="toc-progress" aria-live="polite">
+            <div class="toc-progress-head"><span id="readCount">0 of 16 read</span><span id="readPercent">0%</span></div>
+            <div class="toc-progress-track"><div id="tocProgressFill"></div></div>
+          </div>
+          <ol>
+            <li><a href="#s1"><span class="dot"></span>What is “Enterprise Structure”?<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span>The full map — all org units in one picture<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span>Org units of FI, CO and Logistics<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span>Client — the top floor<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span>Company — the group / holding level<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span>Company Code — the heart of FI<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span>Company vs Company Code<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span>Creating a Company Code, step by step<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span>Assignments — joining the pieces<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span>Global parameters — making it postable<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span>A complete worked example<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span>Tables to know<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span>Exam traps<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span>A–Z glossary<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span>Summary<span class="read-tick" aria-hidden="true">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span>Self-test (12 questions)<span class="read-tick" aria-hidden="true">✓</span></a></li>
+          </ol>
+          <p class="toc-note">Screens in this lesson are <b>re-created illustrations</b> made for learning — they are not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <!-- ============ S1 ============ -->
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> What is “Enterprise Structure”?</h2>
+            <p class="sub">The first configuration topic in every SAP FI project — and in the C_TS4FI exam.</p>
+
+            <p>Think about how a real business is organised. A business group may own <b>several legal companies</b>. Each legal company may run <b>several factories and warehouses</b>. It sells through <b>sales offices</b>, buys through a <b>purchasing department</b>, and keeps accounts for the <b>tax office and the law</b>.</p>
+            <p>SAP cannot work with a vague idea like “our business”. SAP needs this structure drawn <b>exactly</b>, piece by piece, inside the system. That drawing — the complete map of how your business is built inside SAP — is called the <b>Enterprise Structure</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Enterprise Structure</span>
+              <p><b>Enterprise Structure</b> = the framework of organisational units (Client, Company, Company Code, Plant, Sales Organisation and so on) that represents your real business structure inside SAP. Every transaction you ever post must belong to one of these units.</p>
+              <p class="urdu">Enterprise Structure matlab: aapke asal business ka SAP ke andar banaya gaya naqsha — kaunsi legal company, kaunsi factory, kaunsa office.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Organisational Unit (Org Unit)</span>
+              <p>An <b>organisational unit</b> is one building block of that map — one box in the diagram. “Company Code”, “Plant” and “Sales Organisation” are all organisational units. You will also see the short form <b>org unit</b>.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · The family tree / organogram</span>
+              <p>Every company has an <b>organogram</b> — the chart on the HR wall showing the CEO at the top, departments below, teams below them. The Enterprise Structure is exactly that chart, but drawn inside SAP, and with one strict rule: <b>every rupee, every material and every employee must sit inside one box of this chart.</b> Nothing floats outside it.</p>
+              <p class="urdu">Jaise daftar ki deewaar par laga hua chart — bara sahab upar, phir departments, phir teams. SAP mein bhi har cheez ko aik box mein hona lazmi hai.</p>
+            </div>
+
+            <h3>Why must this come FIRST?</h3>
+            <ul class="clean">
+              <li><b>Every posting needs an address.</b> When you post a journal entry in SAP, the system asks: <i>which company code?</i> If no company code exists, there is nowhere for the entry to go.</li>
+              <li><b>Legal reports come from this structure.</b> A Balance Sheet is prepared <b>per company code</b>. Wrong structure = wrong legal reports.</li>
+              <li><b>It is very hard to change later.</b> Once thousands of documents are posted, you cannot simply rename or merge company codes. Consultants design this structure carefully at the start of the project.</li>
+            </ul>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>“Pehle makaan ka naqsha, phir furniture.”</b> First the house plan (enterprise structure), then the furniture (accounts, postings, reports). In every SAP project and in this course, structure always comes before transactions.</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s1" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S2 ============ -->
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> The full map — all org units in one picture</h2>
+            <p class="sub">Do not memorise yet. Just see the shape of the whole thing; we will zoom into each box one by one.</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 470" role="img" aria-label="Diagram of the SAP enterprise structure hierarchy">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box-g" x="230" y="10" width="300" height="52" rx="10"/>
+                <text class="svg-title" x="380" y="34" text-anchor="middle">CLIENT (e.g. 100)</text>
+                <text class="svg-sub" x="380" y="52" text-anchor="middle">The whole SAP system of one group</text>
+
+                <path class="svg-line" d="M380 62 V84"/>
+                <rect class="svg-box" x="230" y="86" width="300" height="52" rx="10"/>
+                <text class="svg-title" x="380" y="110" text-anchor="middle">COMPANY (e.g. ABCGRP)</text>
+                <text class="svg-sub" x="380" y="128" text-anchor="middle">Group / holding level — for consolidation</text>
+
+                <path class="svg-line" d="M380 138 V160"/>
+                <rect class="svg-box-a" x="200" y="162" width="360" height="56" rx="10"/>
+                <text class="svg-title" x="380" y="187" text-anchor="middle">COMPANY CODE (e.g. 1000)</text>
+                <text class="svg-sub" x="380" y="206" text-anchor="middle">Legal entity — Balance Sheet &amp; P&amp;L live here ★ FI</text>
+
+                <path class="svg-line" d="M290 218 V244 M380 218 V244 M470 218 V244"/>
+                <rect class="svg-box" x="180" y="246" width="200" height="52" rx="10"/>
+                <text class="svg-title" x="280" y="270" text-anchor="middle">PLANT (1100)</text>
+                <text class="svg-sub" x="280" y="288" text-anchor="middle">Factory / office location · MM</text>
+                <rect class="svg-box" x="400" y="246" width="200" height="52" rx="10"/>
+                <text class="svg-title" x="500" y="270" text-anchor="middle">SALES ORG (1000)</text>
+                <text class="svg-sub" x="500" y="288" text-anchor="middle">Selling unit · SD</text>
+
+                <path class="svg-line" d="M280 298 V322"/>
+                <rect class="svg-box" x="180" y="324" width="200" height="52" rx="10"/>
+                <text class="svg-title" x="280" y="348" text-anchor="middle">STORAGE LOCATION</text>
+                <text class="svg-sub" x="280" y="366" text-anchor="middle">Godown inside a plant · MM</text>
+
+                <rect class="svg-box-g" x="60" y="410" width="640" height="48" rx="10"/>
+                <text class="svg-title" x="380" y="431" text-anchor="middle">CONTROLLING AREA (1000) — can span several company codes ★ CO</text>
+                <text class="svg-sub" x="380" y="449" text-anchor="middle">Inside it: Cost Centers and Profit Centers for internal reporting</text>
+              </svg>
+              <figcaption>The enterprise structure at a glance. The Company Code (blue) is the centre of Financial Accounting — almost everything in FI hangs from it.</figcaption>
+            </figure>
+
+            <h3>How to read this map</h3>
+            <ul class="clean">
+              <li><b>Top to bottom = big to small.</b> Client is the biggest container; a storage location is one of the smallest.</li>
+              <li><b>One box can hold many boxes below it.</b> One client → many companies → many company codes → many plants.</li>
+              <li><b>Every box has a code.</b> SAP identifies each unit by a short code — 1000, 1100, ABCGRP. You will type these codes all day in SAP.</li>
+              <li><b>Different modules own different boxes.</b> FI owns the Company Code. MM (Materials Management — purchasing and stock) owns Plant and Storage Location. SD (Sales &amp; Distribution — selling) owns the Sales Organisation. CO (Controlling — internal cost reporting) owns the Controlling Area.</li>
+            </ul>
+
+            <div class="box term">
+              <span class="box-title">New terms · Module names you just met</span>
+              <p><b>FI</b> = Financial Accounting (legal books). <b>CO</b> = Controlling (internal costs). <b>MM</b> = Materials Management (purchase + stock). <b>SD</b> = Sales &amp; Distribution (selling + billing). These short names are used everywhere in SAP — learn them now.</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s2" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S3 ============ -->
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Org units of FI, CO and Logistics</h2>
+            <p class="sub">A quick tour of every box, before we study the two FI stars of this lesson — Company and Company Code.</p>
+
+            <h3>The FI family (our exam focus)</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Org unit</th><th>Simple meaning</th><th>Example</th></tr>
+                <tr><td class="hl"><b>Client</b></td><td>The top container — one complete SAP environment for a group</td><td>Client 100</td></tr>
+                <tr><td class="hl"><b>Company</b></td><td>The group / holding level, used to combine several legal entities into group reports</td><td>ABCGRP</td></tr>
+                <tr><td class="hl"><b>Company Code</b></td><td>One independent legal entity that keeps its own full books — Balance Sheet + Profit &amp; Loss</td><td>1000</td></tr>
+                <tr><td><b>Business Area</b></td><td>An optional internal division (e.g. a product line) cutting across company codes</td><td>— Lesson 6 —</td></tr>
+                <tr><td><b>Credit Control Area</b></td><td>Controls how much credit customers may take</td><td>— later lesson —</td></tr>
+              </table>
+            </div>
+
+            <h3>The CO family (internal reporting)</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Org unit</th><th>Simple meaning</th></tr>
+                <tr><td class="hl"><b>Controlling Area</b></td><td>The top unit of CO. All cost accounting happens inside it. One controlling area can serve <b>one or many</b> company codes.</td></tr>
+                <tr><td><b>Cost Center</b></td><td>A department or place where costs are collected — e.g. “HR Department”, “Factory Power House”. Answers: <i>where was the cost spent?</i></td></tr>
+                <tr><td><b>Profit Center</b></td><td>A unit whose profit you want to measure separately — e.g. a division or product line. Answers: <i>which part of the business earned this profit?</i></td></tr>
+              </table>
+            </div>
+            <p class="urdu">Cost Center = kharcha kahan hua. Profit Center = munafa kis hisse ne kamaya.</p>
+
+            <h3>The Logistics family (MM &amp; SD) — know the names</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Org unit</th><th>Module</th><th>Simple meaning</th></tr>
+                <tr><td><b>Plant</b></td><td>MM</td><td>A physical location — a factory, a warehouse, or even a head office where stock or services are managed.</td></tr>
+                <tr><td><b>Storage Location</b></td><td>MM</td><td>A godown / section inside a plant where stock is physically kept.</td></tr>
+                <tr><td><b>Purchasing Organisation</b></td><td>MM</td><td>The buying unit that negotiates and purchases for one or more plants.</td></tr>
+                <tr><td><b>Sales Organisation</b></td><td>SD</td><td>The selling unit legally responsible for sales.</td></tr>
+                <tr><td><b>Distribution Channel</b></td><td>SD</td><td><i>How</i> goods reach the customer — wholesale, retail, online.</td></tr>
+                <tr><td><b>Division</b></td><td>SD</td><td>A product group — e.g. “Garments” and “Home Textiles”.</td></tr>
+              </table>
+            </div>
+            <p>Sales Organisation + Distribution Channel + Division together form a <b>Sales Area</b> — the complete “address” of any sale in SAP SD. <span class="examtag">Exam favourite</span></p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · One building, many departments</span>
+              <p>Imagine one big building (Client). Inside it, separate legal firms have their own registered offices (Company Codes). The accounts department watches the legal books (FI), the cost office watches internal spending (CO), the godown keeps stock (MM), and the sales counter sells (SD). Same building — different counters, all connected.</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s3" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S4 ============ -->
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> Client — the top floor</h2>
+            <p class="sub">You met the Client in Lesson 2 (Architecture). Here is its place in the structure — short, because the exam only needs the essentials.</p>
+
+            <div class="box term">
+              <span class="box-title">Quick recap · Client</span>
+              <p>A <b>client</b> is a self-contained environment inside one SAP system, identified by a <b>3-digit number</b> (000, 001, 100…). Data of one client is separate from another client, like separate tenants in one building who cannot see each other’s rooms. Standard SAP clients: <b>000</b> (SAP reference), <b>001</b> (copy of 000), <b>066</b> (SAP EarlyWatch service).</p>
+            </div>
+
+            <ul class="clean">
+              <li>The client sits <b>above everything</b> in the enterprise structure — company codes, plants, all of them are created <i>inside</i> a client.</li>
+              <li>Enterprise structure settings are <b>client-dependent</b>: a company code you create in client 100 does <b>not</b> exist in client 200 of the same system. It must be transported or created there.</li>
+              <li>One client normally represents <b>one business group</b> in the productive system.</li>
+            </ul>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>Client = Building, Company Code = Flat.</b> Many flats (company codes) in one building (client) — each flat has its own lock, its own family, its own accounts.</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s4" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S5 ============ -->
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Company — the group / holding level</h2>
+            <p class="sub">Video 01:34:50 onwards — the first org unit the course defines.</p>
+
+            <p>Many businesses are not one company — they are a <b>group</b>. A holding company owns several separate legal companies: one in Pakistan, one in the UAE, one in the UK. Each of those is legally independent, files its own taxes, and has its own registration.</p>
+            <p>But the owners also want <b>one combined report</b> for the whole group: “What is our total group profit?” In accounting, combining the books of all group companies into one set of group statements is called <b>consolidation</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Consolidation</span>
+              <p><b>Consolidation</b> = merging the financial statements of all companies in a group into one group Balance Sheet and P&amp;L, after removing (eliminating) transactions the group companies did with <i>each other</i> — because a group cannot make a profit by selling to itself.</p>
+              <p class="urdu">Poore group ki books ko aik bana kar dikhana — aur group ke andar ki khareed-o-farokht ko khatam karna.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Company (in SAP)</span>
+              <p>In SAP, a <b>Company</b> is the organisational unit that represents a <b>group of company codes</b> whose books must be consolidated together. Its ID can be up to <b>6 characters</b> (letters and numbers). SAP also calls each company a <b>trading partner</b>, because group companies trade with each other and those internal trades must be identified for consolidation.</p>
+            </div>
+
+            <h3>Key facts about Company</h3>
+            <ul class="clean">
+              <li>T-code to define: <code>OX15</code> — or SPRO → Enterprise Structure → Definition → Financial Accounting → <i>Define Company</i>.</li>
+              <li>Stored in table <code>T880</code>.</li>
+              <li>Defining a company is <b>optional</b> if you never consolidate — a single-company business may skip it. But the moment a group wants consolidated statements, companies must be defined and company codes assigned to them.</li>
+              <li>When one group company sells to another, the posting carries the <b>trading partner</b> (the other company’s ID). At consolidation, SAP uses this to eliminate the internal sale and purchase against each other.</li>
+              <li><b>One company can have many company codes</b> assigned to it — for example, if one legal group entity keeps separate books for two regions.</li>
+            </ul>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · The father and his sons’ shops</span>
+              <p>A father owns three shops, each registered separately in a son’s name (three legal entities = three company codes). For the bank and the law, each shop files separately. But at home, the father asks one question: “<i>Poori family ne total kitna kamaya?</i>” — that family-level view is the <b>Company</b> (group) level, and putting the three shops’ results together is <b>consolidation</b>.</p>
+            </div>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the Define Company screen OX15">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> ILLUSTRATION — re-created for learning · T-code OX15 · Define Company</div>
+              <div class="screen-body"><span class="dim">SPRO → Enterprise Structure → Definition → Financial Accounting → Define Company</span>
+Company   Name of Company                Country  Currency
+<span class="hl2">ABCGRP</span>    ABC Group (Holding)            PK       PKR
+<span class="hl2">XYZGRP</span>    XYZ Trading Group              AE       AED
+<span class="cm">↑ 6-character ID — this is the TRADING PARTNER used in consolidation</span></div>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s5" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S6 ============ -->
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Company Code — the heart of FI</h2>
+            <p class="sub">Video 01:40:00 onwards. If you understand only one thing in this lesson, understand this.</p>
+
+            <p>You already know from Financial Accounting that every <b>legal entity</b> — a registered company — must keep its own complete books: its own Balance Sheet, its own Profit &amp; Loss, its own tax filings. SAP needs one box for exactly that legal entity. That box is the <b>Company Code</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Company Code</span>
+              <p>A <b>Company Code</b> is the <b>smallest organisational unit for which a complete, self-contained set of accounts can be drawn up</b> — a full Balance Sheet and Profit &amp; Loss statement for a legally independent entity. Its ID is exactly <b>4 characters</b> (letters and/or numbers, e.g. <code>1000</code>, <code>PK01</code>).</p>
+              <p class="urdu">Company Code = aik mustaqil legal company jis ki apni mukammal Balance Sheet aur P&amp;L banti hai. FI mein sab kuch isi ke gird ghoomta hai.</p>
+            </div>
+
+            <h3>Why the company code is the centre of everything in FI</h3>
+            <ul class="clean">
+              <li><b>No company code = no posting.</b> Every FI document (journal entry) carries a company code in its header. The field is mandatory — SAP will not save the document without it.</li>
+              <li><b>Legal reports are per company code.</b> Balance Sheet, P&amp;L, tax returns — all are produced company code by company code.</li>
+              <li><b>Everything else in FI hangs from it.</b> Chart of accounts, fiscal year, currencies, document types, vendors, customers — in the coming lessons, almost every setting will be made <i>for a company code</i>.</li>
+              <li><b>One client, many company codes.</b> A group with 12 legal companies creates 12 company codes inside one client.</li>
+              <li><b>Each company code has its own currency</b> — the currency of its country (its local / company code currency), e.g. PKR for a Pakistani company code. Every posting in that company code is recorded in this currency.</li>
+            </ul>
+
+            <div class="box term">
+              <span class="box-title">New term · Local Currency (Company Code Currency)</span>
+              <p>The <b>local currency</b> is the currency in which a company code keeps its legal books — the currency of the country where that legal entity is registered. A Pakistani company code: PKR. A UAE company code: AED.</p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 250" role="img" aria-label="Diagram showing one company with three company codes">
+                <rect class="svg-box-g" x="230" y="8" width="300" height="50" rx="10"/>
+                <text class="svg-title" x="380" y="30" text-anchor="middle">COMPANY · ABCGRP</text>
+                <text class="svg-sub" x="380" y="48" text-anchor="middle">Group view — consolidation happens here</text>
+                <path class="svg-line" d="M380 58 V78 M180 78 H580 M180 78 V96 M380 78 V96 M580 78 V96"/>
+                <rect class="svg-box-a" x="60" y="98" width="240" height="64" rx="10"/>
+                <text class="svg-title" x="180" y="124" text-anchor="middle">1000 · ABC Pakistan</text>
+                <text class="svg-sub" x="180" y="144" text-anchor="middle">Currency PKR · Own Balance Sheet</text>
+                <rect class="svg-box-a" x="320" y="98" width="240" height="64" rx="10"/>
+                <text class="svg-title" x="440" y="124" text-anchor="middle">2000 · ABC UAE</text>
+                <text class="svg-sub" x="440" y="144" text-anchor="middle">Currency AED · Own Balance Sheet</text>
+                <rect class="svg-box-a" x="580" y="98" width="160" height="64" rx="10"/>
+                <text class="svg-title" x="660" y="124" text-anchor="middle">3000 · ABC UK</text>
+                <text class="svg-sub" x="660" y="144" text-anchor="middle">Currency GBP · Own B/S</text>
+                <rect class="svg-box" x="110" y="196" width="540" height="44" rx="10"/>
+                <text class="svg-sub" x="380" y="215" text-anchor="middle">Each company code trades with the others → postings carry the</text>
+                <text class="svg-sub" x="380" y="232" text-anchor="middle">TRADING PARTNER so consolidation can eliminate internal trades</text>
+              </svg>
+              <figcaption>One Company (group) with three Company Codes (legal entities). Each blue box keeps its own complete legal books.</figcaption>
+            </figure>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Separate bahi-khata for each registered shop</span>
+              <p>In the bazaar, one family may run three separately-registered shops. Each shop keeps its <b>own bahi-khata</b> (ledger book), its own bank account, its own tax number. Money moving from Shop A to Shop B is recorded in <i>both</i> books. SAP does the same: each company code is a separate bahi-khata, and inter-company movements are recorded in both — with the trading partner noted, so the family (group) accounts can cancel the internal entries out.</p>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory tricks · Company Code</span>
+              <p><b>“Code = Complete books.”</b> Company <b>C</b>ode → <b>C</b>omplete set of accounts. And the size: <b>Company Code = 4 characters, Company = 6 characters</b> — the smaller unit has the smaller… no wait, remember it the exam way: <i>“Code is short (4), Company is longer (6)”</i> — the word “Company” itself is longer than the word “Code”.</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s6" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S7 ============ -->
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> Company vs Company Code — the classic confusion</h2>
+            <p class="sub">Beginners mix these two up constantly — and the exam knows it. Learn this table cold.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Point</th><th>Company</th><th class="hl">Company Code</th></tr>
+                <tr><td><b>Meaning</b></td><td>Group / holding level — a bundle of company codes</td><td class="hl">One independent legal entity</td></tr>
+                <tr><td><b>ID length</b></td><td>Up to <b>6</b> characters</td><td class="hl">Exactly <b>4</b> characters</td></tr>
+                <tr><td><b>Own Balance Sheet?</b></td><td>No — it only receives the <i>consolidated</i> (combined) statements</td><td class="hl"><b>Yes</b> — complete, self-contained Balance Sheet + P&amp;L</td></tr>
+                <tr><td><b>Mandatory?</b></td><td>Optional — needed only for consolidation</td><td class="hl"><b>Mandatory</b> — FI cannot post without it</td></tr>
+                <tr><td><b>Define with</b></td><td>T-code <code>OX15</code></td><td class="hl">T-code <code>OX02</code></td></tr>
+                <tr><td><b>Stored in table</b></td><td><code>T880</code></td><td class="hl"><code>T001</code></td></tr>
+                <tr><td><b>Relationship</b></td><td>One company ← many company codes</td><td class="hl">One company code → belongs to <b>at most one</b> company</td></tr>
+                <tr><td><b>Also called</b></td><td>Trading partner (in consolidation)</td><td class="hl">—</td></tr>
+              </table>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap</span>
+              <p>The exam loves statements like <i>“A company code can be assigned to multiple companies.”</i> — <b>False.</b> A company code is assigned to <b>one</b> company only. It is the company that can collect <b>many</b> company codes. Direction matters: many → one.</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s7" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S8 ============ -->
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Creating a Company Code, step by step</h2>
+            <p class="sub">In a real project this is done in SPRO (the configuration menu you met in Lesson 3). Two routes exist — copy or create fresh.</p>
+
+            <div class="box term">
+              <span class="box-title">Quick recap · SPRO &amp; IMG</span>
+              <p><b>SPRO</b> is the transaction that opens SAP’s configuration menu (the <b>IMG</b> — Implementation Guide). All enterprise-structure settings in this lesson live under: <i>SPRO → Enterprise Structure → Definition / Assignment → Financial Accounting</i>.</p>
+            </div>
+
+            <h3>Route A — Copy an existing company code (the practical way)</h3>
+            <p>SAP delivers ready-made sample company codes (for example a German and a US sample). Consultants usually <b>copy</b> one, because copying brings along hundreds of ready settings — tables, currencies, tax procedures — that would take days to build by hand.</p>
+            <ul class="clean">
+              <li>T-code <code>EC01</code> — <i>Copy Company Code</i> (copy organisational object).</li>
+              <li>Enter the <b>source</b> company code (the SAP sample) and your <b>new</b> 4-character code.</li>
+              <li>SAP asks whether to also copy the G/L accounts — decide carefully; copying accounts is convenient in a training system.</li>
+              <li>After copying, adjust the details (name, city, country, currency) with <code>OX02</code>.</li>
+            </ul>
+
+            <h3>Route B — Define a fresh company code</h3>
+            <ul class="clean">
+              <li><b>Step 1.</b> Go to <code>OX02</code> (SPRO → Enterprise Structure → Definition → Financial Accounting → <i>Edit, Copy, Delete, Check Company Code</i>).</li>
+              <li><b>Step 2.</b> Choose the activity <i>Edit Company Code Data</i> and press <b>New Entries</b>.</li>
+              <li><b>Step 3.</b> Type your 4-character code (e.g. <code>1000</code>) and the company name.</li>
+              <li><b>Step 4.</b> Fill the additional data: <b>City, Country, Currency</b> (the local currency of its books) and <b>Language</b>.</li>
+              <li><b>Step 5.</b> Maintain the formal <b>address</b> (the “Edit Company Code Address” activity) — name, street, city, country — this address prints on official documents and invoices.</li>
+              <li><b>Step 6.</b> Save. Your entries travel in a <b>Customizing transport request</b> (Lesson 2) from DEV to QAS to PRD.</li>
+            </ul>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the company code list and detail screen OX02">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> ILLUSTRATION — re-created for learning · T-code OX02 · Edit Company Code Data</div>
+              <div class="screen-body"><span class="dim">Change View “Company Code”: Overview</span>
+CoCd  Company Name                 City        Country  Currency  Language
+<span class="hl2">1000</span>  ABC Textiles (Pvt) Ltd       Faisalabad  PK       PKR       EN
+<span class="hl2">2000</span>  ABC Trading LLC              Dubai       AE       AED       EN
+<span class="hl2">3000</span>  ABC Apparel Ltd              London      GB       GBP       EN
+<span class="cm">Detail screen for 1000 →  Company name · City · Country key · Currency · Language key</span>
+<span class="cm">Address button →  formal postal address printed on invoices &amp; legal documents</span></div>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam traps · Creating company codes</span>
+              <p>• A company code ID is <b>4 characters</b> — it can contain letters, not only numbers (<code>PK01</code> is valid).<br>
+              • Deleting a company code is possible in a test system, but once productive postings exist, you do <b>not</b> delete it — real projects archive instead.<br>
+              • The <b>country</b> you choose matters: it drives country-specific settings such as the tax procedure and, if used, a country-specific chart of accounts (both in later lessons).</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s8" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S9 ============ -->
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> Assignments — joining the pieces</h2>
+            <p class="sub">Defining boxes is only half the work. The other half is telling SAP how the boxes connect. These connections are called <b>assignments</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Assignment</span>
+              <p>An <b>assignment</b> is a link between two org units — for example, “Company Code 1000 belongs to Company ABCGRP”. In SPRO, all assignments live under <i>Enterprise Structure → Assignment</i>. Rule of thumb: <b>Definition creates the box; Assignment connects the box.</b></p>
+              <p class="urdu">Definition = dabba banao. Assignment = dabbon ko aapas mein joro.</p>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Assignment</th><th>Rule</th><th>T-code / where</th></tr>
+                <tr><td class="hl"><b>Company Code → Company</b></td><td>Each company code → <b>one</b> company; one company ← many company codes</td><td><code>OX16</code></td></tr>
+                <tr><td><b>Company Code → Controlling Area</b></td><td>Each company code → <b>one</b> controlling area; one controlling area ← many company codes</td><td>In controlling area maintenance, <code>OX06</code></td></tr>
+                <tr><td><b>Plant → Company Code</b></td><td>Each plant → <b>exactly one</b> company code; one company code ← many plants</td><td><code>OX18</code></td></tr>
+                <tr><td><b>Storage Location → Plant</b></td><td>Each storage location belongs to one plant</td><td>Defined within the plant, <code>OX09</code> area of SPRO</td></tr>
+                <tr><td><b>Sales Organisation → Company Code</b></td><td>Each sales org → one company code</td><td>SPRO → Enterprise Structure → Assignment → Sales and Distribution</td></tr>
+                <tr><td><b>Company Code → Credit Control Area</b></td><td>A company code can be controlled by one credit control area</td><td><code>OB38</code> (credit control area itself: <code>OB45</code>)</td></tr>
+              </table>
+            </div>
+
+            <h3>The controlling area rule — read it twice <span class="examtag">Exam favourite</span></h3>
+            <p>One controlling area can serve <b>several</b> company codes — this is called <b>cross-company-code cost accounting</b>, and it lets management see costs for the whole group in one place. But it is allowed <b>only if</b> all those company codes:</p>
+            <ul class="clean">
+              <li>use the <b>same chart of accounts</b>, and</li>
+              <li>use the <b>same fiscal year variant</b> (fiscal year = the 12-month accounting year; full detail in Lesson 7).</li>
+            </ul>
+            <p>If either differs, those company codes need separate controlling areas. <span class="urdu">Aik controlling area, kai company codes — shart: chart of accounts aur fiscal year aik hi ho.</span></p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Plug and socket</span>
+              <p>Defining org units is like buying appliances. Assignments are the <b>plugs in the sockets</b>. A plant that is not plugged into a company code is a fridge standing in the shop — it exists, but it cannot run: no stock valuation, no postings. SAP even refuses many transactions until the assignment exists.</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s9" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S10 ============ -->
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> Global parameters — making a company code postable</h2>
+            <p class="sub">A freshly created company code is an empty shell. A few “global” settings switch it on for accounting. Each gets its own full lesson later — here is the map so nothing surprises you.</p>
+
+            <p>These settings are maintained in the company code’s <b>global parameters</b> — T-code <code>OBY6</code> (<i>Company Code Global Data</i>). Think of <code>OBY6</code> as the company code’s control panel.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Global setting</th><th>What it decides</th><th>Full lesson</th></tr>
+                <tr><td class="hl"><b>Chart of Accounts</b></td><td>The list of G/L accounts this company code may post to</td><td>Chart of Accounts</td></tr>
+                <tr><td class="hl"><b>Fiscal Year Variant</b></td><td>How its accounting year is divided into periods</td><td>Lesson 7</td></tr>
+                <tr><td><b>Field Status Variant</b></td><td>Which fields are required / hidden while posting</td><td>Field Status lesson</td></tr>
+                <tr><td><b>Posting Period Variant</b></td><td>Which periods are open or closed for posting</td><td>Posting Period lesson</td></tr>
+                <tr><td><b>Company</b> (trading partner)</td><td>The group company this code consolidates into</td><td>This lesson (OX16)</td></tr>
+              </table>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>OX = Organisation structure, OB = “Other Basics” of FI config.</b> Most enterprise-structure T-codes start with <b>OX</b> (OX02, OX15, OX16, OX18), while many FI global settings start with <b>OB</b> (OBY6, OB38, OB45). When an exam option shows an OX-code, think “org structure”.</p>
+            </div>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of company code global parameters OBY6">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> ILLUSTRATION — re-created for learning · T-code OBY6 · Company Code Global Data</div>
+              <div class="screen-body"><span class="dim">Company code</span>            <span class="hl2">1000</span>   ABC Textiles (Pvt) Ltd
+<span class="dim">Chart of Accounts</span>        <span class="hl2">CA01</span>   <span class="cm">← the G/L account list this code may use</span>
+<span class="dim">Company</span>                  <span class="hl2">ABCGRP</span> <span class="cm">← trading partner for consolidation</span>
+<span class="dim">Fiscal Year Variant</span>      <span class="hl2">K4</span>     <span class="cm">← Jan–Dec, 12 periods + 4 special (Lesson 7)</span>
+<span class="dim">Field Status Variant</span>     <span class="hl2">1000</span>
+<span class="dim">Post. Period Variant</span>     <span class="hl2">1000</span></div>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s10" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S11 ============ -->
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> A complete worked example</h2>
+            <p class="sub">Let us build one full structure from a story — the way a consultant would on day one of a project.</p>
+
+            <p><b>The story.</b> “ABC Group” is a Faisalabad-based textile group. It has a registered Pakistani company running a spinning mill in Faisalabad and a warehouse in Karachi, a trading company in Dubai, and a small sales company in London. Management wants group-level cost reporting across all three.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Step</th><th>What the consultant creates</th><th>Code</th></tr>
+                <tr><td>1</td><td>Client (productive) for the whole group</td><td><code>100</code></td></tr>
+                <tr><td>2</td><td>Company for group consolidation</td><td><code>ABCGRP</code> (OX15)</td></tr>
+                <tr><td>3</td><td>Company Code — Pakistan legal entity, PKR</td><td><code>1000</code> (OX02)</td></tr>
+                <tr><td>4</td><td>Company Code — UAE legal entity, AED</td><td><code>2000</code></td></tr>
+                <tr><td>5</td><td>Company Code — UK legal entity, GBP</td><td><code>3000</code></td></tr>
+                <tr><td>6</td><td>Assign all three company codes to the company</td><td><code>OX16</code></td></tr>
+                <tr><td>7</td><td>Plant — Faisalabad mill → assign to 1000</td><td><code>1100</code> (OX10, OX18)</td></tr>
+                <tr><td>8</td><td>Plant — Karachi warehouse → assign to 1000</td><td><code>1200</code> (OX18)</td></tr>
+                <tr><td>9</td><td>Storage locations inside each plant (raw material godown, finished goods godown)</td><td><code>1001</code>, <code>1002</code>…</td></tr>
+                <tr><td>10</td><td>One Controlling Area for all three codes — <i>allowed only because all three share the same chart of accounts and fiscal year variant</i></td><td><code>1000</code> (OX06)</td></tr>
+                <tr><td>11</td><td>Global parameters for each company code (chart of accounts, fiscal year variant…)</td><td><code>OBY6</code></td></tr>
+              </table>
+            </div>
+
+            <p><b>Check your understanding:</b> the Karachi warehouse is <i>not</i> a company code — it has no separate legal registration and no Balance Sheet of its own, so it is a <b>plant</b> inside company code 1000. The Dubai company <i>is</i> separately registered, so it gets its own company code, 2000. <span class="urdu">Legal registration hai → company code. Sirf location hai → plant.</span> That one test — <i>“does it need its own Balance Sheet?”</i> — decides almost every structure question in the exam.</p>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s11" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S12 ============ -->
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> Tables to know</h2>
+            <p class="sub">From Lesson 4 you know SAP stores everything in tables. These two hold this lesson’s definitions — view them with <code>SE16N</code>.</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Table</th><th>What it stores</th><th>Key field</th></tr>
+                <tr><td class="hl"><code>T001</code></td><td>All <b>company codes</b> — name, country, currency, language, plus pointers to its chart of accounts and fiscal year variant</td><td><code>BUKRS</code> (company code)</td></tr>
+                <tr><td class="hl"><code>T880</code></td><td>All <b>companies</b> (trading partners) used for consolidation</td><td><code>RCOMP</code> (company)</td></tr>
+              </table>
+            </div>
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>BUKRS</b> — the field name for company code — comes from German <i>Buchungskreis</i> (“posting circle / area”). You will see <code>BUKRS</code> on almost every FI screen and in almost every FI table for the rest of your SAP life. And <b>T001</b>: think “Table number 1 for the number-1 org unit of FI”.</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s12" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S13 ============ -->
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> Exam traps</h2>
+            <p class="sub">The mistakes C_TS4FI is designed to catch. Each one has appeared in practice questions in some form.</p>
+            <div class="box trap">
+              <span class="box-title">Trap 1 · “Company” prepares the Balance Sheet</span>
+              <p>No. The <b>company code</b> prepares the legal Balance Sheet and P&amp;L. The <b>company</b> only receives consolidated group statements.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 2 · Wrong ID lengths</span>
+              <p>Company code = <b>4</b> characters. Company = <b>6</b> characters. Client = <b>3</b> digits. Options in the exam swap these on purpose.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 3 · Company is mandatory</span>
+              <p>No — defining a <b>company</b> is optional unless you need consolidation. The <b>company code</b> is the mandatory one.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 4 · One company code → many companies</span>
+              <p>False. One company code is assigned to <b>one</b> company. One company collects <b>many</b> company codes.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 5 · A plant belongs to many company codes</span>
+              <p>False. A plant is assigned to <b>exactly one</b> company code — that is how stock value lands in one legal entity’s books.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 6 · Controlling area always 1-to-1</span>
+              <p>False. One controlling area can cover <b>many</b> company codes (cross-company-code cost accounting) — <b>if</b> they share the same chart of accounts and fiscal year variant.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 7 · Org units are the same in every client</span>
+              <p>False. Enterprise structure is <b>client-dependent</b> — defined per client and moved between systems with Customizing transports.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 8 · Every branch office needs a company code</span>
+              <p>False. Only an entity that needs its <b>own complete legal financial statements</b> gets a company code. A branch or warehouse inside the same legal entity is a <b>plant</b> (or, for internal segment reporting, a business area / profit center).</p>
+            </div>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s13" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S14 ============ -->
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> A–Z glossary</h2>
+            <p class="sub">Every new term of this lesson, in one line each.</p>
+            <dl class="glossary">
+              <dt>Assignment</dt><dd>A link between two org units, e.g. company code → company (OX16).</dd>
+              <dt>BUKRS</dt><dd>The technical field name of the company code (German: Buchungskreis).</dd>
+              <dt>Business Area</dt><dd>Optional internal division across company codes — full detail in Lesson 6.</dd>
+              <dt>Client</dt><dd>Top-level, self-contained environment in an SAP system; 3-digit number.</dd>
+              <dt>Company</dt><dd>Group-level org unit (up to 6 characters) representing company codes that consolidate together; also the trading partner. Defined with OX15; table T880.</dd>
+              <dt>Company Code</dt><dd>Smallest org unit with a complete, self-contained set of accounts (Balance Sheet + P&amp;L); 4 characters; defined with OX02; table T001.</dd>
+              <dt>Consolidation</dt><dd>Combining group companies’ statements into one, eliminating internal (intercompany) trades.</dd>
+              <dt>Controlling Area</dt><dd>Top CO org unit; can serve many company codes if they share chart of accounts + fiscal year variant.</dd>
+              <dt>Cost Center</dt><dd>CO unit where costs are collected — “where was it spent?”</dd>
+              <dt>Credit Control Area</dt><dd>Org unit that controls customer credit limits across assigned company codes.</dd>
+              <dt>Cross-Company-Code Cost Accounting</dt><dd>One controlling area serving several company codes.</dd>
+              <dt>Distribution Channel</dt><dd>SD unit: how goods reach customers (wholesale, retail, online).</dd>
+              <dt>Division</dt><dd>SD unit: a product group.</dd>
+              <dt>Enterprise Structure</dt><dd>The complete map of org units representing the real business inside SAP.</dd>
+              <dt>Global Parameters</dt><dd>A company code’s control-panel settings (chart of accounts, fiscal year variant…) in OBY6.</dd>
+              <dt>IMG / SPRO</dt><dd>The configuration menu of SAP and the transaction that opens it.</dd>
+              <dt>Intercompany</dt><dd>Between two group companies — e.g. an intercompany sale between company codes 1000 and 2000.</dd>
+              <dt>Local Currency</dt><dd>The currency of a company code’s legal books (its country’s currency).</dd>
+              <dt>Organisational Unit</dt><dd>One building block of the enterprise structure (company code, plant, …).</dd>
+              <dt>Plant</dt><dd>MM location — factory, warehouse or office — assigned to exactly one company code (OX10 / OX18).</dd>
+              <dt>Profit Center</dt><dd>CO unit whose profit is measured separately.</dd>
+              <dt>Purchasing Organisation</dt><dd>MM buying unit for one or more plants.</dd>
+              <dt>Sales Area</dt><dd>Sales Organisation + Distribution Channel + Division together.</dd>
+              <dt>Sales Organisation</dt><dd>SD selling unit, assigned to one company code.</dd>
+              <dt>Storage Location</dt><dd>A godown/section inside a plant where stock is kept.</dd>
+              <dt>T001 / T880</dt><dd>Tables holding company codes (T001) and companies (T880).</dd>
+              <dt>Trading Partner</dt><dd>The company ID recorded on intercompany postings so consolidation can eliminate them.</dd>
+            </dl>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s14" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S15 ============ -->
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> Summary — the whole lesson on one screen</h2>
+            <ul class="clean">
+              <li><b>Enterprise Structure</b> = the map of your business inside SAP. It is built <b>first</b>, because every posting must belong to an org unit.</li>
+              <li>Top to bottom: <b>Client → Company → Company Code → Plant → Storage Location</b>, with the <b>Controlling Area</b> spanning company codes for CO.</li>
+              <li><b>Company</b> = group level, 6 characters, optional, for <b>consolidation</b>; defined in <code>OX15</code>, table <code>T880</code>, also called the <b>trading partner</b>.</li>
+              <li><b>Company Code</b> = one legal entity, 4 characters, <b>mandatory</b>, smallest unit with a complete Balance Sheet + P&amp;L; defined in <code>OX02</code> (copy with <code>EC01</code>), table <code>T001</code>, field <code>BUKRS</code>.</li>
+              <li>Assign company code → company in <code>OX16</code>. One code → one company; one company → many codes.</li>
+              <li>A plant belongs to <b>exactly one</b> company code (<code>OX18</code>). A controlling area can serve <b>many</b> company codes only if they share the <b>same chart of accounts and fiscal year variant</b>.</li>
+              <li>A company code becomes postable through its <b>global parameters</b> in <code>OBY6</code>: chart of accounts, fiscal year variant, field status variant, posting period variant.</li>
+              <li>The one test for any structure question: <i>“Does it need its own Balance Sheet?”</i> Yes → company code. No → plant / business area / profit center.</li>
+            </ul>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s15" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <!-- ============ S16 ============ -->
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> Self-test — 12 questions</h2>
+            <p class="sub">Click an answer to check yourself. Explanations appear instantly — no marks are saved anywhere.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart the test</button>
+          
+            <div class="mark-read-row"><button type="button" class="mark-read-btn" data-mark-read="s16" aria-pressed="false">Mark as Read</button></div>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow">→</span>
+            <div>
+              <b>Next: Lesson 6 — Business Area</b><br>
+              <span style="color:var(--ink-soft)">A small preview only: some businesses want a P&amp;L for an internal division — say, “Garments” vs “Home Textiles” — that cuts <i>across</i> company codes and is <b>not</b> a legal entity. SAP’s answer is the <b>Business Area</b>: an optional org unit you can stamp on postings to draw up internal Balance Sheets and P&amp;Ls per division. In Lesson 6 we will define it, assign it, post with it — and learn why S/4HANA prefers <b>Profit Centers and Segments</b> for this job today, and what the exam expects you to say about it.</span>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 5 of the SAP S/4HANA Financial Accounting series · Prepared for C_TS4FI (SAP S/4HANA Cloud Private Edition, Financial Accounting) exam preparation · All SAP screens shown are re-created illustrations for learning, not real SAP screenshots.
+            <br/>course created by Muhammad Asad Ullah Ibrahim
+          </footer>
+        </main>
+      </div>
+      </div>
+    </div>
+
+    <script>
+      // ---- Shared course progress store (localStorage, shared by all lessons) ----
+      window.SAPProgress=(function(){
+        var KEY='sapCts4fiProgress_v1';
+        function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+        function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+        function getLesson(n){ var s=load(), L=null;
+          if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+          if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+          return L; }
+        function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+          for(var p in patch){ cur[p]=patch[p]; }
+          s.lessons[k]=cur; saveAll(s); return cur; }
+        function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+          return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+        function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+          s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+        return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+      })();
+
+      // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+      function sha256Hex(ascii){
+        ascii=unescape(encodeURIComponent(ascii));
+        function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+        var maxWord=Math.pow(2,32), i, j, result='';
+        var words=[], asciiBitLength=ascii.length*8;
+        var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+        var primeCounter=k.length, isComposite={};
+        for(var candidate=2; primeCounter<64; candidate++){
+          if(!isComposite[candidate]){
+            for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+            hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+            k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+          }
+        }
+        ascii+='\x80';
+        while(ascii.length%64-56) ascii+='\x00';
+        for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+        words[words.length]=((asciiBitLength/maxWord)|0);
+        words[words.length]=(asciiBitLength);
+        for(j=0;j<words.length;){
+          var w=words.slice(j,j+=16), oldHash=hash;
+          hash=hash.slice(0,8);
+          for(i=0;i<64;i++){
+            var w15=w[i-15], w2=w[i-2];
+            var a=hash[0], e=hash[4];
+            var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+            var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+            hash=[(temp1+temp2)|0].concat(hash);
+            hash[4]=(hash[4]+temp1)|0;
+          }
+          for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+        }
+        for(i=0;i<8;i++){
+          for(j=3;j+1;j--){
+            var b=(hash[i]>>(j*8))&255;
+            result+=((b<16)?0:'')+b.toString(16);
+          }
+        }
+        return result;
+      }
+
+      // ---- Lesson 5 gating: locked until Lesson 4 is fully complete, or the gate test is passed 5/5 ----
+      (function(){
+        var THIS_LESSON=5, PREV_LESSON=4, PREV_SECTIONS=20, LOCK_MS=60*60*1000;
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var GATE_Q=[
+          {q:"What is ABAP?",opts:["SAP's programming language used to build SAP applications","SAP's database system for storing tables","A transaction code for posting accounting documents","SAP's operating system for application servers"],a:0},
+          {q:"What is the Data Dictionary (SE11)?",opts:["A tool for writing ABAP programs","A transaction for posting journal entries","Where SAP table and data definitions are stored","Where user passwords and authorisations are maintained"],a:2},
+          {q:"Which table holds the document header in FI?",opts:["BSEG","ACDOCA","T001","BKPF"],a:3},
+          {q:"What is SE16N used for?",opts:["To create a new company code","To display / browse table contents","To release transport requests","To maintain exchange rates"],a:1},
+          {q:"What does the Z-namespace mean for custom developments?",opts:["SAP standard objects start with Z","Z objects are temporary and are deleted every night","Customer developments start with Z or Y, to avoid clashing with SAP standard","Z objects can never be transported to another system"],a:2}
+        ];
+        var gateScreen=document.getElementById('gateScreen');
+        var content=document.getElementById('lessonContent');
+        var lockBox=document.getElementById('gateLockBox');
+        var lockUntilEl=document.getElementById('gateLockUntil');
+        var countdownEl=document.getElementById('gateCountdown');
+        var testArea=document.getElementById('gateTestArea');
+        var qWrap=document.getElementById('gateQuestions');
+        var scoreEl=document.getElementById('gateScore');
+        var msgEl=document.getElementById('gateMsg');
+        var attemptsEl=document.getElementById('gateAttempts');
+        var submitBtn=document.getElementById('gateSubmit');
+        var retryBtn=document.getElementById('gateRetry');
+        var adminBtn=document.getElementById('adminBtn');
+        var adminForm=document.getElementById('adminForm');
+        var adminPw=document.getElementById('adminPw');
+        var adminSubmit=document.getElementById('adminSubmit');
+        var adminMsg=document.getElementById('adminMsg');
+        var timer=null, selected={};
+
+        function isPrevComplete(){
+          var L=window.SAPProgress.getLesson(PREV_LESSON);
+          if(!L) return false;
+          var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+          var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+          return !!(allRead&&quiz);
+        }
+        function unlockLesson(){
+          if(timer){ clearInterval(timer); timer=null; }
+          gateScreen.hidden=true; gateScreen.style.display='none';
+          content.hidden=false; content.style.display='';
+          window.scrollTo(0,0);
+        }
+        function updateCountdown(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var rem=g.lockUntil-Date.now();
+          if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+          var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+          countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        }
+        function showLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          lockBox.hidden=false;
+          testArea.style.display='none';
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+          updateCountdown();
+          if(timer) clearInterval(timer);
+          timer=setInterval(updateCountdown,1000);
+        }
+        function refreshLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var now=Date.now();
+          if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+          if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+          lockBox.hidden=true;
+          testArea.style.display='';
+          return false;
+        }
+        function updateAttempts(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+        }
+        function renderGate(){
+          selected={};
+          scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+          submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+          qWrap.innerHTML='';
+          GATE_Q.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='gate-q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                selected[qi]=oi;
+                var bs=opts.querySelectorAll('.gate-opt');
+                bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+                msgEl.textContent='';
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); qWrap.appendChild(box);
+          });
+        }
+        submitBtn.addEventListener('click',function(){
+          if(refreshLock()) return;
+          if(Object.keys(selected).length<GATE_Q.length){
+            msgEl.textContent='Please answer all 5 questions before submitting.';
+            scoreEl.textContent='';
+            return;
+          }
+          var score=0;
+          GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+          qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+          submitBtn.hidden=true;
+          scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          if(score===GATE_Q.length){
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            msgEl.textContent='Gate test passed. Lesson 5 is now unlocked.';
+            msgEl.className='ok';
+            updateAttempts();
+            setTimeout(unlockLesson,900);
+          }else{
+            g.fails=(g.fails||0)+1;
+            msgEl.textContent='Go back and complete previous lesson.';
+            msgEl.className='';
+            if(g.fails>=3){
+              g.lockUntil=Date.now()+LOCK_MS;
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              updateAttempts();
+              refreshLock();
+            }else{
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              retryBtn.hidden=false;
+              updateAttempts();
+            }
+          }
+        });
+        retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+        adminBtn.addEventListener('click',function(){
+          adminForm.hidden=!adminForm.hidden;
+          if(!adminForm.hidden) adminPw.focus();
+        });
+        function tryAdminUnlock(){
+          var val=adminPw.value;
+          if(!val) return;
+          if(sha256Hex(val)===ADMIN_HASH){
+            var g=window.SAPProgress.getGate(THIS_LESSON);
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            adminMsg.className=''; adminMsg.style.color='var(--green)';
+            adminMsg.textContent='Unlocked. Opening Lesson 5…';
+            adminPw.value='';
+            setTimeout(unlockLesson,700);
+          }else{
+            adminMsg.style.color=''; adminMsg.className='err';
+            adminMsg.textContent='Incorrect password. Please try again.';
+            adminPw.value='';
+            adminPw.focus();
+          }
+        }
+        adminSubmit.addEventListener('click',tryAdminUnlock);
+        adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+        // ---- Initial state ----
+        var g0=window.SAPProgress.getGate(THIS_LESSON);
+        if(isPrevComplete()||g0.unlocked===true){
+          unlockLesson();
+        }else{
+          gateScreen.hidden=false; gateScreen.style.display='';
+          content.hidden=true; content.style.display='none';
+          if(!refreshLock()) renderGate();
+          updateAttempts();
+        }
+      })();
+    </script>
+
+    <script>
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent=(t==='dark'?'Dark':'Light'); }
+        apply('light');
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark'?'light':'dark');
+        });
+
+        var bar=document.getElementById('progressBar');
+        var sections=Array.prototype.slice.call(document.querySelectorAll('section.lesson'));
+        var total=sections.length;
+        var readSet={};
+        try{ var savedL5=window.SAPProgress&&window.SAPProgress.getLesson(5); if(savedL5&&savedL5.readSections){ savedL5.readSections.forEach(function(id){ readSet[id]=true; }); } }catch(e){}
+        var tocMap={};
+        var tocLinks={};
+        document.querySelectorAll('nav.toc li').forEach(function(li){
+          var a=li.querySelector('a'); if(!a) return;
+          var id=a.getAttribute('href').slice(1);
+          tocMap[id]=li; tocLinks[id]=a;
+        });
+        var readCountEl=document.getElementById('readCount');
+        var readPercentEl=document.getElementById('readPercent');
+        var tocFill=document.getElementById('tocProgressFill');
+        function readCount(){ return Object.keys(readSet).length; }
+        function updateProgress(){
+          var c=readCount();
+          var pct=total?Math.round((c/total)*100):0;
+          if(readCountEl) readCountEl.textContent=c+' of '+total+' read';
+          if(readPercentEl) readPercentEl.textContent=pct+'%';
+          if(tocFill) tocFill.style.width=pct+'%';
+          if(bar) bar.style.width=pct+'%';
+        }
+        function setRead(id,isRead){
+          var btn=document.querySelector('[data-mark-read="'+id+'"]');
+          var li=tocMap[id];
+          if(isRead){ readSet[id]=true; } else { delete readSet[id]; }
+          if(li) li.classList.toggle('read',!!isRead);
+          if(btn){
+            btn.classList.toggle('is-read',!!isRead);
+            btn.setAttribute('aria-pressed',isRead?'true':'false');
+            btn.textContent=isRead?'Read \u2713':'Mark as Read';
+          }
+          updateProgress();
+          try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(5,{readSections:arr, allRead:(arr.length===total)}); } }catch(e){}
+        }
+        document.querySelectorAll('[data-mark-read]').forEach(function(btn){
+          btn.addEventListener('click',function(){
+            var id=btn.getAttribute('data-mark-read');
+            setRead(id,!readSet[id]);
+          });
+        });
+        Object.keys(readSet).forEach(function(id){ var li0=tocMap[id]; var btn0=document.querySelector('[data-mark-read="'+id+'"]'); if(li0) li0.classList.add('read'); if(btn0){ btn0.classList.add('is-read'); btn0.setAttribute('aria-pressed','true'); btn0.textContent='Read \u2713'; } });
+        updateProgress();
+
+        var currentActive=null;
+        function setActive(id){
+          if(currentActive===id) return;
+          currentActive=id;
+          Object.keys(tocLinks).forEach(function(k){
+            tocLinks[k].classList.toggle('active',k===id);
+            if(tocMap[k]) tocMap[k].classList.toggle('active',k===id);
+          });
+        }
+        function updateActive(){
+          var offset=110;
+          var current=sections[0]?sections[0].id:null;
+          for(var i=0;i<sections.length;i++){
+            if(sections[i].getBoundingClientRect().top<=offset) current=sections[i].id;
+            else break;
+          }
+          // If scrolled to bottom, activate last section
+          var h=document.documentElement;
+          if(h.scrollTop+h.clientHeight>=h.scrollHeight-4 && sections.length) current=sections[sections.length-1].id;
+          if(current) setActive(current);
+        }
+        document.addEventListener('scroll',updateActive,{passive:true});
+        window.addEventListener('resize',updateActive);
+        if('IntersectionObserver' in window){
+          var obs=new IntersectionObserver(function(entries){
+            entries.forEach(function(e){ if(e.isIntersecting) setActive(e.target.id); });
+          },{rootMargin:'-15% 0px -65% 0px',threshold:0});
+          sections.forEach(function(s){ obs.observe(s); });
+        }
+        updateActive();
+      })();
+    </script>
+
+    <script>
+      (function(){
+        var QUESTIONS=[
+          {q:"Which organisational unit is the smallest unit for which a complete, self-contained set of accounts (Balance Sheet + P&L) can be drawn up?",opts:["Company","Company Code","Controlling Area","Business Area"],a:1,why:"The company code is the legal-entity level of FI — complete books live there, and only there."},
+          {q:"How long is a company code ID, and how long can a company ID be?",opts:["Company code 6, Company 4","Company code 4, Company 6","Both are 4","Both are 6"],a:1,why:"Company Code = 4 characters. Company = up to 6 characters. The exam swaps these on purpose."},
+          {q:"Which T-code is used to define a Company Code?",opts:["OX15","OX16","OX02","OBY6"],a:2,why:"OX02 = Edit, Copy, Delete, Check Company Code. OX15 defines a Company; OX16 assigns company code to company; OBY6 holds global parameters."},
+          {q:"A group wants consolidated financial statements. Which org unit must be defined so intercompany trades can be eliminated?",opts:["Plant","Company (trading partner)","Storage Location","Sales Organisation"],a:1,why:"Companies (trading partners) are defined with OX15; intercompany postings carry the trading partner so consolidation can eliminate internal trades."},
+          {q:"Which statement about the company code → company assignment is correct?",opts:["A company code can be assigned to several companies","A company can have several company codes assigned; a company code belongs to at most one company","The assignment is made with OX02","The assignment is optional for posting but mandatory for plants"],a:1,why:"Many-to-one: many company codes → one company. The assignment itself is made in OX16."},
+          {q:"A warehouse in Karachi belongs to the same legal entity as the Faisalabad mill. In SAP it should be created as a…",opts:["Second company code","Company","Plant assigned to the existing company code","Business Area"],a:2,why:"No separate legal registration and no own Balance Sheet → it is a plant (OX10), assigned to the company code with OX18."},
+          {q:"One controlling area is to serve three company codes. What condition must be met?",opts:["All three must be in the same country","All three must use the same chart of accounts and the same fiscal year variant","All three must have the same currency","Controlling areas can never serve more than one company code"],a:1,why:"Cross-company-code cost accounting requires the same chart of accounts AND the same fiscal year variant. Currency and country may differ."},
+          {q:"Company codes are stored in which table, and what is the key field called?",opts:["T880 / RCOMP","T001 / BUKRS","BKPF / BELNR","T880 / BUKRS"],a:1,why:"T001 holds company codes; the key field is BUKRS. T880 holds companies (key RCOMP); BKPF holds document headers."},
+          {q:"Where are a company code's global parameters (chart of accounts, fiscal year variant, field status variant) maintained?",opts:["OX15","EC01","OBY6","SE16N"],a:2,why:"OBY6 = Company Code Global Data — the control panel of the company code. EC01 only copies a company code."},
+          {q:"Which of these is TRUE about the enterprise structure?",opts:["It is defined once per system and valid for all clients","It is client-dependent and transported with Customizing requests","Company codes can be created after go-live with no planning","Plants are defined inside the company (group) object"],a:1,why:"Org structure settings are client-dependent Customizing — created per client and moved DEV → QAS → PRD by transport."},
+          {q:"A consultant wants to create a new company code with hundreds of ready settings from an SAP sample company code. What should she use?",opts:["OX16 assignment","EC01 — Copy Company Code","OB38","F-02"],a:1,why:"EC01 copies an organisational object (company code) including its dependent settings; afterwards OX02 adjusts name, country and currency."},
+          {q:"Which assignment rule is correct?",opts:["A plant can be assigned to several company codes","A sales organisation is assigned to exactly one company code","A storage location is assigned directly to a company code","A company code is assigned to exactly one plant"],a:1,why:"Sales organisation → one company code. A plant → exactly ONE company code (never several), and a storage location belongs to a plant, not directly to a company code."}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  try{ if(window.SAPProgress) window.SAPProgress.saveLesson(5,{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=10?' — Excellent! You are ready for Lesson 6.':' — Re-read the sections above once, then try again. You can do it.');
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+  </body>
+</html>

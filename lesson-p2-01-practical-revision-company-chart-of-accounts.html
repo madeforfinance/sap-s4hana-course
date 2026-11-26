@@ -1,0 +1,1432 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Part 2 · Lesson 1 — Practical Revision: Company Details &amp; Chart of Accounts · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8; --green-ink:#ffffff;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527; --green-ink:#0e2417;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--green);z-index:60;transition:width .15s linear}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35;border-left:3px solid transparent}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc li.active a{background:var(--accent);color:#fff;font-weight:700;border-left-color:var(--accent-ink)}
+      [data-theme="dark"] nav.toc li.active a{color:#0e1a26}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px;background:var(--surface)}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.active.read a{color:#fff}
+      [data-theme="dark"] nav.toc li.active.read a{color:#0e1a26}
+      nav.toc .tick{display:none;color:var(--green);font-weight:700;flex:none}
+      nav.toc li.read .tick{display:inline}
+      nav.toc li.active .tick{color:inherit}
+      .toc-progress{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+      .toc-progress .pct{font-weight:700;font-size:1.05rem}
+      .toc-progress .track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:6px 0}
+      .toc-progress .fill{height:100%;width:0;background:var(--green);border-radius:99px;transition:width .2s}
+      .toc-progress .count{font-size:.82rem;color:var(--ink-soft)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      section.lesson.is-read{border-color:var(--green)}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .sec-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:22px;padding-top:16px}
+      .mark-read{cursor:pointer;font:inherit;font-weight:700;font-size:.95rem;border-radius:9px;padding:11px 22px;border:2px solid var(--green);background:var(--surface);color:var(--green);display:inline-flex;align-items:center;gap:9px;min-height:48px;transition:background .15s,color .15s}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read .box{width:20px;height:20px;border:2px solid currentColor;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+      .mark-read .box svg{width:13px;height:13px;display:none}
+      .mark-read.done{background:var(--green);color:var(--green-ink);border-color:var(--green)}
+      .mark-read.done .box svg{display:block}
+      .read-status{font-size:.9rem;color:var(--ink-soft);font-weight:600}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);flex-wrap:wrap}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      ol.steps{margin:.4em 0 .8em;padding-left:1.4em}
+      ol.steps li{margin:.45em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+      .btn-ghost{background:var(--surface);color:var(--accent-ink);border:1px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+
+      /* ---------- Gate (locked) screen ---------- */
+      .gate-wrap{max-width:760px;margin:0 auto;padding:34px 18px 80px}
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;box-shadow:var(--shadow)}
+      @media(max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:inherit;font-size:.95rem;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{color:var(--accent);display:inline-flex}
+      .next-lesson .arrow svg{width:26px;height:26px}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Part 2 · Lesson 1</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <!-- ================= LOCKED / GATE SCREEN ================= -->
+    <div class="gate-wrap" id="gateScreen" hidden>
+      <section class="gate-card" aria-labelledby="gateTitle">
+        <div class="gate-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
+        <h2 id="gateTitle">Part 2 · Lesson 1 is locked</h2>
+        <p>This lesson opens only after <b>Part 1 · Lesson 10</b> is fully complete — every section marked Read <b>and</b> its self-test answered. If you have not finished Lesson 10 in this browser, complete it first.</p>
+        <p>You can also open this lesson right now by passing the <b>Gate Test</b> below: 5 questions from Lesson 10 (Tolerance, Post &amp; Park, F-02, Accounts Payable). You need <b>5 / 5</b>. Only your score is shown — correct answers are never displayed.</p>
+
+        <div class="gate-lockbox" id="gateLockBox" hidden>
+          <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+          <p>Locked until: <b id="gateLockUntil">—</b></p>
+          <p>Time remaining: <b id="gateCountdown">—</b></p>
+          <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+        </div>
+
+        <div id="gateTestArea">
+          <div id="gateQuestions"></div>
+          <p id="gateScore" aria-live="polite"></p>
+          <p id="gateMsg" aria-live="polite"></p>
+          <div class="gate-actions">
+            <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+            <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+          </div>
+          <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+        </div>
+
+        <div class="gate-admin">
+          <button class="btn btn-ghost" id="adminBtn" type="button">Admin Unlock</button>
+          <div class="gate-admin-form" id="adminForm" hidden>
+            <label for="adminPw">Admin password</label>
+            <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+            <div class="gate-actions">
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+            </div>
+            <p id="adminMsg" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+      </section>
+    </div>
+
+    <!-- ================= LESSON CONTENT ================= -->
+    <div id="lessonContent" hidden>
+    <div class="wrap">
+      <header class="hero">
+        <span class="kicker">Part 2 · Lesson 1 · Practical Revision — Hands-On Begins</span>
+        <h1>Company Details &amp; Chart of Accounts — The Practical Way</h1>
+        <p class="lede">Part 1 taught you the theory: what a company code is, what a chart of accounts is, and which T-codes control them. Part 2 changes the style — now you <b>do</b> the work, step by step, on the system. This first lesson revises the foundations in practical form: how to <b>search and confirm company details</b> using shortcuts, and how to <b>set up and save the Chart of Accounts series (number ranges) and account-number length</b> correctly. <span class="urdu">Part 1 mein sirf samjha tha, Part 2 mein khud karna hai — yehi asal practical revision hai.</span></p>
+        <div class="hero-meta">
+          <span class="chip">Course segment <b>00:00 – 24:47</b></span>
+          <span class="chip">Level <b>Beginner · Zero SAP assumed</b></span>
+          <span class="chip">Exam <b>C_TS4FI · Organisational structures &amp; basic settings</b></span>
+          <span class="chip">Key T-codes <b>OX02 · OX15 · OB13 · OBD4 · SE16N</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span><span>Welcome to Part 2 — from theory to practice</span><span class="tick">✓</span></a></li>
+            <li><a href="#s2"><span class="dot"></span><span>The Part 1 map — what you have already built</span><span class="tick">✓</span></a></li>
+            <li><a href="#s3"><span class="dot"></span><span>Working practically — Customizing, saving &amp; transports</span><span class="tick">✓</span></a></li>
+            <li><a href="#s4"><span class="dot"></span><span>Company details — what exactly are we searching?</span><span class="tick">✓</span></a></li>
+            <li><a href="#s5"><span class="dot"></span><span>Search tools — F4 help, wildcards &amp; matchcodes</span><span class="tick">✓</span></a></li>
+            <li><a href="#s6"><span class="dot"></span><span>Step by step — finding company &amp; company code details (OX02 · OX15)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s7"><span class="dot"></span><span>Shortcut usage — moving around SAP like a consultant</span><span class="tick">✓</span></a></li>
+            <li><a href="#s8"><span class="dot"></span><span>Checking the table behind the screen — T001 in SE16N</span><span class="tick">✓</span></a></li>
+            <li><a href="#s9"><span class="dot"></span><span>Chart of Accounts revision — the 5-minute recap</span><span class="tick">✓</span></a></li>
+            <li><a href="#s10"><span class="dot"></span><span>Account-number length — the chart’s one big decision (OB13)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s11"><span class="dot"></span><span>The “series” — account groups &amp; number ranges (OBD4)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s12"><span class="dot"></span><span>Step by step — setting the series &amp; length, and saving (OB13 · OBD4)</span><span class="tick">✓</span></a></li>
+            <li><a href="#s13"><span class="dot"></span><span>Worked example — a complete series plan for a trading company</span><span class="tick">✓</span></a></li>
+            <li><a href="#s14"><span class="dot"></span><span>Exam traps</span><span class="tick">✓</span></a></li>
+            <li><a href="#s15"><span class="dot"></span><span>A–Z glossary</span><span class="tick">✓</span></a></li>
+            <li><a href="#s16"><span class="dot"></span><span>Summary</span><span class="tick">✓</span></a></li>
+            <li><a href="#s17"><span class="dot"></span><span>Self-test (10 questions)</span><span class="tick">✓</span></a></li>
+          </ol>
+          <div class="toc-progress">
+            <span class="pct" id="pctText">0%</span>
+            <div class="track"><div class="fill" id="sideFill"></div></div>
+            <span class="count" id="countText">0 of 17 sections marked read</span>
+          </div>
+          <p class="toc-note">Screens in this lesson are <b>re-created illustrations</b> made for learning — they are not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <!-- ============ S1 ============ -->
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Welcome to Part 2 — from theory to practice</h2>
+            <p class="sub">Segment 00:00 — Introduction and overview. What changes now, and what stays the same.</p>
+
+            <p>In Part 1 (Lessons 1–10) you learned SAP the way a student learns driving theory from a book: what the parts are called, what each setting means, and which T-code controls it. You built the whole Financial Accounting foundation on paper — enterprise structure, company code, currencies, chart of accounts, documents, tolerances, and Accounts Payable.</p>
+            <p>Part 2 is the driving practice. The same topics return, but now the question is never <i>“what is it?”</i> — it is <i>“show me: where do I click, what do I type, how do I check it, and how do I save it so it survives?”</i> Consultants are not paid for definitions; they are paid for correct, saved, verified settings.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th></th><th>Part 1 style</th><th>Part 2 style (from today)</th></tr>
+                <tr><td><b>Main question</b></td><td>“What is a company code?”</td><td class="hl">“Find this company code on the system and prove its details are correct.”</td></tr>
+                <tr><td><b>Your hands</b></td><td>Reading, understanding</td><td class="hl">Searching, opening, entering, saving, re-checking</td></tr>
+                <tr><td><b>Proof of learning</b></td><td>You can explain it</td><td class="hl">The setting is saved and you can find it again in 30 seconds</td></tr>
+                <tr><td><b>Exam value</b></td><td>Definition questions</td><td class="hl">Scenario questions — “the consultant did X, what happens / what is missing?”</td></tr>
+              </table>
+            </div>
+
+            <h3>What this lesson covers</h3>
+            <ul class="clean">
+              <li><b>Introduction and overview</b> (segment 00:00) — how Part 2 is organised and how to revise practically.</li>
+              <li><b>Searching company details</b> (segment 11:35) — finding a Company and a Company Code on the system, reading every field, and using <b>shortcuts</b> so the search takes seconds, not minutes.</li>
+              <li><b>Chart of Accounts series and length</b> (segment 16:04 – 24:47) — setting the <b>length</b> of G/L account numbers in the chart (OB13) and the <b>series</b> — the number ranges of the account groups (OBD4) — and <b>saving</b> the work properly.</li>
+            </ul>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Recipe book vs kitchen</span>
+              <p>Part 1 was reading the recipe book and learning the names of the spices. Part 2 is standing in the kitchen: the same spices, but now your hands must find the right jar quickly (searching), measure correctly (series and length), and put the lid back on the jar — saved, not just “done in your head”. A setting that is not saved does not exist, exactly like a dish that was never cooked.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Practical Revision</span>
+              <p><b>Practical revision</b> means revising a topic by <i>performing</i> it, not by re-reading it. For every Part 1 topic, Part 2 follows the same loop: <b>Find it → Open it → Read every field → Change or confirm it → Save it → Find it again to verify.</b> If you can do the loop without notes, you know the topic the way the exam — and a real project — wants.</p>
+              <p class="urdu">Revision ka matlab sirf dobara parhna nahi hai. System par khud kar ke dikhana hi practical revision hai — dhundo, kholo, save karo, phir dobara dhund kar tasdeeq karo.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S2 ============ -->
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> The Part 1 map — what you have already built</h2>
+            <p class="sub">A two-minute recap, because today’s practical work stands on these exact blocks.</p>
+
+            <p>Before touching the system, fix the map in your mind. Everything you will search for today — company details, chart settings — lives inside this structure from Part 1:</p>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 330" role="img" aria-label="Diagram of the Part 1 foundation blocks and where today's lesson works">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box" x="30" y="20" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="137" y="46" text-anchor="middle">CLIENT</text>
+                <text class="svg-sub" x="137" y="65" text-anchor="middle">the whole SAP system copy (L2)</text>
+
+                <rect class="svg-box" x="272" y="20" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="380" y="46" text-anchor="middle">COMPANY</text>
+                <text class="svg-sub" x="380" y="65" text-anchor="middle">consolidation unit (L5) · OX15</text>
+
+                <rect class="svg-box-a" x="515" y="20" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="622" y="46" text-anchor="middle">COMPANY CODE</text>
+                <text class="svg-sub" x="622" y="65" text-anchor="middle">legal books · OX02 — today §4–§8</text>
+
+                <rect class="svg-box" x="30" y="128" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="137" y="154" text-anchor="middle">FISCAL YEAR · PERIODS</text>
+                <text class="svg-sub" x="137" y="173" text-anchor="middle">OB29 · OB52 (L6)</text>
+
+                <rect class="svg-box" x="272" y="128" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="380" y="154" text-anchor="middle">CURRENCIES &amp; RATES</text>
+                <text class="svg-sub" x="380" y="173" text-anchor="middle">OB22 · OB08 (L7)</text>
+
+                <rect class="svg-box-a" x="515" y="128" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="622" y="154" text-anchor="middle">CHART OF ACCOUNTS</text>
+                <text class="svg-sub" x="622" y="173" text-anchor="middle">OB13 · OBD4 (L7) — today §9–§13</text>
+
+                <rect class="svg-box" x="30" y="236" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="137" y="262" text-anchor="middle">DOCUMENTS</text>
+                <text class="svg-sub" x="137" y="281" text-anchor="middle">types · splitting · ACDOCA (L9)</text>
+
+                <rect class="svg-box" x="272" y="236" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="380" y="262" text-anchor="middle">TOLERANCE · PARK · F-02</text>
+                <text class="svg-sub" x="380" y="281" text-anchor="middle">posting control (L10)</text>
+
+                <rect class="svg-box" x="515" y="236" width="215" height="62" rx="10"/>
+                <text class="svg-title" x="622" y="262" text-anchor="middle">ACCOUNTS PAYABLE</text>
+                <text class="svg-sub" x="622" y="281" text-anchor="middle">vendors · invoices · payment (L10)</text>
+              </svg>
+              <figcaption>The Part 1 foundation. Today you work hands-on in the two highlighted blocks — Company Code details and the Chart of Accounts — and use the rest as your map.</figcaption>
+            </figure>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Part 1 lesson</th><th>What it gave you</th><th>How Part 2 uses it today</th></tr>
+                <tr><td>Lessons 2–4</td><td>Architecture, GUI/Fiori, T-codes, ABAP &amp; tables</td><td>Shortcuts (§7) and table checking (§8)</td></tr>
+                <tr><td>Lesson 5</td><td>Company vs Company Code, OX02, T001</td><td>Searching company details (§4–§6)</td></tr>
+                <tr><td>Lesson 7</td><td>Chart of Accounts, OB13, OBD4, FS00</td><td>Series &amp; length, set and saved (§9–§13)</td></tr>
+                <tr><td>Lessons 9–10</td><td>Documents, tolerance, park, F-02, AP</td><td>The gate you passed to enter this lesson</td></tr>
+              </table>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · Revision ka golden rule</span>
+              <p><b>“Pehle map, phir safar.”</b> Before any practical task, say out loud where the object lives: <i>which unit, which T-code, which table.</i> Company Code → OX02 → T001. Chart → OB13 → T004. If the three answers come instantly, the hands will not get lost on the screen.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S3 ============ -->
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Working practically — Customizing, saving &amp; transports</h2>
+            <p class="sub">Three ideas you must be clear on before any hands-on configuration work.</p>
+
+            <div class="box term">
+              <span class="box-title">Reminder · Customizing (SPRO / IMG)</span>
+              <p><b>Customizing</b> is the consultant’s workshop: the set of transactions where the system itself is set up — company codes defined, charts created, rules switched on. You enter it with T-code <code>SPRO</code>, which opens the <b>IMG</b> (Implementation Guide) — a tree of every setting in SAP. Most FI settings in this course live under <i>Enterprise Structure</i> and <i>Financial Accounting Global Settings</i>. Normal daily postings (invoices, payments) are <b>not</b> Customizing — they are application transactions like FB60 or F-02.</p>
+            </div>
+
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>Customizing work (consultant)</h4>
+                <ul class="clean">
+                  <li>Done in <code>SPRO</code> / direct IMG T-codes (OX02, OB13…)</li>
+                  <li>Changes <b>how the system behaves</b> for everyone</li>
+                  <li>Almost always asks for a <b>transport request</b> when saving</li>
+                  <li>Done rarely, checked twice</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>Application work (end user)</h4>
+                <ul class="clean">
+                  <li>Done in business T-codes (FB60, F-02, FS00…)</li>
+                  <li>Creates <b>business data</b> — documents, master records</li>
+                  <li>Saving creates a document / master record, no transport</li>
+                  <li>Done daily, in large volumes</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Transport Request</span>
+              <p>When you save a Customizing change in a development system, SAP usually shows a pop-up: <b>“Prompt for Customizing request”</b>. A <b>transport request</b> is a numbered container (like a sealed parcel) that records your change so it can later be <b>transported</b> — moved in a controlled way — from Development to Quality to Production (the DEV → QAS → PRD journey from Lesson 2). Practical rule: if the pop-up appears, choose your existing request or create a new one with a clear description, and confirm. If you cancel the pop-up, <b>the change is not saved</b>.</p>
+              <p class="urdu">Transport request woh dabba hai jisme aapki setting band ho kar agle system tak safar karti hai. Pop-up par Cancel dabana matlab setting save hi nahi hui.</p>
+            </div>
+
+            <h3>The save-and-verify habit</h3>
+            <ol class="steps">
+              <li><b>Enter</b> the values carefully — read each field before typing.</li>
+              <li><b>Save</b> (Ctrl+S or the save icon) and handle the transport pop-up if it appears.</li>
+              <li><b>Read the status bar</b> — SAP confirms with a message like <i>“Data was saved”</i> or shows the request number. No message, no save.</li>
+              <li><b>Go back and re-open</b> the object. If your values are still there, the save is real. This 20-second check is what separates consultants from guessers.</li>
+            </ol>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>Scenario questions love this sequence: <i>“The consultant entered the settings but cancelled the transport request prompt. What is the result?”</i> — <b>the change was not saved</b>. Saving Customizing and recording it in a transport request are one act, not two.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S4 ============ -->
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> Company details — what exactly are we searching?</h2>
+            <p class="sub">Segment 11:35 begins. First be precise: “company details” is two different objects, and mixing them is the classic beginner error.</p>
+
+            <p>When a manager says “show me the company details”, a beginner opens the first screen that says “company” and reads the wrong object. SAP has <b>two</b> company-like objects, and Lesson 5 separated them — here is the practical version:</p>
+
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>Company — T-code <code>OX15</code></h4>
+                <ul class="clean">
+                  <li><b>6-character</b> ID, e.g. <code>IBRA01</code></li>
+                  <li>The <b>consolidation unit</b>: the legal group entity whose companies are combined for group reporting</li>
+                  <li>Details are light: name, address, language, country, currency of the company</li>
+                  <li>Stored in table <code>T880</code> (global company data)</li>
+                  <li>You do <b>not</b> post anything in a Company</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>Company Code — T-code <code>OX02</code></h4>
+                <ul class="clean">
+                  <li><b>4-character</b> ID, e.g. <code>PK01</code> (field name <code>BUKRS</code>)</li>
+                  <li>The <b>legal accounting unit</b>: the entity whose Balance Sheet and P&amp;L are prepared</li>
+                  <li>Details are rich: name, city, country, <b>local currency</b>, language, fiscal year variant link, chart assignment…</li>
+                  <li>Stored in table <code>T001</code></li>
+                  <li><b>All</b> FI postings happen inside a Company Code</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">Reminder · Company Code (BUKRS)</span>
+              <p>The <b>company code</b> is the smallest unit in SAP FI for which a complete, legally independent set of books is kept. Its 4-character key is called <code>BUKRS</code> in tables and on screens. When someone says “company details” in an FI context, nine times out of ten they mean the <b>company code</b> details in <code>T001</code> — currency, country, language, fiscal year variant, and the assigned chart of accounts.</p>
+            </div>
+
+            <h3>The detail fields you will be asked to verify</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Field (screen)</th><th>Technical name</th><th>What “correct” looks like — example</th></tr>
+                <tr><td>Company Code</td><td><code>BUKRS</code></td><td><code>PK01</code> — 4 characters, never changeable after creation</td></tr>
+                <tr><td>Company Name</td><td><code>BUTXT</code></td><td>The legal name as it should print on reports</td></tr>
+                <tr><td>City / Country</td><td><code>ORT01</code> / <code>LAND1</code></td><td>e.g. Faisalabad / <code>PK</code></td></tr>
+                <tr><td>Currency</td><td><code>WAERS</code></td><td><code>PKR</code> — the local currency of the legal books (Lesson 7)</td></tr>
+                <tr><td>Language</td><td><code>SPRAS</code></td><td><code>EN</code> — language of the company code’s texts</td></tr>
+                <tr><td>Company (assignment)</td><td><code>BUKRS</code> → Company</td><td>Which 6-character Company this code reports up to</td></tr>
+              </table>
+            </div>
+            <p>Beyond OX02, the company code’s <b>global parameters</b> (T-code <code>OBY6</code>) hold its working settings: chart of accounts, fiscal year variant, field status variant, posting period variant. A full “company details” check reads <b>both</b> screens — OX02 for identity, OBY6 for behaviour.</p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · CNIC card vs bank account form</span>
+              <p>The <b>Company</b> is like the family name on a CNIC — it identifies the household for government grouping. The <b>Company Code</b> is the full bank account form — your name, address, currency of the account, everything money actually moves through. Searching “company details” and opening only the family name is like verifying an account by reading only the surname.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S5 ============ -->
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Search tools — F4 help, wildcards &amp; matchcodes</h2>
+            <p class="sub">The three search skills every SAP screen rewards. Learn them once; use them ten thousand times.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Search Help (F4 Help / Value Help)</span>
+              <p>Almost every input field in SAP has a hidden list of allowed values. Pressing <b>F4</b> (or clicking the small search icon at the right of the field) opens that list — SAP calls it the <b>search help</b> or <b>value help</b>. Instead of guessing a code from memory, you search by name, filter, and double-click the right row; SAP copies the exact code into your field. F4 is the difference between “I think the code was PK01…” and knowing.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Matchcode &amp; Wildcards</span>
+              <p>The old SAP name for a search help is a <b>matchcode</b> — you will still meet the word in menus and exam questions; they mean the same family of search tools. Inside search fields you can use <b>wildcards</b>: the star <code>*</code> means “any characters, any number” and the plus <code>+</code> means “exactly one character”. So <code>PK*</code> finds PK01, PK02, PKH1… and <code>*Trading*</code> finds any name containing the word Trading.</p>
+            </div>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>You type</th><th>Meaning</th><th>Example results</th></tr>
+                <tr><td><code>PK*</code></td><td>Starts with PK, anything after</td><td>PK01 · PK02 · PK99</td></tr>
+                <tr><td><code>*Apparel*</code></td><td>Contains “Apparel” anywhere</td><td>Ibrahim Apparel &amp; Trading</td></tr>
+                <tr><td><code>PK+1</code></td><td>PK, exactly one character, then 1</td><td>PK01 · PKA1 (not PK1, not PK001)</td></tr>
+                <tr><td><code>*</code></td><td>Everything — no restriction</td><td>The full list (careful: can be long)</td></tr>
+              </table>
+            </div>
+
+            <h3>The F4 routine — practise until it is a reflex</h3>
+            <ol class="steps">
+              <li>Click into the field (for example, <i>Company Code</i>).</li>
+              <li>Press <b>F4</b>. The search help pop-up opens — often with several tabs (by code, by name, by country…).</li>
+              <li>Type your restriction with wildcards, e.g. name <code>*Apparel*</code>, and press Enter / the green tick.</li>
+              <li>Read the result list carefully — code <b>and</b> name — then <b>double-click</b> the correct row.</li>
+              <li>Confirm the field now holds the exact code before you press Enter on the main screen.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of an F4 search help for company codes">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> F4 — Search Help: Company Codes · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Tab: Company Code by Name — restriction: Company name = *Apparel*</span><br>
+CoCd&nbsp;&nbsp;&nbsp;Company Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;City&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctry&nbsp;&nbsp;Curr.<br>
+<span class="kw">PK01</span>&nbsp;&nbsp;&nbsp;<span class="hl2">Ibrahim Apparel &amp; Trading</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Faisalabad&nbsp;&nbsp;&nbsp;PK&nbsp;&nbsp;&nbsp;&nbsp;PKR<br>
+AE01&nbsp;&nbsp;&nbsp;Gulf Apparel Trading LLC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dubai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AE&nbsp;&nbsp;&nbsp;&nbsp;AED<br>
+<span class="cm">▸ Double-click the PK01 row → the code PK01 is copied into your field</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · “Yaad nahi? F4 dabao”</span>
+              <p>Never type a code from memory when F4 exists. Consultants are not walking code-lists — they are fast searchers. In the exam, “the user does not know the company code” is solved by the <b>search help (F4)</b>, not by a report and not by asking IT.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S6 ============ -->
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Step by step — finding company &amp; company code details (OX02 · OX15)</h2>
+            <p class="sub">The full practical routine, exactly as you would perform it on a training system.</p>
+
+            <h3>Route A — Company code details via OX02</h3>
+            <ol class="steps">
+              <li>In the command field, type <code>OX02</code> and press Enter. (Menu path if you prefer: <i>SPRO → Enterprise Structure → Definition → Financial Accounting → Edit, Copy, Delete, Check Company Code</i>.)</li>
+              <li>Choose <b>Edit Company Code data</b>. A list of all company codes appears — this list itself is your first search result.</li>
+              <li>Use the <b>Position / Find</b> button (binoculars icon) or scroll: enter <code>PK01</code> to jump straight to the row.</li>
+              <li><b>Double-click</b> the PK01 row. The detail screen opens: name, city, country, currency, language.</li>
+              <li>Read every field against your checklist (§4). Note the <b>Company</b> field — the 6-character consolidation company this code belongs to.</li>
+              <li>Press <b>Back (F3)</b> — you changed nothing, so no save is needed. Viewing is free; only editing creates responsibility.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the OX02 company code detail screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OX02 — Change View “Company Codes”: Details of Selected Set · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Table: T001 — Company Codes</span><br>
+Company Code&nbsp;&nbsp;: <span class="kw">PK01</span><br>
+Company Name&nbsp;&nbsp;: <span class="hl2">Ibrahim Apparel &amp; Trading (Pvt) Ltd</span><br>
+City&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">Faisalabad</span>&nbsp;&nbsp;&nbsp;&nbsp;Country: <span class="hl2">PK</span> (Pakistan)<br>
+Currency&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">PKR</span> <span class="cm">(WAERS — local currency of the legal books)</span><br>
+Language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">EN</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Company: <span class="hl2">IBRA01</span> <span class="cm">(consolidation assignment)</span><br>
+<span class="cm">▸ Display mode first. Only enter change mode when you truly intend to edit.</span></div>
+            </div>
+
+            <h3>Route B — Company details via OX15</h3>
+            <ol class="steps">
+              <li>Type <code>OX15</code> in the command field, Enter. (Menu path: <i>SPRO → Enterprise Structure → Definition → Financial Accounting → Define Company</i>.)</li>
+              <li>The list of <b>Companies</b> (table <code>T880</code>) opens. Find <code>IBRA01</code> with Position/Find or F4-style searching.</li>
+              <li>Double-click to read: company name, address, country, language, and the company’s currency.</li>
+              <li>Compare with OX02: same group, different object. The company code PK01 points <i>up</i> to company IBRA01 — that one field is the bridge between daily books and group reporting.</li>
+            </ol>
+
+            <h3>Route C — The 10-second route (when you already know the code)</h3>
+            <p>Many display transactions ask for a company code at entry. Type the code, press <b>F4</b> if unsure, Enter — and the header of the next screen (or <i>Environment → Company Code data</i> in some transactions) confirms the name and currency before you post anything. Checking the company code <b>before</b> posting is a professional habit: a posting in the wrong company code is one of the most expensive beginner mistakes, because documents cannot simply be “moved” afterwards.</p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>“Which transaction shows the definition of a company code?” — <code>OX02</code>. “And of a company (consolidation)?” — <code>OX15</code>. The exam also swaps their tables on purpose: company code = <code>T001</code>, company = <code>T880</code>. <b>OX02–T001, OX15–T880</b> — pin this pair down today.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+          <!-- ============ S7 ============ -->
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> Shortcut usage — moving around SAP like a consultant</h2>
+            <p class="sub">The second half of segment 11:35: the same search, done at consultant speed.</p>
+
+            <p>Everything in §5–§6 works with mouse clicks through menus. It also takes five minutes. Consultants navigate by the <b>command field</b> — the small input box at the top-left of every SAP GUI screen — plus a handful of codes and keys. These are the ones this lesson expects you to own:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Shortcut</th><th>What it does</th><th>When you use it</th></tr>
+                <tr><td class="hl"><code>/nXXXX</code></td><td>Ends the current transaction and opens transaction XXXX in the <b>same</b> session (window)</td><td>Jumping from OX02 to OX15: type <code>/nOX15</code></td></tr>
+                <tr><td class="hl"><code>/oXXXX</code></td><td>Opens transaction XXXX in a <b>new</b> session (new window), keeping the current one alive</td><td>Keeping the company code list open while you check the chart: <code>/oOB13</code></td></tr>
+                <tr><td class="hl"><code>/n</code></td><td>Ends the current transaction and returns to the SAP Easy Access menu</td><td>“I am lost — take me home.”</td></tr>
+                <tr><td class="hl"><code>/nEND</code></td><td>Logs off, <b>with</b> a confirmation pop-up</td><td>End of the working day — the safe log-off</td></tr>
+                <tr><td class="hl"><code>/i</code></td><td>Deletes (closes) the <b>current</b> session only</td><td>Closing one of several open windows</td></tr>
+                <tr><td class="hl"><code>Ctrl + /</code></td><td>Jumps the cursor straight into the <b>command field</b></td><td>Hands stay on the keyboard — no mouse hunt</td></tr>
+                <tr><td class="hl"><code>F1</code></td><td><b>Field help</b> — SAP explains the field your cursor is in</td><td>Any field you do not understand. Use it before asking anyone.</td></tr>
+                <tr><td class="hl"><code>F4</code></td><td><b>Search help</b> — the list of allowed values for the field (§5)</td><td>Any code you are not 100% sure of</td></tr>
+                <tr><td class="hl"><code>F3</code> / <code>Shift+F3</code></td><td><b>Back</b> one screen / <b>Exit</b> the transaction</td><td>Leaving a detail screen without saving accidents</td></tr>
+                <tr><td class="hl"><code>Ctrl+S</code></td><td><b>Save</b></td><td>After any deliberate change (§3 habit)</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Session (Mode)</span>
+              <p>A <b>session</b> (SAP GUI calls it a <i>mode</i>) is one open SAP window with its own screen journey. You may have several sessions open at once — one showing the company code list, another the chart — and <code>/o</code> is how you spawn a new one without losing your place. Unsaved work lives only in its own session: closing a session throws its unsaved screen away, which is why <code>/n</code> inside a screen with unsaved changes asks before discarding.</p>
+              <p class="urdu">Session matlab aik khuli hui SAP window. /o se nayi window khulti hai, purani waisi ki waisi rehti hai — aik par list, dusri par detail.</p>
+            </div>
+
+            <h3>Favourites — your personal menu</h3>
+            <p>On the SAP Easy Access screen you can build a <b>Favourites</b> list: right-click <i>Favorites → Insert Transaction</i>, type the T-code, and it stays one double-click away forever. A practical starter set for this course: <code>OX02 · OX15 · OB13 · OBD4 · FS00 · SE16N · FB50 · F-02</code>. Favourites are stored per user — they are your own desk drawers inside SAP.</p>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · “Slash wale teen dost”</span>
+              <p><b>/n</b> = <i>nayi transaction, purani khatam.</i> <b>/o</b> = <i>one more window.</i> <b>/nEND</b> = <i>din khatam, ghar jao.</i> Three slashes, three speeds of leaving — pick the right one and you never lose work or waste a click.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>“A user wants to open a second transaction <b>without losing</b> the current screen.” The answer is <code>/oXXXX</code> — new session. <code>/nXXXX</code> is the tempting wrong answer: it works, but it <b>ends</b> the current transaction first.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S8 ============ -->
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Checking the table behind the screen — T001 in SE16N</h2>
+            <p class="sub">A consultant’s X-ray: when a screen is slow or a value is in doubt, look at the table itself.</p>
+
+            <div class="box term">
+              <span class="box-title">Reminder · SE16N — General Table Display</span>
+              <p><code>SE16N</code> is SAP’s general <b>table display</b> transaction: type a table name, set selection filters, and read the raw rows exactly as stored in the database. It changes nothing — it is a viewing window, not an editing tool. Every Customizing screen you use is simply a friendly face on top of a table; SE16N lets you verify what the face is showing.</p>
+            </div>
+
+            <h3>Verifying company code PK01 in T001 — step by step</h3>
+            <ol class="steps">
+              <li>Command field: <code>/nSE16N</code>, Enter.</li>
+              <li>Table: type <code>T001</code>, Enter — the selection screen appears with T001’s fields.</li>
+              <li>In the <b>BUKRS</b> (Company Code) field, enter <code>PK01</code>. Press <b>F4</b> there if you want the search help — it works here too.</li>
+              <li>Press <b>F8 (Execute)</b>. Exactly one row returns: PK01’s stored truth.</li>
+              <li>Compare the columns — <code>BUTXT</code> (name), <code>LAND1</code> (country), <code>WAERS</code> (currency), <code>SPRAS</code> (language) — with what OX02 showed. They must agree; the screen reads this row.</li>
+              <li>Exit with F3. You have verified the detail at database level — the strongest check a beginner can do.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of T001 displayed in SE16N">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> SE16N — General Table Display · Table T001 · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Selection: BUKRS = PK01 → 1 row found</span><br>
+BUKRS&nbsp;&nbsp;BUTXT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LAND1&nbsp;&nbsp;WAERS&nbsp;&nbsp;SPRAS&nbsp;&nbsp;ORT01<br>
+<span class="kw">PK01</span>&nbsp;&nbsp;&nbsp;<span class="hl2">Ibrahim Apparel &amp; Trading</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">PK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">PKR</span>&nbsp;&nbsp;&nbsp;&nbsp;EN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Faisalabad<br>
+<span class="cm">▸ Display only — SE16N never edits. Wrong value here = wrong value everywhere.</span></div>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Showroom vs godown register</span>
+              <p>OX02 is the showroom — clean, arranged, customer-friendly. T001 in SE16N is the godown (warehouse) register — the raw stock book the showroom is stocked from. When the showroom display looks wrong, a smart shopkeeper checks the register, not the display. Screens can confuse; the table is the record.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>Two favourites: <b>(1)</b> SE16N is for <b>displaying</b> table contents — it is not how you maintain Customizing (that is the IMG transaction, e.g. OX02). <b>(2)</b> If OX02 and T001 ever seem to disagree, trust neither blindly — you are probably looking at <b>different clients</b> or a different company code row. Check the client and the BUKRS filter first.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S9 ============ -->
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> Chart of Accounts revision — the 5-minute recap</h2>
+            <p class="sub">Segment 16:04 begins. Before setting anything, reload Lesson 7’s chart knowledge in practical form.</p>
+
+            <div class="box term">
+              <span class="box-title">Reminder · Chart of Accounts (CoA)</span>
+              <p>A <b>Chart of Accounts</b> is the complete list of <b>G/L accounts</b> a company may post to — Cash, Bank, Sales, Rent, and every other khata. It is defined once in <code>OB13</code> (table <code>T004</code>, 4-character key, technical field <code>KTOPL</code>), and assigned to company codes in <code>OB62</code>. An account that is not in the chart does not exist for posting — exactly like a register with no page for that khata.</p>
+            </div>
+
+            <ul class="clean">
+              <li><b>One operating chart per company code</b> — but one chart can serve <b>many</b> company codes, even across countries and currencies.</li>
+              <li><b>Three chart roles:</b> <b>operating</b> (daily posting), <b>group</b> (linked per account by the <i>group account number</i>, in the chart segment SKA1), <b>country</b> (linked by the <i>alternative account number</i>, in the company code segment SKB1). Nobody posts in group or country charts.</li>
+              <li><b>Every G/L account has two segments:</b> chart segment (<code>SKA1</code>, created once per chart) + company code segment (<code>SKB1</code>, once per company code). Both must exist before posting; maintained together in <code>FS00</code>.</li>
+              <li><b>Account groups</b> (<code>OBD4</code>, table <code>T077S</code>) organise the chart into categories — and they are where today’s <b>series</b> lives (§11).</li>
+            </ul>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 250" role="img" aria-label="Diagram showing the two decisions inside a chart of accounts: length and series">
+                <defs>
+                  <marker id="arr9" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box-a" x="255" y="15" width="250" height="58" rx="10"/>
+                <text class="svg-title" x="380" y="40" text-anchor="middle">CHART OF ACCOUNTS (OB13)</text>
+                <text class="svg-sub" x="380" y="59" text-anchor="middle">e.g. IACO — the master list</text>
+
+                <rect class="svg-box-g" x="45" y="130" width="320" height="72" rx="10"/>
+                <text class="svg-title" x="205" y="158" text-anchor="middle">DECISION 1 — LENGTH (OB13)</text>
+                <text class="svg-sub" x="205" y="178" text-anchor="middle">how many digits an account number may have (max 10)</text>
+
+                <rect class="svg-box-gr" x="395" y="130" width="320" height="72" rx="10"/>
+                <text class="svg-title" x="555" y="158" text-anchor="middle">DECISION 2 — SERIES (OBD4)</text>
+                <text class="svg-sub" x="555" y="178" text-anchor="middle">which number range each account group owns</text>
+
+                <path class="svg-arrow" d="M330 73 L240 126" style="marker-end:url(#arr9)"/>
+                <path class="svg-arrow" d="M430 73 L520 126" style="marker-end:url(#arr9)"/>
+              </svg>
+              <figcaption>A chart of accounts is not finished when its name is created. Two number decisions complete it: the LENGTH of account numbers (set in the chart itself, OB13) and the SERIES — the from–to ranges of its account groups (OBD4). The next three sections set both.</figcaption>
+            </figure>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · “List, Lambaai, Line”</span>
+              <p>Chart banane ke teen L: <b>List</b> (OB13 — chart exists), <b>Lambaai</b> (length — numbers kitne digits ke honge), <b>Line</b> (series — har group ki line/range kahan se kahan tak). Teeno L pure hon to chart tayyar hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S10 ============ -->
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> Account-number length — the chart’s one big decision (OB13)</h2>
+            <p class="sub">Set once per chart, felt in every account number forever after. Understand it fully before touching it.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Length of G/L Account Number</span>
+              <p>When a chart is defined in <code>OB13</code>, one field — <b>Length of G/L account number</b> — fixes how many digits account numbers in this chart may have, from 1 up to a <b>maximum of 10 digits</b>. It is a property of the <b>chart</b>, not of any single account: choose 6, and every account number in that chart is up to 6 digits (100000, 400000, 501010…). Choose 10, and numbers may run to 10 digits. SAP stores shorter entries with leading zeros where needed, so the length is about <b>capacity and structure</b>, not about typing zeros.</p>
+            </div>
+
+            <h3>How to choose — the practical reasoning</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Length</th><th>Capacity</th><th>Fits which business?</th></tr>
+                <tr><td><code>4</code></td><td>Up to 9,999 numbers</td><td>Very small chart — quickly outgrown</td></tr>
+                <tr><td class="hl"><code>6</code></td><td>Up to 999,999</td><td class="hl">The common practical choice: roomy series per group, numbers still easy to read and dictate on the phone</td></tr>
+                <tr><td><code>8</code></td><td>Up to 99,999,999</td><td>Large groups encoding extra meaning (entity / sub-ledger digits) in the number</td></tr>
+                <tr><td><code>10</code></td><td>Maximum SAP allows</td><td>Very large or heavily structured charts — power that most companies never need</td></tr>
+              </table>
+            </div>
+            <p>Two forces pull in opposite directions. <b>Too short</b> and your series (§11) run out of room — a growing company cannot fit new revenue accounts into a full range. <b>Too long</b> and every human who types, reads, or dictates an account number pays for digits that carry no meaning. Six digits with a clean series plan is the balance most mid-size companies choose — and it is the plan §13 builds.</p>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>Three traps live here. <b>(1)</b> Length is defined <b>per chart of accounts</b> (OB13) — not per company code and not per account. <b>(2)</b> The maximum length is <b>10 digits</b> — any answer saying 8 or 12 as the SAP maximum is wrong. <b>(3)</b> Once G/L accounts exist in the chart, the length can no longer simply be shortened — the decision is effectively a <b>before-you-create-accounts</b> decision, like the company code currency in Lesson 7.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Mobile number ki length</span>
+              <p>A country fixes its mobile numbers at 11 digits before issuing a single SIM — because every later system (billing, directories, apps) is built on that length. The chart’s account-number length is the same founding decision: fix it first, design the series inside it, and only then start “issuing SIMs” — creating accounts.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S11 ============ -->
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> The “series” — account groups &amp; number ranges (OBD4)</h2>
+            <p class="sub">“Series” is the word practitioners use for the number ranges of the chart. Here is exactly what it means in SAP.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Series (Account Group Number Range)</span>
+              <p>In everyday SAP project language, the <b>series</b> of a chart means the set of <b>number intervals</b> that divide the chart’s numbers among its <b>account groups</b>. Technically, each <b>account group</b> (defined per chart in <code>OBD4</code>, table <code>T077S</code>) carries two fields — <b>From Account</b> and <b>To Account</b> — and together all the groups’ intervals form the chart’s series plan: Assets own 100000–199999, Revenue owns 400000–499999, and so on. When a consultant says “set the series”, they mean: <i>open OBD4 and give every account group its correct from–to interval</i>.</p>
+              <p class="urdu">Series matlab numberon ki taqseem — kis group ko kaunsi range milegi. 1xxxxx assets ki gali, 4xxxxx revenue ki gali; ghar (account) usi gali mein bane ga jiska woh hai.</p>
+            </div>
+
+            <h3>The rules the system enforces</h3>
+            <ul class="clean">
+              <li><b>Every G/L account must belong to exactly one account group</b> — the group field is compulsory in the account’s chart segment (SKA1).</li>
+              <li><b>The account number must fall inside its group’s interval.</b> Create account 450000 in group REVN (400000–499999): accepted. Try to create it in group ASST (100000–199999): SAP refuses — the number is outside the group’s series.</li>
+              <li><b>Intervals of different groups in the same chart must not overlap.</b> If ASST claims 100000–199999, no other group in that chart may claim any part of it. Overlap = two owners for one number = forbidden.</li>
+              <li><b>Gaps are allowed and wise.</b> Leaving empty space between series (e.g. Assets end at 199999, Liabilities start at 200000, but within Assets you use only up to 150000) gives the business room to grow without renumbering.</li>
+              <li><b>The interval must fit the chart’s length.</b> In a 6-digit chart, an interval ending at 1000000 (7 digits) is impossible — series design always starts from the length decision (§10).</li>
+            </ul>
+
+            <h3>Job 2 of the account group — do not forget it</h3>
+            <p>From Lesson 7, remember the account group’s second job: it also carries the <b>field status for the account master-data screen</b> — while an account of this group is being created, which master fields are required, optional, or suppressed. The series is job 1; the master-data field status is job 2. Exam questions test both, and test that you do not confuse this with the <i>posting</i> field status group (OBC4), which is a different object entirely.</p>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Sheher ki gali numbering</span>
+              <p>A planned city gives each mohalla a number series: Block A houses are 1–99, Block B are 100–199. An address tells you the block before you read the nameplate — and the town planner forbids two blocks from claiming the same numbers. Account groups are the blocks; the series is the planner’s map; an account number is the house address that must sit in its own block.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S12 ============ -->
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> Step by step — setting the series &amp; length, and saving (OB13 · OBD4)</h2>
+            <p class="sub">The complete hands-on sequence of segment 16:04 – 24:47, in the order a consultant performs it.</p>
+
+            <h3>Part A — Create / check the chart and set its length (OB13)</h3>
+            <ol class="steps">
+              <li>Command field: <code>/nOB13</code>, Enter. (Menu path: <i>SPRO → Financial Accounting → General Ledger Accounting → Master Data → G/L Accounts → Preparations → Edit Chart of Accounts List</i>.) The list of charts (table <code>T004</code>) opens.</li>
+              <li>To <b>check</b> an existing chart: find it with Position/Find, double-click, and read the <b>Length of G/L account number</b> field. To <b>create</b>: choose <b>New Entries</b>.</li>
+              <li>Enter the <b>Chart of Accounts</b> key (4 characters, e.g. <code>IACO</code>) and a clear <b>description</b>.</li>
+              <li>Set <b>Length of G/L account number</b> = <code>6</code> — the decision from §10, made <b>before</b> any account exists.</li>
+              <li>If the group uses one, enter the <b>Group chart of accounts</b> key; leave the chart unblocked only when the setup is complete (a blocked chart cannot receive accounts — a safety lock while building).</li>
+              <li><b>Save (Ctrl+S)</b>. Handle the <b>transport request</b> pop-up (§3): select or create the request, confirm, and read the status-bar confirmation.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the OB13 chart of accounts definition screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OB13 — New Entries: Details of Added Entry (Chart of Accounts) · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Table: T004 — Charts of Accounts</span><br>
+Chart of Accts&nbsp;&nbsp;&nbsp;: <span class="kw">IACO</span><br>
+Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">Ibrahim Apparel — Operating Chart of Accounts</span><br>
+Length of G/L acct no.: <span class="kw">6</span> <span class="cm">(← the LENGTH decision — max 10, set before accounts exist)</span><br>
+Group chart of accts&nbsp;&nbsp;: <span class="hl2">GRP1</span> <span class="cm">(optional — group reporting link)</span><br>
+Blocked&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="hl2">No</span> <span class="cm">(set to blocked while the chart is still being built)</span><br>
+<span class="cm">▸ Ctrl+S → transport request pop-up → confirm → “Data was saved”</span></div>
+            </div>
+
+            <h3>Part B — Set the series: account groups with their intervals (OBD4)</h3>
+            <ol class="steps">
+              <li>Command field: <code>/nOBD4</code>, Enter. (Menu path: <i>SPRO → … → G/L Accounts → Preparations → Define Account Group</i>.)</li>
+              <li>The list shows account groups <b>per chart</b> — first make sure you are looking at rows for <b>your</b> chart (<code>IACO</code>). Working in the wrong chart’s groups is the most common OBD4 accident.</li>
+              <li>Choose <b>New Entries</b> for each group you need. For every group enter: <b>Chart</b>, <b>Account Group</b> key (4 characters), <b>Description</b>, <b>From Account</b>, <b>To Account</b> — the series interval.</li>
+              <li>Enter the full plan (§13 gives one): ASST 100000–199999, LIAB 200000–299999, EQUT 300000–399999, REVN 400000–499999, EXPN 500000–599999, plus a tighter CASH sub-range if your design uses one.</li>
+              <li>Double-check before saving: <b>no overlaps</b>, every interval inside the 6-digit length, sensible gaps left inside each range.</li>
+              <li><b>Save (Ctrl+S)</b>, confirm the transport request, read the confirmation message.</li>
+              <li><b>Verify (§3 habit):</b> exit, re-enter OBD4, filter your chart, and read the intervals back. Then — the real proof — create a test account in <code>FS00</code> inside one interval (accepted) and try one outside its group’s interval (refused). The system itself confirms your series.</li>
+            </ol>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the OBD4 account group list with number intervals">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OBD4 — Change View “G/L Account Groups”: Overview · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Table: T077S — G/L Account Groups · Chart: IACO</span><br>
+Chart&nbsp;&nbsp;Group&nbsp;&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From Acct&nbsp;&nbsp;To Account<br>
+IACO&nbsp;&nbsp;&nbsp;<span class="kw">ASST</span>&nbsp;&nbsp;&nbsp;Assets&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">100000</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">199999</span><br>
+IACO&nbsp;&nbsp;&nbsp;<span class="kw">LIAB</span>&nbsp;&nbsp;&nbsp;Liabilities&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">200000</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">299999</span><br>
+IACO&nbsp;&nbsp;&nbsp;<span class="kw">REVN</span>&nbsp;&nbsp;&nbsp;Revenue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">400000</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">499999</span><br>
+IACO&nbsp;&nbsp;&nbsp;<span class="kw">EXPN</span>&nbsp;&nbsp;&nbsp;Expenses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">500000</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">599999</span><br>
+<span class="cm">▸ No overlaps · all inside the 6-digit length · Ctrl+S saves the series plan</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · Save karne ka tareeqa</span>
+              <p><b>“Likho, Save karo, Dobara kholo.”</b> Har Customizing kaam ka yahi teen-hissa formula hai. Teesra hissa — dobara khol kar verify karna — sab se zyada skip hota hai, aur exam ke scenario sawalon mein wahi sab se zyada test hota hai.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S13 ============ -->
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> Worked example — a complete series plan for a trading company</h2>
+            <p class="sub">One full design, from length decision to the last interval — the pattern you can reuse in the exam and on a project.</p>
+
+            <p><b>The business.</b> A Pakistani apparel trading company (company code <code>PK01</code>, local currency PKR) is implementing SAP. It needs the normal trading accounts: cash and banks, receivables control, inventory, fixed assets, payables control, loans, owner’s capital, sales (domestic and export), purchases / cost of sales, and operating expenses.</p>
+            <p><b>Decision 1 — Length (OB13):</b> <b>6 digits</b>. Capacity is far beyond the company’s needs, numbers stay short enough to read aloud, and the first digit can carry the series meaning.</p>
+            <p><b>Decision 2 — Series (OBD4):</b> the first digit names the family — a design habit called <i>speaking numbers</i>, because the number itself speaks: any 4xxxxx is revenue before you read its name.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Account group</th><th>Series (From – To)</th><th>Example accounts that will live here</th></tr>
+                <tr><td><code>ASST</code> — Assets</td><td class="hl">100000 – 199999</td><td>110000 Cash · 111000 Bank · 120000 Trade Receivables (recon.) · 130000 Inventory · 150000 Fixed Assets</td></tr>
+                <tr><td><code>LIAB</code> — Liabilities</td><td class="hl">200000 – 299999</td><td>210000 Trade Payables (recon.) · 220000 Bank Loans · 230000 Accrued Expenses</td></tr>
+                <tr><td><code>EQUT</code> — Equity</td><td class="hl">300000 – 399999</td><td>300000 Share Capital · 310000 Retained Earnings</td></tr>
+                <tr><td><code>REVN</code> — Revenue</td><td class="hl">400000 – 499999</td><td>400000 Sales — Domestic · 410000 Sales — Export · 420000 Other Income</td></tr>
+                <tr><td><code>EXPN</code> — Expenses</td><td class="hl">500000 – 599999</td><td>500000 Purchases / COGS · 510000 Salaries · 520000 Rent · 530000 Utilities</td></tr>
+              </table>
+            </div>
+
+            <h3>Reading the plan like a consultant</h3>
+            <ul class="clean">
+              <li><b>Balance sheet first, P&amp;L after:</b> 1–3 are Balance Sheet families, 4–5 are P&amp;L families — the number order mirrors the financial statements themselves.</li>
+              <li><b>Reconciliation accounts sit inside their family:</b> receivables control (120000) inside Assets, payables control (210000) inside Liabilities — the series respects accounting logic, not alphabet.</li>
+              <li><b>Room to grow:</b> each family holds 100,000 numbers; the company uses a few dozen. Growth never forces renumbering.</li>
+              <li><b>The proof test:</b> creating <code>450000</code> “Sales — Online” in REVN succeeds (inside 400000–499999); creating it in ASST fails — the series is enforced by the system, not by a policy document.</li>
+            </ul>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · Phone number ka area code</span>
+              <p>Jaise 03 se shuru hone wala number mobile ka lagta hai aur 042 Lahore ka landline — pehle digits hi qisam bata dete hain. Speaking numbers wali series bhi yahi karti hai: 4xxxxx dekhte hi accountant kehta hai “revenue hai”, naam parhne se pehle.</p>
+            </div>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+          <!-- ============ S14 ============ -->
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> Exam traps</h2>
+            <p class="sub">The mistakes C_TS4FI questions are designed to catch in this lesson’s topics. Read these twice.</p>
+            <ul class="clean">
+              <li><b>Trap 1 — “Company and company code are the same object.”</b> No. Company (<code>OX15</code>, 6 characters, table <code>T880</code>) is the consolidation unit; Company Code (<code>OX02</code>, 4 characters, field <code>BUKRS</code>, table <code>T001</code>) is the legal accounting unit you post in.</li>
+              <li><b>Trap 2 — “The user does not know the code, so a report must be run.”</b> The everyday answer is the <b>search help — F4</b> — with wildcards (<code>*</code> any number of characters, <code>+</code> exactly one). “Matchcode” is the older name for the same search idea.</li>
+              <li><b>Trap 3 — “/nOB13 keeps the current transaction open.”</b> <code>/n</code> <b>ends</b> the current transaction. To keep it and open a new window, use <code>/oOB13</code> — a new session.</li>
+              <li><b>Trap 4 — “SE16N is used to maintain company code data.”</b> SE16N only <b>displays</b> tables (e.g. T001). Maintenance happens in the Customizing transaction (OX02). Display ≠ maintain.</li>
+              <li><b>Trap 5 — “Account-number length is set per company code / per account.”</b> It is set <b>per chart of accounts</b> in <code>OB13</code>, maximum <b>10 digits</b>, and is decided before accounts are created.</li>
+              <li><b>Trap 6 — “Two account groups may share part of a number range.”</b> Intervals in one chart must <b>never overlap</b>; gaps are fine, overlaps are rejected by design.</li>
+              <li><b>Trap 7 — “An account number may sit outside its group’s range if the name matches.”</b> The system checks the <b>number against the group’s From–To interval (OBD4)</b>, not the name. Outside the series = creation refused.</li>
+              <li><b>Trap 8 — “Account group and field status group are the same.”</b> Account group (OBD4) = number series + <i>master-data</i> screen field status. Field status group (OBC4) = <i>posting</i> screen field status. Different objects, different jobs — carried from Lesson 7, still examined.</li>
+              <li><b>Trap 9 — “Cancelling the transport prompt still saves the setting.”</b> It does not. A Customizing change saved without its transport request is <b>not saved</b> at all in a system that requires the prompt.</li>
+              <li><b>Trap 10 — “One chart per company code is required.”</b> One operating chart can serve <b>many</b> company codes; each company code has exactly <b>one</b> operating chart. The series and length then apply to every company code sharing that chart.</li>
+            </ul>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S15 ============ -->
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> A–Z glossary</h2>
+            <p class="sub">Every technical term from this lesson, in one line each.</p>
+            <dl class="glossary">
+              <dt>Account Group (OBD4)</dt><dd>Category of G/L accounts inside a chart; carries the number series (From–To interval) and the master-data screen field status. Table T077S.</dd>
+              <dt>BUKRS</dt><dd>Technical field name of the company code (4 characters) in tables and on screens.</dd>
+              <dt>Chart of Accounts</dt><dd>The complete list of G/L accounts; 4-character key, field KTOPL, table T004; defined in OB13, assigned in OB62.</dd>
+              <dt>Company (OX15)</dt><dd>The 6-character consolidation unit a company code reports up to; stored in table T880. No postings happen in a Company.</dd>
+              <dt>Company Code (OX02)</dt><dd>The 4-character legal accounting unit whose books are kept; stored in table T001; all FI postings happen inside it.</dd>
+              <dt>Command Field</dt><dd>The input box at the top-left of the SAP GUI screen where T-codes and slash commands (/n, /o) are typed.</dd>
+              <dt>Customizing (SPRO / IMG)</dt><dd>The consultant’s setup area of SAP; SPRO opens the Implementation Guide (IMG) tree of all settings.</dd>
+              <dt>F1 / F4</dt><dd>F1 = field help (explains the field under the cursor). F4 = search help (list of allowed values for the field).</dd>
+              <dt>Favourites</dt><dd>A user’s personal list of transactions on the SAP Easy Access screen for one-click access.</dd>
+              <dt>Global Parameters (OBY6)</dt><dd>The company code’s working settings: chart of accounts, fiscal year variant, field status variant, posting period variant.</dd>
+              <dt>Length of G/L Account Number</dt><dd>Chart-level setting in OB13 fixing how many digits account numbers may have; maximum 10; decided before accounts are created.</dd>
+              <dt>Matchcode</dt><dd>The older SAP name for a search help — a structured search over allowed values.</dd>
+              <dt>OB13 / OBD4 / OB62</dt><dd>Define chart of accounts (and its length) / define account groups and their series / assign the chart to a company code.</dd>
+              <dt>OX02 / OX15</dt><dd>Define &amp; display company codes (T001) / define &amp; display companies (T880).</dd>
+              <dt>SE16N</dt><dd>General Table Display — view any table’s rows (display only, never maintenance).</dd>
+              <dt>Series</dt><dd>Practical name for the set of number intervals (From Account – To Account) that account groups divide a chart’s numbers into; set in OBD4.</dd>
+              <dt>Session (Mode)</dt><dd>One open SAP GUI window with its own screen journey; /o opens a new session, /i closes the current one.</dd>
+              <dt>Slash Commands</dt><dd>/nXXXX end current transaction, open XXXX · /oXXXX open XXXX in a new session · /n return to menu · /nEND log off with confirmation.</dd>
+              <dt>Transport Request</dt><dd>The numbered container that records a Customizing change for controlled movement DEV → QAS → PRD; cancelling its prompt means the change is not saved.</dd>
+              <dt>Wildcard</dt><dd>Search pattern character: * = any characters, any number; + = exactly one character.</dd>
+            </dl>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S16 ============ -->
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> Summary — the whole lesson on one screen</h2>
+            <ul class="clean">
+              <li><b>Part 2 = practical revision:</b> for every topic the loop is <i>Find it → Open it → Read every field → Change or confirm → Save → Re-open and verify</i>. A setting that is not saved — including its transport request — does not exist.</li>
+              <li><b>Company details:</b> <b>Company</b> = 6-character consolidation unit, <code>OX15</code>, table <code>T880</code>. <b>Company Code</b> = 4-character legal accounting unit (<code>BUKRS</code>), <code>OX02</code>, table <code>T001</code> — name, city, country, currency (<code>WAERS</code>), language, and the Company it reports to. Working settings live in the global parameters, <code>OBY6</code>.</li>
+              <li><b>Searching:</b> <b>F4</b> opens the search help (matchcode) on almost any field; wildcards <code>*</code> (any number of characters) and <code>+</code> (exactly one) make name searches like <code>*Apparel*</code> possible. <code>SE16N</code> verifies the same data at table level — display only.</li>
+              <li><b>Shortcuts:</b> <code>/nXXXX</code> switch transaction (current ends), <code>/oXXXX</code> new session (current survives), <code>/n</code> back to menu, <code>/nEND</code> log off safely, <code>Ctrl+/</code> jump to the command field, <code>F1</code> field help, <code>F4</code> value help, <code>Ctrl+S</code> save. Favourites pin your daily T-codes to the Easy Access screen.</li>
+              <li><b>Chart of Accounts:</b> defined in <code>OB13</code> (table <code>T004</code>), assigned in <code>OB62</code>; exactly one operating chart per company code, shareable by many company codes.</li>
+              <li><b>Length:</b> the chart’s <b>Length of G/L account number</b> (OB13) fixes the digits of every account number — maximum <b>10</b>, practically often <b>6</b> — and is decided <b>before</b> accounts are created.</li>
+              <li><b>Series:</b> each <b>account group</b> (OBD4, table <code>T077S</code>) owns a <b>From–To interval</b>; all intervals together are the chart’s series. Rules: every account belongs to one group, its number must sit inside the group’s interval, intervals never overlap, gaps are allowed and wise, and everything must fit the chart’s length. Save with Ctrl+S, confirm the transport request, then re-open and prove it with a test account in FS00.</li>
+            </ul>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <!-- ============ S17 ============ -->
+          <section class="lesson" id="s17">
+            <h2><span class="no">17</span> Self-test — 10 questions</h2>
+            <p class="sub">Click an answer to check yourself. Explanations appear instantly. Answer all 10 questions and mark every section Read to complete this lesson and unlock the next one.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart the test</button>
+
+            <div class="sec-foot">
+              <button class="mark-read" type="button"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span><span class="mr-label">Mark Read</span></button>
+              <span class="read-status">Not read yet</span>
+            </div>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span>
+            <div>
+              <b>Next: Part 2 · Lesson 2 — the practical work continues</b><br>
+              <span style="color:var(--ink-soft)">A small preview only: you have now revised how to <b>find</b> company details and how to <b>set and save</b> the chart’s series and length. The next lesson continues the same hands-on style — building further configuration on top of the company code and chart you prepared today, with the same loop: find it, open it, set it, save it, verify it. Finish this lesson fully — every section marked Read and the self-test answered — so the next lesson opens for you.</span>
+            </div>
+          </div>
+
+          <footer>
+            course created by Muhammad Asad Ullah Ibrahim<br>
+            Part 2 · Lesson 1 of the SAP S/4HANA Financial Accounting series · Prepared for C_TS4FI (SAP S/4HANA Cloud Private Edition, Financial Accounting) exam preparation · All SAP screens shown are re-created illustrations for learning, not real SAP screenshots.
+          </footer>
+        </main>
+      </div>
+    </div>
+    </div>
+
+    <script>
+    // ---- Shared course progress store (localStorage, shared by all lessons) ----
+    window.SAPProgress=(function(){
+      var KEY='sapCts4fiProgress_v1';
+      function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+      function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+      function getLesson(n){ var s=load(), L=null;
+        if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+        if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+        return L; }
+      function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+        for(var p in patch){ cur[p]=patch[p]; }
+        s.lessons[k]=cur; saveAll(s); return cur; }
+      function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+        return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+      function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+        s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+      return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+    })();
+
+    // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+    function sha256Hex(ascii){
+      ascii=unescape(encodeURIComponent(ascii));
+      function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+      var maxWord=Math.pow(2,32), i, j, result='';
+      var words=[], asciiBitLength=ascii.length*8;
+      var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+      var primeCounter=k.length, isComposite={};
+      for(var candidate=2; primeCounter<64; candidate++){
+        if(!isComposite[candidate]){
+          for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+          hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+          k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+        }
+      }
+      ascii+='\x80';
+      while(ascii.length%64-56) ascii+='\x00';
+      for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+      words[words.length]=((asciiBitLength/maxWord)|0);
+      words[words.length]=(asciiBitLength);
+      for(j=0;j<words.length;){
+        var w=words.slice(j,j+=16), oldHash=hash;
+        hash=hash.slice(0,8);
+        for(i=0;i<64;i++){
+          var w15=w[i-15], w2=w[i-2];
+          var a=hash[0], e=hash[4];
+          var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+          var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+          hash=[(temp1+temp2)|0].concat(hash);
+          hash[4]=(hash[4]+temp1)|0;
+        }
+        for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+      }
+      for(i=0;i<8;i++){
+        for(j=3;j+1;j--){
+          var b=(hash[i]>>(j*8))&255;
+          result+=((b<16)?0:'')+b.toString(16);
+        }
+      }
+      return result;
+    }
+
+    // ---- Part 2 Lesson 1 gating: locked until Part 1 Lesson 10 is fully complete, or the gate test is passed 5/5 ----
+    (function(){
+      var THIS_LESSON='p2-1', PREV_LESSON=10, PREV_SECTIONS=11, LOCK_MS=60*60*1000;
+      var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+      var GATE_Q=[
+        {q:"What does a Tolerance Group control in SAP FI?",opts:["The maximum posting difference and amount limits allowed for a group of users or G/L accounts","The number of sessions a user may open at the same time","The exchange rate type used for foreign currency postings","The length of G/L account numbers in the chart of accounts"],a:0},
+        {q:"Which statement about Parked Documents is correct?",opts:["A parked document already updates G/L balances and cannot be changed","A parked document is saved without updating balances and can be edited and posted later","A parked document is the same as a deleted document","Parking a document is only possible for customer invoices"],a:1},
+        {q:"What is transaction F-02 used for?",opts:["Displaying the chart of accounts","Creating a new company code","General posting — entering a G/L account posting","Running the payment program for vendors"],a:2},
+        {q:"In Accounts Payable, what is the role of the Reconciliation Account?",opts:["It is the bank account from which vendors are paid","It stores the vendor's address and payment terms","It is a G/L account that is updated automatically with every vendor posting, linking the subledger to the general ledger","It is used only at year-end for closing entries"],a:2},
+        {q:"What happens when a payment difference is within the permitted tolerance?",opts:["The system blocks the payment until a manager approves it","The system rejects the invoice and returns it to the vendor","The document must be parked and can never be posted","The system posts the difference automatically to a difference account and clears the item"],a:3}
+      ];
+      var gateScreen=document.getElementById('gateScreen');
+      var content=document.getElementById('lessonContent');
+      var lockBox=document.getElementById('gateLockBox');
+      var lockUntilEl=document.getElementById('gateLockUntil');
+      var countdownEl=document.getElementById('gateCountdown');
+      var testArea=document.getElementById('gateTestArea');
+      var qWrap=document.getElementById('gateQuestions');
+      var scoreEl=document.getElementById('gateScore');
+      var msgEl=document.getElementById('gateMsg');
+      var attemptsEl=document.getElementById('gateAttempts');
+      var submitBtn=document.getElementById('gateSubmit');
+      var retryBtn=document.getElementById('gateRetry');
+      var adminBtn=document.getElementById('adminBtn');
+      var adminForm=document.getElementById('adminForm');
+      var adminPw=document.getElementById('adminPw');
+      var adminSubmit=document.getElementById('adminSubmit');
+      var adminMsg=document.getElementById('adminMsg');
+      var timer=null, selected={};
+
+      function isPrevComplete(){
+        var L=window.SAPProgress.getLesson(PREV_LESSON);
+        if(!L) return false;
+        var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+        var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+        return !!(allRead&&quiz);
+      }
+      function unlockLesson(){
+        if(timer){ clearInterval(timer); timer=null; }
+        gateScreen.hidden=true; gateScreen.style.display='none';
+        content.hidden=false; content.style.display='';
+        window.scrollTo(0,0);
+      }
+      function updateCountdown(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var rem=g.lockUntil-Date.now();
+        if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+        var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+        countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+      }
+      function showLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        lockBox.hidden=false;
+        testArea.style.display='none';
+        lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        updateCountdown();
+        if(timer) clearInterval(timer);
+        timer=setInterval(updateCountdown,1000);
+      }
+      function refreshLock(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        var now=Date.now();
+        if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+        if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+        lockBox.hidden=true;
+        testArea.style.display='';
+        return false;
+      }
+      function updateAttempts(){
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+      }
+      function renderGate(){
+        selected={};
+        scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+        submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+        qWrap.innerHTML='';
+        GATE_Q.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='gate-q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              selected[qi]=oi;
+              var bs=opts.querySelectorAll('.gate-opt');
+              bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+              msgEl.textContent='';
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); qWrap.appendChild(box);
+        });
+      }
+      submitBtn.addEventListener('click',function(){
+        if(refreshLock()) return;
+        if(Object.keys(selected).length<GATE_Q.length){
+          msgEl.textContent='Please answer all 5 questions before submitting.';
+          scoreEl.textContent='';
+          return;
+        }
+        var score=0;
+        GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+        qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+        submitBtn.hidden=true;
+        scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+        var g=window.SAPProgress.getGate(THIS_LESSON);
+        if(score===GATE_Q.length){
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          msgEl.textContent='Gate test passed. Part 2 · Lesson 1 is now unlocked.';
+          msgEl.className='ok';
+          updateAttempts();
+          setTimeout(unlockLesson,900);
+        }else{
+          g.fails=(g.fails||0)+1;
+          msgEl.textContent='Go back and complete previous lesson.';
+          msgEl.className='';
+          if(g.fails>=3){
+            g.lockUntil=Date.now()+LOCK_MS;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            updateAttempts();
+            refreshLock();
+          }else{
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            retryBtn.hidden=false;
+            updateAttempts();
+          }
+        }
+      });
+      retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+      adminBtn.addEventListener('click',function(){
+        adminForm.hidden=!adminForm.hidden;
+        if(!adminForm.hidden) adminPw.focus();
+      });
+      function tryAdminUnlock(){
+        var val=adminPw.value;
+        if(!val) return;
+        if(sha256Hex(val)===ADMIN_HASH){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          g.fails=0; g.lockUntil=0; g.unlocked=true;
+          window.SAPProgress.saveGate(THIS_LESSON,g);
+          adminMsg.className=''; adminMsg.style.color='var(--green)';
+          adminMsg.textContent='Unlocked. Opening Part 2 · Lesson 1…';
+          adminPw.value='';
+          setTimeout(unlockLesson,700);
+        }else{
+          adminMsg.style.color=''; adminMsg.className='err';
+          adminMsg.textContent='Incorrect password. Please try again.';
+          adminPw.value='';
+          adminPw.focus();
+        }
+      }
+      adminSubmit.addEventListener('click',tryAdminUnlock);
+      adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+      // ---- Initial state ----
+      var g0=window.SAPProgress.getGate(THIS_LESSON);
+      if(isPrevComplete()||g0.unlocked===true){
+        unlockLesson();
+      }else{
+        gateScreen.hidden=false; gateScreen.style.display='';
+        content.hidden=true; content.style.display='none';
+        if(!refreshLock()) renderGate();
+        updateAttempts();
+      }
+    })();
+    </script>
+
+    <script>
+    (function(){
+      "use strict";
+      var THIS_KEY='p2-1';
+      /* ---------- Theme switch (top right, default Light) ---------- */
+      var themeBtn=document.getElementById('themeBtn');
+      var themeLabel=document.getElementById('themeLabel');
+      function applyTheme(t){
+        document.documentElement.setAttribute('data-theme',t);
+        if(themeLabel) themeLabel.textContent=(t==='dark'?'Dark':'Light');
+      }
+      applyTheme('light');
+      themeBtn.addEventListener('click',function(){
+        var cur=document.documentElement.getAttribute('data-theme');
+        applyTheme(cur==='dark'?'light':'dark');
+      });
+
+      /* ---------- Mark Read + sidebar progress + scroll-spy ---------- */
+      var sections=[].slice.call(document.querySelectorAll('section.lesson'));
+      var tocItems={};
+      [].slice.call(document.querySelectorAll('#tocList li')).forEach(function(li){
+        var a=li.querySelector('a');
+        if(a) tocItems[a.getAttribute('href').slice(1)]={li:li,a:a};
+      });
+      var readSet={}, total=sections.length;
+      var pctText=document.getElementById('pctText'), sideFill=document.getElementById('sideFill'),
+          countText=document.getElementById('countText'), bar=document.getElementById('progressBar');
+
+      function persist(){
+        try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(THIS_KEY,{readSections:arr, allRead:(total>0&&arr.length===total)}); } }catch(e){}
+      }
+      function updateProgress(){
+        var n=Object.keys(readSet).length;
+        var pct=total?Math.round(n/total*100):0;
+        if(pctText) pctText.textContent=pct+'%';
+        if(sideFill) sideFill.style.width=pct+'%';
+        if(countText) countText.textContent=n+' of '+total+' sections marked read';
+        if(bar) bar.style.width=pct+'%';
+      }
+      function reflect(sec){
+        var id=sec.id, on=!!readSet[id];
+        var btn=sec.querySelector('.mark-read'), status=sec.querySelector('.read-status'), label=sec.querySelector('.mr-label');
+        if(btn) btn.classList.toggle('done',on);
+        if(label) label.textContent=on?'Read':'Mark Read';
+        if(status) status.textContent=on?'Marked as read':'Not read yet';
+        sec.classList.toggle('is-read',on);
+        if(tocItems[id]) tocItems[id].li.classList.toggle('read',on);
+      }
+      // Restore this lesson's saved read state
+      try{
+        var saved=window.SAPProgress?window.SAPProgress.getLesson(THIS_KEY):null;
+        if(saved&&saved.readSections){ saved.readSections.forEach(function(id){ readSet[id]=true; }); }
+      }catch(e){}
+      sections.forEach(function(sec){
+        reflect(sec);
+        var btn=sec.querySelector('.mark-read');
+        if(btn) btn.addEventListener('click',function(){
+          if(readSet[sec.id]) delete readSet[sec.id]; else readSet[sec.id]=true;
+          reflect(sec); updateProgress(); persist();
+        });
+      });
+      updateProgress();
+
+      // Scroll-spy: highlight the section currently on screen in the sidebar
+      if('IntersectionObserver' in window){
+        var spy=new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if(en.isIntersecting&&tocItems[en.target.id]){
+              Object.keys(tocItems).forEach(function(k){ tocItems[k].li.classList.remove('active'); });
+              tocItems[en.target.id].li.classList.add('active');
+            }
+          });
+        },{rootMargin:'-25% 0px -65% 0px'});
+        sections.forEach(function(s){ spy.observe(s); });
+      }
+    })();
+    </script>
+
+    <script>
+    (function(){
+      var QUESTIONS=[
+        {q:"A manager asks you to 'show the company details' for the legal entity whose Balance Sheet is prepared in SAP. Which object, T-code and table are correct?",opts:["Company — OX15 — table T880","Company Code — OX02 — table T001","Company Code — OB13 — table T004","Company — SE16N — table SKA1"],a:1,why:"The legal accounting unit is the Company Code (BUKRS, 4 characters), defined in OX02 and stored in T001. The Company (OX15, T880) is only the consolidation unit above it."},
+        {q:"You do not know a company code, but you know the company name contains the word 'Apparel'. What is the fastest correct way to find the code?",opts:["Run SE16N on every table until the name appears","Ask the basis team to extract the codes","Open the field's search help with F4 and search the name with wildcards: *Apparel*","Type APPAREL into the command field"],a:2,why:"F4 search help with wildcards (* = any characters) is the everyday tool for finding codes by name. The star on both sides means 'contains'."},
+        {q:"What does typing /oOB13 in the command field do?",opts:["Ends the current transaction and opens OB13 in the same window","Opens OB13 in a NEW session, keeping the current screen alive","Logs off and reopens OB13 after login","Opens OB13 in display mode only"],a:1,why:"/o opens a new session (window) — the current transaction survives. /nOB13 would END the current transaction first. That difference is Trap 3."},
+        {q:"You check company code PK01 in OX02 and want to verify the stored data at database level. Which tool and table do you use?",opts:["FS00 — table SKB1","OBY6 — table T004","SE16N — table T001, filtered on BUKRS = PK01","OB13 — table T077S"],a:2,why:"SE16N is the general table display (view only). Company codes are stored in T001; BUKRS is the company code field."},
+        {q:"Where is the Length of G/L Account Number set, and what is its maximum?",opts:["Per company code in OX02 — maximum 8","Per account in FS00 — maximum 10","Per chart of accounts in OB13 — maximum 10","Per account group in OBD4 — maximum 6"],a:2,why:"The length is a property of the CHART, set in OB13 before accounts are created. SAP's maximum is 10 digits; 6 is a common practical choice, not the limit."},
+        {q:"In project language, what does 'setting the series' of a chart of accounts mean?",opts:["Sorting the accounts alphabetically","Giving every account group its From–To number interval in OBD4","Assigning the chart to all company codes in OB62","Blocking the chart while it is being built"],a:1,why:"The 'series' is the set of number ranges owned by the account groups — From Account to To Account in OBD4 (table T077S)."},
+        {q:"Account group ASST owns 100000–199999 and REVN owns 400000–499999 in the same chart. Which creation will SAP accept?",opts:["Account 150000 in group REVN","Account 450000 in group ASST","Account 450000 in group REVN","Account 250000 in group ASST"],a:2,why:"The account number must fall inside its own group's interval. 450000 sits inside REVN's 400000–499999 — accepted. Every other pairing is outside its group's series."},
+        {q:"Which statement about account group intervals in one chart is correct?",opts:["Intervals may overlap if the groups have different names","Intervals must never overlap, but gaps between them are allowed","All intervals must be exactly the same size","Intervals are defined per company code, not per chart"],a:1,why:"Two groups owning the same number would make the number ambiguous — overlaps are forbidden. Gaps are allowed and give room to grow. Groups (and their intervals) are defined per chart in OBD4."},
+        {q:"A consultant enters a Customizing change and cancels the transport request pop-up. What is the result?",opts:["The change is saved locally and transported later automatically","The change is saved, but without a description","The change is NOT saved","The change is saved only in the current session"],a:2,why:"In a system that prompts for a Customizing request, saving and recording in the request are one act. Cancelling the prompt cancels the save."},
+        {q:"Which statement about the operating chart of accounts and company codes is correct?",opts:["Every company code needs its own separate chart of accounts","One operating chart can be assigned to many company codes, and each company code has exactly one operating chart","A company code may have two operating charts if they share the same length","The chart is assigned to the company (OX15), not to company codes"],a:1,why:"Define once, assign many times — the variant principle from Part 1. The chart is assigned to company codes in OB62; the length and series then apply to all of them."}
+      ];
+      var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+      var answered=0, correct=0;
+      function render(){
+        quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+        QUESTIONS.forEach(function(item,qi){
+          var box=document.createElement('div'); box.className='q';
+          var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+          var opts=document.createElement('div'); opts.className='opts';
+          var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+          item.opts.forEach(function(text,oi){
+            var b=document.createElement('button'); b.type='button'; b.className='opt';
+            var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+            b.appendChild(letter); b.appendChild(document.createTextNode(text));
+            b.addEventListener('click',function(){
+              if(box.dataset.done) return; box.dataset.done='1'; answered++;
+              var buttons=opts.querySelectorAll('.opt');
+              buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+              if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+              explain.classList.add('show');
+              if(answered===QUESTIONS.length){
+                try{ if(window.SAPProgress) window.SAPProgress.saveLesson('p2-1',{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=8?' — Excellent! Mark every section Read to complete this lesson.':' — Re-read the sections above once, then try again. You can do it.');
+              } else {
+                scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+              }
+            });
+            opts.appendChild(b);
+          });
+          box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+        });
+      }
+      render();
+      document.getElementById('resetQuiz').addEventListener('click',render);
+    })();
+    </script>
+  </body>
+</html>

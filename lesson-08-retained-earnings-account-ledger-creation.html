@@ -1,0 +1,1106 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 8 — Retained Earnings Account &amp; Ledger Creation · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:60;transition:width .1s linear}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0;display:flex;gap:9px;align-items:baseline}
+      nav.toc li a{flex:1}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc .dot{width:15px;height:15px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:2px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;line-height:1}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read .dot::after{content:"✓"}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.active a{background:var(--accent-soft);color:var(--accent-ink);font-weight:700;box-shadow:inset 3px 0 0 var(--accent)}
+      nav.toc li.active .dot{border-color:var(--accent)}
+      nav.toc li.active.read .dot{border-color:var(--green)}
+      .toc-progress{margin:2px 0 12px}
+      .tp-row{display:flex;justify-content:space-between;align-items:baseline;font-size:.85rem;font-weight:700;color:var(--ink)}
+      .tp-row #readPct{color:var(--green)}
+      .tp-track{height:8px;background:var(--surface2);border-radius:999px;overflow:hidden;margin-top:6px}
+      .tp-fill{height:100%;width:0;background:var(--green);border-radius:999px;transition:width .3s ease}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      /* gate / locked screen */
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;margin-top:26px;box-shadow:var(--shadow);max-width:760px}
+      @media (max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      .btn-ghost{background:transparent;color:var(--accent-ink);border:2px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .btn:disabled{opacity:.55;cursor:default}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600;font-size:.93rem;margin:0}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+      .mark-row{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+      .mark-read{background:var(--surface);color:var(--green);border:2px solid var(--green);border-radius:999px;padding:9px 22px;font:700 .92rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px;transition:background .15s ease,color .15s ease}
+      .mark-read:hover{background:var(--green-soft)}
+      .mark-read.done{background:var(--green);color:#fff;border-color:var(--green)}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}.tp-fill,.mark-read{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 8 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <div class="wrap">
+      <!-- ============ GATE / LOCKED SCREEN (shown until Lesson 7 is complete or the gate test is passed) ============ -->
+      <div id="gateScreen">
+        <section class="gate-card" aria-labelledby="gateTitle">
+          <div class="gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          </div>
+          <h2 id="gateTitle">Lesson 8 is locked</h2>
+          <p>Lesson 8 opens only when <b>Lesson 7 is fully complete</b> — every Lesson 7 section marked Read <b>and</b> the Lesson 7 self-test answered.</p>
+          <p>If you have already studied Lesson 7, you can unlock Lesson 8 by passing the <b>Gate Test</b> below: 5 questions from Lesson 7. You need <b>5 / 5</b> to pass. Only your marks are shown after you submit — the correct answers are never displayed.</p>
+
+          <div class="gate-lockbox" id="gateLockBox" hidden>
+            <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+            <p>Locked until: <b id="gateLockUntil">—</b></p>
+            <p>Time remaining: <b id="gateCountdown">—</b></p>
+            <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+          </div>
+
+          <div id="gateTestArea">
+            <div id="gateQuestions"></div>
+            <p id="gateScore" aria-live="polite"></p>
+            <p id="gateMsg" aria-live="polite"></p>
+            <div class="gate-actions">
+              <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+              <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+            </div>
+            <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+          </div>
+
+          <div class="gate-admin">
+            <button class="btn btn-ghost" id="adminBtn" type="button">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 21 2"/><path d="M15 8l3 3"/></svg>Admin Unlock
+            </button>
+            <div class="gate-admin-form" id="adminForm" hidden>
+              <label for="adminPw">Admin password</label>
+              <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+              <p id="adminMsg" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+        </section>
+      </div>
+
+      <div id="lessonContent" hidden>
+      <header class="hero">
+        <span class="kicker">Lesson 8 · Video 05:27:24 – 06:26:05</span>
+        <h1>Retained Earnings Account &amp; Ledger Creation</h1>
+        <p class="lede">In Lesson 7 you built the Chart of Accounts — the full list of G/L accounts. But two things are still missing before SAP can ever close a year or store a posting properly. First: when the year ends, where does the profit or loss <em>go</em>? That answer is the <strong>Retained Earnings Account</strong>. Second: every posting in SAP is written into a book called a <strong>Ledger</strong> — and in this lesson you create that book. <span class="urdu">(Is lesson mein hum saal ke aakhir mein munafa/nuksan ko band karna, aur SAP ki asal "bahi khata" — ledger — banana seekhenge.)</span></p>
+        <div class="hero-meta">
+          <span class="chip">Part A · <b>Retained Earnings</b> — 05:27:24</span>
+          <span class="chip">Part B · <b>Ledger Creation</b> — 05:41:00</span>
+          <span class="chip">Key T-codes · <b>OB53 · FINSC_LEDGER</b></span>
+          <span class="chip">Level · <b>Beginner — zero SAP assumed</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <ol>
+            <li><span class="dot"></span><a href="#s1">Where we are</a></li>
+            <li><span class="dot"></span><a href="#s2">Year-end in plain accounting</a></li>
+            <li><span class="dot"></span><a href="#s3">The Retained Earnings Account</a></li>
+            <li><span class="dot"></span><a href="#s4">Define it in OB53 — step by step</a></li>
+            <li><span class="dot"></span><a href="#s5">Balance Carryforward — how it runs</a></li>
+            <li><span class="dot"></span><a href="#s6">What is a Ledger in SAP?</a></li>
+            <li><span class="dot"></span><a href="#s7">Leading Ledger 0L</a></li>
+            <li><span class="dot"></span><a href="#s8">Create a Non-Leading Ledger — steps</a></li>
+            <li><span class="dot"></span><a href="#s9">Ledger Groups &amp; Parallel Accounting</a></li>
+            <li><span class="dot"></span><a href="#s10">T-codes &amp; Tables</a></li>
+            <li><span class="dot"></span><a href="#s11">Exam Traps</a></li>
+            <li><span class="dot"></span><a href="#s12">Glossary A–Z</a></li>
+            <li><span class="dot"></span><a href="#s13">Summary</a></li>
+            <li><span class="dot"></span><a href="#s14">Self-Test — 12 Questions</a></li>
+          </ol>
+          <div class="toc-progress" aria-live="polite">
+            <div class="tp-row"><span id="readCount">0 of 14 sections read</span><span id="readPct">0%</span></div>
+            <div class="tp-track"><div class="tp-fill" id="readFill"></div></div>
+          </div>
+          <p class="toc-note">Screens shown in this lesson are re-created illustrations for learning — not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Where we are in the course</h2>
+            <p class="sub">A quick recap, so this lesson sits in the right place in your head.</p>
+            <p>So far you have built the skeleton of a company inside SAP:</p>
+            <ul class="clean">
+              <li><b>Lesson 5</b> — Company and <strong>Company Code</strong> (the legal unit that keeps its own books).</li>
+              <li><b>Lesson 6</b> — Business Area, <strong>Fiscal Year Variant</strong> (the calendar of the books), Credit Control Area, <strong>Posting Period Variant</strong> (which months are open for posting).</li>
+              <li><b>Lesson 7</b> — Currencies, the <strong>Chart of Accounts</strong> (the list of all G/L accounts, T-code <code>OB13</code>), and Field Status.</li>
+            </ul>
+            <p>Now think like an accountant for one second. Your chart of accounts has two families of accounts:</p>
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>Balance Sheet accounts</h4>
+                <p>Cash, bank, machinery, loans, capital. These <b>live on</b> — their balance on 31 December becomes the opening balance on 1 January. <span class="urdu">(Ye khaate agle saal mein bhi chalte rehte hain.)</span></p>
+              </div>
+              <div class="mini-card">
+                <h4>P&amp;L accounts (Income &amp; Expense)</h4>
+                <p>Sales, rent, salaries, electricity. These are <b>only for one year</b>. At year-end they must be closed to zero, and their net result — profit or loss — must move somewhere. That "somewhere" is today's first topic.</p>
+              </div>
+            </div>
+            <div class="box term">
+              <span class="box-title">New term — G/L Account</span>
+              <p><b>G/L</b> means <b>General Ledger</b>. A G/L account is one head of account in the chart of accounts — for example "Rent Expense" or "Bank Account". You already know this from manual accounting: it is simply one page of your ledger book.</p>
+            </div>
+          </section>
+
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> Year-end in plain accounting — first, no SAP</h2>
+            <p class="sub">You already know this from Financial Accounting. SAP only automates it.</p>
+            <p>At the end of the year, an accountant prepares the <strong>Profit &amp; Loss Account</strong> (Income Statement). All revenues are collected on one side, all expenses on the other. The difference is:</p>
+            <ul class="clean">
+              <li>Revenue &gt; Expense → <b>Net Profit</b></li>
+              <li>Expense &gt; Revenue → <b>Net Loss</b></li>
+            </ul>
+            <p>That net profit or loss does not disappear. It belongs to the owners of the business, so it is transferred to the <strong>Balance Sheet</strong>, into the owners' equity section. Year after year, these undistributed profits keep collecting in one equity account. Accountants call that accumulated amount <strong>Retained Earnings</strong> — the profit the business <em>retained</em> (kept inside the business) instead of paying out as dividend.</p>
+            <div class="box term">
+              <span class="box-title">New term — Retained Earnings</span>
+              <p>The total profit of all past years, minus losses and minus dividends paid out. It is a <b>Balance Sheet account</b> sitting inside <b>Equity</b> (owners' funds), next to Share Capital. <span class="urdu">(Saalon ka jama shuda munafa jo business ne bahar nahi nikala, andar hi rakha.)</span></p>
+            </div>
+            <div class="box analogy">
+              <span class="box-title">Analogy — the savings jar</span>
+              <p>Imagine a shopkeeper who, every December, counts the year's profit and puts it into one big glass jar labelled "Savings". He never mixes it with daily cash. After 5 years, the jar shows the total savings of 5 years. That jar is Retained Earnings: every year's result is poured into the <b>same one jar</b>, and it keeps growing (or shrinking, in a loss year).</p>
+            </div>
+            <figure class="diagram" aria-label="Diagram: P and L accounts close into Retained Earnings">
+              <svg viewBox="0 0 720 250" role="img">
+                <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text class="svg-title" x="20" y="28">Year-end closing — where the year's result goes</text>
+                <rect class="svg-box" x="20" y="50" width="200" height="52" rx="8"/>
+                <text class="svg-title" x="36" y="74">Revenue accounts</text>
+                <text class="svg-sub" x="36" y="92">Sales, Interest Income…</text>
+                <rect class="svg-box" x="20" y="118" width="200" height="52" rx="8"/>
+                <text class="svg-title" x="36" y="142">Expense accounts</text>
+                <text class="svg-sub" x="36" y="160">Rent, Salaries, Power…</text>
+                <rect class="svg-box-a" x="290" y="84" width="170" height="52" rx="8"/>
+                <text class="svg-title" x="306" y="108">Net result of the year</text>
+                <text class="svg-sub" x="306" y="126">Profit or Loss</text>
+                <rect class="svg-box-g" x="520" y="84" width="180" height="52" rx="8"/>
+                <text class="svg-title" x="536" y="108">RETAINED EARNINGS</text>
+                <text class="svg-sub" x="536" y="126">Balance Sheet · Equity</text>
+                <path class="svg-arrow" d="M220 76 C 255 76, 255 100, 288 104"/>
+                <path class="svg-arrow" d="M220 144 C 255 144, 255 120, 288 116"/>
+                <path class="svg-arrow" d="M460 110 L 516 110"/>
+                <text class="svg-sub" x="20" y="205">P&amp;L accounts are closed to ZERO — they start the new year empty.</text>
+                <text class="svg-sub" x="20" y="226">Retained Earnings carries the result forward — it never closes; it accumulates.</text>
+              </svg>
+              <figcaption>Diagram (illustration): at year-end, all P&amp;L accounts close into one net result, which is transferred to the Retained Earnings account in the Balance Sheet.</figcaption>
+            </figure>
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>"P&amp;L dies every year, Retained Earnings lives forever."</b> Income and expense accounts are reborn empty each year; the retained earnings account is the one permanent home of every year's result.</p>
+            </div>
+          </section>
+
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> The Retained Earnings Account in SAP</h2>
+            <p class="sub">SAP cannot close the year unless you first tell it: "this is the jar."</p>
+            <p>In SAP, the retained earnings account is a <strong>normal Balance Sheet G/L account</strong> — for example account <code>330000</code> "Retained Earnings" — that you create in the chart of accounts like any other account (T-code <code>FS00</code>, from Lesson 7). Creating the account alone is <em>not</em> enough. You must also <strong>declare</strong> it as the retained earnings account, so SAP knows: "when the year closes, pour every P&amp;L result into <em>this</em> account."</p>
+
+            <h3>The link: P&amp;L Statement Account Type</h3>
+            <p>How does SAP know which P&amp;L accounts belong to which retained earnings account? Through a small code called the <strong>P&amp;L statement account type</strong>.</p>
+            <div class="box term">
+              <span class="box-title">New term — P&amp;L Statement Account Type</span>
+              <p>A one-character code (standard SAP uses <code>X</code>) that works like a <b>label</b>. You stick this label on (1) the retained earnings account definition, and (2) every P&amp;L account in the chart of accounts. At closing time, SAP collects all P&amp;L accounts carrying label <code>X</code> and transfers their total to the retained earnings account that also carries label <code>X</code>.</p>
+            </div>
+            <p>Where is the label set?</p>
+            <ul class="clean">
+              <li>On each <b>P&amp;L account</b>: in <code>FS00</code>, in the <b>chart of accounts segment</b> (the part of the account valid for the whole chart — table <code>SKA1</code>), there is a field <b>"P&amp;L statement account type"</b>. For revenue and expense accounts you enter <code>X</code> there.</li>
+              <li>On the <b>retained earnings side</b>: in T-code <code>OB53</code> you say "for chart of accounts <code>YCOA</code>, type <code>X</code> means account <code>330000</code>".</li>
+            </ul>
+            <div class="box analogy">
+              <span class="box-title">Analogy — labelled boxes and one shelf</span>
+              <p>Think of a warehouse. Every income/expense box gets a sticker "X". One shelf is marked: "All X boxes are emptied onto THIS shelf — shelf 330000." At year-end, the worker (SAP's carryforward program) simply follows the stickers. No sticker, no transfer — that account would be forgotten at closing. <span class="urdu">(Jis khaate par X ka label nahi, wo saal-band mein reh jayega.)</span></p>
+            </div>
+
+            <h3>One retained earnings account — or more?</h3>
+            <p>The standard, and what the exam expects, is <strong>one retained earnings account per chart of accounts</strong>, using type <code>X</code>. But SAP technically allows <strong>more than one</strong>: you can define extra types (for example <code>A</code>, <code>B</code>) each pointing to a different retained earnings account — useful if a group wants, say, operating profit and financial profit accumulated separately. Each P&amp;L account then carries the type of the retained earnings account it should close into.</p>
+            <div class="box trap">
+              <span class="box-title">Exam trap #1</span>
+              <p>The retained earnings account is defined <b>per Chart of Accounts</b> — <b>NOT per Company Code</b>. The <code>OB53</code> screen asks for the chart of accounts key, never a company code. Because many company codes can share one chart (Lesson 7), they automatically share the same retained earnings definition. If an exam option says "retained earnings is defined for each company code in OB53" — it is wrong.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Exam trap #2</span>
+              <p>You <b>never post directly</b> to the retained earnings account in daily business, and it is a <b>Balance Sheet account</b>, not a P&amp;L account. Its balance changes only through the year-end balance carryforward (and rare manual corrections by senior consultants). If a question calls it a "P&amp;L account" — wrong family: it lives in Equity on the Balance Sheet.</p>
+            </div>
+          </section>
+
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> Define it in OB53 — step by step</h2>
+            <p class="sub">Two minutes of configuration that the whole year-end depends on.</p>
+            <h3>Before you start — the prerequisites</h3>
+            <ul class="clean">
+              <li>The <b>chart of accounts</b> exists (Lesson 7, <code>OB13</code>) — here we use <code>YCOA</code>.</li>
+              <li>The retained earnings <b>G/L account itself exists</b> in that chart — e.g. <code>330000</code>, created as a Balance Sheet account.</li>
+              <li>Your P&amp;L accounts have (or will have) <code>X</code> in their P&amp;L statement account type field.</li>
+            </ul>
+            <h3>The steps</h3>
+            <ul class="clean">
+              <li><b>Step 1</b> — Open T-code <code>OB53</code>, or follow the SPRO path below.</li>
+              <li><b>Step 2</b> — SAP asks for the <b>Chart of Accounts</b>. Enter <code>YCOA</code> and press Enter.</li>
+              <li><b>Step 3</b> — Choose <b>New Entries</b>. In the <b>P&amp;L statement account type</b> column enter <code>X</code>.</li>
+              <li><b>Step 4</b> — In the <b>Account</b> column enter the retained earnings G/L account number, e.g. <code>330000</code>.</li>
+              <li><b>Step 5</b> — Save. SAP asks for a <b>transport request</b> (Lesson 2 — the parcel that carries configuration from DEV to QAS to PRD). Confirm it.</li>
+            </ul>
+            <div class="box term">
+              <span class="box-title">New term — SPRO</span>
+              <p><code>SPRO</code> is the T-code that opens SAP's configuration menu — the big tree of settings screens where consultants set up the system. Almost every "define" screen in this course can be reached either by its direct T-code (like <code>OB53</code>) or by walking the SPRO tree. The SPRO path for this setting is:<br>
+              <span class="mono">SPRO → Financial Accounting → General Ledger Accounting → Master Data → G/L Accounts → Preparations → Define Retained Earnings Account</span></p>
+            </div>
+            <div class="screen" role="img" aria-label="Re-created illustration of the OB53 retained earnings screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OB53 — Change View "Retained Earnings Account": Overview · Illustration only, not a real SAP screenshot</div>
+              <div class="screen-body"><span class="kw">Chart of Accounts</span>&nbsp;&nbsp;: <span class="hl2">YCOA</span>&nbsp;&nbsp;<span class="dim">Standard Chart of Accounts</span><br>
+<span class="dim">──────────────────────────────────────────────</span><br>
+<span class="kw">P&amp;L stmt acct type</span>&nbsp;&nbsp;&nbsp;<span class="kw">Account</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">Account long text</span><br>
+<span class="hl2">X</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">330000</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">Retained Earnings</span><br>
+<span class="cm">← One row is enough for most companies: type X → one account.</span></div>
+            </div>
+            <p>That is the entire configuration. One row: <code>X → 330000</code>. Behind the scenes SAP stores it in table <code>T030</code> (the big configuration table for standard account determination — you will meet it again in later topics).</p>
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>"OB53 — the year-end's address."</b> When the carryforward program asks "where should the profit go?", OB53 is the address book it opens. And remember <b>X marks the spot</b> — type <code>X</code> is the standard label, like an X on a treasure map pointing to the retained earnings account.</p>
+            </div>
+          </section>
+
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Balance Carryforward — how the closing actually runs</h2>
+            <p class="sub">OB53 only writes the address. This is the program that delivers the parcel. <span class="examtag">C_TS4FI favourite</span></p>
+            <div class="box term">
+              <span class="box-title">New term — Balance Carryforward</span>
+              <p>The year-end job that moves balances from the closing fiscal year into the new fiscal year. In S/4HANA you run it with T-code <code>FAGLGVTR</code>. (In old ECC the transaction was <code>F.16</code> — the exam is on S/4HANA, so answer <code>FAGLGVTR</code>.)</p>
+            </div>
+            <p>The carryforward treats the two account families differently — this difference is a classic exam question:</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Account family</th><th>What FAGLGVTR does</th></tr>
+                <tr><td><b>Balance Sheet accounts</b></td><td>Their closing balance is carried forward as the <b>opening balance</b> of the new year — account by account, exactly as it was.</td></tr>
+                <tr><td class="hl"><b>P&amp;L accounts</b></td><td class="hl">They are <b>closed to zero</b>. Their <b>total net result</b> is posted to the <b>Retained Earnings account</b> (found through the type, e.g. <code>X</code>, in OB53). In the new year every P&amp;L account starts at zero, and Retained Earnings shows the accumulated result.</td></tr>
+              </table>
+            </div>
+            <h3>Important details the exam loves</h3>
+            <ul class="clean">
+              <li><b>It is done per company code and per ledger</b> — you select the company code(s), the ledger, and the new fiscal year when running <code>FAGLGVTR</code>. (Ledgers are Part B of this lesson — hold on for two minutes.)</li>
+              <li><b>It can be re-run.</b> If late postings land in the old year afterwards, you simply run the carryforward again; SAP updates the carried-forward amounts. It is not a one-time, point-of-no-return event.</li>
+              <li><b>No journal document is posted for the P&amp;L closing.</b> The transfer to retained earnings happens inside the carryforward — the P&amp;L accounts just start the new year at zero with their result sitting in Retained Earnings. Do not imagine a manual "Profit Dr / Retained Earnings Cr" entry in FB50.</li>
+              <li><b>Order matters:</b> if the retained earnings account is not defined in OB53, or a P&amp;L account is missing its type <code>X</code>, the carryforward cannot place that result correctly — configuration first (this lesson), closing later.</li>
+            </ul>
+            <div class="box analogy">
+              <span class="box-title">Analogy — shifting to a new register</span>
+              <p>A shopkeeper finishes the year's register book. Furniture, stock and cash-in-hand figures are copied as-is onto page 1 of the new book (Balance Sheet accounts). But the daily income/expense pages are <b>not</b> copied — only their final total, "this year we earned Rs 5 lakh", is written into the savings jar page (Retained Earnings), and the income/expense pages of the new book start blank. That copying job is FAGLGVTR.</p>
+            </div>
+          </section>
+
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Part B — What is a Ledger in SAP?</h2>
+            <p class="sub">Video 05:41:00. First the accounting word, then the SAP word — they are cousins, not twins.</p>
+            <p>In your accounting studies, the <strong>ledger</strong> is the main book of accounts: every journal entry is posted into ledger accounts, and from the ledger you prepare the trial balance and financial statements. In SAP the word is used in a very specific technical way:</p>
+            <div class="box term">
+              <span class="box-title">New term — Ledger (SAP sense)</span>
+              <p>A <b>ledger</b> in SAP is a complete, separate set of books inside the General Ledger — its own full copy of postings, kept under one set of accounting rules. One company code can keep <b>several ledgers at the same time</b>: one for local law, one for group reporting rules, and so on. Every posting knows which ledger(s) it belongs to.</p>
+            </div>
+            <p>Why would one company need more than one set of books? Because different rule-makers ask for different numbers:</p>
+            <ul class="clean">
+              <li><b>Local law / tax rules</b> — e.g. Pakistani companies reporting under local requirements.</li>
+              <li><b>Group rules (IFRS)</b> — a multinational parent wants every subsidiary's numbers under IFRS.</li>
+              <li>The same purchase of a machine can be depreciated one way for local books and another way for group books. Two rule sets → two valuations → <b>parallel accounting</b>.</li>
+            </ul>
+            <div class="box term">
+              <span class="box-title">New term — Parallel Accounting</span>
+              <p>Keeping books under <b>two or more accounting principles at the same time</b> in the same system. <span class="urdu">(Ek hi company, do alag qawaid ke hisaab — ek saath.)</span> The main way to do this in S/4HANA is the <b>ledger approach</b>: one ledger per accounting principle.</p>
+            </div>
+            <div class="box analogy">
+              <span class="box-title">Analogy — one match, two scorebooks</span>
+              <p>Two scorekeepers watch the same cricket match. One writes the scorebook in the local style, the other in the international style. Same match, same balls — but two complete, separate scorebooks, each correct under its own rules. A ledger is a scorebook: same business events, recorded under one accounting principle.</p>
+            </div>
+            <figure class="diagram" aria-label="Diagram: one company code with leading and non-leading ledgers">
+              <svg viewBox="0 0 720 240" role="img">
+                <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <text class="svg-title" x="20" y="28">One company code — parallel ledgers</text>
+                <rect class="svg-box" x="20" y="90" width="170" height="56" rx="8"/>
+                <text class="svg-title" x="36" y="114">Company Code PK01</text>
+                <text class="svg-sub" x="36" y="132">Everyday postings</text>
+                <rect class="svg-box-a" x="300" y="50" width="400" height="52" rx="8"/>
+                <text class="svg-title" x="316" y="74">Ledger 0L — LEADING ledger</text>
+                <text class="svg-sub" x="316" y="92">Main books · gets EVERY posting automatically</text>
+                <rect class="svg-box-g" x="300" y="118" width="400" height="52" rx="8"/>
+                <text class="svg-title" x="316" y="142">Ledger 2L — Non-leading ledger</text>
+                <text class="svg-sub" x="316" y="160">Group / IFRS books · gets all + adjustment postings</text>
+                <rect class="svg-box-gr" x="300" y="186" width="400" height="40" rx="8"/>
+                <text class="svg-title" x="316" y="211">Ledger 3L — Non-leading ledger (optional)</text>
+                <path class="svg-arrow" d="M190 104 C 240 104, 250 80, 296 78"/>
+                <path class="svg-arrow" d="M190 118 L 296 142"/>
+                <path class="svg-arrow" d="M190 132 C 240 132, 250 200, 296 204"/>
+              </svg>
+              <figcaption>Diagram (illustration): postings flow into the leading ledger always, and into non-leading ledgers in parallel — one company, several rule books.</figcaption>
+            </figure>
+          </section>
+
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> The Leading Ledger — 0L</h2>
+            <p class="sub">Every SAP system has exactly one boss ledger. It arrives pre-delivered; you do not create it.</p>
+            <div class="box term">
+              <span class="box-title">New term — Leading Ledger</span>
+              <p>The <b>main</b> ledger of the system. SAP delivers it with the fixed key <code>0L</code> (zero-L). There is <b>exactly one</b> leading ledger in the whole client, and it is the ledger of the <b>main accounting principle</b> — normally the one used for the company's primary financial statements.</p>
+            </div>
+            <h3>What makes 0L special?</h3>
+            <ul class="clean">
+              <li><b>It receives every posting.</b> When a user posts any normal document and does not name a ledger, the posting goes into the leading ledger (and into any non-leading ledgers in parallel — Section 8). You can never post "around" it.</li>
+              <li><b>It is the only ledger connected to Controlling (CO).</b> Management accounting reads its actuals from the leading ledger.</li>
+              <li><b>Company codes are assigned to it</b>, and each company code takes its most important settings <em>from</em> the leading ledger's assignment: the <b>local currency</b> (Lesson 7), and the fiscal-year / posting-period settings come from the company code's variants (Lesson 6) as maintained for the leading ledger.</li>
+              <li><b>It always exists.</b> <code>0L</code> comes with the standard system. Your job in configuration is not to create it, but to check its settings and assign company codes.</li>
+            </ul>
+            <div class="box term">
+              <span class="box-title">New term — Non-Leading Ledger</span>
+              <p>Any ledger <b>other than</b> 0L. You create these yourself, with your own two-character keys (for example <code>2L</code>, <code>3L</code>, or letters like <code>IF</code>). Each non-leading ledger represents <b>one additional accounting principle</b> (for example IFRS for group reporting) and can have its own fiscal year variant and its own currencies, different from the leading ledger.</p>
+            </div>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Point</th><th>Leading Ledger 0L</th><th>Non-Leading Ledger</th></tr>
+                <tr><td>How many?</td><td class="hl"><b>Exactly one</b> per client</td><td>Several allowed</td></tr>
+                <tr><td>Who creates it?</td><td>Delivered by SAP — never created by you</td><td>You create it (this lesson)</td></tr>
+                <tr><td>Key</td><td>Fixed: <code>0L</code></td><td>Your choice, 2 characters, e.g. <code>2L</code></td></tr>
+                <tr><td>Receives postings</td><td>All postings, always</td><td>All postings in parallel + ledger-specific adjustments</td></tr>
+                <tr><td>Connected to CO?</td><td><b>Yes</b> — the only one</td><td>No</td></tr>
+                <tr><td>Fiscal year variant</td><td>Follows the company code's variant</td><td>Can have its <b>own</b> variant per company code</td></tr>
+              </table>
+            </div>
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>"0L = Zero choice, Leader always."</b> The leading ledger's key starts with <b>0</b> because it is the <b>first and only</b> boss — and <b>L</b> for Leader. One Leader, many followers (non-leading ledgers).</p>
+            </div>
+          </section>
+
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Create a Non-Leading Ledger — step by step</h2>
+            <p class="sub">The video's task: create a ledger for the second set of books. In S/4HANA this is done in one modern transaction.</p>
+            <div class="box term">
+              <span class="box-title">New term — FINSC_LEDGER</span>
+              <p>The S/4HANA configuration transaction for ledgers. One screen family where you <b>define ledgers</b>, mark the leading ledger, and make the <b>company code settings for the ledger</b> (currencies, fiscal year variant, posting period variant per company code). The SPRO path is:<br>
+              <span class="mono">SPRO → Financial Accounting → Financial Accounting Global Settings → Ledgers → Ledger → Define Ledgers for General Ledger Accounting</span></p>
+            </div>
+            <h3>The steps (as in the video)</h3>
+            <ul class="clean">
+              <li><b>Step 1</b> — Open <code>FINSC_LEDGER</code> (or follow the SPRO path above). You see the list of existing ledgers — <code>0L</code> is already there, flagged as <b>Leading</b>.</li>
+              <li><b>Step 2</b> — Choose <b>New Entries</b> and create your ledger: enter a 2-character key, e.g. <code>2L</code>, and a description, e.g. "IFRS Ledger". Leave the <b>Leading</b> checkbox <b>empty</b> — only 0L may carry it.</li>
+              <li><b>Step 3</b> — Select your new ledger and go to <b>"Company Code Settings for the Ledger"</b>. Add your company code, e.g. <code>PK01</code>.</li>
+              <li><b>Step 4</b> — For that company code + ledger combination, set:
+                <ul class="clean">
+                  <li><b>Local currency</b> — normally the same as the company code currency (Lesson 7);</li>
+                  <li>Optionally a <b>second (parallel) currency</b>, e.g. a group currency like USD;</li>
+                  <li><b>Fiscal Year Variant</b> — can be the same as the leading ledger's (e.g. <code>K4</code>) or a different one if this rule book follows a different calendar;</li>
+                  <li><b>Posting Period Variant</b> — controls which periods are open <em>for this ledger</em> (Lesson 6).</li>
+                </ul>
+              </li>
+              <li><b>Step 5</b> — Save (with transport request). The ledger is now active for that company code.</li>
+            </ul>
+            <div class="screen" role="img" aria-label="Re-created illustration of the FINSC_LEDGER ledger definition screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> FINSC_LEDGER — Ledgers for General Ledger Accounting · Illustration only, not a real SAP screenshot</div>
+              <div class="screen-body"><span class="kw">Ledger</span>&nbsp;&nbsp;<span class="kw">Leading</span>&nbsp;&nbsp;<span class="kw">Ledger name</span><br>
+<span class="hl2">0L</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">[X]</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">Leading Ledger</span>&nbsp;&nbsp;<span class="cm">← delivered by SAP</span><br>
+<span class="hl2">2L</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">[ ]</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">IFRS Ledger</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">← created in this lesson</span><br>
+<span class="dim">──────────────────────────────────────────────</span><br>
+<span class="kw">Company code settings for ledger 2L:</span><br>
+<span class="dim">CoCd</span> <span class="hl2">PK01</span>&nbsp;&nbsp;<span class="dim">Local crcy</span> <span class="hl2">PKR</span>&nbsp;&nbsp;<span class="dim">FY variant</span> <span class="hl2">K4</span>&nbsp;&nbsp;<span class="dim">PP variant</span> <span class="hl2">PK01</span></div>
+            </div>
+            <h3>What happens after creation — how postings flow</h3>
+            <ul class="clean">
+              <li>A <b>normal posting</b> (no ledger named) is written into the leading ledger <b>and</b> all assigned non-leading ledgers at the same time — one document, several ledger views.</li>
+              <li>An <b>adjustment only for one principle</b> (e.g. extra IFRS depreciation) is posted <b>to a specific ledger</b> using a <b>ledger group</b> — next section. It changes only that ledger's books; the leading ledger never sees it.</li>
+              <li>Each ledger keeps its <b>own balances</b> and its <b>own balance carryforward</b> (remember <code>FAGLGVTR</code> is run per ledger — now that detail makes sense).</li>
+            </ul>
+            <div class="box trap">
+              <span class="box-title">Exam trap #3</span>
+              <p>You <b>cannot</b> create a second leading ledger, and you cannot make your new ledger "leading" while 0L exists. Exactly <b>one</b> leading ledger per client — an exam option offering two leading ledgers is always wrong.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Exam trap #4</span>
+              <p>Defining the ledger alone does nothing. The ledger works for a company code only <b>after the company code settings for that ledger</b> are maintained (currency, fiscal year variant, posting period variant). "Ledger defined but company code not assigned → no postings in that ledger" is a favourite scenario question.</p>
+            </div>
+          </section>
+
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> Ledger Groups &amp; Parallel Accounting — completing the picture</h2>
+            <p class="sub">How do you post to just one ledger? You aim the document with a group.</p>
+            <div class="box term">
+              <span class="box-title">New term — Ledger Group</span>
+              <p>A named bundle of ledgers used as the <b>target</b> of a posting. When you create a ledger, SAP <b>automatically creates a ledger group with the same name</b> containing only that ledger. So to post an IFRS-only adjustment, you enter ledger group <code>2L</code> in the document — the posting lands only in ledger 2L. Posting <b>without</b> any ledger group hits <b>all</b> ledgers.</p>
+            </div>
+            <div class="box term">
+              <span class="box-title">New term — Representative Ledger</span>
+              <p>In a ledger group that contains <b>several</b> ledgers, one ledger is marked the <b>representative ledger</b>. Its posting period check decides whether posting is allowed: if the period is open in the representative ledger, the document may post to the group. For the automatic one-ledger groups, that single ledger is its own representative.</p>
+            </div>
+            <h3>Ledger approach vs Accounts approach</h3>
+            <p>There are two classic designs for parallel accounting. S/4HANA strongly prefers the first — and the exam knows it:</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th></th><th>Ledger Approach</th><th>Accounts Approach</th></tr>
+                <tr><td><b>Idea</b></td><td class="hl">One chart of accounts; <b>separate ledger</b> per accounting principle</td><td>One ledger; <b>extra G/L accounts</b> per principle inside the same books</td></tr>
+                <tr><td><b>Where the difference lives</b></td><td>In the ledger (0L vs 2L)</td><td>In different account numbers</td></tr>
+                <tr><td><b>S/4HANA status</b></td><td class="hl"><b>Recommended / standard</b></td><td>Legacy approach from older systems</td></tr>
+              </table>
+            </div>
+            <div class="box analogy">
+              <span class="box-title">Analogy — two notebooks vs one notebook, two pens</span>
+              <p>Ledger approach: two separate notebooks, one per rule set — clean, each book tells one complete story. Accounts approach: one notebook, but some pages written with a second pen for the second rule set — the totals mix together and are hard to separate. SAP's advice: <b>separate notebooks</b>. <span class="urdu">(Har qaaida ki apni copy — yehi asaan aur saaf tareeqa hai.)</span></p>
+            </div>
+            <h3>One more connection — where do ledger postings physically live?</h3>
+            <p>Every G/L document line in S/4HANA is stored in the <strong>Universal Journal</strong> table <code>ACDOCA</code>, and every line carries its <strong>ledger</strong> field (<code>RLDNR</code>) — that is how one table can hold many ledgers' books at once. The Universal Journal gets its own full treatment in Lesson 9; for today, just remember: <b>ledger is a field on every journal line</b>, and the leading ledger's lines are the ones CO reads.</p>
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>"No group named → all ledgers fed. Group named → only those ledgers fed."</b> And for creation order: <b>Define the Ledger, then give it a Company Code home</b> — a ledger without company-code settings is a book with no shelf.</p>
+            </div>
+          </section>
+
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> T-codes &amp; Tables — this lesson at a glance</h2>
+            <div class="tblwrap">
+              <table>
+                <tr><th>T-code</th><th>What it does</th></tr>
+                <tr><td><code>OB53</code></td><td>Define the <b>Retained Earnings Account</b> for a chart of accounts (type → account)</td></tr>
+                <tr><td><code>FS00</code></td><td>Create/edit a G/L account — P&amp;L accounts get their <b>P&amp;L statement account type</b> here (chart segment)</td></tr>
+                <tr><td><code>FINSC_LEDGER</code></td><td>Define <b>ledgers</b> and maintain <b>company code settings for the ledger</b> (S/4HANA)</td></tr>
+                <tr><td><code>FAGLGVTR</code></td><td><b>Balance Carryforward</b> — run the year-end transfer into the new fiscal year</td></tr>
+                <tr><td><code>F.16</code></td><td>Old ECC carryforward transaction — know it only to <b>reject</b> it in S/4HANA questions</td></tr>
+              </table>
+            </div>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Table</th><th>What it stores</th></tr>
+                <tr><td><code>T030</code></td><td>Standard account determination — includes the OB53 retained earnings assignment</td></tr>
+                <tr><td><code>SKA1</code></td><td>G/L account <b>chart of accounts segment</b> — holds the P&amp;L statement account type of each account</td></tr>
+                <tr><td><code>T881</code></td><td>Ledger master — the list of ledgers and which one is leading</td></tr>
+                <tr><td><code>FINSC_LEDGER</code> views</td><td>Company code settings per ledger (currencies, fiscal year variant, posting period variant)</td></tr>
+                <tr><td><code>ACDOCA</code></td><td>Universal Journal — every journal line, with its ledger in field <code>RLDNR</code> (full detail in Lesson 9)</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> Exam Traps — read these twice</h2>
+            <p class="sub">Traps 1–4 appeared inside the sections. Here is the complete set for Lesson 8.</p>
+            <div class="box trap"><span class="box-title">Trap 1 — Level of definition</span><p>Retained earnings is defined <b>per chart of accounts</b> (OB53), never per company code.</p></div>
+            <div class="box trap"><span class="box-title">Trap 2 — Wrong account family</span><p>Retained Earnings is a <b>Balance Sheet / Equity</b> account. Any option calling it a P&amp;L account, or saying users post daily entries to it, is wrong.</p></div>
+            <div class="box trap"><span class="box-title">Trap 3 — Two leading ledgers</span><p>Impossible. <b>One</b> leading ledger per client — always <code>0L</code>, delivered by SAP.</p></div>
+            <div class="box trap"><span class="box-title">Trap 4 — Ledger without company code settings</span><p>A defined ledger with <b>no company code settings</b> receives no postings for that company code. Definition + assignment — both steps are needed.</p></div>
+            <div class="box trap"><span class="box-title">Trap 5 — "Creating" 0L</span><p>You never create the leading ledger; you only create <b>non-leading</b> ledgers. A step-by-step option that starts with "create ledger 0L" is a distractor.</p></div>
+            <div class="box trap"><span class="box-title">Trap 6 — Carryforward posts a document</span><p><code>FAGLGVTR</code> does <b>not</b> post a normal journal document for the P&amp;L closing; P&amp;L accounts open the new year at zero and their result sits in Retained Earnings. It can also be <b>re-run</b> after late postings.</p></div>
+            <div class="box trap"><span class="box-title">Trap 7 — Posting to one ledger only</span><p>A ledger-specific posting is made with a <b>ledger group</b>, not by "switching off" other ledgers. No ledger group in the document = the posting goes to <b>all</b> ledgers.</p></div>
+            <div class="box trap"><span class="box-title">Trap 8 — Only one retained earnings account can ever exist</span><p>Standard practice is one (type <code>X</code>), but SAP <b>allows multiple</b> retained earnings accounts per chart using different P&amp;L statement account types. "Only one is technically possible" is false.</p></div>
+            <div class="box trap"><span class="box-title">Trap 9 — Non-leading ledger and CO</span><p>Only the <b>leading</b> ledger is integrated with Controlling. Non-leading ledgers are FI-only views.</p></div>
+          </section>
+
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> Glossary A–Z — every new term of Lesson 8</h2>
+            <dl class="glossary">
+              <dt>ACDOCA</dt><dd>The Universal Journal table in S/4HANA; every journal line is stored here, including its ledger (field RLDNR). Full lesson: Lesson 9.</dd>
+              <dt>Accounting Principle</dt><dd>One complete set of accounting rules — e.g. local GAAP or IFRS — under which a set of books is prepared.</dd>
+              <dt>Balance Carryforward</dt><dd>The year-end job (FAGLGVTR) that moves balances into the new fiscal year: Balance Sheet balances as opening balances, P&amp;L results into Retained Earnings.</dd>
+              <dt>Balance Sheet Account</dt><dd>An account whose balance carries into the next year (assets, liabilities, equity) — e.g. Cash, Loans, Retained Earnings.</dd>
+              <dt>Company Code Settings for the Ledger</dt><dd>The per company code + ledger settings (local currency, parallel currency, fiscal year variant, posting period variant) maintained in FINSC_LEDGER; without them the ledger takes no postings for that company code.</dd>
+              <dt>Dividend</dt><dd>Profit paid out to owners; retained earnings is the profit that remains after dividends.</dd>
+              <dt>Equity</dt><dd>The owners' section of the Balance Sheet — share capital plus retained earnings.</dd>
+              <dt>FAGLGVTR</dt><dd>S/4HANA transaction for the balance carryforward; run per company code, per ledger, per new fiscal year; can be re-run.</dd>
+              <dt>FINSC_LEDGER</dt><dd>S/4HANA configuration transaction to define ledgers and their company code settings.</dd>
+              <dt>Leading Ledger (0L)</dt><dd>The one main ledger of the client; delivered by SAP; receives every posting; the only ledger integrated with CO.</dd>
+              <dt>Ledger (SAP)</dt><dd>A complete separate set of G/L books kept under one accounting principle inside the same system.</dd>
+              <dt>Ledger Group</dt><dd>A named bundle of ledgers used to target a posting; a group with the ledger's own name is created automatically for each ledger.</dd>
+              <dt>Non-Leading Ledger</dt><dd>Any ledger other than 0L, created by you for an additional accounting principle, e.g. 2L for IFRS.</dd>
+              <dt>OB53</dt><dd>Transaction to define the retained earnings account per chart of accounts.</dd>
+              <dt>P&amp;L Account</dt><dd>An income or expense account; closed to zero at year-end, its result transferred to retained earnings.</dd>
+              <dt>P&amp;L Statement Account Type</dt><dd>A one-character label (standard: X) linking P&amp;L accounts to the retained earnings account they close into; stored in the account's chart segment (SKA1), assigned in FS00.</dd>
+              <dt>Parallel Accounting</dt><dd>Maintaining books under several accounting principles simultaneously — in S/4HANA normally via parallel (non-leading) ledgers.</dd>
+              <dt>Representative Ledger</dt><dd>The ledger in a multi-ledger group whose open/closed posting periods decide whether a group posting is allowed.</dd>
+              <dt>Retained Earnings</dt><dd>Balance Sheet (equity) account holding the accumulated, undistributed profit of all years; in SAP defined in OB53 per chart of accounts.</dd>
+              <dt>RLDNR</dt><dd>The ledger field on every Universal Journal line in ACDOCA.</dd>
+              <dt>SPRO</dt><dd>The configuration menu transaction of SAP; the tree of all customizing settings.</dd>
+              <dt>T030</dt><dd>Table storing standard account determination, including the retained earnings assignment from OB53.</dd>
+              <dt>T881</dt><dd>Table storing the ledger master data, including the leading-ledger flag.</dd>
+              <dt>Transport Request</dt><dd>The package that carries configuration changes from DEV to QAS to PRD (Lesson 2).</dd>
+            </dl>
+          </section>
+
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> Summary — Lesson 8 in one page</h2>
+            <ul class="clean">
+              <li>At year-end, <b>P&amp;L accounts close to zero</b>; their net result moves into <b>Retained Earnings</b>, a Balance Sheet (equity) account holding all years' undistributed profit.</li>
+              <li>In SAP, the link is the <b>P&amp;L statement account type</b> — standard <code>X</code> — set on every P&amp;L account in FS00 (chart segment, SKA1), and mapped to one account in <b>OB53 per chart of accounts</b> (stored in T030). Multiple retained earnings accounts are possible with different types.</li>
+              <li>The closing job is the <b>balance carryforward, FAGLGVTR</b> — per company code and per ledger, re-runnable, no journal document posted for the P&amp;L transfer.</li>
+              <li>A <b>ledger</b> is a complete set of books under one accounting principle. The <b>leading ledger 0L</b> is delivered by SAP, is unique, receives every posting, and is the only ledger linked to CO.</li>
+              <li><b>Non-leading ledgers</b> (e.g. 2L for IFRS) are created in <b>FINSC_LEDGER</b>; they work only after <b>company code settings</b> (currency, fiscal year variant, posting period variant) are maintained.</li>
+              <li>Postings with <b>no ledger group</b> go to <b>all</b> ledgers; postings with a <b>ledger group</b> go only to that group's ledgers — the basis of <b>parallel accounting</b> (ledger approach, preferred in S/4HANA).</li>
+            </ul>
+          </section>
+
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> Self-Test — 12 questions</h2>
+            <p class="sub">Tap an answer to check yourself. Explanations appear instantly — no marks leave this page.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart the test</button>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow" aria-hidden="true">→</span>
+            <div>
+              <b>Next: Lesson 9 — Document Type &amp; Number Range</b>
+              <p style="margin:.2em 0 0">Every posting in SAP is a <b>document</b>. In Lesson 9 you will learn how document types (like SA, KR, DR) classify documents, and how number ranges give every document its unique number — the next configuration step in the video, starting at 06:26:05.</p>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 8 of 10 · SAP S/4HANA Financial Accounting · C_TS4FI Exam Prep Series<br>
+            course created by Muhammad Asad Ullah Ibrahim<br>
+            Screens in this lesson are re-created illustrations for learning, not real SAP screenshots. SAP, S/4HANA and C_TS4FI are trademarks of SAP SE; this study page is not affiliated with SAP.
+          </footer>
+        </main>
+      </div>
+      </div>
+    </div>
+
+    <script>
+      // ---- Shared course progress store (localStorage, shared by all lessons) ----
+      window.SAPProgress=(function(){
+        var KEY='sapCts4fiProgress_v1';
+        function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+        function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+        function getLesson(n){ var s=load(), L=null;
+          if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+          if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+          return L; }
+        function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+          for(var p in patch){ cur[p]=patch[p]; }
+          s.lessons[k]=cur; saveAll(s); return cur; }
+        function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+          return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+        function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+          s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+        return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+      })();
+
+      // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+      function sha256Hex(ascii){
+        ascii=unescape(encodeURIComponent(ascii));
+        function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+        var maxWord=Math.pow(2,32), i, j, result='';
+        var words=[], asciiBitLength=ascii.length*8;
+        var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+        var primeCounter=k.length, isComposite={};
+        for(var candidate=2; primeCounter<64; candidate++){
+          if(!isComposite[candidate]){
+            for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+            hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+            k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+          }
+        }
+        ascii+='\x80';
+        while(ascii.length%64-56) ascii+='\x00';
+        for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+        words[words.length]=((asciiBitLength/maxWord)|0);
+        words[words.length]=(asciiBitLength);
+        for(j=0;j<words.length;){
+          var w=words.slice(j,j+=16), oldHash=hash;
+          hash=hash.slice(0,8);
+          for(i=0;i<64;i++){
+            var w15=w[i-15], w2=w[i-2];
+            var a=hash[0], e=hash[4];
+            var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+            var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+            hash=[(temp1+temp2)|0].concat(hash);
+            hash[4]=(hash[4]+temp1)|0;
+          }
+          for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+        }
+        for(i=0;i<8;i++){
+          for(j=3;j+1;j--){
+            var b=(hash[i]>>(j*8))&255;
+            result+=((b<16)?0:'')+b.toString(16);
+          }
+        }
+        return result;
+      }
+
+      // ---- Lesson 8 gating: locked until Lesson 7 is fully complete, or the gate test is passed 5/5 ----
+      (function(){
+        var THIS_LESSON=8, PREV_LESSON=7, PREV_SECTIONS=18, LOCK_MS=60*60*1000;
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var GATE_Q=[
+          {q:"What are the three currency types in SAP?",opts:["Debit, Credit and Balance currency","Transaction, Local and Parallel / Group currency","Local, Foreign and Reporting currency","Posting, Clearing and Payment currency"],a:1},
+          {q:"Which T-code sets parallel currencies?",opts:["OB13","OB08","OBC4","OB22"],a:3},
+          {q:"What is a Chart of Accounts?",opts:["The list of all G/L accounts used by a company code","The table that stores the balances of all accounts","The list of all company codes in a client","The chart that groups vendors and customers"],a:0},
+          {q:"Which tables hold the two segments of the G/L account master?",opts:["BKPF and BSEG","SKA1 (chart segment) and SKB1 (company code segment)","T001 and T004","SKA1 and T030"],a:1},
+          {q:"What does Field Status control?",opts:["Which posting periods are open for posting","The number range for new G/L accounts","Whether a field is Required, Optional, Display or Suppressed when posting","Which users may post to an account"],a:2}
+        ];
+        var gateScreen=document.getElementById('gateScreen');
+        var content=document.getElementById('lessonContent');
+        var lockBox=document.getElementById('gateLockBox');
+        var lockUntilEl=document.getElementById('gateLockUntil');
+        var countdownEl=document.getElementById('gateCountdown');
+        var testArea=document.getElementById('gateTestArea');
+        var qWrap=document.getElementById('gateQuestions');
+        var scoreEl=document.getElementById('gateScore');
+        var msgEl=document.getElementById('gateMsg');
+        var attemptsEl=document.getElementById('gateAttempts');
+        var submitBtn=document.getElementById('gateSubmit');
+        var retryBtn=document.getElementById('gateRetry');
+        var adminBtn=document.getElementById('adminBtn');
+        var adminForm=document.getElementById('adminForm');
+        var adminPw=document.getElementById('adminPw');
+        var adminSubmit=document.getElementById('adminSubmit');
+        var adminMsg=document.getElementById('adminMsg');
+        var timer=null, selected={};
+
+        function isPrevComplete(){
+          var L=window.SAPProgress.getLesson(PREV_LESSON);
+          if(!L) return false;
+          var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+          var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+          return !!(allRead&&quiz);
+        }
+        function unlockLesson(){
+          if(timer){ clearInterval(timer); timer=null; }
+          gateScreen.hidden=true; gateScreen.style.display='none';
+          content.hidden=false; content.style.display='';
+          window.scrollTo(0,0);
+        }
+        function updateCountdown(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var rem=g.lockUntil-Date.now();
+          if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+          var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+          countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        }
+        function showLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          lockBox.hidden=false;
+          testArea.style.display='none';
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+          updateCountdown();
+          if(timer) clearInterval(timer);
+          timer=setInterval(updateCountdown,1000);
+        }
+        function refreshLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var now=Date.now();
+          if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+          if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+          lockBox.hidden=true;
+          testArea.style.display='';
+          return false;
+        }
+        function updateAttempts(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+        }
+        function renderGate(){
+          selected={};
+          scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+          submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+          qWrap.innerHTML='';
+          GATE_Q.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='gate-q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                selected[qi]=oi;
+                var bs=opts.querySelectorAll('.gate-opt');
+                bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+                msgEl.textContent='';
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); qWrap.appendChild(box);
+          });
+        }
+        submitBtn.addEventListener('click',function(){
+          if(refreshLock()) return;
+          if(Object.keys(selected).length<GATE_Q.length){
+            msgEl.textContent='Please answer all 5 questions before submitting.';
+            scoreEl.textContent='';
+            return;
+          }
+          var score=0;
+          GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+          qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+          submitBtn.hidden=true;
+          scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          if(score===GATE_Q.length){
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            msgEl.textContent='Gate test passed. Lesson 8 is now unlocked.';
+            msgEl.className='ok';
+            updateAttempts();
+            setTimeout(unlockLesson,900);
+          }else{
+            g.fails=(g.fails||0)+1;
+            msgEl.textContent='Go back and complete previous lesson.';
+            msgEl.className='';
+            if(g.fails>=3){
+              g.lockUntil=Date.now()+LOCK_MS;
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              updateAttempts();
+              refreshLock();
+            }else{
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              retryBtn.hidden=false;
+              updateAttempts();
+            }
+          }
+        });
+        retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+        adminBtn.addEventListener('click',function(){
+          adminForm.hidden=!adminForm.hidden;
+          if(!adminForm.hidden) adminPw.focus();
+        });
+        function tryAdminUnlock(){
+          var val=adminPw.value;
+          if(!val) return;
+          if(sha256Hex(val)===ADMIN_HASH){
+            var g=window.SAPProgress.getGate(THIS_LESSON);
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            adminMsg.className=''; adminMsg.style.color='var(--green)';
+            adminMsg.textContent='Unlocked. Opening Lesson 8…';
+            adminPw.value='';
+            setTimeout(unlockLesson,700);
+          }else{
+            adminMsg.style.color=''; adminMsg.className='err';
+            adminMsg.textContent='Incorrect password. Please try again.';
+            adminPw.value='';
+            adminPw.focus();
+          }
+        }
+        adminSubmit.addEventListener('click',tryAdminUnlock);
+        adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+        // ---- Initial state ----
+        var g0=window.SAPProgress.getGate(THIS_LESSON);
+        if(isPrevComplete()||g0.unlocked===true){
+          unlockLesson();
+        }else{
+          gateScreen.hidden=false; gateScreen.style.display='';
+          content.hidden=true; content.style.display='none';
+          if(!refreshLock()) renderGate();
+          updateAttempts();
+        }
+      })();
+    </script>
+
+    <script>
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent=(t==='dark'?'Dark':'Light'); }
+        apply('light');
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark'?'light':'dark');
+        });
+
+        var bar=document.getElementById('progressBar');
+        var sections=Array.prototype.slice.call(document.querySelectorAll('section.lesson'));
+        var total=sections.length;
+        var tocItems=document.querySelectorAll('nav.toc li');
+        var map={};
+        tocItems.forEach(function(li){ var a=li.querySelector('a'); if(a){ map[a.getAttribute('href').slice(1)]=li; } });
+        var readCountEl=document.getElementById('readCount');
+        var readPctEl=document.getElementById('readPct');
+        var readFillEl=document.getElementById('readFill');
+        var readSet={};
+        function updateProgress(){
+          var n=Object.keys(readSet).length;
+          var pct=total?Math.round(n/total*100):0;
+          if(readCountEl) readCountEl.textContent=n+' of '+total+' sections read';
+          if(readPctEl) readPctEl.textContent=pct+'%';
+          if(readFillEl) readFillEl.style.width=pct+'%';
+          bar.style.width=pct+'%';
+          try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(8,{readSections:arr, allRead:(total>0&&arr.length===total)}); } }catch(e){}
+        }
+        sections.forEach(function(sec){
+          var row=document.createElement('div'); row.className='mark-row';
+          var btn=document.createElement('button');
+          btn.type='button'; btn.className='mark-read'; btn.textContent='Mark Read';
+          var h2=sec.querySelector('h2');
+          btn.setAttribute('aria-label','Mark this section as read'+(h2?': '+h2.textContent.trim():''));
+          btn.addEventListener('click',function(){
+            if(readSet[sec.id]) return;
+            readSet[sec.id]=true;
+            btn.classList.add('done'); btn.textContent='Read ✓';
+            if(map[sec.id]) map[sec.id].classList.add('read');
+            updateProgress();
+          });
+          row.appendChild(btn); sec.appendChild(row);
+        });
+        updateProgress();
+
+        /* ---------- Restore saved Mark Read state from the shared store ---------- */
+        try{
+          var savedL8=window.SAPProgress&&window.SAPProgress.getLesson(8);
+          if(savedL8&&savedL8.readSections){
+            savedL8.readSections.forEach(function(id){
+              var sec=document.getElementById(id);
+              if(sec&&!readSet[id]){
+                readSet[id]=true;
+                var rb=sec.querySelector('.mark-read');
+                if(rb){ rb.classList.add('done'); rb.textContent='Read ✓'; }
+                if(map[id]) map[id].classList.add('read');
+              }
+            });
+            updateProgress();
+          }
+        }catch(e){}
+
+        var activeId=null;
+        function spy(){
+          var pos=window.scrollY+140;
+          var current=sections.length?sections[0].id:null;
+          sections.forEach(function(s){ if(s.offsetTop<=pos) current=s.id; });
+          if(current===activeId) return;
+          activeId=current;
+          tocItems.forEach(function(li){ li.classList.remove('active'); });
+          if(map[current]) map[current].classList.add('active');
+        }
+        document.addEventListener('scroll',spy,{passive:true});
+        window.addEventListener('resize',spy);
+        spy();
+      })();
+    </script>
+    <script>
+      (function(){
+        var QUESTIONS=[
+          {q:"What is the Retained Earnings account in SAP?",opts:["A P&L account that collects all expenses of the year","A Balance Sheet (equity) account that holds the accumulated, undistributed profit of all years","An account used for daily cash postings","A vendor account for dividend payments"],a:1,why:"Retained Earnings sits in Equity on the Balance Sheet. Each year's net result is transferred into it at closing, and it accumulates year after year."},
+          {q:"At which level is the retained earnings account defined in OB53?",opts:["Per company code","Per client","Per chart of accounts","Per fiscal year variant"],a:2,why:"OB53 asks for the Chart of Accounts — never a company code. Company codes sharing a chart share the same retained earnings definition (Trap 1)."},
+          {q:"What links a P&L account to the retained earnings account it closes into?",opts:["The field status group","The P&L statement account type (standard: X)","The account group","The posting period variant"],a:1,why:"The P&L statement account type is set on each P&L account in FS00 (chart segment, SKA1) and mapped to the retained earnings account in OB53 — 'X marks the spot'."},
+          {q:"What does the balance carryforward (FAGLGVTR) do with P&L accounts?",opts:["It carries their balances forward unchanged, like Balance Sheet accounts","It deletes them at year-end","It closes them to zero and transfers their net result to the Retained Earnings account","It blocks them for the new year"],a:2,why:"Balance Sheet accounts carry forward as opening balances; P&L accounts close to zero and their total result lands in Retained Earnings. No journal document is posted for this transfer."},
+          {q:"Which statement about the leading ledger is correct?",opts:["You create it yourself with FINSC_LEDGER before any other ledger","There can be up to three leading ledgers per client","It is ledger 0L, delivered by SAP, and there is exactly one per client","It is used only for group reporting"],a:2,why:"0L is delivered, unique, receives every posting, and is the only ledger integrated with Controlling (Trap 3 and Trap 5)."},
+          {q:"A company must report under local law and under IFRS. What is the recommended S/4HANA design?",opts:["Two company codes with different charts of accounts","The accounts approach — extra G/L accounts for IFRS in the same ledger","The ledger approach — leading ledger for the main principle, a non-leading ledger for IFRS","Post IFRS adjustments only at year-end in the leading ledger"],a:2,why:"Parallel accounting in S/4HANA is done with parallel ledgers: one ledger per accounting principle, same chart of accounts. The accounts approach is the legacy alternative."},
+          {q:"You defined non-leading ledger 2L in FINSC_LEDGER, but no postings appear in it for company code PK01. What is missing?",opts:["The retained earnings account for ledger 2L","The company code settings for the ledger (currency, fiscal year variant, posting period variant) for PK01","A separate chart of accounts for ledger 2L","A transport request for the postings"],a:1,why:"Defining a ledger is only step one. Without company code settings for that ledger, the ledger takes no postings for that company code (Trap 4)."},
+          {q:"A user posts a normal document without entering any ledger group. Where does the posting go?",opts:["Only into the leading ledger 0L","Into all ledgers assigned to the company code","Nowhere — a ledger group is mandatory","Only into non-leading ledgers"],a:1,why:"No ledger group named → all ledgers fed. A ledger group is used precisely when you want to post to specific ledgers only (Trap 7)."},
+          {q:"An IFRS-only depreciation adjustment must not change the local books. How is it posted?",opts:["To the leading ledger, then reversed in local books","Using the ledger group of the non-leading (IFRS) ledger","Directly to the retained earnings account","With a different chart of accounts"],a:1,why:"Ledger-specific postings are aimed with a ledger group — here the automatically created group '2L' containing only the IFRS ledger. The leading ledger never sees the document."},
+          {q:"Which ledger is integrated with Controlling (CO)?",opts:["Every ledger equally","Only non-leading ledgers","Only the leading ledger 0L","None — CO has its own separate database in S/4HANA"],a:2,why:"CO reads its actuals from the leading ledger only. Non-leading ledgers are FI-only views (Trap 9)."},
+          {q:"Where is the P&L statement account type of a G/L account stored?",opts:["In the company code segment (SKB1)","In the chart of accounts segment (SKA1)","In table T030","In the ledger master T881"],a:1,why:"The type sits in the chart segment (SKA1), set in FS00 — logical, because the closing behaviour of a P&L account is the same for every company code using that chart. T030 stores the OB53 mapping (type → retained earnings account)."},
+          {q:"Late postings are made into the old fiscal year after the balance carryforward was already run. What should you do?",opts:["Nothing can be done — the carryforward is final","Reverse all old-year postings and repost them in the new year","Simply run FAGLGVTR again — it updates the carried-forward balances","Create a new retained earnings account"],a:2,why:"The balance carryforward can be re-run as often as needed; SAP recalculates and updates the opening balances and the retained earnings result (Trap 6)."}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=10?' — Excellent! You are ready for Lesson 9.':' — Re-read the sections above once, then try again. You can do it.');
+                  try{ if(window.SAPProgress) window.SAPProgress.saveLesson(8,{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+  </body>
+</html>

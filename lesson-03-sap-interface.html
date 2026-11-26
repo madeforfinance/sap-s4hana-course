@@ -1,0 +1,1241 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 3 — SAP Interface · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      /* reading progress */
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:60;transition:width .1s linear}
+
+      /* top bar */
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      @media (max-width:860px){.layout{grid-template-columns:1fr}}
+
+      /* TOC */
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      nav.toc li.read a::after{content:"✓";margin-left:auto;color:var(--green);font-weight:700;flex:none}
+      nav.toc a.active{background:var(--accent);color:#fff;font-weight:700}
+      nav.toc a.active:hover{background:var(--accent);color:#fff}
+      nav.toc a.active .dot{border-color:#fff}
+      nav.toc li.read a.active .dot{background:var(--green);border-color:#fff}
+      nav.toc li.read a.active::after{color:#fff}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+
+      /* read progress (sidebar) */
+      .read-progress{margin:0 0 12px}
+      .rp-row{display:flex;justify-content:space-between;align-items:baseline;font-size:.85rem;color:var(--ink-soft);margin-bottom:6px}
+      .rp-row b{color:var(--ink)}
+      #readPct{font-weight:700;color:var(--accent-ink)}
+      .rp-bar{height:8px;border-radius:5px;background:var(--surface2);border:1px solid var(--line);overflow:hidden}
+      #readBar{height:100%;width:0;background:var(--green);transition:width .25s ease}
+
+      /* Mark Read button */
+      .mark-row{display:flex;justify-content:flex-end;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+      .mark-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--green);color:var(--green);border-radius:999px;padding:8px 20px;font:700 .92rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px;transition:background .15s ease,color .15s ease}
+      .mark-btn:hover{background:var(--green-soft)}
+      .mark-btn.is-read{background:var(--green);border-color:var(--green);color:#fff}
+      .mark-btn.is-read:hover{background:var(--green)}
+
+      /* hero */
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      /* callouts */
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      /* tables */
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      /* diagrams */
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      /* mock screens */
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .fiori-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;background:var(--surface2);padding:16px}
+      .tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 12px;min-height:86px}
+      .tile .t-ic{width:26px;height:26px;color:var(--accent)}
+      .tile .t-name{font-size:.82rem;font-weight:600;margin-top:8px;line-height:1.3}
+      .tile .t-num{font-size:1.25rem;font-weight:700;color:var(--accent-ink)}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      /* glossary */
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      /* self test */
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      /* gate / locked screen */
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;margin-top:26px;box-shadow:var(--shadow);max-width:760px}
+      @media (max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      .btn-ghost{background:transparent;color:var(--accent-ink);border:2px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .btn:disabled{opacity:.55;cursor:default}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600;font-size:.93rem;margin:0}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      .weightbar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:10px 0 4px;border:1px solid var(--line)}
+      .weightbar div{height:100%}
+      .legend{font-size:.85rem;color:var(--ink-soft)}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 3 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Dark theme</span>
+      </button>
+    </div>
+
+    <div class="wrap">
+      <!-- ============ GATE / LOCKED SCREEN (shown until Lesson 2 is complete or the gate test is passed) ============ -->
+      <div id="gateScreen">
+        <section class="gate-card" aria-labelledby="gateTitle">
+          <div class="gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          </div>
+          <h2 id="gateTitle">Lesson 3 is locked</h2>
+          <p>Lesson 3 opens only when <b>Lesson 2 is fully complete</b> — every Lesson 2 section marked Read <b>and</b> the Lesson 2 self-test answered.</p>
+          <p>If you have already studied Lesson 2, you can unlock Lesson 3 by passing the <b>Gate Test</b> below: 5 questions from Lesson 2. You need <b>5 / 5</b> to pass. Only your marks are shown after you submit — the correct answers are never displayed.</p>
+
+          <div class="gate-lockbox" id="gateLockBox" hidden>
+            <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+            <p>Locked until: <b id="gateLockUntil">—</b></p>
+            <p>Time remaining: <b id="gateCountdown">—</b></p>
+            <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+          </div>
+
+          <div id="gateTestArea">
+            <div id="gateQuestions"></div>
+            <p id="gateScore" aria-live="polite"></p>
+            <p id="gateMsg" aria-live="polite"></p>
+            <div class="gate-actions">
+              <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+              <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+            </div>
+            <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+          </div>
+
+          <div class="gate-admin">
+            <button class="btn btn-ghost" id="adminBtn" type="button">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 21 2"/><path d="M15 8l3 3"/></svg>Admin Unlock
+            </button>
+            <div class="gate-admin-form" id="adminForm" hidden>
+              <label for="adminPw">Admin password</label>
+              <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+              <p id="adminMsg" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+        </section>
+      </div>
+
+      <div id="lessonContent" hidden>
+      <header class="hero">
+        <span class="kicker">Part 1 · Lesson 3 of 10 · SAP S/4HANA Financial Accounting</span>
+        <h1>Lesson 3 — SAP Interface</h1>
+        <p class="lede">In Lesson 2 you learned how SAP is built <b>inside</b> — the three layers. Now we stand in front of the machine and learn to <b>use it with our own hands</b>: how you log on, every part of the SAP window, the magic <b>command field</b> and <b>T-codes</b>, the messages SAP shows you in the status bar, the two lifesaver keys <b>F1</b> and <b>F4</b>, running several screens at once, and the modern <b>Fiori</b> face. After this lesson, the SAP screen will never look strange again. <span class="urdu">(Is lesson ke baad SAP ki screen aap ke liye ajnabi nahi rahegi — har button, har hissa pehchana hua lagega.)</span></p>
+        <div class="hero-meta">
+          <span class="chip">Exam: <b>C_TS4FI</b> — SAP S/4HANA Cloud Private Edition, Financial Accounting</span>
+          <span class="chip">Exam topic: <b>Overview &amp; Deployment of SAP S/4HANA</b> (weight: up to ~10%)</span>
+          <span class="chip">Level: <b>Complete beginner</b> · Builds on Lessons 1 &amp; 2</span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Lesson 3 contents">
+          <h2>In this lesson</h2>
+          <div class="read-progress" aria-live="polite">
+            <div class="rp-row"><span><b id="readCount">0 of 19</b> sections read</span><span id="readPct">0%</span></div>
+            <div class="rp-bar"><div id="readBar"></div></div>
+          </div>
+          <ol id="tocList">
+            <li><a href="#s1"><span class="dot"></span>1. Quick recap of Lessons 1 &amp; 2</a></li>
+            <li><a href="#s2"><span class="dot"></span>2. What does “Interface” mean?</a></li>
+            <li><a href="#s3"><span class="dot"></span>3. Two faces of SAP: GUI vs Fiori</a></li>
+            <li><a href="#s4"><span class="dot"></span>4. Step 1: SAP Logon — choosing your system</a></li>
+            <li><a href="#s5"><span class="dot"></span>5. Step 2: The logon screen — 4 fields</a></li>
+            <li><a href="#s6"><span class="dot"></span>6. The SAP GUI window, part by part</a></li>
+            <li><a href="#s7"><span class="dot"></span>7. SAP Easy Access — your home screen</a></li>
+            <li><a href="#s8"><span class="dot"></span>8. T-codes and the command field</a></li>
+            <li><a href="#s9"><span class="dot"></span>9. Special commands: /n, /o, /nex…</a></li>
+            <li><a href="#s10"><span class="dot"></span>10. Many screens at once: sessions (modes)</a></li>
+            <li><a href="#s11"><span class="dot"></span>11. The status bar and message types S-I-W-E-A-X</a></li>
+            <li><a href="#s12"><span class="dot"></span>12. F1 and F4 — your two lifesaver keys</a></li>
+            <li><a href="#s13"><span class="dot"></span>13. Make SAP yours: favourites &amp; defaults</a></li>
+            <li><a href="#s14"><span class="dot"></span>14. Tour: the Fiori Launchpad</a></li>
+            <li><a href="#s15"><span class="dot"></span>15. GUI vs Fiori — full comparison</a></li>
+            <li><a href="#s16"><span class="dot"></span>16. Exam traps for Lesson 3</a></li>
+            <li><a href="#s17"><span class="dot"></span>17. Lesson 3 glossary (A–Z)</a></li>
+            <li><a href="#s18"><span class="dot"></span>18. Summary — key points</a></li>
+            <li><a href="#s19"><span class="dot"></span>19. Self-test (12 MCQs)</a></li>
+          </ol>
+          <p class="toc-note">The blue highlight shows the section on your screen. Press the green <b>Mark Read</b> button at the end of a section to mark it read — a green tick appears here and your progress updates. <span class="urdu">(Jo hissa parh liya, us ke aakhir mein Mark Read dabayein — yahan sabz nishan lag jayega.)</span></p>
+        </nav>
+
+        <main>
+
+          <!-- ============ 1 RECAP ============ -->
+          <section class="lesson" id="s1" data-toc>
+            <h2><span class="no">01</span> Quick recap of Lessons 1 &amp; 2</h2>
+            <p class="sub">One minute of revision — this lesson stands on these points.</p>
+            <ul class="clean">
+              <li><b>ERP</b> = one software, one database, for the whole company. <b>SAP</b> is the leading ERP; <b>FICO</b> = FI + CO is its finance side.</li>
+              <li>Generations: <b>R/3 → ECC → S/4HANA</b>. S/4HANA runs <b>only on the HANA database</b>.</li>
+              <li>SAP is built in <b>three layers</b>: <b>Presentation</b> (your screen) → <b>Application</b> (the brain, runs ABAP programs) → <b>Database</b> (HANA, stores everything). Remember <b>P-A-D</b>.</li>
+              <li>A <b>Client</b> is a separate environment inside one SAP system, identified by <b>3 digits</b> (for example 100, 800). Client ≠ customer.</li>
+              <li>Work is organised in a <b>landscape</b>: DEV (build) → QAS (test) → PRD (live), and settings travel in <b>Transport Requests</b>.</li>
+              <li>You meet SAP through two faces: the classic <b>SAP GUI</b> and the modern, browser-based <b>Fiori</b>.</li>
+            </ul>
+            <p>Lesson 2 ended at the presentation layer — your screen. This lesson zooms into exactly that layer and stays there: <b>every button, box and message you will touch as a daily SAP user.</b> <span class="urdu">(Pichle lesson mein hum ne machine ke andar dekha; is lesson mein hum machine ke saamne kharay ho kar usay chalana seekhenge.)</span></p>
+          </section>
+
+          <!-- ============ 2 WHAT IS INTERFACE ============ -->
+          <section class="lesson" id="s2" data-toc>
+            <h2><span class="no">02</span> What does “Interface” mean?</h2>
+            <div class="box term"><span class="box-title">New word — Interface</span>
+              <p>An <b>interface</b> is the <b>point where two things meet and talk to each other</b>. In our case: the place where <b>you (the human)</b> meet <b>SAP (the software)</b>. Everything you see and touch — the screens, menus, buttons, boxes and messages — together is called the <b>user interface</b>, often shortened to <b>UI</b>.</p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — the dashboard of a car</span>
+              <p>A car's engine does all the real work, but you never touch the engine while driving. You use the <b>dashboard</b>: steering wheel, pedals, gear lever, speedometer and warning lights. The dashboard is the car's <b>interface</b> — it takes your actions to the engine and shows the engine's answers back to you.</p>
+              <p>SAP is the same. The application server and the HANA database (Lesson 2) are the “engine”. The <b>SAP GUI window and the Fiori screens are the dashboard</b> — and a good driver must know every control and every warning light on it. That is this lesson.</p>
+            </div>
+            <div class="box term"><span class="box-title">New word — GUI</span>
+              <p><b>GUI</b> stands for <b>G</b>raphical <b>U</b>ser <b>I</b>nterface — pronounced “goo-ee”. It simply means an interface you use by <b>looking at pictures, menus and buttons and clicking with a mouse</b>, instead of typing only text commands. Windows, Android and SAP GUI are all GUIs. SAP's classic program is literally named <b>SAP GUI</b>.</p>
+            </div>
+            <p>One more thing before we start: “interface” is also used in a second, technical sense — a connection <i>between two software systems</i> (for example, a bank sending a file into SAP is an “interface”). That meaning belongs to later, advanced topics. <b>In this lesson, interface = the screens you use.</b></p>
+            <div class="box trick"><span class="box-title">Memory trick</span>
+              <p><b>Interface = “the face between”</b> — <i>inter</i> (between) + <i>face</i>. It is literally the <b>face</b> that stands <b>between</b> you and the system. Jab bhi lafz “interface” aaye, “chehra” yaad kar lein — the face of SAP.</p>
+            </div>
+          </section>
+
+          <!-- ============ 3 TWO FACES ============ -->
+          <section class="lesson" id="s3" data-toc>
+            <h2><span class="no">03</span> The two faces of SAP: GUI and Fiori</h2>
+            <p>You already met both faces in Lessons 1 and 2. Here is the short version again, because this whole lesson walks through both, one by one:</p>
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>SAP GUI — the classic face</h4>
+                <p>A program <b>installed on your PC</b>. You start it, log on, and work with menus, toolbars and <b>T-codes</b> (short codes for screens). This is where FI consultants do most configuration and heavy daily work even today. Sections 4–13 of this lesson are all about the GUI.</p>
+              </div>
+              <div class="mini-card">
+                <h4>SAP Fiori — the modern face</h4>
+                <p>SAP opened in a <b>web browser</b> — nothing to install. Work is organised as <b>apps shown as tiles</b> on a home page called the <b>Fiori Launchpad</b>. It works on PC, tablet and phone, and it is the face SAP is pushing for S/4HANA. Section 14 tours it.</p>
+              </div>
+            </div>
+            <div class="box term"><span class="box-title">New word — Frontend / Backend</span>
+              <p>IT people call the part you see the <b>frontend</b> and the hidden working part the <b>backend</b>. In SAP words: <b>frontend = presentation layer</b> (GUI / Fiori on your device); <b>backend = application layer + database</b> (the servers). When a consultant says “it's a frontend issue”, they mean the problem is on the user's screen side, not in the data.</p>
+            </div>
+            <p><b>Important:</b> GUI and Fiori are only two different <i>doors</i> into the <b>same house</b>. Behind both doors stand the same application servers, the same programs and the same HANA database. A document you post in the GUI appears instantly in Fiori, and the other way round — because there is only <b>one</b> data, in Layer 3. <span class="urdu">(Do darwazay, aik hi ghar — data aik hi jagah rehta hai.)</span></p>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>“Fiori is a different system with its own database” — <b>wrong</b>. Fiori is only an interface (a frontend). Same system, same data. Also beware a third door with a similar name: <b>SAP GUI for HTML (Web GUI)</b> shows the <i>classic GUI screens inside a browser</i> — that is <b>not</b> Fiori. Fiori apps are newly designed apps; Web GUI is the old screens wearing a browser coat.</p>
+            </div>
+          </section>
+
+          <!-- ============ 4 SAP LOGON ============ -->
+          <section class="lesson" id="s4" data-toc>
+            <h2><span class="no">04</span> Step 1: SAP Logon — choosing your system</h2>
+            <p class="sub">Your SAP day starts here: a small program called SAP Logon, before any accounting screen appears.</p>
+            <div class="box term"><span class="box-title">New word — Log on / Logon</span>
+              <p><b>To log on</b> means to enter a system by proving who you are — with a user name and password. <b>Log off</b> is the opposite: leaving the system properly. The small starting program of SAP GUI is itself called <b>SAP Logon</b> (sometimes “the logon pad”).</p>
+            </div>
+            <p>When you double-click the SAP Logon icon on your PC, you do <b>not</b> yet see accounting. You see a <b>list of SAP systems</b> you are allowed to enter — because one company has many systems (remember the landscape from Lesson 2: DEV, QAS, PRD — plus training systems). Your IT team (the <b>Basis</b> team — SAP's system administrators) sets up this list for you.</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 300" role="img" aria-label="Illustration of the SAP Logon pad window listing systems: S4D Development, S4Q Quality, S4P Production and a training system">
+                <rect x="110" y="30" width="500" height="240" rx="10" class="svg-box"/>
+                <rect x="110" y="30" width="500" height="34" rx="10" class="svg-box-a"/>
+                <text x="130" y="52" class="svg-title">SAP Logon — choose a system</text>
+                <rect x="130" y="82" width="460" height="34" rx="6" class="svg-box-a"/>
+                <text x="146" y="104" class="svg-sub"><tspan font-weight="700" fill="var(--ink)">S4P</tspan> — Production (live company data)</text>
+                <rect x="130" y="124" width="460" height="34" rx="6" class="svg-box"/>
+                <text x="146" y="146" class="svg-sub"><tspan font-weight="700" fill="var(--ink)">S4Q</tspan> — Quality (testing)</text>
+                <rect x="130" y="166" width="460" height="34" rx="6" class="svg-box"/>
+                <text x="146" y="188" class="svg-sub"><tspan font-weight="700" fill="var(--ink)">S4D</tspan> — Development (building / practice)</text>
+                <rect x="130" y="208" width="460" height="34" rx="6" class="svg-box"/>
+                <text x="146" y="230" class="svg-sub"><tspan font-weight="700" fill="var(--ink)">TRN</tspan> — Training system (for learning)</text>
+              </svg>
+              <figcaption>The SAP Logon pad: a list of systems. You double-click one to enter it. (Illustration drawn for learning in the style of SAP Logon — not a real SAP screenshot.)</figcaption>
+            </figure>
+            <p>Each line shows a <b>System ID (SID)</b> — the 3-character name of a system from Lesson 2 — plus a short description. As a learner you will normally enter a <b>training or development system</b>. Production (PRD) is the live system with real company data — treat it with respect.</p>
+            <div class="box analogy"><span class="box-title">Analogy — doors of a building</span>
+              <p>The Logon pad is like standing in the street in front of a building with several labelled doors: <i>Office (live work)</i>, <i>Workshop (building)</i>, <i>Test lab</i>, <i>Classroom</i>. Choosing the door is step 1. Showing your ID card at that door is step 2 — the logon screen, next section.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>Do not confuse <b>SAP Logon</b> (the starter program with the system list) with the <b>logon screen</b> (user + password inside one chosen system). Two different steps. Also: the systems in your Logon pad are <b>not</b> different “versions of SAP on your PC” — your PC holds no SAP data at all; the list is just a set of addresses of servers.</p>
+            </div>
+          </section>
+
+          <!-- ============ 5 LOGON SCREEN ============ -->
+          <section class="lesson" id="s5" data-toc>
+            <h2><span class="no">05</span> Step 2: The logon screen — only 4 fields</h2>
+            <p>After you double-click a system, SAP asks you to prove who you are. The logon screen has just <b>four fields</b> — learn them well, because two of them are favourite exam material:</p>
+            <div class="screen" role="img" aria-label="Illustration of the SAP logon screen with Client, User, Password and Language fields">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> SAP Logon screen — illustration (re-created for learning, not a real SAP screenshot)</div>
+              <div class="screen-body">Client&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">[ 800 ]</span> <span class="dim">← 3-digit environment inside the system</span><br/>User&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl2">[ ASAD.FI ]</span> <span class="dim">← your personal user ID</span><br/>Password&nbsp;&nbsp;<span class="hl2">[ •••••••• ]</span> <span class="dim">← shown as dots, never readable</span><br/>Language&nbsp;&nbsp;<span class="hl2">[ EN ]</span> <span class="dim">← EN = English, DE = German…</span><br/><span class="dim">Press ENTER (the green tick) to log on.</span></div>
+            </div>
+            <div class="tblwrap"><table>
+              <tr><th style="width:18%">Field</th><th style="width:38%">Simple meaning</th><th>Good to know</th></tr>
+              <tr><td><b>Client</b></td><td>The 3-digit environment inside this system you want to enter (Lesson 2).</td><td>Often pre-filled with a default client. Training systems often use client <b>800</b>; your company will tell you its number. Wrong client = “user not created in this client”.</td></tr>
+              <tr><td><b>User</b></td><td>Your personal SAP user ID — your identity inside SAP.</td><td>Everything you post is stamped with this ID. Never share it: SAP treats work done under your ID as <b>your</b> work.</td></tr>
+              <tr><td><b>Password</b></td><td>Your secret key.</td><td>At your <b>very first logon</b> SAP forces you to change the starting password given by the admin. Wrong password too many times → the ID gets <b>locked</b> and only an admin can unlock it.</td></tr>
+              <tr><td><b>Language</b></td><td>The language of the <b>screens and menus</b>.</td><td>Two-letter code: <code>EN</code> English, <code>DE</code> German, and others your company installed. It changes menu words — never the accounting data.</td></tr>
+            </table></div>
+            <div class="box term"><span class="box-title">New word — Session (first meaning)</span>
+              <p>A <b>session</b> is your one continuous visit inside SAP — from the moment you log on until you log off. Think of it as one “sitting”. Inside one session you can later open several screens at once (Section 10), but it all starts with this single logon. IT people also call one open SAP window a <b>mode</b> — same thing.</p>
+            </div>
+            <h3>What if you are already logged on somewhere else?</h3>
+            <p>If your user ID is already logged on (for example, you left yourself logged on at another PC), SAP shows a warning box with three choices: <b>continue and end the other logon</b>, <b>continue without ending it</b> (multiple logons are recorded and can cost an extra licence), or <b>cancel this logon</b>. Choose calmly — it is not an error, just SAP keeping count. <span class="urdu">(Ghabrana nahi — ye sirf aik warning hai, ghalti nahi.)</span></p>
+            <div class="box trick"><span class="box-title">Memory trick — “C-U-P-L”</span>
+              <p>The 4 logon fields in order: <b>C</b>lient, <b>U</b>ser, <b>P</b>assword, <b>L</b>anguage — “<b>C</b>up <b>o</b>f tea, please, with <b>L</b>emon”? Simpler: <b>“Chai Usko Pilao, Lemon ke saath”</b> — Client, User, Password, Language. If an exam question asks what the logon screen needs, CUP-L is the complete answer.</p>
+            </div>
+          </section>
+
+          <!-- ============ 6 GUI WINDOW ANATOMY ============ -->
+          <section class="lesson" id="s6" data-toc>
+            <h2><span class="no">06</span> The SAP GUI window, part by part</h2>
+            <p class="sub">You pressed Enter, you are in. Every SAP GUI screen — all thousands of them — is built from the same seven parts. Learn the seven parts once, and every screen feels familiar.</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 430" role="img" aria-label="Labelled diagram of the SAP GUI window: title bar, menu bar, standard toolbar with command field, application toolbar, screen body, and status bar">
+                <rect x="40" y="36" width="640" height="352" rx="10" class="svg-box"/>
+                <rect x="40" y="36" width="640" height="34" rx="10" class="svg-box-a"/>
+                <text x="58" y="58" class="svg-title">1 · TITLE BAR — name of the screen + system info</text>
+                <rect x="40" y="78" width="640" height="30" class="svg-box"/>
+                <text x="58" y="98" class="svg-sub">2 · MENU BAR —  System · Edit · Goto · Extras · Environment · Help …</text>
+                <rect x="40" y="116" width="640" height="38" class="svg-box-g"/>
+                <text x="58" y="132" class="svg-sub">3 · STANDARD TOOLBAR — same buttons on every screen: Enter ✓ · Save · Back · Exit · Cancel · Print · Find</text>
+                <text x="58" y="148" class="svg-sub">+ COMMAND FIELD [ /nFB50______ ] ← type T-codes here</text>
+                <rect x="40" y="162" width="640" height="30" class="svg-box"/>
+                <text x="58" y="182" class="svg-sub">4 · APPLICATION TOOLBAR — buttons that belong to THIS screen only (Post, Simulate, Park…)</text>
+                <rect x="40" y="200" width="640" height="118" class="svg-box-a"/>
+                <text x="58" y="226" class="svg-title">5 · SCREEN BODY (work area)</text>
+                <text x="58" y="248" class="svg-sub">The actual fields of the transaction: Company Code [____]  Posting Date [__.__.____]</text>
+                <text x="58" y="270" class="svg-sub">G/L Account [__________]  Amount [____________] …</text>
+                <text x="58" y="296" class="svg-sub">Required fields show a small tick/check mark — the screen will not proceed without them.</text>
+                <rect x="40" y="326" width="640" height="30" class="svg-box"/>
+                <text x="58" y="346" class="svg-sub">6 · STATUS BAR — messages appear here (green / yellow / red) + system · client · user · session</text>
+                <text x="40" y="412" class="svg-sub">7 · The whole window is one SESSION — you can open up to 6 in parallel (Section 10).</text>
+              </svg>
+              <figcaption>The anatomy of every SAP GUI screen. Seven parts, always in the same place. (Diagram drawn for learning — an illustration, not a real SAP screenshot.)</figcaption>
+            </figure>
+            <div class="tblwrap"><table>
+              <tr><th style="width:24%">Part</th><th style="width:40%">What it is</th><th>Remember it as</th></tr>
+              <tr><td><b>1. Title bar</b></td><td>Top line: the name of the screen/transaction you are in; on the right, system information (system, client, user) when you open the info area.</td><td>The shop's name board</td></tr>
+              <tr><td><b>2. Menu bar</b></td><td>Text menus that change a little from screen to screen. Two menus are <b>always</b> there: <b>System</b> (log off, new session, user profile) at the start and <b>Help</b> at the end.</td><td>The full menu card</td></tr>
+              <tr><td><b>3. Standard toolbar</b></td><td>A row of picture-buttons that is <b>the same on every screen</b>: Enter (green tick), Save, Back, Exit, Cancel, Print, Find, page up/down, new session, help. The <b>command field</b> sits at its left end.</td><td>Controls every car has: steering, brake</td></tr>
+              <tr><td><b>4. Application toolbar</b></td><td>Buttons that belong to <b>this transaction only</b> — e.g. in a posting screen: Post, Park, Simulate, Account Assignment Model. Changes completely from screen to screen.</td><td>Controls only this machine has</td></tr>
+              <tr><td><b>5. Screen body</b></td><td>The working area: the fields you fill. Fields with a <b>tick mark</b> are <b>required</b> (must be filled). Greyed-out fields are display-only.</td><td>The form itself</td></tr>
+              <tr><td><b>6. Status bar</b></td><td>The bottom line of the window. SAP talks to you here: success, warning and error messages (Section 11), plus which system/client/user/session you are in.</td><td>The car's warning-light strip</td></tr>
+              <tr><td><b>7. Session window</b></td><td>The whole window itself — one working screen. You can have several open together.</td><td>One open notebook</td></tr>
+            </table></div>
+            <div class="box term"><span class="box-title">New words — Toolbar, Pushbutton, Field</span>
+              <p>A <b>toolbar</b> is a strip of clickable picture-buttons. A single button is a <b>pushbutton</b>. A <b>field</b> is one box on the screen where you type or see one piece of data — a date field, an amount field. A <b>checkbox</b> is a small square you tick on/off; a <b>radio button</b> is a round button where you must pick exactly one of a group.</p>
+            </div>
+            <h3>The standard toolbar buttons you will use daily</h3>
+            <div class="tblwrap"><table>
+              <tr><th style="width:26%">Button</th><th style="width:30%">Keyboard</th><th>What it does</th></tr>
+              <tr><td><b>Enter</b> (green tick)</td><td><code>Enter</code></td><td>“Continue / check my input.” Sends the screen to the server for checking — it does <b>not</b> save by itself.</td></tr>
+              <tr><td><b>Save</b></td><td><code>Ctrl + S</code></td><td>Saves / posts what you entered. In FI posting screens, Save = <b>Post</b>.</td></tr>
+              <tr><td><b>Back</b></td><td><code>F3</code></td><td>One step back to the previous screen.</td></tr>
+              <tr><td><b>Exit</b></td><td><code>Shift + F3</code></td><td>Leaves the transaction completely, back towards the main menu.</td></tr>
+              <tr><td><b>Cancel</b></td><td><code>F12</code></td><td>Leaves the screen <b>without saving</b> anything you typed.</td></tr>
+              <tr><td><b>Print</b></td><td><code>Ctrl + P</code></td><td>Prints the current list/screen output.</td></tr>
+              <tr><td><b>Find / Find next</b></td><td><code>Ctrl + F</code> / <code>Ctrl + G</code></td><td>Searches text inside long lists and menu trees.</td></tr>
+              <tr><td><b>Create new session</b></td><td>—</td><td>Opens one more parallel SAP window (Section 10).</td></tr>
+              <tr><td><b>Help</b></td><td><code>F1</code> (on a field)</td><td>Opens help — Section 12 is devoted to it.</td></tr>
+            </table></div>
+            <div class="box trap"><span class="box-title">Exam trap — Enter is not Save</span>
+              <p>New users press <b>Enter</b> and think the document is saved. <b>Wrong.</b> Enter only sends the screen for checking/continuing. Data is saved only with <b>Save (Ctrl+S)</b> — or, in FI, by <b>posting</b>. A classic beginner (and exam) confusion: Back (F3) vs Exit (Shift+F3) vs Cancel (F12) are three different ways of leaving — Back keeps you one step inside, Exit leaves the transaction, Cancel throws away unsaved typing.</p>
+            </div>
+          </section>
+
+          <!-- ============ 7 EASY ACCESS ============ -->
+          <section class="lesson" id="s7" data-toc>
+            <h2><span class="no">07</span> SAP Easy Access — your home screen</h2>
+            <p>Right after logon you land on the <b>SAP Easy Access</b> screen — the home screen of the GUI. On the left it shows a <b>menu tree</b>: folders inside folders, grouping every transaction in the system. The FI path you will walk most often is <b>Accounting → Financial Accounting → …</b>.</p>
+            <div class="screen" role="img" aria-label="Illustration of the SAP Easy Access menu tree with favourites and the Accounting Financial Accounting folders">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> SAP Easy Access — illustration (re-created for learning, not a real SAP screenshot)</div>
+              <div class="screen-body">▾ ★ <span class="hl2">Favorites</span> <span class="dim">← your own shortcuts (Section 13)</span><br/>▾ SAP Menu<br/>&nbsp;&nbsp;▸ Office<br/>&nbsp;&nbsp;▸ Cross-Application Components<br/>&nbsp;&nbsp;▸ Logistics<br/>&nbsp;&nbsp;▾ <span class="hl2">Accounting</span><br/>&nbsp;&nbsp;&nbsp;&nbsp;▾ <span class="hl2">Financial Accounting</span><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▸ General Ledger<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▸ Accounts Payable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▸ Accounts Receivable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▸ Asset Accounting<br/>&nbsp;&nbsp;&nbsp;&nbsp;▸ Controlling<br/>&nbsp;&nbsp;▸ Human Resources<br/>&nbsp;&nbsp;▸ Tools</div>
+            </div>
+            <p>You can open any transaction by <b>double-clicking</b> its line in the tree. That is the slow, safe, learning way — good for your first weeks. The fast way, used by every experienced user, is typing the transaction's <b>T-code</b> in the command field — the next section.</p>
+            <div class="box term"><span class="box-title">New word — Menu path</span>
+              <p>A <b>menu path</b> is the written route through the folders, like a postal address: <i>SAP Menu → Accounting → Financial Accounting → General Ledger → Document Entry → FB50 – Enter G/L Account Document</i>. Books and exam questions often give the menu path; the T-code is its shortcut.</p>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick — see the T-codes inside the tree</span>
+              <p>In Easy Access, open menu <b>Extras → Settings</b> and tick <b>“Display technical names”</b>. Now every line of the tree also shows its <b>T-code</b> next to the name. This one setting turns the menu tree into your personal T-code teacher — leave it on while you learn. <span class="urdu">(Ye aik setting poori menu ko aap ka ustaad bana deti hai.)</span></p>
+            </div>
+          </section>
+
+          <!-- ============ 8 T-CODES ============ -->
+          <section class="lesson" id="s8" data-toc>
+            <h2><span class="no">08</span> T-codes and the command field — the fast way</h2>
+            <div class="box term"><span class="box-title">New word — Transaction / T-code</span>
+              <p>In SAP language, a <b>transaction</b> is <b>one task-screen</b> — one job you open and complete, like “post a G/L document” or “display a vendor”. (It is <i>not</i> the accounting meaning of transaction!) Every transaction has a short code, its <b>transaction code</b> or <b>T-code</b>: 1–20 characters, usually 4–6, like <code>FB50</code>, <code>FS10N</code>, <code>SU3</code>. Typing a T-code in the <b>command field</b> and pressing Enter jumps you straight to that screen.</p>
+            </div>
+            <div class="box term"><span class="box-title">New word — Command field (OK-code field)</span>
+              <p>The <b>command field</b> is the small white box at the left of the standard toolbar — in old SAP documents it is called the <b>OK-code field</b>. It is SAP's “address bar”: whatever code you type there, SAP takes you to it. If it is hidden, click the small arrow at the toolbar's left edge to open it.</p>
+            </div>
+            <h3>T-codes have a pattern — learn to read them</h3>
+            <ul class="clean">
+              <li><b>The letters usually hint at the area.</b> In FI you will constantly meet <b>F</b>-codes: <code>FB…</code> document posting, <code>FS…</code> G/L accounts, <code>FK…</code> vendors (Kreditoren — German for creditors!), <code>FD…</code> customers (Debitoren), <code>OB…</code> configuration steps. SAP was born in Germany, so some letters are German — do not fight it, just learn the famous ones.</li>
+              <li><b>The ending 01 / 02 / 03 trick:</b> for master data, <b>…01 = Create, …02 = Change, …03 = Display</b>. Example: <code>FK01</code> create vendor, <code>FK02</code> change vendor, <code>FK03</code> display vendor. Same music for customers: <code>FD01 / FD02 / FD03</code>, and G/L accounts: <code>FS00</code> is the central all-in-one screen.</li>
+              <li><b>“Enjoy” transactions:</b> newer, friendlier single screens often carry a <b>50-series or plain name</b> — <code>FB50</code> (post G/L document, one screen) is the “enjoy” version of the classic two-screen <code>F-02</code>. You will use both in later lessons.</li>
+            </ul>
+            <div class="tblwrap"><table>
+              <tr><th style="width:20%">T-code</th><th style="width:42%">What it opens</th><th>Why it is in this lesson</th></tr>
+              <tr><td><code>FB50</code></td><td>Enter G/L Account Document (posting)</td><td>The posting screen used in examples in this series</td></tr>
+              <tr><td><code>FS10N</code></td><td>G/L Account Balance Display</td><td>A typical “display/report” transaction</td></tr>
+              <tr><td><code>SU3</code></td><td>Maintain User Profile (your own defaults)</td><td>Section 13 — make SAP remember your settings</td></tr>
+              <tr><td><code>SE93</code></td><td>Maintain Transaction Codes</td><td>Look up what a T-code is / find T-codes</td></tr>
+              <tr><td><code>SM04</code></td><td>User List (sessions of users)</td><td>See and, with rights, end sessions (Section 10)</td></tr>
+              <tr><td><code>SPRO</code></td><td>Customizing — the configuration door</td><td>Where consultants set up FI (later lessons live here)</td></tr>
+            </table></div>
+            <div class="box analogy"><span class="box-title">Analogy — phone contacts vs dialling numbers</span>
+              <p>Walking the menu tree is like opening your phone's contact list and scrolling to a name. Typing a T-code is like <b>dialling the number directly</b> because you know it by heart. Beginners scroll; professionals dial. Your job in this course: slowly memorise the 20–30 numbers of FI daily life.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>A T-code does <b>not</b> give you permission by itself. Knowing <code>SPRO</code> does not mean you may configure — your user needs the matching <b>authorisation</b> (permission given by the security team). SAP checks your rights every time you start a transaction; “No authorisation” is a normal message, not a system fault. Also: <code>SE93</code> <i>displays/defines</i> transaction codes — it is not where you “search the menu”; for that, use the menu search in Easy Access (Section 7) or SE93's own search help.</p>
+            </div>
+          </section>
+
+          <!-- ============ 9 SPECIAL COMMANDS ============ -->
+          <section class="lesson" id="s9" data-toc>
+            <h2><span class="no">09</span> Special commands: /n, /o, /nex and friends</h2>
+            <p class="sub">The command field understands a small family of slash-commands. These six will save you clicks every single day.</p>
+            <div class="tblwrap"><table>
+              <tr><th style="width:22%">You type</th><th style="width:40%">What happens</th><th>When you use it</th></tr>
+              <tr><td><code>/n</code></td><td><b>Ends the current transaction</b> and takes you back to the Easy Access home screen (same window).</td><td>“I am done with this screen, take me home.” Unsaved typing is lost.</td></tr>
+              <tr><td><code>/nFB50</code></td><td>Ends the current transaction and <b>starts FB50 in the same window</b>.</td><td>Jumping from one transaction straight into another. The daily habit of every consultant.</td></tr>
+              <tr><td><code>/o</code></td><td>Opens a small list of <b>your open sessions</b>; from there you can create a new session or close one.</td><td>When you lost count of your windows.</td></tr>
+              <tr><td><code>/oFB50</code></td><td>Starts FB50 in a <b>NEW window</b>, leaving your current screen untouched.</td><td>“Let me check something in parallel without losing this screen.”</td></tr>
+              <tr><td><code>/*FB50</code></td><td>Starts FB50 and <b>skips its first screen</b>, if the first screen's fields can be filled from your saved defaults.</td><td>Advanced speed trick; works only when the entry screen can be fully defaulted.</td></tr>
+              <tr><td><code>/i</code></td><td><b>Deletes (closes) the current session</b> — this window closes.</td><td>Closing one window without logging off completely.</td></tr>
+              <tr><td><code>/nex</code></td><td><b>Logs off completely, without the “are you sure?” question</b> — all your sessions close at once.</td><td>Leaving for the day. Careful: no confirmation, unsaved work is gone.</td></tr>
+            </table></div>
+            <div class="box trick"><span class="box-title">Memory trick — read the letters</span>
+              <p><b>/n</b> = <b>N</b>ew transaction here (ends the old one). <b>/o</b> = <b>O</b>pen another window. <b>/nex</b> = <b>N</b> + <b>Ex</b>it — the full exit. And the difference that matters most: <b>/nTCODE replaces, /oTCODE adds.</b> Urdu mein: <i>“/n badal deta hai, /o barha deta hai.”</i></p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>Two favourites: (1) “<code>/nex</code> asks for confirmation before logging off” — <b>wrong</b>, that is exactly what it skips; the normal logoff (System → Log Off) asks. (2) “<code>/o</code> logs you off and on again” — <b>wrong</b>, it only opens another session under the <b>same</b> logon. No new password, no new logon.</p>
+            </div>
+          </section>
+
+          <!-- ============ 10 SESSIONS ============ -->
+          <section class="lesson" id="s10" data-toc>
+            <h2><span class="no">10</span> Many screens at once: sessions (modes)</h2>
+            <p>Real accounting work is never one screen at a time. You are posting a document, but you must check an account balance; you check the balance, but you must see the vendor's master data. SAP's answer: under <b>one logon</b> you may open <b>up to 6 sessions (windows) in parallel</b> — the standard default.</p>
+            <figure class="diagram">
+              <svg viewBox="0 0 720 260" role="img" aria-label="Diagram: one logon (user ASAD.FI, client 800) branching into three open sessions: FB50 posting, FS10N balances, FK03 vendor display">
+                <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+                <rect x="235" y="24" width="250" height="52" rx="10" class="svg-box-a"/>
+                <text x="360" y="46" text-anchor="middle" class="svg-title">ONE LOGON</text>
+                <text x="360" y="66" text-anchor="middle" class="svg-sub">User ASAD.FI · Client 800 · one password</text>
+                <path d="M300 76 L150 130" class="svg-arrow"/><path d="M360 76 L360 130" class="svg-arrow"/><path d="M420 76 L570 130" class="svg-arrow"/>
+                <rect x="45" y="134" width="210" height="66" rx="10" class="svg-box-g"/>
+                <text x="150" y="160" text-anchor="middle" class="svg-title">SESSION 1</text>
+                <text x="150" y="180" text-anchor="middle" class="svg-sub">FB50 — posting (half-typed)</text>
+                <rect x="255" y="134" width="210" height="66" rx="10" class="svg-box-g"/>
+                <text x="360" y="160" text-anchor="middle" class="svg-title">SESSION 2</text>
+                <text x="360" y="180" text-anchor="middle" class="svg-sub">FS10N — account balances</text>
+                <rect x="465" y="134" width="210" height="66" rx="10" class="svg-box-g"/>
+                <text x="570" y="160" text-anchor="middle" class="svg-title">SESSION 3</text>
+                <text x="570" y="180" text-anchor="middle" class="svg-sub">FK03 — display vendor</text>
+                <text x="360" y="232" text-anchor="middle" class="svg-sub">…up to 6 sessions under one logon. Each session is independent — closing one never harms the others.</text>
+              </svg>
+              <figcaption>One logon, many sessions. Each window works on its own screen; all share the same user, client and data. (Diagram drawn for learning — an illustration.)</figcaption>
+            </figure>
+            <h3>Three ways to open a new session</h3>
+            <ul class="clean">
+              <li>Type <code>/o</code> + T-code in the command field, e.g. <code>/oFS10N</code>.</li>
+              <li>Click the <b>“Create new session”</b> button on the standard toolbar.</li>
+              <li>Menu <b>System → Create Session</b>.</li>
+            </ul>
+            <p>Each new session opens at the Easy Access screen unless you gave a T-code with <code>/o</code>. Your status bar quietly tells you which session number you are in (Section 11).</p>
+            <div class="box analogy"><span class="box-title">Analogy — one desk, many open registers</span>
+              <p>A manual accountant keeps several registers open on one desk — cash book here, ledger there — and flips between them while staying the same person at the same desk. Sessions are exactly that: <b>one desk (one logon), up to six open registers (sessions)</b>. Logging off is leaving the desk; <code>/i</code> is closing just one register.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>(1) A new session is <b>not</b> a new logon and needs <b>no password again</b>. (2) The standard maximum is <b>6 sessions</b> per logon — a very quotable number. (3) If two of your sessions try to <b>edit the same record</b> at the same time, SAP's lock (the Enqueue from Lesson 2) will stop the second one — even against yourself! Display in one window, edit in the other.</p>
+            </div>
+          </section>
+
+          <!-- ============ 11 STATUS BAR & MESSAGES ============ -->
+          <section class="lesson" id="s11" data-toc>
+            <h2><span class="no">11</span> The status bar and message types: S – I – W – E – A – X</h2>
+            <p class="sub">SAP talks to you all day through one thin line at the bottom of the window. Learn its language and you will always know: did my work save? Is this a small warning or a full stop?</p>
+            <h3>What the status bar shows</h3>
+            <ul class="clean">
+              <li><b>Messages</b> — on the left: the system's answers (“Document 100000123 was posted”, “Enter a company code”…).</li>
+              <li><b>System information</b> — on the right: which <b>system</b>, <b>client</b>, <b>user</b> and <b>session</b> you are in. Clicking this area opens a small info panel. When something looks wrong, check here first: half of all “SAP is broken!” cries are simply a user working in the <b>wrong client</b>.</li>
+              <li><b>Double-click a message</b> in the status bar to open its <b>long text</b> — a fuller explanation, often with the fix written inside.</li>
+            </ul>
+            <h3>The six message types — the heart of this lesson</h3>
+            <div class="tblwrap"><table>
+              <tr><th style="width:10%">Type</th><th style="width:20%">Name</th><th style="width:34%">Simple meaning</th><th>What you do</th></tr>
+              <tr><td><code><b>S</b></code></td><td><b>Success</b></td><td>“Done!” Shown quietly in the status bar, usually green. Example: “Document 100000123 was posted in company code 1000.”</td><td>Nothing — note the document number and carry on. This is the message every accountant waits for.</td></tr>
+              <tr><td><code><b>I</b></code></td><td><b>Information</b></td><td>“Just telling you.” Appears as a <b>pop-up box</b> you must confirm.</td><td>Read it, press Enter, continue. No damage, no stop.</td></tr>
+              <tr><td><code><b>W</b></code></td><td><b>Warning</b></td><td>“Careful — this looks unusual, but it may be allowed.” Usually yellow, in the status bar.</td><td>Read it properly. Often you may <b>press Enter to accept and continue</b> — but a warning means SAP noticed something; do not Enter blindly.</td></tr>
+              <tr><td><code><b>E</b></code></td><td><b>Error</b></td><td>“Stop. This is wrong and cannot be saved like this.” Usually red, in the status bar; the wrong field is highlighted.</td><td>You <b>must correct</b> the entry. No way forward until it is fixed. Example: debits ≠ credits, posting date in a closed period.</td></tr>
+              <tr><td><code><b>A</b></code></td><td><b>Abort</b> (Termination)</td><td>“This transaction cannot continue at all.” Appears as a dialog box; the transaction <b>ends</b>.</td><td>Note the message, go back, and if it repeats, inform the support/Basis team.</td></tr>
+              <tr><td><code><b>X</b></code></td><td><b>Exit</b> (Short dump)</td><td>“The program itself crashed.” The session ends with a technical error screen (a <b>short dump</b>).</td><td>Not your accounting mistake — a program fault. Report it; dumps can be analysed in <code>ST22</code> by technical staff.</td></tr>
+            </table></div>
+            <div class="box term"><span class="box-title">New word — Short dump</span>
+              <p>A <b>short dump</b> is SAP's crash report: when a program hits a problem it cannot survive, SAP stops it and writes a technical report (what program, what line, what data). Users just see “the screen died with a dump”. Remember only this: <b>X-type = program crash = technical team's job</b>, and the analysis T-code is <code>ST22</code>.</p>
+            </div>
+            <div class="box trick"><span class="box-title">Memory trick — traffic lights + two endings</span>
+              <p><b>S</b> = <b>S</b>abz (green) — success, go. <b>W</b> = <b>W</b>arning — yellow, slow down, look, then go. <b>E</b> = <b>E</b>rror — red, full stop, fix it. <b>I</b> = <b>I</b>nformation — just a notice board. Then the two rare endings: <b>A</b> = <b>A</b>bort (transaction ends politely) and <b>X</b> = e<b>X</b>it/crash (program dies). Order yaad rakhein: <b>“S-I-W-E-A-X — pehle teen roz ke, aakhri do ghair-mamooli.”</b></p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>(1) A <b>warning (W)</b> does <b>not</b> always block you — in many screens Enter accepts it; an <b>error (E)</b> always blocks. Exam questions love this difference. (2) Success messages appear in the <b>status bar</b>, information messages as a <b>dialog pop-up</b> — swapping these two is a classic wrong option. (3) Whether a business check gives a W or an E is often a <b>setting</b> (message control in configuration) — the same check can be a warning in one company and an error in another.</p>
+            </div>
+          </section>
+
+          <!-- ============ 12 F1 F4 ============ -->
+          <section class="lesson" id="s12" data-toc>
+            <h2><span class="no">12</span> F1 and F4 — your two lifesaver keys</h2>
+            <p class="sub">If you remember only two keys from this whole lesson, remember these. They turn every SAP field into its own teacher.</p>
+            <div class="twocol">
+              <div class="mini-card">
+                <h4>F1 — Help for this field (“What is this?”)</h4>
+                <p>Click inside <b>any field</b> and press <b>F1</b>. SAP opens the <b>Performance Assistant</b> window explaining: what this field means, what values it expects, and often links to deeper documentation. Technical people also use F1's “Technical Information” to learn the field's table and field name — your first bridge to the database of Lesson 2.</p>
+                <p><b>Use it when:</b> you do not understand a field. Before asking anyone — F1.</p>
+              </div>
+              <div class="mini-card">
+                <h4>F4 — Possible values (“What can I enter?”)</h4>
+                <p>Click inside a field and press <b>F4</b>. SAP opens a <b>search help</b>: a list/search window of the <b>allowed values</b> for that field — all company codes, all G/L accounts, all vendors. Pick one with a double-click and SAP fills the field for you. Fields that offer F4 show a small dropdown icon when you click into them.</p>
+                <p><b>Use it when:</b> you do not know the exact code/number. Never guess codes — F4.</p>
+              </div>
+            </div>
+            <div class="box term"><span class="box-title">New words — Search help / Matchcode</span>
+              <p>The F4 list is called a <b>search help</b>. Old SAP books call it a <b>matchcode</b> — same idea, older word: a helper that finds records by part of the name. In a search help you can type part of a name with stars, e.g. <code>*textile*</code>, to find “every vendor whose name contains textile”. The star <code>*</code> means “anything can stand here” — SAP's wildcard.</p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — asking the shopkeeper</span>
+              <p><b>F1</b> is asking: <i>“What is this thing?”</i> — the shopkeeper explains the product. <b>F4</b> is asking: <i>“Show me all the ones you have.”</i> — the shopkeeper brings the full tray to choose from. Explanation vs list: F1 explains, F4 lists. <span class="urdu">(F1 samjhata hai, F4 dikhata hai.)</span></p>
+            </div>
+            <h3>Three more everyday keys</h3>
+            <div class="tblwrap"><table>
+              <tr><th style="width:18%">Key</th><th style="width:36%">Name</th><th>Use</th></tr>
+              <tr><td><code>F3</code> / <code>Shift+F3</code> / <code>F12</code></td><td>Back / Exit / Cancel</td><td>The three ways of leaving a screen (Section 6). Learn them as a family.</td></tr>
+              <tr><td><code>Ctrl + Page Up/Down</code>, <code>Page Up/Down</code></td><td>Scrolling</td><td>Move through long lists and reports page by page; the toolbar also has first/previous/next/last page buttons.</td></tr>
+              <tr><td><code>Tab</code> / <code>Shift + Tab</code></td><td>Jump between fields</td><td>Moves the cursor field to field — the fastest way to fill a form without the mouse.</td></tr>
+            </table></div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>“F4 gives the explanation of a field” — <b>wrong</b>, that is F1. “F1 lists the allowed values” — <b>wrong</b>, that is F4. The exam swaps them on purpose. Lock it in: <b>F1 = information about the field; F4 = values for the field.</b> One more: F1 help exists for <b>fields and for messages</b> — put the cursor on a status-bar message and press F1 to get its long explanation too.</p>
+            </div>
+          </section>
+
+          <!-- ============ 13 PERSONALISATION ============ -->
+          <section class="lesson" id="s13" data-toc>
+            <h2><span class="no">13</span> Make SAP yours: favourites and your own defaults</h2>
+            <p class="sub">SAP starts the same for everyone, but within a week your SAP should look like <i>your</i> SAP. Three tools do that.</p>
+            <h3>1. Favourites — your own shortcut folder</h3>
+            <p>At the top of the Easy Access tree sits <b>Favourites</b>. Anything you use daily — transactions, reports, even web links — can live here, in folders you name yourself (“Daily Posting”, “Month-End”).</p>
+            <ul class="clean">
+              <li><b>Add:</b> in the menu tree, right-click a transaction → <b>Add to Favourites</b> (or menu <b>Favourites → Add</b>, or simply drag &amp; drop it into the Favourites folder).</li>
+              <li><b>Organise:</b> right-click the Favourites folder → create sub-folders, rename, move up/down.</li>
+              <li><b>Remove:</b> right-click the entry → <b>Delete Favourite</b>. Deleting a favourite deletes only the shortcut — never the transaction itself.</li>
+            </ul>
+            <h3>2. SU3 — your personal defaults</h3>
+            <p>T-code <code>SU3</code> (<b>Maintain User Profile</b>) is where you set things SAP should remember about <b>you</b>:</p>
+            <div class="tblwrap"><table>
+              <tr><th style="width:26%">SU3 tab</th><th>What you set there</th></tr>
+              <tr><td><b>Address</b></td><td>Your name and contact data as shown inside SAP.</td></tr>
+              <tr><td><b>Defaults</b></td><td>Logon language, <b>date format</b> (DD.MM.YYYY etc.), <b>decimal notation</b> (1,234.56 or 1.234,56), your printer, and a <b>start transaction</b> — the screen you land on after logon instead of Easy Access.</td></tr>
+              <tr><td><b>Parameters</b></td><td><b>User parameters</b>: standing values SAP pre-fills for you everywhere — the most famous is parameter <code>BUK</code> = your usual <b>company code</b>. Set BUK once, and company-code fields across SAP arrive pre-filled with your company.</td></tr>
+            </table></div>
+            <div class="box term"><span class="box-title">New word — User parameter (Set/Get parameter)</span>
+              <p>A <b>user parameter</b> is a small named memory SAP keeps for your user ID — like a sticky note saying “this person's company code is 1000”. Technically it works as a <b>Set/Get parameter</b>: screens <i>get</i> the value to pre-fill a field, and some screens <i>set</i> it when you choose a value. The 3-letter parameter ID (BUK, etc.) is its name. You will meet more of these in later lessons.</p>
+            </div>
+            <h3>3. Hold Data / Set Data — inside one transaction</h3>
+            <p>Inside many entry screens, the menu <b>System → User Profile</b> offers <b>Hold Data</b> and <b>Set Data</b>:</p>
+            <ul class="clean">
+              <li><b>Hold Data</b> — the values you typed on this screen are kept and shown again next time you open the screen <b>in this session</b>; they disappear when you log off.</li>
+              <li><b>Set Data</b> — stronger: the values are kept <b>permanently</b> (also after logoff) and the fields become non-editable pre-filled values until you choose <b>Delete Data</b>.</li>
+            </ul>
+            <div class="box analogy"><span class="box-title">Analogy — three kinds of memory</span>
+              <p><b>Hold Data</b> is a pencil note on today's page — gone tomorrow. <b>Set Data</b> is printing your name on the register cover — stays until you change it. <b>SU3 parameters</b> are your registered signature at the bank — SAP applies them everywhere, on every screen, automatically.</p>
+            </div>
+            <div class="box trap"><span class="box-title">Exam trap</span>
+              <p>(1) <code>SU3</code> changes <b>only your own</b> profile; changing <i>other</i> users is <code>SU01</code> (user administration — an admin/security job, not yours). (2) Favourites are <b>personal</b> — your favourites list is not shared with colleagues, and it is not configuration; nothing in Favourites is ever transported. (3) A start transaction in SU3 does not remove Easy Access — <code>/n</code> still takes you home.</p>
+            </div>
+          </section>
+
+          <!-- ============ 14 FIORI TOUR ============ -->
+          <section class="lesson" id="s14" data-toc>
+            <h2><span class="no">14</span> Tour: the Fiori Launchpad — SAP's modern face</h2>
+            <p class="sub">Now the second door. You open a browser, go to the Fiori address your company gives you, and log on with the same user and password. No installation, no SAP Logon pad.</p>
+            <div class="box term"><span class="box-title">New words — Launchpad, Tile, App, Space &amp; Page</span>
+              <p>The <b>Fiori Launchpad</b> is the Fiori home page — the starting point of all Fiori work. Work is offered as <b>apps</b>: small, focused programs (“Post Outgoing Payments”, “Manage Journal Entries”), each shown as a square card called a <b>tile</b>. Tiles are organised into <b>spaces</b> (big work areas, like “Finance”) containing <b>pages</b> (groups of related tiles). Older systems organise tiles into <b>catalogs and groups</b> — same idea, older words.</p>
+            </div>
+            <figure class="diagram" style="padding:0;overflow:hidden">
+              <div style="padding:14px 18px 4px"><span class="svg-title" style="font-size:1rem">FIORI LAUNCHPAD — illustration (re-created for learning, not a real SAP screenshot)</span><br/><span class="svg-sub">Space: Finance · Page: General Ledger · Search bar on top · bell = notifications · circle = your user menu</span></div>
+              <div class="fiori-grid">
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg><div class="t-name">Post General Journal Entries</div></div>
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg><div class="t-name">Manage Journal Entries</div><div class="t-num">128</div></div>
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><div class="t-name">Display G/L Account Balances</div></div>
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div class="t-name">Manage Payment Blocks</div></div>
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg><div class="t-name">Clear G/L Accounts</div></div>
+                <div class="tile"><svg class="t-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><div class="t-name">Financial Statement</div></div>
+              </div>
+              <figcaption style="padding:0 18px 14px">Fiori tiles: some tiles only open an app; some also show a live number (here: 128 journal entries waiting) — that live figure comes from the same HANA data you met in Lesson 2.</figcaption>
+            </figure>
+            <h3>Parts of the Launchpad</h3>
+            <ul class="clean">
+              <li><b>Shell bar (top strip):</b> the space/page menu on the left, a <b>search box</b> in the middle (search apps — and in many setups also business objects like a vendor name), and on the right the <b>notifications bell</b> and your <b>user menu</b> (settings, App Finder, log off).</li>
+              <li><b>Tiles:</b> one click opens the app. Some tiles are <b>smart</b>: they show a live KPI number or mini-chart directly on the tile.</li>
+              <li><b>App Finder:</b> from the user menu — a searchable catalogue of every app your role allows, for finding apps not pinned on your pages.</li>
+              <li><b>Role-based:</b> you only see the apps of <b>your job</b>. The AP clerk's Launchpad and the chief accountant's Launchpad look different — SAP shows each person their own work. <span class="urdu">(Har shakhs ko sirf apna kaam dikhta hai.)</span></li>
+            </ul>
+            <div class="box term"><span class="box-title">New word — Role</span>
+              <p>A <b>role</b> is a bundle of permissions matching one job (“Accounts Payable Accountant”). Roles decide both <b>which Fiori apps appear</b> on your Launchpad and <b>which T-codes you may start</b> in the GUI. One person can hold several roles. If an app or T-code is missing, it is almost always a role/authorisation matter — not a broken system.</p>
+            </div>
+            <div class="box analogy"><span class="box-title">Analogy — phone home screen</span>
+              <p>The Launchpad is your phone's home screen; tiles are app icons; spaces and pages are home-screen pages/folders; the App Finder is the app drawer; the search bar is the swipe-down search. If you can use a smartphone, you already understand Fiori's design — that is exactly why SAP built it this way.</p>
+            </div>
+          </section>
+
+          <!-- ============ 15 COMPARISON ============ -->
+          <section class="lesson" id="s15" data-toc>
+            <h2><span class="no">15</span> GUI vs Fiori — the full comparison</h2>
+            <div class="tblwrap"><table>
+              <tr><th style="width:22%">Point</th><th style="width:39%">SAP GUI</th><th>Fiori</th></tr>
+              <tr><td><b>How you open it</b></td><td>Program installed on the PC (SAP Logon)</td><td>Web browser — no installation</td></tr>
+              <tr><td><b>Home screen</b></td><td>SAP Easy Access menu tree</td><td>Fiori Launchpad with tiles</td></tr>
+              <tr><td><b>How you start work</b></td><td>T-codes in the command field, or menu tree</td><td>Click a tile / search for an app</td></tr>
+              <tr><td><b>Devices</b></td><td>Mainly Windows PC (GUI also exists for Java/HTML)</td><td>PC, tablet, phone — responsive design</td></tr>
+              <tr><td><b>What you see</b></td><td>Everything your authorisations allow — the full tree</td><td>Only your role's apps — focused on your job</td></tr>
+              <tr><td><b>Best for</b></td><td>Configuration (SPRO), heavy expert and mass work, classic reports</td><td>Daily business tasks, approvals, managers, mobile work</td></tr>
+              <tr><td><b>Data behind it</b></td><td colspan="2" style="text-align:center"><b>Identical</b> — same application layer, same HANA database (Lesson 2). Only the face differs.</td></tr>
+            </table></div>
+            <p><b>Which one will you use as an FI consultant?</b> Both. Your daily postings and checks may be in Fiori apps, but configuration, classic transactions and many reports still live in the GUI — and the C_TS4FI exam expects you to know that S/4HANA's <b>intended</b> user experience is Fiori, while the GUI remains fully available. A special middle case: some Fiori tiles quietly open a <b>classic GUI transaction inside the browser</b> (via Web GUI technology) — the app is old inside, new outside. Nothing to fear: the screen will simply look like the GUI screens of this lesson.</p>
+            <div class="box trick"><span class="box-title">Memory trick</span>
+              <p><b>GUI = G</b>uru's tool (expert, full power, installed). <b>Fiori = F</b>riendly face (browser, tiles, phone). Both drink from the same well — HANA. <span class="urdu">(Do chehray, aik hi dil — data.)</span></p>
+            </div>
+          </section>
+
+          <!-- ============ 16 EXAM TRAPS ============ -->
+          <section class="lesson" id="s16" data-toc>
+            <h2><span class="no">16</span> Exam traps for Lesson 3</h2>
+            <p class="sub">The wrong options in C_TS4FI are usually one of these. Read them slowly — each one has caught real candidates.</p>
+            <ul class="clean">
+              <li><b>Enter ≠ Save.</b> Enter checks/continues; only Save (Ctrl+S) or posting stores data.</li>
+              <li><b>Message types:</b> S = success (status bar), I = information (pop-up dialog), W = warning (can often be accepted with Enter), E = error (must correct), A = abort (transaction ends), X = exit/short dump (program crash, see <code>ST22</code>).</li>
+              <li><b>F1 vs F4:</b> F1 = explanation of the field; F4 = list of allowed values (search help). The exam swaps them deliberately.</li>
+              <li><b>/n vs /o:</b> <code>/nTCODE</code> replaces the transaction in the same window; <code>/oTCODE</code> opens a new window. <code>/nex</code> logs off <b>without</b> confirmation.</li>
+              <li><b>Sessions:</b> maximum <b>6</b> sessions under one logon; a new session needs no new logon and no password.</li>
+              <li><b>Logon screen = 4 fields:</b> Client, User, Password, Language. Company code is <b>not</b> a logon field — you choose it inside transactions (or default it with parameter BUK).</li>
+              <li><b>Back / Exit / Cancel:</b> F3 = back one screen; Shift+F3 = exit the transaction; F12 = cancel without saving.</li>
+              <li><b>GUI vs Fiori data:</b> both interfaces use the <b>same</b> backend and database. Fiori is not a separate system, and Fiori did not delete the GUI.</li>
+              <li><b>Web GUI ≠ Fiori:</b> classic screens rendered in a browser are GUI for HTML, not Fiori apps.</li>
+              <li><b>Standard vs application toolbar:</b> the standard toolbar is identical on all screens; the application toolbar belongs to the current transaction only.</li>
+              <li><b>SU3 vs SU01:</b> SU3 = your own profile/defaults; SU01 = administering other users (admin job).</li>
+              <li><b>T-code ≠ authorisation:</b> knowing a code never grants the right to run it; roles/authorisations decide.</li>
+            </ul>
+          </section>
+
+          <!-- ============ 17 GLOSSARY ============ -->
+          <section class="lesson" id="s17" data-toc>
+            <h2><span class="no">17</span> Lesson 3 glossary (A–Z)</h2>
+            <p class="sub">Every new term of this lesson, in one line each. Use it for quick revision before the exam.</p>
+            <dl class="glossary">
+              <dt>App (Fiori)</dt><dd>One focused Fiori program for one job, opened from a tile.</dd>
+              <dt>Application toolbar</dt><dd>Buttons that belong only to the current transaction (Post, Park, Simulate…).</dd>
+              <dt>Authorisation</dt><dd>Permission to do something in SAP, given through roles; checked on every action.</dd>
+              <dt>Backend</dt><dd>The hidden part of SAP: application layer + database.</dd>
+              <dt>Command field</dt><dd>The box at the left of the standard toolbar where T-codes and slash-commands are typed; also called the OK-code field.</dd>
+              <dt>Easy Access</dt><dd>The GUI home screen with the menu tree and Favourites, shown after logon.</dd>
+              <dt>Favourites</dt><dd>Your personal shortcut folder at the top of the Easy Access tree.</dd>
+              <dt>Field</dt><dd>One box on a screen holding one piece of data.</dd>
+              <dt>Fiori Launchpad</dt><dd>The Fiori home page in the browser, holding your tiles in spaces and pages.</dd>
+              <dt>Frontend</dt><dd>The part of SAP you see and touch: GUI or Fiori (presentation layer).</dd>
+              <dt>GUI</dt><dd>Graphical User Interface — screens used with mouse and keyboard; also the name of SAP's classic PC program.</dd>
+              <dt>Hold Data / Set Data</dt><dd>Screen values kept for this session only (Hold) or permanently (Set), via System → User Profile.</dd>
+              <dt>Interface</dt><dd>The meeting point between user and system — all screens, menus, buttons and messages.</dd>
+              <dt>Logon screen</dt><dd>The screen with 4 fields — Client, User, Password, Language — used to enter one system.</dd>
+              <dt>Menu path</dt><dd>The folder-by-folder route to a transaction, written like an address.</dd>
+              <dt>Message types</dt><dd>S success, I information, W warning, E error, A abort, X exit (short dump).</dd>
+              <dt>Role</dt><dd>A bundle of permissions for one job; decides your apps and T-codes.</dd>
+              <dt>SAP Logon</dt><dd>The starter program listing the SAP systems you may enter.</dd>
+              <dt>Search help (F4)</dt><dd>The list/search window of allowed values for a field; older name: matchcode.</dd>
+              <dt>Session (mode)</dt><dd>One open SAP window under a logon; up to 6 in parallel.</dd>
+              <dt>Short dump</dt><dd>SAP's crash report when a program fails (message type X); analysed in ST22.</dd>
+              <dt>Standard toolbar</dt><dd>The button row that is the same on every GUI screen (Enter, Save, Back, Exit, Cancel…).</dd>
+              <dt>Status bar</dt><dd>The bottom line of the GUI window: messages plus system/client/user/session info.</dd>
+              <dt>T-code</dt><dd>Transaction code — the short code (e.g. FB50) that starts one transaction.</dd>
+              <dt>Tile</dt><dd>The square card on the Launchpad that opens one Fiori app; may show a live number.</dd>
+              <dt>Transaction</dt><dd>In SAP words: one task-screen (one job), not an accounting entry.</dd>
+              <dt>User parameter</dt><dd>A standing default value kept for your user ID (e.g. BUK = company code), maintained in SU3.</dd>
+            </dl>
+          </section>
+
+          <!-- ============ 18 SUMMARY ============ -->
+          <section class="lesson" id="s18" data-toc>
+            <h2><span class="no">18</span> Summary — key points for C_TS4FI</h2>
+            <ul class="clean">
+              <li><b>Interface</b> = the face between you and SAP. The two faces of S/4HANA are <b>SAP GUI</b> (installed, T-codes) and <b>Fiori</b> (browser, tiles) — both over the <b>same</b> backend and HANA database.</li>
+              <li>Starting work is two steps: <b>SAP Logon</b> (choose the system) → <b>logon screen</b> (Client, User, Password, Language).</li>
+              <li>Every GUI screen has the same skeleton: <b>title bar, menu bar, standard toolbar + command field, application toolbar, screen body, status bar</b>.</li>
+              <li><b>SAP Easy Access</b> is the GUI home screen: menu tree + your personal <b>Favourites</b>. Turn on <i>Extras → Settings → Display technical names</i> to see T-codes in the tree.</li>
+              <li>A <b>transaction</b> is one task-screen; its <b>T-code</b> typed in the <b>command field</b> is the fast way in. Endings <b>01/02/03 = create/change/display</b>.</li>
+              <li>Slash-commands: <code>/n</code> end transaction, <code>/nTCODE</code> replace, <code>/oTCODE</code> new window, <code>/i</code> close this session, <code>/nex</code> log off without asking.</li>
+              <li>One logon can hold up to <b>6 sessions</b> in parallel — no extra password.</li>
+              <li>Messages: <b>S</b> success · <b>I</b> information · <b>W</b> warning · <b>E</b> error · <b>A</b> abort · <b>X</b> exit/dump. Double-click a status-bar message for its long text.</li>
+              <li><b>F1</b> explains a field; <b>F4</b> lists its allowed values. Never guess a code — F4 it.</li>
+              <li><b>SU3</b> holds your personal defaults and parameters (e.g. <code>BUK</code> company code); <b>Hold/Set Data</b> makes entry screens remember your values.</li>
+              <li>Fiori: <b>Launchpad → spaces → pages → tiles → apps</b>, all filtered by your <b>role</b>; the App Finder lists everything your role allows.</li>
+              <li>Useful T-codes of this lesson: <code>SU3</code> your defaults, <code>SE93</code> transaction codes, <code>SM04</code> user sessions, <code>ST22</code> short dumps, <code>SPRO</code> configuration.</li>
+            </ul>
+          </section>
+
+          <!-- ============ 19 SELF TEST ============ -->
+          <section class="lesson" id="s19" data-toc>
+            <h2><span class="no">19</span> Self-test — 12 MCQs</h2>
+            <p class="sub">Exam style: choose one answer, get instant feedback. Aim for 10/12 before moving to Lesson 4.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart self-test</button>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow" aria-hidden="true">→</span>
+            <div>
+              <b>Next: Lesson 4 — SAP ABAP Language</b><br/>
+              <span style="color:var(--ink-soft)">You can now drive the SAP screens with confidence. But who <i>writes</i> the programs behind those screens? Lesson 4 opens the bonnet one more time — gently, for non-programmers: what ABAP is, where ABAP programs live, how to read (not write!) a few lines of ABAP, the Data Dictionary, and why an FI consultant who can “speak a little ABAP” works twice as fast with the technical team. Lesson 4 will arrive as its own separate document, like this one.</span>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 3 of the C_TS4FI Exam-Prep series · Screen pictures in this lesson are learning illustrations re-created in the style of SAP GUI / Fiori, not actual SAP screenshots · Exam facts follow SAP's published C_TS4FI exam description; SAP may update them — always confirm on SAP's official certification page before booking.
+            <br/>course created by Muhammad Asad Ullah Ibrahim
+          </footer>
+        </main>
+      </div>
+      </div>
+    </div>
+
+
+    <script>
+      // ---- Shared course progress store (localStorage, shared by all lessons) ----
+      window.SAPProgress=(function(){
+        var KEY='sapCts4fiProgress_v1';
+        function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+        function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+        function getLesson(n){ var s=load(), L=null;
+          if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+          if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+          return L; }
+        function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+          for(var p in patch){ cur[p]=patch[p]; }
+          s.lessons[k]=cur; saveAll(s); return cur; }
+        function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+          return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+        function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+          s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+        return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+      })();
+
+      // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+      function sha256Hex(ascii){
+        ascii=unescape(encodeURIComponent(ascii));
+        function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+        var maxWord=Math.pow(2,32), i, j, result='';
+        var words=[], asciiBitLength=ascii.length*8;
+        var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+        var primeCounter=k.length, isComposite={};
+        for(var candidate=2; primeCounter<64; candidate++){
+          if(!isComposite[candidate]){
+            for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+            hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+            k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+          }
+        }
+        ascii+='\x80';
+        while(ascii.length%64-56) ascii+='\x00';
+        for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+        words[words.length]=((asciiBitLength/maxWord)|0);
+        words[words.length]=(asciiBitLength);
+        for(j=0;j<words.length;){
+          var w=words.slice(j,j+=16), oldHash=hash;
+          hash=hash.slice(0,8);
+          for(i=0;i<64;i++){
+            var w15=w[i-15], w2=w[i-2];
+            var a=hash[0], e=hash[4];
+            var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+            var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+            hash=[(temp1+temp2)|0].concat(hash);
+            hash[4]=(hash[4]+temp1)|0;
+          }
+          for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+        }
+        for(i=0;i<8;i++){
+          for(j=3;j+1;j--){
+            var b=(hash[i]>>(j*8))&255;
+            result+=((b<16)?0:'')+b.toString(16);
+          }
+        }
+        return result;
+      }
+
+      // ---- Lesson 3 gating: locked until Lesson 2 is fully complete, or the gate test is passed 5/5 ----
+      (function(){
+        var THIS_LESSON=3, PREV_LESSON=2, PREV_SECTIONS=19, LOCK_MS=60*60*1000;
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var GATE_Q=[
+          {q:"What are the three tiers of SAP architecture?",opts:["Presentation, Application, Database","Development, Quality, Production","Client, Server, Cloud","Frontend, Middleware, Backup"],a:0},
+          {q:"What does the Dispatcher do?",opts:["It stores all SAP data in tables","It checks user passwords at logon","It transports changes from one system to another","It distributes user requests to work processes"],a:3},
+          {q:"What is a Client in SAP?",opts:["A customer who buys products from the company","An independent business unit / data area inside one SAP system, e.g. 000/001/066","A personal computer running SAP GUI","A full copy of SAP installed on a second server"],a:1},
+          {q:"What is the correct landscape order?",opts:["PRD → QAS → DEV","DEV → PRD → QAS","DEV → QAS → PRD","QAS → DEV → PRD"],a:2},
+          {q:"What moves a change from DEV to QAS/PRD?",opts:["A background job","A Transport Request","A support package","A client copy"],a:1}
+        ];
+        var gateScreen=document.getElementById('gateScreen');
+        var content=document.getElementById('lessonContent');
+        var lockBox=document.getElementById('gateLockBox');
+        var lockUntilEl=document.getElementById('gateLockUntil');
+        var countdownEl=document.getElementById('gateCountdown');
+        var testArea=document.getElementById('gateTestArea');
+        var qWrap=document.getElementById('gateQuestions');
+        var scoreEl=document.getElementById('gateScore');
+        var msgEl=document.getElementById('gateMsg');
+        var attemptsEl=document.getElementById('gateAttempts');
+        var submitBtn=document.getElementById('gateSubmit');
+        var retryBtn=document.getElementById('gateRetry');
+        var adminBtn=document.getElementById('adminBtn');
+        var adminForm=document.getElementById('adminForm');
+        var adminPw=document.getElementById('adminPw');
+        var adminSubmit=document.getElementById('adminSubmit');
+        var adminMsg=document.getElementById('adminMsg');
+        var timer=null, selected={};
+
+        function isPrevComplete(){
+          var L=window.SAPProgress.getLesson(PREV_LESSON);
+          if(!L) return false;
+          var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+          var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+          return !!(allRead&&quiz);
+        }
+        function unlockLesson(){
+          if(timer){ clearInterval(timer); timer=null; }
+          gateScreen.hidden=true; gateScreen.style.display='none';
+          content.hidden=false; content.style.display='';
+          window.scrollTo(0,0);
+        }
+        function updateCountdown(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var rem=g.lockUntil-Date.now();
+          if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+          var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+          countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        }
+        function showLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          lockBox.hidden=false;
+          testArea.style.display='none';
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+          updateCountdown();
+          if(timer) clearInterval(timer);
+          timer=setInterval(updateCountdown,1000);
+        }
+        function refreshLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var now=Date.now();
+          if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+          if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+          lockBox.hidden=true;
+          testArea.style.display='';
+          return false;
+        }
+        function updateAttempts(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+        }
+        function renderGate(){
+          selected={};
+          scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+          submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+          qWrap.innerHTML='';
+          GATE_Q.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='gate-q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                selected[qi]=oi;
+                var bs=opts.querySelectorAll('.gate-opt');
+                bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+                msgEl.textContent='';
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); qWrap.appendChild(box);
+          });
+        }
+        submitBtn.addEventListener('click',function(){
+          if(refreshLock()) return;
+          if(Object.keys(selected).length<GATE_Q.length){
+            msgEl.textContent='Please answer all 5 questions before submitting.';
+            scoreEl.textContent='';
+            return;
+          }
+          var score=0;
+          GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+          qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+          submitBtn.hidden=true;
+          scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          if(score===GATE_Q.length){
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            msgEl.textContent='Gate test passed. Lesson 3 is now unlocked.';
+            msgEl.className='ok';
+            updateAttempts();
+            setTimeout(unlockLesson,900);
+          }else{
+            g.fails=(g.fails||0)+1;
+            msgEl.textContent='Go back and complete previous lesson.';
+            msgEl.className='';
+            if(g.fails>=3){
+              g.lockUntil=Date.now()+LOCK_MS;
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              updateAttempts();
+              refreshLock();
+            }else{
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              retryBtn.hidden=false;
+              updateAttempts();
+            }
+          }
+        });
+        retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+        adminBtn.addEventListener('click',function(){
+          adminForm.hidden=!adminForm.hidden;
+          if(!adminForm.hidden) adminPw.focus();
+        });
+        function tryAdminUnlock(){
+          var val=adminPw.value;
+          if(!val) return;
+          if(sha256Hex(val)===ADMIN_HASH){
+            var g=window.SAPProgress.getGate(THIS_LESSON);
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            adminMsg.className=''; adminMsg.style.color='var(--green)';
+            adminMsg.textContent='Unlocked. Opening Lesson 3…';
+            adminPw.value='';
+            setTimeout(unlockLesson,700);
+          }else{
+            adminMsg.style.color=''; adminMsg.className='err';
+            adminMsg.textContent='Incorrect password. Please try again.';
+            adminPw.value='';
+            adminPw.focus();
+          }
+        }
+        adminSubmit.addEventListener('click',tryAdminUnlock);
+        adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+        // ---- Initial state ----
+        var g0=window.SAPProgress.getGate(THIS_LESSON);
+        if(isPrevComplete()||g0.unlocked===true){
+          unlockLesson();
+        }else{
+          gateScreen.hidden=false; gateScreen.style.display='';
+          content.hidden=true; content.style.display='none';
+          if(!refreshLock()) renderGate();
+          updateAttempts();
+        }
+      })();
+    </script>
+
+    <script>
+      // ---- Theme switch (default Light) ----
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent = (t==='dark') ? 'Light theme' : 'Dark theme'; }
+        apply('light'); // default theme: Light
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+        });
+      })();
+
+      // ---- Sidebar: active-section highlight + Mark Read + read progress ----
+      (function(){
+        var sections=Array.prototype.slice.call(document.querySelectorAll('section.lesson[data-toc]'));
+        var total=sections.length;
+        var items={}; // section id -> {li, a}
+        document.querySelectorAll('#tocList li').forEach(function(li){
+          var a=li.querySelector('a'); if(a) items[a.getAttribute('href').slice(1)]={li:li,a:a};
+        });
+        var readSet={};
+        // Restore this lesson's saved read state from the shared progress store.
+        try{ var savedL3=window.SAPProgress&&window.SAPProgress.getLesson(3);
+          if(savedL3&&savedL3.readSections){ savedL3.readSections.forEach(function(id){ readSet[id]=true; }); }
+        }catch(e){}
+        var readCountEl=document.getElementById('readCount');
+        var readPctEl=document.getElementById('readPct');
+        var readBarEl=document.getElementById('readBar');
+        var topBar=document.getElementById('progressBar');
+
+        function readTotal(){ var n=0; for(var k in readSet){ if(readSet[k]) n++; } return n; }
+        function updateProgress(){
+          var n=readTotal();
+          var pct= total>0 ? Math.round((n/total)*100) : 0;
+          readCountEl.textContent=n+' of '+total;
+          readPctEl.textContent=pct+'%';
+          readBarEl.style.width=pct+'%';
+          topBar.style.width=pct+'%';
+        }
+
+        // One green Mark Read button at the end of every section, linked to its sidebar item.
+        sections.forEach(function(sec){
+          var row=document.createElement('div'); row.className='mark-row';
+          var btn=document.createElement('button');
+          btn.type='button'; btn.className='mark-btn'; btn.setAttribute('aria-pressed','false');
+          btn.textContent='Mark Read';
+          btn.addEventListener('click',function(){
+            var isRead=!readSet[sec.id];
+            readSet[sec.id]=isRead;
+            btn.classList.toggle('is-read',isRead);
+            btn.setAttribute('aria-pressed',isRead?'true':'false');
+            btn.textContent= isRead ? 'Read ✓' : 'Mark Read';
+            if(items[sec.id]) items[sec.id].li.classList.toggle('read',isRead);
+            updateProgress();
+            // Persist to the shared store so later lessons' gating can read it.
+            try{ if(window.SAPProgress){ var arr=[]; for(var kk in readSet){ if(readSet[kk]) arr.push(kk); }
+              window.SAPProgress.saveLesson(3,{readSections:arr, allRead:(arr.length===total)}); } }catch(e){}
+          });
+          if(readSet[sec.id]){ btn.classList.add('is-read'); btn.setAttribute('aria-pressed','true'); btn.textContent='Read ✓'; if(items[sec.id]) items[sec.id].li.classList.add('read'); }
+          row.appendChild(btn); sec.appendChild(row);
+        });
+        updateProgress();
+
+        // Scrollspy: highlight the section currently on screen in the sidebar.
+        function setActive(id){
+          for(var k in items){ items[k].a.classList.toggle('active', k===id); }
+        }
+        if('IntersectionObserver' in window){
+          var visible={};
+          var spy=new IntersectionObserver(function(entries){
+            entries.forEach(function(e){ visible[e.target.id]=e.isIntersecting; });
+            for(var i=0;i<sections.length;i++){ if(visible[sections[i].id]){ setActive(sections[i].id); return; } }
+          },{rootMargin:'-15% 0px -70% 0px'});
+          sections.forEach(function(s){ spy.observe(s); });
+        }
+        // Fallback / refinement on scroll: last section whose top has passed the offset line.
+        var ticking=false;
+        function onScroll(){
+          if(ticking) return; ticking=true;
+          window.requestAnimationFrame(function(){
+            ticking=false;
+            var line=window.scrollY+140, current=sections.length?sections[0].id:null;
+            sections.forEach(function(s){ if(s.getBoundingClientRect().top+window.scrollY<=line) current=s.id; });
+            if(current) setActive(current);
+          });
+        }
+        document.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+      })();
+
+            // ---- Self-test quiz ----
+      (function(){
+        var QUESTIONS=[
+          {q:"What does the word “interface” mean in this lesson?",opts:["A connection cable between two servers","The meeting point between the user and the system — all screens, menus, buttons and messages","A type of database table","The ABAP programming language"],a:1,why:"Interface = inter (between) + face. It is the face between you and SAP: everything you see and touch."},
+          {q:"Which fields does the SAP logon screen ask for?",opts:["Company code, user, password, language","Client, user, password, company code","Client, user, password, language","User, password, language, cost centre"],a:2,why:"C-U-P-L: Client, User, Password, Language. Company code is chosen inside transactions (or defaulted with parameter BUK) — never at logon."},
+          {q:"You typed a full entry and pressed ENTER. What has happened?",opts:["The document is saved in the database","The screen was sent to the server for checking/continuing — nothing is saved yet","The document is printed","You are logged off"],a:1,why:"Enter only checks and continues. Saving needs Save (Ctrl+S) — in FI, posting. Enter ≠ Save is the classic trap."},
+          {q:"You are in transaction FB50 and want to open FS10N in a NEW window without losing your half-typed entry. What do you type?",opts:["/nFS10N","FS10N","/oFS10N","/nex then FS10N"],a:2,why:"/o = open another session. /nFS10N would end FB50 in the same window and throw away your typing; /nex logs you off completely."},
+          {q:"What is the standard maximum number of sessions (windows) under one SAP logon?",opts:["2","3","6","Unlimited"],a:2,why:"Up to 6 sessions per logon by default — and a new session needs no new logon and no password."},
+          {q:"SAP shows: “Posting date is in a closed period.” The message is red and you cannot continue until you fix it. Which message type is this?",opts:["S — Success","W — Warning","I — Information","E — Error"],a:3,why:"E = Error: full stop, correction is compulsory. A warning (W) can often be accepted with Enter; an error never can."},
+          {q:"Where does a SUCCESS (S) message appear, and where does an INFORMATION (I) message appear?",opts:["Both appear as pop-up boxes","S in the status bar; I as a pop-up dialog box","S as a pop-up; I in the status bar","Both appear in the status bar only"],a:1,why:"Success messages sit quietly in the status bar (e.g. “Document … was posted”). Information messages pop up as a dialog you must confirm."},
+          {q:"You do not know what the field “Business Area” means. Which key helps you, and how?",opts:["F4 — it lists all allowed values","F1 — it opens the field's explanation (Performance Assistant)","F3 — it goes back to the explanation","F12 — it cancels into the help"],a:1,why:"F1 = information about the field (what it means). F4 = values for the field (the list). The exam loves swapping them."},
+          {q:"You need a vendor number but only remember part of the vendor's name. What is the professional way?",opts:["Guess numbers until one works","Press F4 in the vendor field and use the search help with a * wildcard, e.g. *textile*","Ask Basis to read the database password","Type the name into the command field"],a:1,why:"F4 opens the search help. The * wildcard stands for “anything” — *textile* finds every vendor whose name contains ‘textile’. Never guess codes."},
+          {q:"Which statement about the two toolbars is correct?",opts:["The application toolbar is the same on every screen","The standard toolbar is the same on every screen; the application toolbar belongs to the current transaction","Both toolbars change on every screen","The command field is part of the application toolbar"],a:1,why:"Standard toolbar = Enter, Save, Back, Exit, Cancel… identical everywhere, with the command field at its left. Application toolbar = this screen's own buttons (Post, Park…)."},
+          {q:"In SU3 you set the parameter BUK to 1000. What does that do?",opts:["It creates company code 1000","It deletes all other company codes","Company code fields across SAP are pre-filled with 1000 for your user","It gives you authorisation for company code 1000"],a:2,why:"User parameters are standing defaults — SAP ‘gets’ the value to pre-fill fields. A parameter is a convenience, never an authorisation."},
+          {q:"A colleague says: “Fiori has newer data than the GUI, because Fiori is a separate system.” What is correct?",opts:["True — Fiori synchronises every night","True — Fiori has its own HANA database","False — GUI and Fiori are two faces of the SAME system and the SAME database","False — the GUI has the newer data"],a:2,why:"One system, one database, two interfaces. A document posted in the GUI is visible in Fiori immediately, and the other way round."}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  // Persist self-test completion to the shared store for the next lesson's gating.
+                  try{ if(window.SAPProgress) window.SAPProgress.saveLesson(3,{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=10?' — Excellent! You are ready for Lesson 4.':' — Re-read the sections above once, then try again. You can do it.');
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+  </body>
+</html>

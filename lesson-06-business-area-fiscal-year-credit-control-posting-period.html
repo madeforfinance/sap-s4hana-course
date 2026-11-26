@@ -1,0 +1,1337 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Lesson 6 — Business Area, Fiscal Year Variant, Credit Control Area &amp; Posting Period Variant · C_TS4FI Exam Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f5f0; --surface:#ffffff; --surface2:#efece4; --ink:#1d2733; --ink-soft:#46545f;
+        --line:#ddd6c8; --accent:#0a6ed1; --accent-ink:#085aab; --accent-soft:#e3effa;
+        --gold:#b07d2b; --gold-soft:#f7ecd4; --green:#1e7d46; --green-soft:#e2f3e8;
+        --red:#b3372f; --red-soft:#fae7e5; --urdu:#6b4fa1; --urdu-soft:#efe9f8;
+        --code-bg:#12222f; --code-ink:#d7ecff; --shadow:0 1px 3px rgba(29,39,51,.08),0 8px 24px rgba(29,39,51,.06);
+      }
+      [data-theme="dark"]{
+        --bg:#0e141b; --surface:#16202b; --surface2:#1c2937; --ink:#e8eef4; --ink-soft:#a9b8c6;
+        --line:#2c3d4f; --accent:#4da3ec; --accent-ink:#8ec4f5; --accent-soft:#173350;
+        --gold:#d9a44a; --gold-soft:#3a2f16; --green:#5cc184; --green-soft:#173527;
+        --red:#e07a72; --red-soft:#3d201d; --urdu:#b79ae0; --urdu-soft:#2a2140;
+        --code-bg:#0a1017; --code-ink:#cfe8ff; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.65}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2rem}
+      h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;line-height:1.2;margin:0}
+      p{margin:.55em 0}
+      a{color:var(--accent-ink)}
+      code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+
+      #progressBar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:60;transition:width .1s linear}
+
+      .topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 18px}
+      .topbar .crumb{font-size:.82rem;color:var(--ink-soft);letter-spacing:.02em}
+      .topbar .crumb b{color:var(--ink)}
+      .topbar .spacer{flex:1}
+      .theme-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 .85rem "Source Sans 3",sans-serif;cursor:pointer;min-height:38px}
+      .theme-btn:hover{border-color:var(--accent)}
+      .theme-btn svg{width:17px;height:17px;flex:none}
+      [data-theme="light"] .icon-moon{display:none}
+      [data-theme="dark"] .icon-sun{display:none}
+
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+      .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:34px;align-items:start}
+      .layout>*{min-width:0}
+      @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+      nav.toc{position:sticky;top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px;box-shadow:var(--shadow);margin-top:26px}
+      @media (max-width:860px){nav.toc{position:static}}
+      nav.toc h2{font-size:.8rem;font-family:"Source Sans 3",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+      nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+      nav.toc li{margin:2px 0}
+      nav.toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);font-size:.92rem;padding:7px 8px;border-radius:8px;line-height:1.35}
+      nav.toc a:hover{background:var(--surface2);color:var(--ink)}
+      nav.toc .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line);flex:none;position:relative;top:1px}
+      nav.toc li.read .dot{background:var(--green);border-color:var(--green)}
+      nav.toc li.read a{color:var(--ink)}
+      .toc-note{font-size:.8rem;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+      nav.toc a.active{background:var(--accent-soft);color:var(--accent-ink);font-weight:700}
+      nav.toc a.active .dot{border-color:var(--accent);background:var(--accent)}
+      nav.toc .tick{display:none;color:var(--green);font-weight:700;margin-left:auto;padding-left:6px;flex:none}
+      nav.toc li.read .tick{display:inline}
+      .read-progress{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+      .rp-text{font-size:.86rem;font-weight:600;color:var(--ink);margin-bottom:7px}
+      .rp-bar{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden}
+      .rp-fill{height:100%;width:0;background:var(--green);border-radius:99px;transition:width .35s ease}
+      .mark-read{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--green-soft);color:var(--green);border:1.5px solid var(--green);border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .mark-read:hover{border-color:var(--green);filter:brightness(1.04)}
+      .mark-read.done{background:#1e7d46;border-color:#1e7d46;color:#fff}
+      @media (prefers-reduced-motion: reduce){.rp-fill{transition:none}}
+
+      .hero{padding:38px 0 8px}
+      .hero .kicker{display:inline-block;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+      .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;margin:16px 0 10px}
+      .hero .lede{font-size:1.13rem;color:var(--ink-soft);max-width:46em}
+      .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.88rem;box-shadow:var(--shadow)}
+      .chip b{color:var(--accent-ink)}
+
+      section.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px 30px 24px;margin-top:26px;box-shadow:var(--shadow);scroll-margin-top:76px}
+      @media (max-width:560px){section.lesson{padding:22px 18px 18px}}
+      section.lesson>h2{font-size:1.55rem;font-weight:700;display:flex;gap:12px;align-items:baseline}
+      section.lesson>h2 .no{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem;font-weight:700}
+      section.lesson h3{font-size:1.16rem;margin:1.3em 0 .3em;font-weight:700}
+      section.lesson h4{font-size:1rem;margin:1.1em 0 .2em}
+      .sub{color:var(--ink-soft);margin-top:2px}
+
+      .box{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:.97rem}
+      .box .box-title{font-weight:700;display:block;margin-bottom:3px;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+      .box p{margin:.3em 0}
+      .analogy{background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+      .analogy .box-title{color:var(--gold)}
+      .trick{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 40%,transparent)}
+      .trick .box-title{color:var(--green)}
+      .trap{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent)}
+      .trap .box-title{color:var(--red)}
+      .term{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+      .term .box-title{color:var(--accent-ink)}
+      .urdu{color:var(--urdu);font-style:italic}
+      .examtag{display:inline-block;background:var(--urdu-soft);color:var(--urdu);border-radius:6px;font-size:.75rem;font-weight:700;padding:2px 8px;letter-spacing:.04em;vertical-align:middle}
+
+      .tblwrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+      table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:480px}
+      th{background:var(--surface2);text-align:left;padding:10px 14px;font-weight:700;border-bottom:2px solid var(--line)}
+      td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+      tr:last-child td{border-bottom:none}
+      td.hl,th.hl{background:var(--accent-soft)}
+
+      figure.diagram{margin:20px 0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:18px}
+      figure.diagram svg{width:100%;height:auto;display:block}
+      figcaption{font-size:.86rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+      .svg-title{font:700 15px "Source Sans 3",sans-serif;fill:var(--ink)}
+      .svg-sub{font:400 12.5px "Source Sans 3",sans-serif;fill:var(--ink-soft)}
+      .svg-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+      .svg-box-a{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+      .svg-box-g{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+      .svg-box-r{fill:var(--red-soft);stroke:var(--red);stroke-width:1.5}
+      .svg-box-gr{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+      .svg-line{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+      .svg-arrow{stroke:var(--accent);stroke-width:2;fill:none;marker-end:url(#arr)}
+
+      .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+      .screen-bar{background:var(--surface2);padding:8px 14px;font:600 .8rem "JetBrains Mono",monospace;color:var(--ink-soft);display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+      .screen-bar .win{width:10px;height:10px;border-radius:50%;background:var(--line)}
+      .screen-body{background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:.82rem;padding:16px 18px;line-height:1.9;overflow-x:auto;white-space:nowrap}
+      .screen-body .dim{opacity:.55}
+      .screen-body .hl2{color:#ffd97a}
+      .screen-body .kw{color:#7cc7ff;font-weight:700}
+      .screen-body .cm{color:#9db8a4;font-style:italic}
+      .screen-body .st{color:#ffd97a}
+
+      ul.clean{margin:.4em 0 .8em;padding-left:1.25em}
+      ul.clean li{margin:.32em 0}
+      .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      @media (max-width:640px){.twocol{grid-template-columns:1fr}}
+      .mini-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+      .mini-card h4{margin-top:0}
+
+      dl.glossary{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+      @media (max-width:640px){dl.glossary{grid-template-columns:1fr}}
+      dl.glossary dt{font-weight:700;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line)}
+      dl.glossary dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+      dl.glossary dt:last-of-type,dl.glossary dd:last-of-type{border-bottom:none}
+
+      .q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .q p.qtext{font-weight:600;margin:0 0 10px}
+      .opts{display:grid;gap:8px}
+      .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .opt:hover{border-color:var(--accent)}
+      .opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .opt.correct{border-color:var(--green);background:var(--green-soft)}
+      .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+      .opt:disabled{cursor:default;opacity:.92}
+      .explain{display:none;margin-top:10px;font-size:.92rem;background:var(--surface2);border-radius:8px;padding:10px 13px}
+      .explain.show{display:block}
+      #scoreLine{font-weight:700;font-size:1.05rem;margin-top:14px}
+      .btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font:600 .95rem "Source Sans 3",sans-serif;cursor:pointer;min-height:44px}
+      .btn:hover{background:var(--accent-ink)}
+
+      /* gate / locked screen */
+      .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 30px 26px;margin-top:26px;box-shadow:var(--shadow);max-width:760px}
+      @media (max-width:560px){.gate-card{padding:24px 18px 20px}}
+      .gate-icon{width:54px;height:54px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+      .gate-icon svg{width:28px;height:28px}
+      .gate-card h2{font-size:1.7rem;font-weight:700;margin-bottom:8px}
+      .gate-card p{color:var(--ink-soft)}
+      .gate-card p b{color:var(--ink)}
+      .gate-q{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+      .gate-q p.qtext{font-weight:600;margin:0 0 10px;color:var(--ink)}
+      .gate-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);cursor:pointer;min-height:44px;width:100%}
+      .gate-opt:hover{border-color:var(--accent)}
+      .gate-opt .letter{font-weight:700;color:var(--accent-ink);flex:none}
+      .gate-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+      .gate-opt:disabled{cursor:default;opacity:.75}
+      .gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+      .btn-ghost{background:transparent;color:var(--accent-ink);border:2px solid var(--accent)}
+      .btn-ghost:hover{background:var(--accent-soft)}
+      .btn:disabled{opacity:.55;cursor:default}
+      #gateScore{font-weight:700;font-size:1.08rem;color:var(--ink);margin-top:14px}
+      #gateMsg{font-weight:600;color:var(--red);margin-top:8px}
+      #gateMsg.ok{color:var(--green)}
+      .gate-attempts{font-size:.9rem;color:var(--ink-soft);margin-top:8px}
+      .gate-lockbox{background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+      .gate-lockbox p{color:var(--ink);margin:.3em 0}
+      .gate-admin{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+      .gate-admin-form{margin-top:14px;display:grid;gap:10px;max-width:420px}
+      .gate-admin-form label{font-weight:600;font-size:.92rem;color:var(--ink)}
+      .gate-admin-form input{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font:400 .95rem "Source Sans 3",sans-serif;color:var(--ink);min-height:44px;width:100%}
+      .gate-admin-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+      #adminMsg{font-weight:600;font-size:.93rem;margin:0}
+      #adminMsg.err{color:var(--red)}
+      .gate-credit{margin-top:22px;font-size:.86rem;color:var(--ink-soft);text-align:center}
+
+      .next-lesson{margin-top:26px;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:22px 26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+      .next-lesson .arrow{font-size:1.6rem;color:var(--accent)}
+      footer{margin-top:34px;color:var(--ink-soft);font-size:.86rem;text-align:center}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}#progressBar{transition:none}}
+    </style>
+  </head>
+  <body>
+    <div id="progressBar"></div>
+
+    <div class="topbar">
+      <span class="crumb"><b>C_TS4FI Exam Prep</b> · SAP S/4HANA Financial Accounting · <b>Lesson 6 of 10</b></span>
+      <span class="spacer"></span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+
+    <div class="wrap">
+      <!-- ============ GATE / LOCKED SCREEN (shown until Lesson 5 is complete or the gate test is passed) ============ -->
+      <div id="gateScreen">
+        <section class="gate-card" aria-labelledby="gateTitle">
+          <div class="gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          </div>
+          <h2 id="gateTitle">Lesson 6 is locked</h2>
+          <p>Lesson 6 opens only when <b>Lesson 5 is fully complete</b> — every Lesson 5 section marked Read <b>and</b> the Lesson 5 self-test answered.</p>
+          <p>If you have already studied Lesson 5, you can unlock Lesson 6 by passing the <b>Gate Test</b> below: 5 questions from Lesson 5. You need <b>5 / 5</b> to pass. Only your marks are shown after you submit — the correct answers are never displayed.</p>
+
+          <div class="gate-lockbox" id="gateLockBox" hidden>
+            <p><b>This lesson is locked for 1 hour</b> after 3 failed gate test attempts.</p>
+            <p>Locked until: <b id="gateLockUntil">—</b></p>
+            <p>Time remaining: <b id="gateCountdown">—</b></p>
+            <p>The gate test cannot be attempted during the lock. An admin can unlock the lesson early below.</p>
+          </div>
+
+          <div id="gateTestArea">
+            <div id="gateQuestions"></div>
+            <p id="gateScore" aria-live="polite"></p>
+            <p id="gateMsg" aria-live="polite"></p>
+            <div class="gate-actions">
+              <button class="btn" id="gateSubmit" type="button">Submit gate test</button>
+              <button class="btn btn-ghost" id="gateRetry" type="button" hidden>Try again</button>
+            </div>
+            <p class="gate-attempts" id="gateAttempts" aria-live="polite"></p>
+          </div>
+
+          <div class="gate-admin">
+            <button class="btn btn-ghost" id="adminBtn" type="button">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 21 2"/><path d="M15 8l3 3"/></svg>Admin Unlock
+            </button>
+            <div class="gate-admin-form" id="adminForm" hidden>
+              <label for="adminPw">Admin password</label>
+              <input type="password" id="adminPw" autocomplete="off" placeholder="Enter admin password" />
+              <button class="btn" id="adminSubmit" type="button">Unlock lesson</button>
+              <p id="adminMsg" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p class="gate-credit">course created by Muhammad Asad Ullah Ibrahim</p>
+        </section>
+      </div>
+
+      <div id="lessonContent" hidden>
+      <header class="hero">
+        <span class="kicker">Lesson 6 · Enterprise Structure — Part 2</span>
+        <h1>Business Area, Fiscal Year Variant, Credit Control Area &amp; Posting Period Variant</h1>
+        <p class="lede">In Lesson 5 you built the skeleton — the <b>Company Code</b>. Now you give it four control settings that decide <b>how</b> it works: which internal division a posting belongs to (<b>Business Area</b>), what its accounting calendar looks like (<b>Fiscal Year Variant</b>), how much credit its customers may take (<b>Credit Control Area</b>), and which months are open or locked for posting (<b>Posting Period Variant</b>). <span class="urdu">Company code ghar tha — ye chaar cheezein us ghar ke rules hain.</span></p>
+        <div class="hero-meta">
+          <span class="chip">Video time <b>02:26:45 – 03:57:35</b></span>
+          <span class="chip">Level <b>Beginner · Zero SAP assumed</b></span>
+          <span class="chip">Exam <b>C_TS4FI · Organisational structures &amp; basic settings</b></span>
+          <span class="chip">Key T-codes <b>OX03 · OB29 · OB45 · OB38 · OB52</b></span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="toc" aria-label="Table of contents">
+          <h2>In this lesson</h2>
+          <ol>
+            <li><a href="#s1"><span class="dot"></span>Where Lesson 6 fits — the four rules of a company code</a></li>
+            <li><a href="#s2"><span class="dot"></span>Business Area — what it is and why it exists</a></li>
+            <li><a href="#s3"><span class="dot"></span>Business Area in detail — rules, limits &amp; S/4HANA</a></li>
+            <li><a href="#s4"><span class="dot"></span>Defining a Business Area (OX03), step by step</a></li>
+            <li><a href="#s5"><span class="dot"></span>Fiscal Year, Posting Periods &amp; Special Periods</a></li>
+            <li><a href="#s6"><span class="dot"></span>Fiscal Year Variant — K4, V3, V6, V9 &amp; OB29</a></li>
+            <li><a href="#s7"><span class="dot"></span>Credit Control Area — what it is and why it exists</a></li>
+            <li><a href="#s8"><span class="dot"></span>Credit Control Area in detail — OB45, OB38 &amp; credit exposure</a></li>
+            <li><a href="#s9"><span class="dot"></span>Posting Period Variant — the gatekeeper (OB52)</a></li>
+            <li><a href="#s10"><span class="dot"></span>Posting Period Variant in action — a posting’s journey</a></li>
+            <li><a href="#s11"><span class="dot"></span>All four together — one invoice, four checks</a></li>
+            <li><a href="#s12"><span class="dot"></span>Tables to know</a></li>
+            <li><a href="#s13"><span class="dot"></span>Exam traps</a></li>
+            <li><a href="#s14"><span class="dot"></span>A–Z glossary</a></li>
+            <li><a href="#s15"><span class="dot"></span>Summary</a></li>
+            <li><a href="#s16"><span class="dot"></span>Self-test (12 questions)</a></li>
+          </ol>
+          <div class="read-progress">
+            <div class="rp-text"><span id="readCount">0 of 16 sections read</span> · <span id="readPct">0%</span></div>
+            <div class="rp-bar"><div class="rp-fill" id="readFill"></div></div>
+          </div>
+          <p class="toc-note">Screens in this lesson are <b>re-created illustrations</b> made for learning — they are not real SAP screenshots.</p>
+        </nav>
+
+        <main>
+          <!-- ============ S1 ============ -->
+          <section class="lesson" id="s1">
+            <h2><span class="no">01</span> Where Lesson 6 fits — the four rules of a company code</h2>
+            <p class="sub">A quick recap of Lesson 5, then the map of this lesson (video 02:26:45 onwards).</p>
+
+            <p>In Lesson 5 you created a <b>Company Code</b> — one legal entity with its own books — and you saw its <b>global parameters</b> in <code>OBY6</code>: chart of accounts, fiscal year variant, field status variant, posting period variant. At that time we only <i>named</i> those settings. This lesson explains the four of them that the video covers next, in the video’s own order:</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>Video time</th><th>Topic</th><th>The one question it answers</th></tr>
+                <tr><td class="hl"><code>02:26:45</code></td><td><b>Business Area</b></td><td>“Which internal division / product line does this posting belong to?”</td></tr>
+                <tr><td class="hl"><code>02:32:00</code></td><td><b>Fiscal Year Variant</b></td><td>“What does this company’s accounting year look like — when does it start, and into which periods is it divided?”</td></tr>
+                <tr><td class="hl"><code>02:55:22</code></td><td><b>Credit Control Area</b></td><td>“How much credit (udhaar) may our customers take before we stop selling to them?”</td></tr>
+                <tr><td class="hl"><code>03:10:00</code></td><td><b>Posting Period Variant</b></td><td>“Which months are currently open for posting — and which are locked?”</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Customizing</span>
+              <p>Almost everything in this lesson is <b>Customizing</b> — the settings a consultant makes in <code>SPRO</code> (the configuration menu, Lesson 5) to adapt SAP to one business, before any real postings happen. Customizing is <i>not</i> day-to-day work; end users never see it. Opposite of Customizing is <b>master data</b> (customers, vendors, G/L accounts) and <b>transaction data</b> (the postings themselves).</p>
+              <p class="urdu">Customizing = system ki settings pehle se set karna. Master data = khaate aur parties. Transaction data = roz ki entries.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Variant &amp; the Variant Principle</span>
+              <p>A <b>variant</b> is a ready-made bundle of settings with a short name — like a saved “profile”. SAP’s <b>variant principle</b> says: define the bundle <b>once</b>, then <b>assign</b> it to as many company codes as you like. Fiscal Year Variant and Posting Period Variant both work this way. One change to the variant changes it for every company code using it — powerful, and a little dangerous.</p>
+              <p class="urdu">Aik dafa setting banao, naam do, phir jitni company codes ko chahiye laga do — yehi variant principle hai.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · A new employee’s rule-book</span>
+              <p>Imagine a new accountant joins your company. Before his first entry, you tell him four things: <b>(1)</b> “Always write on the entry which department it belongs to.” <b>(2)</b> “Our year runs April to March, divided into 12 months.” <b>(3)</b> “Never let a customer’s total udhaar cross his approved limit.” <b>(4)</b> “Last month’s register is closed and locked — post only in the current month.” Those four instructions <i>are</i> this lesson — SAP just stores them as settings instead of telling a person.</p>
+            </div>
+          </section>
+
+          <!-- ============ S2 ============ -->
+          <section class="lesson" id="s2">
+            <h2><span class="no">02</span> Business Area — what it is and why it exists</h2>
+            <p class="sub">Video 02:26:45 — the optional org unit we only named in Lesson 5.</p>
+
+            <p>Think of a real business you already know. One registered company — say <b>Ibrahim Apparel &amp; Trading</b> — sells two very different product lines from the same legal entity: <b>winter garments</b> and <b>home textiles</b>. Legally it is <b>one</b> company: one tax registration, one Balance Sheet. So in SAP it is <b>one company code</b>.</p>
+            <p>But the owner keeps asking an <i>internal</i> question: <b>“Which line is actually making money — garments or home textiles?”</b> The company code alone cannot answer that, because inside one company code all postings mix together. The owner needs the books <b>sliced</b> by product line — without creating fake legal companies.</p>
+            <p>SAP’s classic answer to that slice is the <b>Business Area</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Business Area</span>
+              <p>A <b>Business Area</b> is an organisational unit that represents a <b>separate area of operations or responsibilities</b> inside a business — for example a product line, a division, or a line of business. It is used to draw up <b>internal</b> Balance Sheets and Profit &amp; Loss statements for that area. Its code is up to <b>4 characters</b>, and its technical field name is <code>GSBER</code>.</p>
+              <p class="urdu">Business Area = aik hi company ke andar aik alag hissa ya product line, jis ka munafa aap alag dekhna chahte hain. Ye legal company nahi hoti.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · One shop, two counters</span>
+              <p>One shop (one company code), but two counters inside it: a <b>garments counter</b> and a <b>home-textiles counter</b>. Every sale slip is stamped with the counter’s name. At month-end the owner totals each counter separately: “Garments earned this much, textiles earned that much.” The stamp on the slip is the business area. The shop’s legal accounts stay one — the counters are only for the owner’s own understanding.</p>
+            </div>
+
+            <h3>The three facts that define a Business Area</h3>
+            <ul class="clean">
+              <li><b>It is NOT a legal entity.</b> It files no taxes, has no registration, and its Balance Sheet is for <b>internal evaluation only</b> — you cannot submit it to any authority.</li>
+              <li><b>It cuts ACROSS company codes.</b> A business area is defined once for the whole <b>client</b>, not inside a company code. So “Garments” can exist in company code 1000 (Pakistan) <i>and</i> company code 2000 (UAE), and you can report garments across the whole group.</li>
+              <li><b>It is OPTIONAL.</b> A company code posts perfectly well without any business area. You use it only if management wants that internal slice.</li>
+            </ul>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 330" role="img" aria-label="Diagram showing one business area cutting across two company codes">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box" x="60" y="20" width="300" height="180" rx="12"/>
+                <text class="svg-title" x="210" y="46" text-anchor="middle">COMPANY CODE 1000</text>
+                <text class="svg-sub" x="210" y="64" text-anchor="middle">Pakistan — legal entity</text>
+                <rect class="svg-box-a" x="80" y="82" width="120" height="44" rx="8"/>
+                <text class="svg-title" x="140" y="109" text-anchor="middle">Garments</text>
+                <rect class="svg-box-g" x="220" y="82" width="120" height="44" rx="8"/>
+                <text class="svg-title" x="280" y="109" text-anchor="middle">Home Textiles</text>
+                <rect class="svg-box-a" x="80" y="140" width="120" height="44" rx="8"/>
+                <text class="svg-title" x="140" y="167" text-anchor="middle">Garments</text>
+                <rect class="svg-box-g" x="220" y="140" width="120" height="44" rx="8"/>
+                <text class="svg-title" x="280" y="167" text-anchor="middle">Home Textiles</text>
+
+                <rect class="svg-box" x="400" y="20" width="300" height="180" rx="12"/>
+                <text class="svg-title" x="550" y="46" text-anchor="middle">COMPANY CODE 2000</text>
+                <text class="svg-sub" x="550" y="64" text-anchor="middle">UAE — legal entity</text>
+                <rect class="svg-box-a" x="420" y="82" width="120" height="44" rx="8"/>
+                <text class="svg-title" x="480" y="109" text-anchor="middle">Garments</text>
+                <rect class="svg-box-g" x="560" y="82" width="120" height="44" rx="8"/>
+                <text class="svg-title" x="620" y="109" text-anchor="middle">Home Textiles</text>
+                <rect class="svg-box-a" x="420" y="140" width="120" height="44" rx="8"/>
+                <text class="svg-title" x="480" y="167" text-anchor="middle">Garments</text>
+                <rect class="svg-box-g" x="560" y="140" width="120" height="44" rx="8"/>
+                <text class="svg-title" x="620" y="167" text-anchor="middle">Home Textiles</text>
+
+                <rect class="svg-box-gr" x="60" y="238" width="640" height="62" rx="12"/>
+                <text class="svg-title" x="380" y="264" text-anchor="middle">BUSINESS AREA “GARM” (Garments) — one definition for the whole client</text>
+                <text class="svg-sub" x="380" y="284" text-anchor="middle">Report garments across BOTH company codes — internal view only, no legal standing</text>
+                <path class="svg-line" d="M140 200 V232 M480 200 V232"/>
+              </svg>
+              <figcaption>Company codes are vertical legal walls. A business area is a horizontal slice that passes through all of them.</figcaption>
+            </figure>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>Company Code = legal line, Business Area = product line.</b> Legal line → tax office cares. Product line → only the owner cares.</p>
+            </div>
+          </section>
+
+          <!-- ============ S3 ============ -->
+          <section class="lesson" id="s3">
+            <h2><span class="no">03</span> Business Area in detail — rules, limits &amp; S/4HANA</h2>
+            <p class="sub">Everything the exam can ask about the business area, in one place.</p>
+
+            <h3>How does a posting GET a business area?</h3>
+            <p>The business area is not typed on the document header — it is entered <b>per line item</b> (each debit/credit line can carry one, in field <code>GSBER</code>). In practice it usually arrives automatically:</p>
+            <ul class="clean">
+              <li><b>From Logistics (MM/SD):</b> you assign a business area to a <b>Plant + Division</b> combination in Customizing. When goods are sold or moved for that plant and division, SAP derives the business area by itself.</li>
+              <li><b>In pure FI postings:</b> the user enters it on the line item, or it is filled by a default / substitution rule the consultant sets up.</li>
+              <li><b>On master data:</b> some objects (for example cost centers) carry a business area, and postings to them inherit it.</li>
+            </ul>
+
+            <h3>Why its Balance Sheet is “internal only” — the honest limitation</h3>
+            <p>You <i>can</i> produce a Balance Sheet and P&amp;L per business area in SAP. But some balance sheet items cannot be split cleanly by division in real life: the <b>bank account</b> is shared, <b>tax payable</b> is for the whole legal company, a customer may buy from both divisions on one invoice. SAP therefore treats business-area financial statements as <b>internal management reports</b>, not legal statements. For a legally clean split you would need separate company codes.</p>
+            <p class="urdu">Bank account aur tax poori company ka hota hai, aik product line ka nahi — is liye business area ki Balance Sheet sirf andar ke istemal ke liye hai.</p>
+
+            <h3>Business Area vs Profit Center vs Segment <span class="examtag">S/4HANA favourite</span></h3>
+            <p>In Lesson 5 you met the <b>Profit Center</b> (CO unit whose profit is measured separately). S/4HANA also has the <b>Segment</b> — a unit used for legally required <i>segment reporting</i> (reporting results by line of business or region in published accounts, under accounting standards like IFRS 8). All three can slice a company code — so which does the exam want?</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Feature</th><th>Business Area</th><th>Profit Center</th><th>Segment</th></tr>
+                <tr><td>Comes from</td><td>FI (classic)</td><td class="hl">CO / FI</td><td class="hl">Derived from Profit Center</td></tr>
+                <tr><td>Level</td><td>Client-wide, across company codes</td><td>Controlling area</td><td>Client-wide</td></tr>
+                <tr><td>Balance Sheet per unit</td><td>Internal only, not fully reliable</td><td class="hl">Yes — with Document Splitting, balanced to zero</td><td class="hl">Yes — with Document Splitting</td></tr>
+                <tr><td>S/4HANA status</td><td>Still available, but <b>not recommended</b> for new designs</td><td class="hl"><b>Recommended</b></td><td class="hl"><b>Recommended</b> for segment reporting</td></tr>
+              </table>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Document Splitting</span>
+              <p><b>Document Splitting</b> is an S/4HANA FI feature that automatically splits each posting line by characteristics such as <b>Profit Center</b> and <b>Segment</b>, so that a complete, balanced Balance Sheet can be drawn up for each profit center / segment. (Full lesson on it comes later in this course.) Key point for today: <b>business area is not a standard document-splitting characteristic</b> — that is the technical reason S/4HANA prefers profit centers and segments for this job.</p>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview</span>
+              <p>If a question says “management wants a <b>balanced</b> Balance Sheet per product line in S/4HANA”, the expected answer is <b>Profit Center + Document Splitting</b> (and Segment where segment reporting is meant) — <b>not</b> Business Area. Business area answers belong to questions about <i>classic, internal, cross-company-code</i> reporting.</p>
+            </div>
+          </section>
+
+          <!-- ============ S4 ============ -->
+          <section class="lesson" id="s4">
+            <h2><span class="no">04</span> Defining a Business Area (OX03), step by step</h2>
+            <p class="sub">The actual Customizing work — it takes less than a minute, because a business area is just a code and a name.</p>
+
+            <h3>Step by step</h3>
+            <ul class="clean">
+              <li><b>Step 1 — Open the setting.</b> Either run transaction <code>OX03</code> directly, or go through the menu: <code>SPRO</code> → Enterprise Structure → Definition → Financial Accounting → <i>Define Business Area</i>.</li>
+              <li><b>Step 2 — Click “New Entries”.</b> You see an empty table with two columns: <i>Business Area</i> and <i>Short Description</i>.</li>
+              <li><b>Step 3 — Type the code and name.</b> Code: up to <b>4 characters</b> — e.g. <code>GARM</code>. Name: a plain description — “Garments Division”.</li>
+              <li><b>Step 4 — Save.</b> SAP asks for a <b>Customizing transport request</b> (Lesson 2 — the parcel that carries settings DEV → QAS → PRD). Done. The business area now exists for the <b>whole client</b> — there is no separate “assign to company code” step, because it was never inside a company code.</li>
+              <li><b>Step 5 (for automatic derivation) — Assign to Plant/Division.</b> In SPRO → Enterprise Structure → Assignment → Logistics – General → <i>Assign Business Area to Plant/Division</i>, link each plant + division pair to its business area, so MM/SD postings pick it up automatically.</li>
+            </ul>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the OX03 define business area screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OX03 — Change View “Business Areas”: Overview · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Table: TGSB — Business Areas (client-wide)</span><br>
+BusA&nbsp;&nbsp;Short Description<br>
+<span class="hl2">GARM</span>&nbsp;&nbsp;Garments Division<br>
+<span class="hl2">TEXT</span>&nbsp;&nbsp;Home Textiles Division<br>
+<span class="hl2">RETL</span>&nbsp;&nbsp;Retail Shops<br>
+<span class="cm">▸ New Entries → type a code of max. 4 characters + a name → Save (transport request)</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · The OX family</span>
+              <p>From Lesson 5: <code>OX02</code> company code, <code>OX15</code> company, <code>OX16</code> assignment. Add today: <code>OX03</code> business area. <b>“OX = Organisation eXtension”</b> — whenever you see an OX code, something in the enterprise structure is being defined.</p>
+            </div>
+          </section>
+
+          <!-- ============ S5 ============ -->
+          <section class="lesson" id="s5">
+            <h2><span class="no">05</span> Fiscal Year, Posting Periods &amp; Special Periods</h2>
+            <p class="sub">Video 02:32:00 — first the accounting idea, then the SAP setting. You already know this from Financial Accounting; SAP only gives it precise names.</p>
+
+            <p>In your accounting studies, a business does not report “from the beginning of time”. It cuts time into a <b>financial year</b>, prepares a Balance Sheet and P&amp;L for that year, then starts fresh. SAP uses three precise terms for this cutting of time:</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Fiscal Year</span>
+              <p>The <b>fiscal year</b> is the 12-month accounting year of a company. It does <b>not</b> have to match the calendar year (January–December). Pakistan’s government fiscal year runs <b>July–June</b>; India’s runs <b>April–March</b>; the US federal government uses <b>October–September</b>. A company chooses the fiscal year its law and tax rules require. “Fiscal” simply means “relating to government finance / taxes”.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Posting Period</span>
+              <p>A <b>posting period</b> is one slice of the fiscal year — normally one <b>month</b>. Every posting in SAP is booked into exactly one posting period, decided by its <b>posting date</b>. A normal fiscal year has <b>12 posting periods</b>. Period-end reports (trial balance, P&amp;L) are produced per posting period.</p>
+              <p class="urdu">Posting period matlab woh mahina jisme entry record hogi — aam tor par saal ke 12 mahine, 12 periods.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Special Periods</span>
+              <p><b>Special periods</b> are up to <b>4 extra periods (13, 14, 15, 16)</b> that sit <i>after</i> the last normal period of the fiscal year. They belong to the <b>same fiscal year</b> and the same calendar dates as the last month — they exist only so that <b>year-end adjustment postings</b> (audit corrections, final provisions, closing entries) can be kept separate from the normal business of the last month. Maximum in SAP: <b>16 periods in total = 12 normal + 4 special</b>.</p>
+              <p class="urdu">Special periods saal ke aakhir mein extra “pocket” hain — audit aur closing adjustments ke liye, taake aakhri mahine ke asal numbers kharab na hon.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · The diary with appendix pages</span>
+              <p>Your fiscal year is a diary with <b>12 monthly chapters</b>. At the back, the diary has <b>4 blank appendix pages</b>. After the year ends, the auditor finds mistakes — you do not rub out the December chapter; you write the corrections on the appendix pages, clearly labelled “year-end adjustments”. Those appendix pages are special periods 13–16. The year still has 12 months of real life — the appendix only holds corrections <i>about</i> that life.</p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 210" role="img" aria-label="Timeline of a fiscal year April to March with twelve posting periods and four special periods">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <text class="svg-title" x="380" y="26" text-anchor="middle">Fiscal Year 2026 (variant V3: April – March) — 16 periods</text>
+                <g>
+                  <rect class="svg-box-a" x="20" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="46" y="86" text-anchor="middle">1</text><text class="svg-sub" x="46" y="104" text-anchor="middle">Apr</text>
+                  <rect class="svg-box-a" x="78" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="104" y="86" text-anchor="middle">2</text><text class="svg-sub" x="104" y="104" text-anchor="middle">May</text>
+                  <rect class="svg-box-a" x="136" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="162" y="86" text-anchor="middle">3</text><text class="svg-sub" x="162" y="104" text-anchor="middle">Jun</text>
+                  <rect class="svg-box-a" x="194" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="220" y="86" text-anchor="middle">4</text><text class="svg-sub" x="220" y="104" text-anchor="middle">Jul</text>
+                  <rect class="svg-box-a" x="252" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="278" y="86" text-anchor="middle">5</text><text class="svg-sub" x="278" y="104" text-anchor="middle">Aug</text>
+                  <rect class="svg-box-a" x="310" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="336" y="86" text-anchor="middle">6</text><text class="svg-sub" x="336" y="104" text-anchor="middle">Sep</text>
+                  <rect class="svg-box-a" x="368" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="394" y="86" text-anchor="middle">7</text><text class="svg-sub" x="394" y="104" text-anchor="middle">Oct</text>
+                  <rect class="svg-box-a" x="426" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="452" y="86" text-anchor="middle">8</text><text class="svg-sub" x="452" y="104" text-anchor="middle">Nov</text>
+                  <rect class="svg-box-a" x="484" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="510" y="86" text-anchor="middle">9</text><text class="svg-sub" x="510" y="104" text-anchor="middle">Dec</text>
+                  <rect class="svg-box-a" x="542" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="568" y="86" text-anchor="middle">10</text><text class="svg-sub" x="568" y="104" text-anchor="middle">Jan</text>
+                  <rect class="svg-box-a" x="600" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="626" y="86" text-anchor="middle">11</text><text class="svg-sub" x="626" y="104" text-anchor="middle">Feb</text>
+                  <rect class="svg-box-a" x="658" y="60" width="52" height="56" rx="8"/><text class="svg-title" x="684" y="86" text-anchor="middle">12</text><text class="svg-sub" x="684" y="104" text-anchor="middle">Mar</text>
+                </g>
+                <g>
+                  <rect class="svg-box-g" x="470" y="146" width="52" height="48" rx="8"/><text class="svg-title" x="496" y="168" text-anchor="middle">13</text><text class="svg-sub" x="496" y="186" text-anchor="middle">Adj.</text>
+                  <rect class="svg-box-g" x="528" y="146" width="52" height="48" rx="8"/><text class="svg-title" x="554" y="168" text-anchor="middle">14</text><text class="svg-sub" x="554" y="186" text-anchor="middle">Adj.</text>
+                  <rect class="svg-box-g" x="586" y="146" width="52" height="48" rx="8"/><text class="svg-title" x="612" y="168" text-anchor="middle">15</text><text class="svg-sub" x="612" y="186" text-anchor="middle">Adj.</text>
+                  <rect class="svg-box-g" x="644" y="146" width="52" height="48" rx="8"/><text class="svg-title" x="670" y="168" text-anchor="middle">16</text><text class="svg-sub" x="670" y="186" text-anchor="middle">Adj.</text>
+                </g>
+                <text class="svg-sub" x="240" y="172" text-anchor="middle">12 normal posting periods (real months of business)</text>
+                <path class="svg-line" d="M690 116 V140"/>
+              </svg>
+              <figcaption>Periods 13–16 (gold) are not extra months — they are adjustment pockets attached to the end of period 12’s month.</figcaption>
+            </figure>
+          </section>
+
+          <!-- ============ S6 ============ -->
+          <section class="lesson" id="s6">
+            <h2><span class="no">06</span> Fiscal Year Variant — K4, V3, V6, V9 &amp; OB29</h2>
+            <p class="sub">The reusable calendar template of a company code.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Fiscal Year Variant (FYV)</span>
+              <p>A <b>Fiscal Year Variant</b> is a named template that describes one kind of accounting calendar: <b>how many posting periods</b> the year has, <b>how many are special periods</b>, and <b>on which calendar dates each period begins and ends</b>. It is defined once (transaction <code>OB29</code>, table <code>T009</code>) and then <b>assigned to company codes</b> in their global parameters (<code>OBY6</code>, Lesson 5). Many company codes can share one variant — the variant principle again.</p>
+              <p class="urdu">Fiscal Year Variant = saal ka calendar template: saal kab shuru hota hai, kitne periods hain, har period ki tareekhein kya hain.</p>
+            </div>
+
+            <h3>The standard variants SAP delivers — learn these four</h3>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Variant</th><th>Fiscal year runs</th><th>Periods</th><th>Typical user</th></tr>
+                <tr><td class="hl"><code>K4</code></td><td><b>January – December</b> (= calendar year)</td><td>12 + 4 special</td><td>Most companies worldwide; Pakistan private companies commonly</td></tr>
+                <tr><td class="hl"><code>V3</code></td><td><b>April – March</b></td><td>12 + 4 special</td><td>India, UK, Japan</td></tr>
+                <tr><td class="hl"><code>V6</code></td><td><b>October – September</b></td><td>12 + 4 special</td><td>US federal government pattern</td></tr>
+                <tr><td class="hl"><code>V9</code></td><td><b>July – June</b></td><td>12 + 4 special</td><td>Pakistan government pattern, Australia</td></tr>
+              </table>
+            </div>
+            <p>SAP delivers more (for example <code>24</code> — a year of <b>24 half-month periods</b>), but K4 / V3 / V6 / V9 are the exam’s favourites. Notice the pattern: in every standard variant the <b>period number follows the fiscal year, not the calendar month</b>. In V3, April is period <b>1</b> and March is period <b>12</b> — even though March is calendar month 3.</p>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p><b>K4 = “Kalender” 4 quarters</b> — K is for the German word <i>Kalenderjahr</i> (calendar year), so K4 starts in January. For V3: <b>“V3 — India’s April year, period 3 = June… ”</b> simpler: just remember the exam pair — <b>V3 = April–March</b>. And <b>V9: July–June</b> is Pakistan’s government year.</p>
+            </div>
+
+            <h3>Year-dependent vs year-independent</h3>
+            <div class="box term">
+              <span class="box-title">New term · Year-Dependent Variant</span>
+              <p>A variant is <b>year-dependent</b> if the calendar dates of its periods are <b>different for different years</b> — for example a retail calendar whose periods always end on a Saturday, so the dates shift every year. Then the consultant must maintain the exact period dates <b>separately for each fiscal year</b> (stored in table <code>T009B</code>). If the period dates are the same pattern every year (all four standard variants above), the variant is <b>year-independent</b> and needs no yearly maintenance. In <code>OB29</code> a checkbox — <i>“Year-dependent”</i> — records which kind it is.</p>
+            </div>
+
+            <h3>Shortened fiscal year</h3>
+            <div class="box term">
+              <span class="box-title">New term · Shortened Fiscal Year</span>
+              <p>A <b>shortened fiscal year</b> is a one-off fiscal year with <b>fewer than 12 posting periods</b>. It happens when a company <b>changes its year-end</b> (say from December to March — the transition year has only 3 months) or in a company’s <b>first</b> year of business. In the variant’s settings for that specific year, you reduce the number of periods and tick the <i>“Shortened Fiscal Year”</i> indicator, so SAP and the tax reports treat that stub year correctly.</p>
+              <p class="urdu">Jab company apna saal ka aakhri mahina badalti hai, darmiyan wala saal chhota ho jata hai — wohi shortened fiscal year hai.</p>
+            </div>
+
+            <h3>Defining and assigning — the two steps</h3>
+            <ul class="clean">
+              <li><b>Define (OB29):</b> SPRO → Financial Accounting → Financial Accounting Global Settings → Ledgers → Fiscal Year and Posting Periods → <i>Define Fiscal Year Variant</i>. In practice you almost never build one from zero — you <b>copy K4 or the closest standard variant</b>, rename it (2 characters, e.g. <code>Z1</code> — customer names start with Y or Z, Lesson 4), and adjust.</li>
+              <li><b>Maintain period dates (if year-dependent or non-standard):</b> in the same OB29 screen, select the variant → <i>Periods</i> — enter each period’s month, day and year-shift (+/−1 tells SAP whether that month falls in the previous or next calendar year — e.g. in V3, January–March carry year-shift <b>+1</b> because they belong to the next calendar year).</li>
+              <li><b>Assign (OBY6):</b> SPRO → … → <i>Assign Company Code to Fiscal Year Variant</i> — or simply enter the variant in the company code’s global parameters. From Lesson 5 you know this is where it lives.</li>
+            </ul>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the OB29 fiscal year variant list">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OB29 — Fiscal Year Variants · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Table: T009 — Fiscal Year Variants</span><br>
+FY Variant&nbsp;&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No. of Posting Periods&nbsp;&nbsp;No. of Special Periods&nbsp;&nbsp;Year-Dependent<br>
+<span class="hl2">K4</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fiscal Year = Calendar Year&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ ]<br>
+<span class="hl2">V3</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;April – March&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ ]<br>
+<span class="hl2">V6</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;October – September&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ ]<br>
+<span class="hl2">V9</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;July – June&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ ]<br>
+<span class="cm">▸ Copy a standard variant → rename (Z…) → adjust → assign to company code in OBY6</span></div>
+            </div>
+
+            <div class="box trap">
+              <span class="box-title">Exam trap preview · One variant, one rule</span>
+              <p>All company codes assigned to the <b>same controlling area</b> must use the <b>same fiscal year variant</b> (Lesson 5’s cross-company-code cost accounting rule). The exam loves combining these two lessons: change a company code’s FYV carelessly and CO breaks.</p>
+            </div>
+          </section>
+
+          <!-- ============ S7 ============ -->
+          <section class="lesson" id="s7">
+            <h2><span class="no">07</span> Credit Control Area — what it is and why it exists</h2>
+            <p class="sub">Video 02:55:22 — the FI setting that protects you from customers who do not pay.</p>
+
+            <p>You know this from real business life. A wholesaler sells cloth to retailers on <b>udhaar</b> (credit): take the goods now, pay in 30 days. Credit increases sales — but every shopkeeper also knows the danger: give too much udhaar to one customer and, if he runs away, the loss can sink you. So every sensible business sets a rule: <b>“This customer may owe us at most Rs 500,000 at any time. Not one rupee more.”</b></p>
+            <p>In SAP, the organisational unit that owns and enforces exactly this rule is the <b>Credit Control Area</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Credit Control Area (CCA)</span>
+              <p>A <b>Credit Control Area</b> is an organisational unit within which <b>credit limits for customers are specified and monitored</b>. Its code is up to <b>4 characters</b> (table <code>T014</code>). One credit control area can cover <b>one or many company codes</b> — so a customer who buys from several of your legal companies gets <b>one combined limit</b>, checked against his <b>total</b> dues across all of them.</p>
+              <p class="urdu">Credit Control Area = woh hissa jahan har customer ki udhaar limit set aur check hoti hai. Aik limit, saari company codes ke liye mili-juli.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New terms · Credit Limit &amp; Credit Exposure</span>
+              <p><b>Credit limit</b> = the maximum amount a customer is allowed to owe you at any moment — the ceiling. <b>Credit exposure</b> = how much the customer <i>currently</i> owes you in total, counting everything: unpaid invoices (<b>open items</b>), plus goods already ordered but not yet delivered, plus goods delivered but not yet invoiced. SAP’s rule is a single comparison, checked again and again: <b>credit exposure must never exceed the credit limit</b>.</p>
+            </div>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · The shopkeeper’s udhaar khata</span>
+              <p>The old shopkeeper keeps one page per customer in his udhaar register. At the top of the page he writes the limit in red: “Max Rs 500,000”. Every new order is first added on the page — old unpaid bills, today’s order, the truck already loaded. If the total crosses the red line, he politely refuses: “Pehle purana hisaab clear karein.” SAP’s credit control area is that register, and the red line is checked <b>automatically at every sales order</b>, across every company code the register covers.</p>
+            </div>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 240" role="img" aria-label="Diagram of credit exposure components adding up against a credit limit">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <text class="svg-title" x="380" y="26" text-anchor="middle">One customer, one Credit Control Area — exposure vs limit</text>
+                <rect class="svg-box-a" x="30" y="52" width="160" height="62" rx="10"/>
+                <text class="svg-title" x="110" y="78" text-anchor="middle">Open orders</text>
+                <text class="svg-sub" x="110" y="97" text-anchor="middle">Ordered, not delivered</text>
+                <rect class="svg-box-a" x="210" y="52" width="160" height="62" rx="10"/>
+                <text class="svg-title" x="290" y="78" text-anchor="middle">Open deliveries</text>
+                <text class="svg-sub" x="290" y="97" text-anchor="middle">Sent, not yet invoiced</text>
+                <rect class="svg-box-a" x="390" y="52" width="160" height="62" rx="10"/>
+                <text class="svg-title" x="470" y="78" text-anchor="middle">Open billing docs</text>
+                <text class="svg-sub" x="470" y="97" text-anchor="middle">Invoiced in SD, not in FI</text>
+                <rect class="svg-box-a" x="570" y="52" width="160" height="62" rx="10"/>
+                <text class="svg-title" x="650" y="78" text-anchor="middle">Open items (FI)</text>
+                <text class="svg-sub" x="650" y="97" text-anchor="middle">Unpaid invoices</text>
+                <path class="svg-line" d="M110 114 V138 M290 114 V138 M470 114 V138 M650 114 V138"/>
+                <rect class="svg-box-g" x="130" y="140" width="500" height="40" rx="10"/>
+                <text class="svg-title" x="380" y="165" text-anchor="middle">= TOTAL CREDIT EXPOSURE</text>
+                <path class="svg-arrow" d="M380 180 V202"/>
+                <rect class="svg-box-r" x="130" y="204" width="500" height="30" rx="10"/>
+                <text class="svg-title" x="380" y="224" text-anchor="middle">Exposure ≤ CREDIT LIMIT ? → order allowed / blocked</text>
+              </svg>
+              <figcaption>Credit exposure is more than unpaid invoices — SAP counts the customer’s whole pipeline of commitments.</figcaption>
+            </figure>
+          </section>
+
+          <!-- ============ S8 ============ -->
+          <section class="lesson" id="s8">
+            <h2><span class="no">08</span> Credit Control Area in detail — OB45, OB38 &amp; credit exposure</h2>
+            <p class="sub">Define it, assign it, and see where the customer’s limit actually lives.</p>
+
+            <h3>Step 1 — Define the credit control area (OB45)</h3>
+            <ul class="clean">
+              <li>Transaction <code>OB45</code>, or SPRO → Enterprise Structure → Definition → Financial Accounting → <i>Define Credit Control Area</i>.</li>
+              <li>Give it a code (up to 4 characters, often the same as the company code, e.g. <code>1000</code>), a name, and its <b>currency</b> — all limits in this area are kept in that currency.</li>
+              <li>Two important settings live here: the <b>update group</b> and the <b>default risk category</b> (explained just below). Table: <code>T014</code>.</li>
+            </ul>
+
+            <div class="box term">
+              <span class="box-title">New terms · Risk Category &amp; Update Group</span>
+              <p>A <b>risk category</b> is a label for how risky a customer is — e.g. “low risk”, “medium risk”, “high risk”. Different categories can get different strictness of credit check. An <b>update group</b> decides <i>which</i> values flow into the credit exposure — the standard update group <code>000012</code> adds up open orders + open deliveries + open billing documents + open items, exactly the four boxes in the diagram above.</p>
+            </div>
+
+            <h3>Step 2 — Assign company codes (OB38)</h3>
+            <ul class="clean">
+              <li>Transaction <code>OB38</code>, or SPRO → Enterprise Structure → Assignment → Financial Accounting → <i>Assign Company Code to Credit Control Area</i>.</li>
+              <li>For each company code you set its <b>default (permitted) credit control area</b>. Several company codes may point to the <b>same</b> credit control area — that is the whole point: one shared limit per customer.</li>
+              <li>A company code can also be allowed to use <b>other</b> credit control areas for specific customers (“permitted credit control areas”), but it always has exactly <b>one default</b>.</li>
+            </ul>
+
+            <h3>Step 3 — The customer’s limit itself</h3>
+            <p>The limit is <b>not</b> stored on the credit control area — it is stored <b>per customer, per credit control area</b>, in the customer’s <b>credit master data</b>. In classic SAP this was transaction <code>FD32</code> (table <code>KNKK</code>). One customer can therefore have <b>different limits in different credit control areas</b> — generous in the area covering Pakistan, zero (cash only) in a new export area.</p>
+
+            <div class="box term">
+              <span class="box-title">S/4HANA change · SAP Credit Management (FSCM) <span class="examtag">Exam favourite</span></span>
+              <p>In <b>S/4HANA</b>, classic credit management (FI-AR-CR, with FD32) is <b>replaced</b> by <b>SAP Credit Management</b> (part of FSCM — Financial Supply Chain Management). The credit limit now lives on the <b>Business Partner</b> (Lesson 1’s “one master record per party”) in the role <i>“SAP Credit Management”</i>, organised by <b>credit segment</b> — a unit much like a credit control area, and usually mapped from it. The credit control area is still defined in the enterprise structure (OB45/OB38) for compatibility, but the live credit check runs through credit segments and business partners. Exam questions on S/4HANA credit expect this answer.</p>
+            </div>
+
+            <h3>What happens when the limit is crossed?</h3>
+            <ul class="clean">
+              <li>The credit check runs in <b>SD</b> (Sales &amp; Distribution) when a sales order is created or changed — FI supplies the limit and exposure data. This FI–SD teamwork is called <b>integration</b>.</li>
+              <li>Depending on settings, SAP can show a <b>warning</b>, an <b>error</b>, or <b>block the order / delivery</b> until a credit manager releases it.</li>
+              <li>Payments received reduce open items → exposure falls → the customer can order again. The register updates itself.</li>
+            </ul>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · OB45 / OB38</span>
+              <p><b>45 = “define” the area, 38 = “attach” the company codes.</b> Or remember the flow of this whole lesson: <b>OX03</b> business area → <b>OB29</b> fiscal year → <b>OB45</b> credit → <b>OB38</b> assign credit → <b>OB52</b> periods. Five codes, one lesson.</p>
+            </div>
+          </section>
+
+          <!-- ============ S9 ============ -->
+          <section class="lesson" id="s9">
+            <h2><span class="no">09</span> Posting Period Variant — the gatekeeper (OB52)</h2>
+            <p class="sub">Video 03:10:00 — the setting that opens and locks the months.</p>
+
+            <p>Every month-end, accountants do something sacred: they <b>close the month</b>. Reports are printed, balances are agreed, tax is filed. After that, <b>nobody</b> may sneak a posting into that month — otherwise last month’s printed reports would silently stop matching the system. In manual accounting you would lock the register in a cupboard. In SAP, the lock is the <b>Posting Period Variant</b>.</p>
+
+            <div class="box term">
+              <span class="box-title">New term · Posting Period Variant (PPV)</span>
+              <p>A <b>Posting Period Variant</b> is a named set of rules that decides, for each company code using it, <b>which posting periods are open for posting and which are closed</b> — separately for each <b>account type</b>. It is maintained in transaction <code>OB52</code> (table <code>T001B</code>) and <b>assigned to company codes in OBY6</b> — variant principle again: one variant can serve many company codes, so a group can open and close the month for all its companies with a single change.</p>
+              <p class="urdu">Posting Period Variant = kis mahine mein entry ho sakti hai aur kis mein nahi — yehi system ka taala hai.</p>
+            </div>
+
+            <div class="box term">
+              <span class="box-title">New term · Account Type</span>
+              <p>Every posting line belongs to one <b>account type</b> — the kind of account it hits. SAP uses one-letter codes, and you must know all six:</p>
+            </div>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Code</th><th>Account type</th><th>Simple meaning</th></tr>
+                <tr><td class="hl"><code>+</code></td><td><b>All account types</b></td><td>The master row — applies to every type at once</td></tr>
+                <tr><td class="hl"><code>A</code></td><td>Assets</td><td>Asset accounting postings</td></tr>
+                <tr><td class="hl"><code>D</code></td><td>Customers</td><td>Accounts Receivable (Debtors)</td></tr>
+                <tr><td class="hl"><code>K</code></td><td>Vendors</td><td>Accounts Payable (Creditors) — K from German <i>Kreditor</i></td></tr>
+                <tr><td class="hl"><code>M</code></td><td>Materials</td><td>Stock / material postings from MM</td></tr>
+                <tr><td class="hl"><code>S</code></td><td>G/L accounts</td><td>Pure general-ledger postings</td></tr>
+              </table>
+            </div>
+            <p>Why separate rows per account type? Because closing is staggered in real life: you may lock <b>materials (M)</b> postings on the 1st so stock is final, keep <b>vendors (K)</b> open two more days for late supplier invoices, and keep <b>G/L (S)</b> open longest for the accountants’ own adjustment entries. OB52’s per-type rows make exactly that possible.</p>
+
+            <h3>The two period ranges — OB52’s cleverest idea</h3>
+            <p>Each account-type row in OB52 has <b>two</b> “from period – to period” ranges, plus a column called <b>AuGr</b> (authorization group):</p>
+            <ul class="clean">
+              <li><b>Range 1 (Period 1 columns)</b> — the periods open for <b>everybody</b> with normal posting rights.</li>
+              <li><b>Range 2 (Period 2 columns)</b> — extra periods open <b>only for users who carry the authorization group</b> named in the AuGr column — typically the senior accountants / closing team. This range is how <b>special periods 13–16</b> are opened safely: normal users cannot touch them, the closing team can.</li>
+            </ul>
+
+            <div class="box analogy">
+              <span class="box-title">Analogy · The bank’s shutter and the manager’s cabin</span>
+              <p>At closing time the bank pulls the main shutter down — customers (normal users, Range 1) can no longer enter. But the manager and cashier, who have the cabin key (authorization group, Range 2), are still inside finishing the day’s balancing. OB52 works the same: one lock for the public, a second, key-holder-only range for the closing team — and that is where special-period adjustments are posted.</p>
+            </div>
+
+            <div class="screen" role="img" aria-label="Re-created illustration of the OB52 posting period variant screen">
+              <div class="screen-bar"><span class="win"></span><span class="win"></span><span class="win"></span> OB52 — Posting Period Variant 1000 · Fiscal Year 2027 · <span style="color:var(--red)">re-created illustration, not a real SAP screenshot</span></div>
+              <div class="screen-body"><span class="dim">Table: T001B — Permitted posting periods (interval per account type)</span><br>
+A&nbsp;&nbsp;From Per.1&nbsp;&nbsp;Year&nbsp;&nbsp;To Per.1&nbsp;&nbsp;Year&nbsp;&nbsp;From Per.2&nbsp;&nbsp;Year&nbsp;&nbsp;To Per.2&nbsp;&nbsp;Year&nbsp;&nbsp;AuGr<br>
+<span class="hl2">+</span>&nbsp;&nbsp;11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;F001<br>
+<span class="hl2">D</span>&nbsp;&nbsp;11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;F001<br>
+<span class="hl2">K</span>&nbsp;&nbsp;11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;F001<br>
+<span class="hl2">S</span>&nbsp;&nbsp;11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2027&nbsp;&nbsp;F001<br>
+<span class="cm">▸ Read it as: periods 11–12 open for all · periods 13–16 (special) open only for AuGr F001</span></div>
+            </div>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · Account type letters</span>
+              <p><b>“Aunty D K M S”</b> — <b>A</b>ssets, <b>D</b>ebtors (customers), <b>K</b>reditors (vendors), <b>M</b>aterials, <b>S</b>achkonten (German for G/L accounts) — and <b>+</b> means “all of the above”. D and K are simply the English accounting words <b>D</b>ebtors and <b>K</b>(C)reditors wearing German spelling.</p>
+            </div>
+          </section>
+
+          <!-- ============ S10 ============ -->
+          <section class="lesson" id="s10">
+            <h2><span class="no">10</span> Posting Period Variant in action — a posting’s journey</h2>
+            <p class="sub">How the Fiscal Year Variant and Posting Period Variant work together on every single posting.</p>
+
+            <h3>Step by step: what SAP checks when you press “Post”</h3>
+            <ul class="clean">
+              <li><b>Step 1 — Read the posting date.</b> Every document has a <b>posting date</b> in its header — the date the entry belongs to (not necessarily today).</li>
+              <li><b>Step 2 — Date → period (Fiscal Year Variant’s job).</b> SAP takes the company code’s fiscal year variant and asks: “Which fiscal year and which period does this date fall in?” Example with V3 (April–March): posting date <b>15 Feb 2027</b> → fiscal year <b>2026</b>, period <b>11</b>. (The fiscal year is named by the year in which it <i>starts</i>.)</li>
+              <li><b>Step 3 — Period open? (Posting Period Variant’s job).</b> SAP takes the company code’s posting period variant and checks the row for the relevant account type: is period 11 / 2026 inside an open range? <b>Yes → posting saved. No → hard error:</b> <i>“Posting period 011 2026 is not open”</i> — the entry is refused completely; there is no “post anyway” button.</li>
+              <li><b>Step 4 — Special periods are the exception.</b> A posting date can never “fall into” period 13–16, because those periods have no dates of their own. To post an adjustment, the user types a posting date inside the <b>last normal period</b> (e.g. 31 Mar 2027) and enters the special period number <b>manually in the “Period” field</b> of the document header. SAP then checks Range 2 and the user’s authorization group before allowing it.</li>
+            </ul>
+
+            <figure class="diagram">
+              <svg viewBox="0 0 760 150" role="img" aria-label="Flow diagram of a posting date being converted to a period and checked against open periods">
+                <defs>
+                  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+                </defs>
+                <rect class="svg-box" x="10" y="45" width="150" height="60" rx="10"/>
+                <text class="svg-title" x="85" y="71" text-anchor="middle">Posting date</text>
+                <text class="svg-sub" x="85" y="90" text-anchor="middle">15 Feb 2027</text>
+                <path class="svg-arrow" d="M160 75 H205"/>
+                <rect class="svg-box-a" x="210" y="45" width="170" height="60" rx="10"/>
+                <text class="svg-title" x="295" y="71" text-anchor="middle">Fiscal Year Variant</text>
+                <text class="svg-sub" x="295" y="90" text-anchor="middle">V3 → FY 2026, Period 11</text>
+                <path class="svg-arrow" d="M380 75 H425"/>
+                <rect class="svg-box-g" x="430" y="45" width="170" height="60" rx="10"/>
+                <text class="svg-title" x="515" y="71" text-anchor="middle">Posting Period Variant</text>
+                <text class="svg-sub" x="515" y="90" text-anchor="middle">OB52: period 11 open?</text>
+                <path class="svg-arrow" d="M600 75 H645"/>
+                <rect class="svg-box-gr" x="650" y="45" width="100" height="60" rx="10"/>
+                <text class="svg-title" x="700" y="71" text-anchor="middle">POSTED</text>
+                <text class="svg-sub" x="700" y="90" text-anchor="middle">or error</text>
+              </svg>
+              <figcaption>Two different variants, two different jobs: the FYV <i>translates</i> the date; the PPV <i>guards</i> the period.</figcaption>
+            </figure>
+
+            <div class="box trick">
+              <span class="box-title">Memory trick · Translator vs Gatekeeper</span>
+              <p><b>Fiscal Year Variant = translator</b> (date → period number). <b>Posting Period Variant = gatekeeper</b> (period number → allowed or refused). If a posting fails with “period not open”, the gatekeeper (OB52) stopped it — the translator did its job fine.</p>
+            </div>
+
+            <h3>The monthly closing routine</h3>
+            <p>At each month-end the FI team edits OB52 for the company code’s variant: the finished month is removed from Range 1 (closed) and the new month becomes the open range. Because of the variant principle, if ten company codes share variant <code>1000</code>, <b>one OB52 change closes the month for all ten at once</b> — convenient, and exactly why exam questions ask which company codes a PPV change affects: <i>all company codes assigned to that variant</i>.</p>
+            <p>One neighbour to know: <b>Materials Management has its own period</b> (the MM period, moved with <code>MMPV</code>) that controls goods movements. It is separate from the FI posting period — a favourite confusion in exam questions.</p>
+          </section>
+
+          <!-- ============ S11 ============ -->
+          <section class="lesson" id="s11">
+            <h2><span class="no">11</span> All four together — one invoice, four checks</h2>
+            <p class="sub">Watch all four settings work on a single real posting.</p>
+
+            <p><b>The scene:</b> On <b>15 February 2027</b>, company code <b>1000</b> (Ibrahim Apparel, fiscal year variant <b>V3</b> April–March, credit control area <b>1000</b>, posting period variant <b>1000</b>) sells garments worth <b>Rs 600,000</b> on credit to a regular customer. The customer’s credit limit is Rs 1,000,000 and he already owes Rs 350,000 in open items plus Rs 100,000 in open orders. The garments belong to business area <b>GARM</b>.</p>
+
+            <div class="tblwrap">
+              <table>
+                <tr><th>#</th><th>Setting</th><th>What it does to this sale</th><th>Result</th></tr>
+                <tr><td>1</td><td><b>Credit Control Area</b> (OB45/OB38)</td><td>Exposure check: 350,000 open items + 100,000 open orders + 600,000 new order = <b>1,050,000</b> vs limit <b>1,000,000</b></td><td class="hl"><b>Order BLOCKED</b> — exposure would cross the limit by 50,000; customer must pay first or a credit manager must release it</td></tr>
+                <tr><td>2</td><td><b>Fiscal Year Variant</b> (OB29)</td><td>Posting date 15 Feb 2027 under V3 (Apr–Mar) → fiscal year <b>2026</b>, period <b>11</b></td><td>Period identified</td></tr>
+                <tr><td>3</td><td><b>Posting Period Variant</b> (OB52)</td><td>Checks account type <b>D</b> (customers): is period 11 / 2026 open in variant 1000?</td><td>If open → invoice may post; if the team already closed February → error, posting refused</td></tr>
+                <tr><td>4</td><td><b>Business Area</b> (OX03)</td><td>The revenue and receivable lines are stamped <code>GSBER = GARM</code> (derived from plant + division)</td><td>The sale appears in the <b>Garments</b> internal P&amp;L and Balance Sheet slice</td></tr>
+              </table>
+            </div>
+
+            <p><b>Check your understanding:</b> notice the <i>order</i> of the story. The credit check fires in SD <b>before</b> any accounting document exists. The fiscal-year and posting-period checks fire <b>at posting time</b> in FI. The business area is a <b>stamp</b> carried on the lines for later reporting. Four settings, four different moments — the exam tests them separately precisely because students mix them up. <span class="urdu">Credit pehle check hota hai, period posting ke waqt, aur business area sirf aik stamp hai reporting ke liye.</span></p>
+          </section>
+
+          <!-- ============ S12 ============ -->
+          <section class="lesson" id="s12">
+            <h2><span class="no">12</span> Tables to know</h2>
+            <p class="sub">View any of these with <code>SE16N</code> (Lesson 4). Examiners love pairing a setting with its table.</p>
+            <div class="tblwrap">
+              <table>
+                <tr><th>Table</th><th>What it stores</th><th>Key field / note</th></tr>
+                <tr><td class="hl"><code>TGSB</code></td><td>All <b>business areas</b></td><td>Key <code>GSBER</code></td></tr>
+                <tr><td class="hl"><code>T009</code></td><td>All <b>fiscal year variants</b> — number of periods, special periods, year-dependent flag</td><td>Key <code>PERIV</code></td></tr>
+                <tr><td><code>T009B</code></td><td>The <b>period dates</b> of each fiscal year variant (month/day/year-shift per period)</td><td>Read by SAP to convert posting date → period</td></tr>
+                <tr><td class="hl"><code>T014</code></td><td>All <b>credit control areas</b></td><td>Key <code>KKBER</code></td></tr>
+                <tr><td><code>KNKK</code></td><td>Classic customer <b>credit master data</b> — limit and exposure per customer per credit control area</td><td>In S/4HANA, credit data moves to the Business Partner (FSCM)</td></tr>
+                <tr><td class="hl"><code>T001B</code></td><td><b>Permitted posting periods</b> — the OB52 intervals per posting period variant and account type</td><td>The gatekeeper’s rule-book</td></tr>
+                <tr><td><code>T001</code></td><td>(Lesson 5) Company codes — holds the <b>assignment</b> of fiscal year variant and posting period variant per company code</td><td>Fields include <code>PERIV</code> (FYV) — set via OBY6</td></tr>
+              </table>
+            </div>
+            <div class="box trick">
+              <span class="box-title">Memory trick</span>
+              <p>The technical field names tell the story: <b>GSBER</b> = <i>Geschäftsbereich</i> (German for business area), <b>KKBER</b> = <i>Kreditkontrollbereich</i> (credit control area), <b>PERIV</b> = <i>Periodenverschlüsselung</i> (fiscal year variant). German again — SAP’s mother tongue (Lesson 4). You do not need the German; just recognise the codes on sight.</p>
+            </div>
+          </section>
+
+          <!-- ============ S13 ============ -->
+          <section class="lesson" id="s13">
+            <h2><span class="no">13</span> Exam traps</h2>
+            <p class="sub">The mistakes C_TS4FI is designed to catch in this lesson’s four topics.</p>
+            <div class="box trap">
+              <span class="box-title">Trap 1 · Business area = legal entity</span>
+              <p>False. A business area has <b>no legal standing</b>; its financial statements are for <b>internal evaluation only</b>. Legal statements exist only at <b>company code</b> level.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 2 · Business area is defined per company code</span>
+              <p>False. It is defined <b>once at client level</b> (OX03) and is valid <b>across company codes</b> — that cross-company view is its main purpose.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 3 · A fiscal year can have 12 special periods</span>
+              <p>False. Maximum <b>16 periods total: 12 normal + at most 4 special</b> (13–16). Any option claiming more is wrong.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 4 · SAP finds the special period from the posting date</span>
+              <p>False. Special periods have <b>no dates</b>. The posting date must fall in the <b>last normal period</b>, and the user enters the special period <b>manually</b> in the document header’s Period field — plus needs the OB52 Range-2 authorization group.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 5 · K4 starts in April</span>
+              <p>False. <b>K4 = calendar year, January–December.</b> April–March is <b>V3</b>. October–September is <b>V6</b>, July–June is <b>V9</b>. The exam shuffles these four relentlessly.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 6 · One credit control area per company code, always</span>
+              <p>False. One credit control area can serve <b>many</b> company codes — that sharing is exactly how a customer gets <b>one combined limit</b> across the group. The company code side is the many; the CCA side can be one.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 7 · Credit exposure = unpaid invoices only</span>
+              <p>False. With the standard update group <code>000012</code>, exposure = <b>open orders + open deliveries + open billing documents + open items</b>. Forgetting the pipeline understates the customer’s true dues.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 8 · OB52 assigns the variant to the company code</span>
+              <p>False. <code>OB52</code> only <b>maintains the open/closed intervals</b>. The <b>assignment</b> of a posting period variant to a company code happens in <b>OBY6</b> (global parameters) — same place as the fiscal year variant assignment.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 9 · Account type “+” means G/L accounts</span>
+              <p>False. <code>+</code> means <b>all account types</b>. G/L accounts are <code>S</code>. Customers are <code>D</code>, vendors <code>K</code>, assets <code>A</code>, materials <code>M</code>.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 10 · In S/4HANA, credit limits are still maintained in FD32</span>
+              <p>False for S/4HANA. Classic credit management is replaced by <b>SAP Credit Management (FSCM)</b>: limits live on the <b>Business Partner</b> under <b>credit segments</b>. FD32/KNKK belong to the classic world the exam contrasts against.</p>
+            </div>
+            <div class="box trap">
+              <span class="box-title">Trap 11 · Changing one PPV affects one company code</span>
+              <p>False. Because of the <b>variant principle</b>, editing a posting period variant (or fiscal year variant) affects <b>every company code assigned to it</b>. Always check the assignment list before “just closing one company’s month”.</p>
+            </div>
+          </section>
+
+          <!-- ============ S14 ============ -->
+          <section class="lesson" id="s14">
+            <h2><span class="no">14</span> A–Z glossary</h2>
+            <p class="sub">Every new term of this lesson, in one line each.</p>
+            <dl class="glossary">
+              <dt>Account Type</dt><dd>One-letter kind of a posting line: + all, A assets, D customers, K vendors, M materials, S G/L accounts.</dd>
+              <dt>AuGr (Authorization Group)</dt><dd>OB52 column naming the group of users allowed to post in the second (restricted) period range.</dd>
+              <dt>Business Area</dt><dd>Optional, client-wide org unit for internal Balance Sheet / P&amp;L per division or product line; max 4 characters; OX03; field GSBER; table TGSB.</dd>
+              <dt>Credit Control Area</dt><dd>Org unit within which customer credit limits are set and monitored; can cover many company codes; OB45 / OB38; table T014; field KKBER.</dd>
+              <dt>Credit Exposure</dt><dd>What a customer currently owes in total: open orders + open deliveries + open billing documents + open items.</dd>
+              <dt>Credit Limit</dt><dd>The maximum a customer may owe at any time; stored per customer per credit control area.</dd>
+              <dt>Credit Segment</dt><dd>S/4HANA (FSCM) unit on the Business Partner that holds credit limits — the successor idea to the credit control area.</dd>
+              <dt>Customizing</dt><dd>Consultant settings in SPRO that adapt SAP to a business before go-live; moved by transport requests.</dd>
+              <dt>Document Splitting</dt><dd>S/4HANA feature that splits posting lines by profit center / segment so balanced statements per unit are possible.</dd>
+              <dt>Fiscal Year</dt><dd>A company’s 12-month accounting year; need not equal the calendar year.</dd>
+              <dt>Fiscal Year Variant</dt><dd>Named calendar template: number of periods, special periods, and each period’s dates; OB29; table T009; field PERIV.</dd>
+              <dt>GSBER</dt><dd>Technical field name of the business area.</dd>
+              <dt>K4 / V3 / V6 / V9</dt><dd>Standard fiscal year variants: Jan–Dec / Apr–Mar / Oct–Sep / Jul–Jun — each 12 periods + 4 special.</dd>
+              <dt>OB29 / OB38 / OB45 / OB52</dt><dd>Define fiscal year variant / assign credit control area / define credit control area / maintain posting periods.</dd>
+              <dt>Open Items</dt><dd>Unpaid, uncleared lines on a customer or vendor account — part of credit exposure.</dd>
+              <dt>OX03</dt><dd>Transaction to define business areas.</dd>
+              <dt>Posting Date</dt><dd>The date in a document header that decides which fiscal year and period the posting belongs to.</dd>
+              <dt>Posting Period</dt><dd>One slice of the fiscal year, normally a month; a normal year has 12.</dd>
+              <dt>Posting Period Variant</dt><dd>Named rule-set deciding which periods are open or closed per account type; OB52; table T001B; assigned in OBY6.</dd>
+              <dt>Risk Category</dt><dd>Label of how risky a customer is; controls how strict the credit check is.</dd>
+              <dt>SAP Credit Management</dt><dd>The FSCM credit solution that replaces classic credit management in S/4HANA; limits on the Business Partner.</dd>
+              <dt>Segment</dt><dd>Reporting unit for segment reporting (e.g. IFRS 8), usually derived from the profit center; works with document splitting.</dd>
+              <dt>Shortened Fiscal Year</dt><dd>A one-off fiscal year with fewer than 12 posting periods, e.g. when a company changes its year-end.</dd>
+              <dt>Special Periods</dt><dd>Up to 4 extra periods (13–16) after the last normal period, for year-end adjustments; entered manually, never derived from a date.</dd>
+              <dt>Update Group</dt><dd>Setting deciding which document values flow into credit exposure; standard 000012 covers orders, deliveries, billing and open items.</dd>
+              <dt>Variant Principle</dt><dd>Define a settings bundle once, assign it to many company codes; a change affects all assignees.</dd>
+              <dt>Year-Dependent Variant</dt><dd>A fiscal year variant whose period dates differ per year and must be maintained for each year (T009B).</dd>
+            </dl>
+          </section>
+
+          <!-- ============ S15 ============ -->
+          <section class="lesson" id="s15">
+            <h2><span class="no">15</span> Summary — the whole lesson on one screen</h2>
+            <ul class="clean">
+              <li><b>Business Area</b> (<code>OX03</code>, 4 chars, field <code>GSBER</code>, table <code>TGSB</code>): an <b>optional, client-wide</b> slice across company codes for <b>internal</b> Balance Sheet / P&amp;L per division. Not a legal entity. In S/4HANA designs, <b>Profit Center + Segment + Document Splitting</b> are preferred for balanced per-unit statements.</li>
+              <li><b>Fiscal Year</b> = 12-month accounting year; divided into <b>12 posting periods</b> plus up to <b>4 special periods</b> (13–16) for year-end adjustments — <b>16 maximum</b>.</li>
+              <li><b>Fiscal Year Variant</b> (<code>OB29</code>, table <code>T009</code>): the calendar template. <b>K4</b> = Jan–Dec, <b>V3</b> = Apr–Mar, <b>V6</b> = Oct–Sep, <b>V9</b> = Jul–Jun. Can be <b>year-dependent</b>; a <b>shortened fiscal year</b> has fewer than 12 periods. Assigned to company codes in <code>OBY6</code>.</li>
+              <li><b>Credit Control Area</b> (<code>OB45</code> define, <code>OB38</code> assign, table <code>T014</code>): the unit that sets and monitors customer <b>credit limits</b>; one CCA can cover <b>many company codes</b> so a customer has one combined limit. <b>Exposure</b> = open orders + deliveries + billing + open items (update group <code>000012</code>). In <b>S/4HANA</b>, SAP Credit Management (FSCM) with <b>credit segments</b> on the Business Partner replaces classic FD32 credit management.</li>
+              <li><b>Posting Period Variant</b> (<code>OB52</code>, table <code>T001B</code>, assigned in <code>OBY6</code>): decides which periods are <b>open or closed</b>, per <b>account type</b> (+, A, D, K, M, S). <b>Range 1</b> = everyone; <b>Range 2 + AuGr</b> = closing team only — that is how special periods are protected.</li>
+              <li>On every posting: <b>FYV translates</b> posting date → period; <b>PPV guards</b> whether that period is open; the <b>credit check</b> already guarded the sale in SD; the <b>business area stamps</b> the lines for internal reporting.</li>
+            </ul>
+          </section>
+
+          <!-- ============ S16 ============ -->
+          <section class="lesson" id="s16">
+            <h2><span class="no">16</span> Self-test — 12 questions</h2>
+            <p class="sub">Click an answer to check yourself. Explanations appear instantly — no marks are saved anywhere.</p>
+            <div id="quiz"></div>
+            <p id="scoreLine" aria-live="polite"></p>
+            <button class="btn" id="resetQuiz" type="button">Restart the test</button>
+          </section>
+
+          <div class="next-lesson">
+            <span class="arrow">→</span>
+            <div>
+              <b>Next: Lesson 7 — Currency Settings</b><br>
+              <span style="color:var(--ink-soft)">A small preview only: your company code keeps its legal books in one currency — but what if it buys in dollars, sells in dirhams, and its group reports in euros? In Lesson 7 we set the <b>company code (local) currency</b>, meet SAP’s <b>parallel currencies</b> (one posting, valued in several currencies at once), and learn how <b>exchange rate types</b> and the daily <b>exchange rate table</b> turn foreign amounts into local ones — the settings every foreign-currency posting quietly depends on.</span>
+            </div>
+          </div>
+
+          <footer>
+            Lesson 6 of the SAP S/4HANA Financial Accounting series · Prepared for C_TS4FI (SAP S/4HANA Cloud Private Edition, Financial Accounting) exam preparation · All SAP screens shown are re-created illustrations for learning, not real SAP screenshots.
+            <br/>course created by Muhammad Asad Ullah Ibrahim
+          </footer>
+        </main>
+      </div>
+      </div>
+    </div>
+
+    <script>
+      // ---- Shared course progress store (localStorage, shared by all lessons) ----
+      window.SAPProgress=(function(){
+        var KEY='sapCts4fiProgress_v1';
+        function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ var o=JSON.parse(raw); if(o&&typeof o==='object') return o; } }catch(e){} return {lessons:{},gates:{}}; }
+        function saveAll(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+        function getLesson(n){ var s=load(), L=null;
+          if(s.lessons){ L=s.lessons[String(n)]||s.lessons['lesson'+n]||null; }
+          if(!L){ L=s['lesson'+n]||s[String(n)]||null; }
+          return L; }
+        function saveLesson(n,patch){ var s=load(); if(!s.lessons) s.lessons={}; var k=String(n), cur=s.lessons[k]||{};
+          for(var p in patch){ cur[p]=patch[p]; }
+          s.lessons[k]=cur; saveAll(s); return cur; }
+        function getGate(n){ var s=load(), g=(s.gates&&s.gates[String(n)])||{};
+          return {fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; }
+        function saveGate(n,g){ var s=load(); if(!s.gates) s.gates={};
+          s.gates[String(n)]={fails:g.fails||0, lockUntil:g.lockUntil||0, unlocked:g.unlocked===true}; saveAll(s); }
+        return {getLesson:getLesson, saveLesson:saveLesson, getGate:getGate, saveGate:saveGate, load:load};
+      })();
+
+      // ---- SHA-256 (hex) — used only to check the admin password against its hash ----
+      function sha256Hex(ascii){
+        ascii=unescape(encodeURIComponent(ascii));
+        function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+        var maxWord=Math.pow(2,32), i, j, result='';
+        var words=[], asciiBitLength=ascii.length*8;
+        var hash=sha256Hex.h=sha256Hex.h||[], k=sha256Hex.k=sha256Hex.k||[];
+        var primeCounter=k.length, isComposite={};
+        for(var candidate=2; primeCounter<64; candidate++){
+          if(!isComposite[candidate]){
+            for(i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+            hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+            k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+          }
+        }
+        ascii+='\x80';
+        while(ascii.length%64-56) ascii+='\x00';
+        for(i=0;i<ascii.length;i++){ j=ascii.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+        words[words.length]=((asciiBitLength/maxWord)|0);
+        words[words.length]=(asciiBitLength);
+        for(j=0;j<words.length;){
+          var w=words.slice(j,j+=16), oldHash=hash;
+          hash=hash.slice(0,8);
+          for(i=0;i<64;i++){
+            var w15=w[i-15], w2=w[i-2];
+            var a=hash[0], e=hash[4];
+            var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+            var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+            hash=[(temp1+temp2)|0].concat(hash);
+            hash[4]=(hash[4]+temp1)|0;
+          }
+          for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+        }
+        for(i=0;i<8;i++){
+          for(j=3;j+1;j--){
+            var b=(hash[i]>>(j*8))&255;
+            result+=((b<16)?0:'')+b.toString(16);
+          }
+        }
+        return result;
+      }
+
+      // ---- Lesson 6 gating: locked until Lesson 5 is fully complete, or the gate test is passed 5/5 ----
+      (function(){
+        var THIS_LESSON=6, PREV_LESSON=5, PREV_SECTIONS=16, LOCK_MS=60*60*1000;
+        var ADMIN_HASH='8093b4669ee8d852c485654d9f1277e9071a7f0e0ca615faf0c299b316919c75';
+        var GATE_Q=[
+          {q:"What is the difference between Company and Company Code?",opts:["Company Code is the legal consolidation unit; Company is the smallest unit that produces a full balance sheet / P&L","Company is the legal consolidation unit; Company Code is the smallest unit that produces a full balance sheet / P&L","They are the same unit — two names for one legal entity","Company is used only in Controlling; Company Code is used only in Sales"],a:1},
+          {q:"Which T-code creates a Company Code?",opts:["OX15","OX16","OX02","OBY6"],a:2},
+          {q:"Which table stores Company Code data?",opts:["T880, key field RCOMP","BKPF, key field BELNR","SKA1, key field SAKNR","T001, key field BUKRS"],a:3},
+          {q:"What is OX15 used for?",opts:["To define a Company","To create a Company Code","To assign a Company Code to a Company","To maintain Company Code global parameters"],a:0},
+          {q:"Which currency is set at Company Code level in OX02?",opts:["Group currency","Transaction currency","Local currency","Index currency"],a:2}
+        ];
+        var gateScreen=document.getElementById('gateScreen');
+        var content=document.getElementById('lessonContent');
+        var lockBox=document.getElementById('gateLockBox');
+        var lockUntilEl=document.getElementById('gateLockUntil');
+        var countdownEl=document.getElementById('gateCountdown');
+        var testArea=document.getElementById('gateTestArea');
+        var qWrap=document.getElementById('gateQuestions');
+        var scoreEl=document.getElementById('gateScore');
+        var msgEl=document.getElementById('gateMsg');
+        var attemptsEl=document.getElementById('gateAttempts');
+        var submitBtn=document.getElementById('gateSubmit');
+        var retryBtn=document.getElementById('gateRetry');
+        var adminBtn=document.getElementById('adminBtn');
+        var adminForm=document.getElementById('adminForm');
+        var adminPw=document.getElementById('adminPw');
+        var adminSubmit=document.getElementById('adminSubmit');
+        var adminMsg=document.getElementById('adminMsg');
+        var timer=null, selected={};
+
+        function isPrevComplete(){
+          var L=window.SAPProgress.getLesson(PREV_LESSON);
+          if(!L) return false;
+          var allRead=(L.allRead===true)||(L.readSections&&L.readSections.length>=PREV_SECTIONS);
+          var quiz=(L.quizDone===true)||(L.selfTestDone===true)||(typeof L.quizAnswered==='number'&&typeof L.quizTotal==='number'&&L.quizTotal>0&&L.quizAnswered>=L.quizTotal);
+          return !!(allRead&&quiz);
+        }
+        function unlockLesson(){
+          if(timer){ clearInterval(timer); timer=null; }
+          gateScreen.hidden=true; gateScreen.style.display='none';
+          content.hidden=false; content.style.display='';
+          window.scrollTo(0,0);
+        }
+        function updateCountdown(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var rem=g.lockUntil-Date.now();
+          if(rem<=0){ if(timer){ clearInterval(timer); timer=null; } refreshLock(); renderGate(); updateAttempts(); return; }
+          var s=Math.ceil(rem/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+          countdownEl.textContent=(h>0?(h+'h '):'')+((m<10?'0':'')+m+'m ')+((ss<10?'0':'')+ss+'s');
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+        }
+        function showLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          lockBox.hidden=false;
+          testArea.style.display='none';
+          lockUntilEl.textContent=new Date(g.lockUntil).toLocaleString();
+          updateCountdown();
+          if(timer) clearInterval(timer);
+          timer=setInterval(updateCountdown,1000);
+        }
+        function refreshLock(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          var now=Date.now();
+          if(g.lockUntil&&g.lockUntil>now){ showLock(); return true; }
+          if(g.lockUntil&&g.lockUntil<=now){ g.lockUntil=0; g.fails=0; window.SAPProgress.saveGate(THIS_LESSON,g); }
+          lockBox.hidden=true;
+          testArea.style.display='';
+          return false;
+        }
+        function updateAttempts(){
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          attemptsEl.textContent=(g.fails>0)?('Failed attempts: '+g.fails+' of 3. After 3 consecutive failed attempts, this lesson locks for 1 hour.'):'';
+        }
+        function renderGate(){
+          selected={};
+          scoreEl.textContent=''; msgEl.textContent=''; msgEl.className='';
+          submitBtn.hidden=false; submitBtn.disabled=false; retryBtn.hidden=true;
+          qWrap.innerHTML='';
+          GATE_Q.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='gate-q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='gate-opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                selected[qi]=oi;
+                var bs=opts.querySelectorAll('.gate-opt');
+                bs.forEach(function(x,xi){ x.classList.toggle('selected',xi===oi); });
+                msgEl.textContent='';
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); qWrap.appendChild(box);
+          });
+        }
+        submitBtn.addEventListener('click',function(){
+          if(refreshLock()) return;
+          if(Object.keys(selected).length<GATE_Q.length){
+            msgEl.textContent='Please answer all 5 questions before submitting.';
+            scoreEl.textContent='';
+            return;
+          }
+          var score=0;
+          GATE_Q.forEach(function(item,qi){ if(selected[qi]===item.a) score++; });
+          qWrap.querySelectorAll('.gate-opt').forEach(function(b){ b.disabled=true; });
+          submitBtn.hidden=true;
+          scoreEl.textContent='Your score: '+score+' / '+GATE_Q.length;
+          var g=window.SAPProgress.getGate(THIS_LESSON);
+          if(score===GATE_Q.length){
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            msgEl.textContent='Gate test passed. Lesson 6 is now unlocked.';
+            msgEl.className='ok';
+            updateAttempts();
+            setTimeout(unlockLesson,900);
+          }else{
+            g.fails=(g.fails||0)+1;
+            msgEl.textContent='Go back and complete previous lesson.';
+            msgEl.className='';
+            if(g.fails>=3){
+              g.lockUntil=Date.now()+LOCK_MS;
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              updateAttempts();
+              refreshLock();
+            }else{
+              window.SAPProgress.saveGate(THIS_LESSON,g);
+              retryBtn.hidden=false;
+              updateAttempts();
+            }
+          }
+        });
+        retryBtn.addEventListener('click',function(){ renderGate(); updateAttempts(); });
+        adminBtn.addEventListener('click',function(){
+          adminForm.hidden=!adminForm.hidden;
+          if(!adminForm.hidden) adminPw.focus();
+        });
+        function tryAdminUnlock(){
+          var val=adminPw.value;
+          if(!val) return;
+          if(sha256Hex(val)===ADMIN_HASH){
+            var g=window.SAPProgress.getGate(THIS_LESSON);
+            g.fails=0; g.lockUntil=0; g.unlocked=true;
+            window.SAPProgress.saveGate(THIS_LESSON,g);
+            adminMsg.className=''; adminMsg.style.color='var(--green)';
+            adminMsg.textContent='Unlocked. Opening Lesson 6…';
+            adminPw.value='';
+            setTimeout(unlockLesson,700);
+          }else{
+            adminMsg.style.color=''; adminMsg.className='err';
+            adminMsg.textContent='Incorrect password. Please try again.';
+            adminPw.value='';
+            adminPw.focus();
+          }
+        }
+        adminSubmit.addEventListener('click',tryAdminUnlock);
+        adminPw.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryAdminUnlock(); } });
+
+        // ---- Initial state ----
+        var g0=window.SAPProgress.getGate(THIS_LESSON);
+        if(isPrevComplete()||g0.unlocked===true){
+          unlockLesson();
+        }else{
+          gateScreen.hidden=false; gateScreen.style.display='';
+          content.hidden=true; content.style.display='none';
+          if(!refreshLock()) renderGate();
+          updateAttempts();
+        }
+      })();
+    </script>
+
+    <script>
+      (function(){
+        var root=document.documentElement, label=document.getElementById('themeLabel');
+        function apply(t){ root.setAttribute('data-theme',t); label.textContent=(t==='dark'?'Dark':'Light'); }
+        apply('light');
+        document.getElementById('themeBtn').addEventListener('click',function(){
+          apply(root.getAttribute('data-theme')==='dark'?'light':'dark');
+        });
+
+        var bar=document.getElementById('progressBar');
+        var sections=Array.prototype.slice.call(document.querySelectorAll('section.lesson'));
+        var tocItems=document.querySelectorAll('nav.toc li');
+        var map={};
+        tocItems.forEach(function(li){
+          var a=li.querySelector('a');
+          if(a){
+            map[a.getAttribute('href').slice(1)]=li;
+            var tick=document.createElement('span');
+            tick.className='tick'; tick.setAttribute('aria-hidden','true'); tick.textContent='✓';
+            a.appendChild(tick);
+          }
+        });
+
+        var readCount=document.getElementById('readCount'),
+            readPct=document.getElementById('readPct'),
+            readFill=document.getElementById('readFill');
+        var readSet={};
+        function updateProgress(){
+          var n=0;
+          sections.forEach(function(s){ if(readSet[s.id]) n++; });
+          var pct=sections.length?Math.round(n/sections.length*100):0;
+          readCount.textContent=n+' of '+sections.length+' sections read';
+          readPct.textContent=pct+'%';
+          readFill.style.width=pct+'%';
+          bar.style.width=pct+'%';
+        }
+        var btnMap={};
+        sections.forEach(function(s){
+          var btn=document.createElement('button');
+          btn.type='button'; btn.className='mark-read'; btn.setAttribute('aria-pressed','false');
+          btn.textContent='Mark Read';
+          btnMap[s.id]=btn;
+          btn.addEventListener('click',function(){
+            var done=!readSet[s.id];
+            if(done){ readSet[s.id]=true; } else { delete readSet[s.id]; }
+            btn.classList.toggle('done',done);
+            btn.setAttribute('aria-pressed',done?'true':'false');
+            btn.textContent=done?'Read ✓':'Mark Read';
+            if(map[s.id]) map[s.id].classList.toggle('read',done);
+            updateProgress();
+            try{ if(window.SAPProgress){ var arr=Object.keys(readSet); window.SAPProgress.saveLesson(6,{readSections:arr, allRead:(arr.length===sections.length)}); } }catch(e){}
+          });
+          s.appendChild(btn);
+        });
+        try{ var savedL6=window.SAPProgress&&window.SAPProgress.getLesson(6); if(savedL6&&savedL6.readSections){ savedL6.readSections.forEach(function(id){ if(btnMap[id]){ readSet[id]=true; btnMap[id].classList.add('done'); btnMap[id].setAttribute('aria-pressed','true'); btnMap[id].textContent='Read ✓'; if(map[id]) map[id].classList.add('read'); } }); } }catch(e){}
+        updateProgress();
+
+        function setActive(id){
+          tocItems.forEach(function(li){ var a=li.querySelector('a'); if(a) a.classList.remove('active'); });
+          if(map[id]){ var link=map[id].querySelector('a'); if(link) link.classList.add('active'); }
+        }
+        if('IntersectionObserver' in window){
+          var visible={};
+          var obs=new IntersectionObserver(function(entries){
+            entries.forEach(function(e){ visible[e.target.id]=e.isIntersecting; });
+            for(var i=0;i<sections.length;i++){
+              if(visible[sections[i].id]){ setActive(sections[i].id); break; }
+            }
+          },{rootMargin:'-30% 0px -55% 0px',threshold:0});
+          sections.forEach(function(s){ obs.observe(s); });
+        }
+      })();
+    </script>
+
+    <script>
+      (function(){
+        var QUESTIONS=[
+          {q:"What is a Business Area used for?",opts:["Preparing legal financial statements for the tax authorities","Drawing up internal Balance Sheets and P&L statements for a division or product line across company codes","Defining the credit limit of customers","Controlling which posting periods are open"],a:1,why:"A business area is an optional, client-wide unit for INTERNAL reporting per division/product line. Legal statements belong to the company code."},
+          {q:"Which statement about the Business Area is correct?",opts:["It is defined inside each company code with OX02","It is a legal entity with its own tax registration","It is defined once at client level with OX03 and can be used across company codes","It is mandatory for every company code"],a:2,why:"OX03 defines business areas once for the whole client; they cut across company codes and are optional, with no legal standing."},
+          {q:"A fiscal year variant has 12 normal posting periods. What is the maximum total number of periods, including special periods?",opts:["12","14","16","24"],a:2,why:"12 normal + up to 4 special periods (13–16) = 16 maximum. Special periods hold year-end adjustments."},
+          {q:"Which fiscal year variant describes an April – March fiscal year?",opts:["K4","V3","V6","V9"],a:1,why:"V3 = April–March (India/UK pattern). K4 = Jan–Dec, V6 = Oct–Sep, V9 = Jul–Jun."},
+          {q:"Under variant V3 (April–March), a document is posted with posting date 15 February 2027. Which fiscal year and period does it belong to?",opts:["Fiscal year 2027, period 2","Fiscal year 2026, period 11","Fiscal year 2027, period 11","Fiscal year 2026, period 2"],a:1,why:"In V3 the year is named by its starting year: April 2026–March 2027 is fiscal year 2026. February is the 11th month of that year (Apr=1 … Feb=11)."},
+          {q:"How is a posting made into special period 13?",opts:["Use a posting date in the 13th month of the year","SAP derives period 13 automatically from the document date","Enter a posting date in the last normal period and type period 13 manually in the document header's Period field","Only the system can create special-period postings during the year-end run"],a:2,why:"Special periods have no calendar dates. The date falls in period 12; the user enters 13 manually — and OB52's second range plus authorization group must allow it."},
+          {q:"A company changes its year-end from December to March, creating a one-off year of only 3 months. What is this called, and what must be set?",opts:["A year-dependent variant; maintain T009B","A shortened fiscal year; reduce the number of posting periods for that year and set the shortened-fiscal-year indicator","A special period year; add 4 special periods","A parallel fiscal year; assign a second variant in OBY6"],a:1,why:"A fiscal year with fewer than 12 posting periods is a shortened fiscal year — used exactly for year-end changes and start-up stub years."},
+          {q:"Which T-codes define and assign a Credit Control Area?",opts:["Define OX03, assign OX16","Define OB45, assign company codes with OB38","Define OB29, assign with OB52","Define FD32, assign with OBY6"],a:1,why:"OB45 = Define Credit Control Area (table T014); OB38 = Assign Company Code to Credit Control Area. FD32 was the classic customer credit master, not the area itself."},
+          {q:"With the standard update group 000012, a customer's credit exposure consists of…",opts:["Only the open (unpaid) items in FI","Open orders + open deliveries + open billing documents + open items","Only the sales orders not yet delivered","The credit limit minus payments received"],a:1,why:"Exposure counts the customer's whole commitment pipeline, not just unpaid invoices — that is the protection the credit check is meant to give."},
+          {q:"In OB52, what do the account-type codes D, K and S mean?",opts:["D = G/L, K = customers, S = vendors","D = customers, K = vendors, S = G/L accounts","D = assets, K = materials, S = customers","D = vendors, K = customers, S = assets"],a:1,why:"D = Debtors (customers), K = Kreditors (vendors), S = G/L accounts (Sachkonten). A = assets, M = materials, + = all account types."},
+          {q:"A user gets the error “Posting period 011 2026 is not open”. Which setting is responsible, and where is that variant assigned to the company code?",opts:["Fiscal year variant (OB29), assigned in OX02","Posting period variant (OB52), assigned in OBY6","Credit control area (OB45), assigned in OB38","Business area (OX03), assigned in OX16"],a:1,why:"The FYV successfully translated the date to period 11 — the gatekeeper that refused it is the posting period variant maintained in OB52 and assigned to the company code in OBY6."},
+          {q:"In S/4HANA, management wants a complete, balanced Balance Sheet per product line. What is the recommended design?",opts:["Business areas with manual clearing postings","Profit centers (and segments) with Document Splitting","One company code per product line in all cases","Credit control areas per product line"],a:1,why:"Document splitting balances postings by profit center and segment, giving zero-balanced statements per unit. Business area is not a standard splitting characteristic, so its balance sheet stays an internal, approximate view."}
+        ];
+        var quiz=document.getElementById('quiz'), scoreLine=document.getElementById('scoreLine');
+        var answered=0, correct=0;
+        function render(){
+          quiz.innerHTML=''; answered=0; correct=0; scoreLine.textContent='';
+          QUESTIONS.forEach(function(item,qi){
+            var box=document.createElement('div'); box.className='q';
+            var p=document.createElement('p'); p.className='qtext'; p.textContent='Q'+(qi+1)+'. '+item.q; box.appendChild(p);
+            var opts=document.createElement('div'); opts.className='opts';
+            var explain=document.createElement('div'); explain.className='explain'; explain.textContent=item.why;
+            item.opts.forEach(function(text,oi){
+              var b=document.createElement('button'); b.type='button'; b.className='opt';
+              var letter=document.createElement('span'); letter.className='letter'; letter.textContent='ABCD'[oi];
+              b.appendChild(letter); b.appendChild(document.createTextNode(text));
+              b.addEventListener('click',function(){
+                if(box.dataset.done) return; box.dataset.done='1'; answered++;
+                var buttons=opts.querySelectorAll('.opt');
+                buttons.forEach(function(x,xi){ x.disabled=true; if(xi===item.a) x.classList.add('correct'); });
+                if(oi===item.a){ correct++; } else { b.classList.add('wrong'); }
+                explain.classList.add('show');
+                if(answered===QUESTIONS.length){
+                  try{ if(window.SAPProgress) window.SAPProgress.saveLesson(6,{quizDone:true, quizAnswered:answered, quizTotal:QUESTIONS.length}); }catch(e){}
+                  scoreLine.textContent='Your score: '+correct+' / '+QUESTIONS.length+(correct>=10?' — Excellent! You are ready for Lesson 7.':' — Re-read the sections above once, then try again. You can do it.');
+                } else {
+                  scoreLine.textContent='Answered: '+answered+' / '+QUESTIONS.length+' · Correct so far: '+correct;
+                }
+              });
+              opts.appendChild(b);
+            });
+            box.appendChild(opts); box.appendChild(explain); quiz.appendChild(box);
+          });
+        }
+        render();
+        document.getElementById('resetQuiz').addEventListener('click',render);
+      })();
+    </script>
+  </body>
+</html>
